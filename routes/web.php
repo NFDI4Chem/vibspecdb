@@ -40,3 +40,11 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (Req
         'team' => $team
     ]);
 })->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/explorer', function (Request $request) {
+    $team = $request->user()->currentTeam;
+    $team->users = $team->allUsers();
+    return Inertia::render('Explorer', [
+        'team' => $team
+    ]);
+})->name('explorer');

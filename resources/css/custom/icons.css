@@ -1,0 +1,27 @@
+@layer components {
+  .icon {
+    @apply cursor-pointer;
+  }
+}
+
+.default-icon {
+  @apply icon text-gray-400 hover:text-gray-500;
+}
+
+.delete-icon {
+  @apply icon text-red-400 hover:text-red-600;
+}
+
+.success-icon {
+  @apply icon text-green-500 hover:text-green-600;
+}
+
+.info-icon {
+  @apply icon;
+  color: #78ADCE;
+}
+
+.info-icon:hover {
+  color: #2c80b1;
+}
+
