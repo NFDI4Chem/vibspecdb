@@ -41,8 +41,9 @@
         <!-- <welcome /> -->
 
         <div class="max-w-2lg mx-auto my-5 px-2">
-            <div class="container bg-blue-400 w-auto h-auto w-full">
-                <DraggableFiles :data="myArray" />
+            <div class="container bg-transparent w-auto h-auto w-full">
+                <Draggable :list="myArray" />
+                <!-- <rawDisplayer class="col-3" :value="myArray" title="List" /> -->
             </div>
         </div>
     </app-layout>
@@ -51,28 +52,35 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Welcome from "@/Jetstream/Welcome.vue";
-import DraggableFiles from "@/Components/FilesExplorer/DraggableFiles";
+import Draggable from "@/Components/FilesExplorer/Draggable";
+import rawDisplayer from "@/Components/FilesExplorer/RawDisplayer";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
     components: {
         AppLayout,
         Welcome,
-        DraggableFiles
+        Draggable,
+        rawDisplayer,
     },
     data() {
         return {
             myArray: [
                 {
-                    name: "JohnJohnJohnJohnJohnJohnJohnJohnJohnJohn JohnJohnJohn",
-                    id: 0,
-                },
-                {
-                    name: "Joao",
-                    id: 1,
-                },
-                {
-                    name: "Jean",
-                    id: 2,
+                    name: "New Folder 1",
+                    id: uuidv4(),
+                    children: [
+                        {
+                            name: "New Folder 2",
+                            id: uuidv4(),
+                            children: [],
+                        },
+                        {
+                            name: "New Folder 3",
+                            id: uuidv4(),
+                            children: [],
+                        },
+                    ],
                 },
             ],
         };
