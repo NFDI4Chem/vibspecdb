@@ -1200,6 +1200,10 @@ select {
 	margin-left: 1.5rem;
 	margin-right: 1.5rem;
 }
+.my-10 {
+	margin-top: 2.5rem;
+	margin-bottom: 2.5rem;
+}
 .ml-3 {
 	margin-left: 0.75rem;
 }
@@ -1410,6 +1414,9 @@ select {
 .w-1\/2 {
 	width: 50%;
 }
+.w-1 {
+	width: 0.25rem;
+}
 .min-w-0 {
 	min-width: 0px;
 }
@@ -1439,6 +1446,15 @@ select {
 }
 .max-w-md {
 	max-width: 28rem;
+}
+.max-w-sm {
+	max-width: 24rem;
+}
+.max-w-none {
+	max-width: none;
+}
+.max-w-lg {
+	max-width: 32rem;
 }
 .flex-1 {
 	flex: 1 1 0%;
@@ -1492,6 +1508,9 @@ select {
 }
 .cursor-pointer {
 	cursor: pointer;
+}
+.resize {
+	resize: both;
 }
 .list-inside {
 	list-style-position: inside;
@@ -2280,9 +2299,6 @@ select {
 .focus\:z-10:focus {
 	z-index: 10;
 }
-.focus\:border-0:focus {
-	border-width: 0px;
-}
 .focus\:border-blue-300:focus {
 	--tw-border-opacity: 1;
 	border-color: rgba(147, 197, 253, var(--tw-border-opacity));
@@ -2416,9 +2432,6 @@ select {
 }
 .focus\:ring-offset-rose-500:focus {
 	--tw-ring-offset-color: #f43f5e;
-}
-.focus-visible\:border-0:focus-visible {
-	border-width: 0px;
 }
 .focus-visible\:outline-none:focus-visible {
 	outline: 2px solid transparent;

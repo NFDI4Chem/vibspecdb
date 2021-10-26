@@ -1,5 +1,9 @@
 require('./bootstrap');
 
+// import uPlot from 'uplot';
+import UplotVue from 'uplot-vue';
+import 'uplot/dist/uPlot.min.css';
+
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
@@ -12,10 +16,11 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => require(`./Pages/${name}.vue`),
     setup({ el, app, props, plugin }) {
-        return createApp({ render: () => h(app, props), store  })
+        return createApp({ render: () => h(app, props), store })
             .use(plugin)
             .use(store)
             .mixin({ methods: { route } })
+            .component('UplotVue', UplotVue)
             .mount(el);
     },
 });

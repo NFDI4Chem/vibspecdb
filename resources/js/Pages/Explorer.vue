@@ -36,16 +36,23 @@
 
         </template>
 
+        <div id="uplotExam" class="my-15">
+            <div class="container bg-transparent w-auto h-auto w-full">
+                <ExampleComponent />
+            </div>
+        </div>
+
         <div class="max-w-2lg mx-auto my-5 px-2">
             <div class="container bg-transparent w-auto h-auto w-full">
                 <Draggable :list="elements" />
             </div>
         </div>
-        <div class="max-w-2lg mx-auto my-5 px-2">
+        <div class="max-w-2lg mx-auto my-5 px-2" v-if="true">
             <div class="container bg-transparent w-auto h-auto w-full">
                 <BasicTreeSelect v-model:elements="elements" />
             </div>
         </div>
+
     </app-layout>
 </template>
 
@@ -53,7 +60,10 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Welcome from "@/Jetstream/Welcome.vue";
 import Draggable from "@/Components/FilesExplorer/Draggable";
-import BasicTreeSelect from '../Components/TreeSelect/BasicTreeSelect.vue';
+import BasicTreeSelect from '@/Components/TreeSelect/BasicTreeSelect.vue';
+
+import ExampleComponent from '@/Components/uPlot/ExampleComponent.vue';
+
 
 export default {
     components: {
@@ -61,6 +71,7 @@ export default {
         Welcome,
         Draggable,
         BasicTreeSelect,
+        ExampleComponent
     },
     props: ["user", "team"],
     computed: {
