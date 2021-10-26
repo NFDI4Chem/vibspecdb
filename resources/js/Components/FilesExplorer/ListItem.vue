@@ -15,7 +15,7 @@
                             input
                         "
                     >
-                        {{ item.name }}
+                        {{ item.label }}
                     </p>
                 </div>
                 <div class="flex flex-row justify-between w-16">

@@ -27586,7 +27586,7 @@ __webpack_require__.r(__webpack_exports__);
       this.realValue.map(function (item) {
         if (item.id === id) {
           item.children.push({
-            name: "New Folder ".concat(item.children.length + 1),
+            label: "New Folder ".concat(item.children.length + 1),
             id: (0,uuid__WEBPACK_IMPORTED_MODULE_2__.default)(),
             children: []
           });
@@ -27630,7 +27630,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
-    value: {
+    elements: {
       required: false,
       type: Array,
       "default": []
@@ -27645,12 +27645,12 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
-    elements: {
+    list: {
       get: function get() {
-        return this.value;
+        return this.elements;
       },
       set: function set(value) {
-        this.$emit("input", value);
+        this.$emit("update:elements", value);
       }
     }
   }
@@ -29066,11 +29066,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_AppLayout_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Layouts/AppLayout.vue */ "./resources/js/Layouts/AppLayout.vue");
 /* harmony import */ var _Jetstream_Welcome_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Jetstream/Welcome.vue */ "./resources/js/Jetstream/Welcome.vue");
 /* harmony import */ var _Components_FilesExplorer_Draggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Components/FilesExplorer/Draggable */ "./resources/js/Components/FilesExplorer/Draggable.vue");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Components_TreeSelect_BasicTreeSelect_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/TreeSelect/BasicTreeSelect.vue */ "./resources/js/Components/TreeSelect/BasicTreeSelect.vue");
 
-
- // import rawDisplayer from "@/Components/FilesExplorer/RawDisplayer";
 
 
 
@@ -29080,23 +29077,6 @@ __webpack_require__.r(__webpack_exports__);
     Welcome: _Jetstream_Welcome_vue__WEBPACK_IMPORTED_MODULE_1__.default,
     Draggable: _Components_FilesExplorer_Draggable__WEBPACK_IMPORTED_MODULE_2__.default,
     BasicTreeSelect: _Components_TreeSelect_BasicTreeSelect_vue__WEBPACK_IMPORTED_MODULE_3__.default
-  },
-  data: function data() {
-    return {
-      myArray: [{
-        name: "New Folder 1",
-        id: (0,uuid__WEBPACK_IMPORTED_MODULE_4__.default)(),
-        children: [{
-          name: "New Folder 2",
-          id: (0,uuid__WEBPACK_IMPORTED_MODULE_4__.default)(),
-          children: []
-        }, {
-          name: "New Folder 3",
-          id: (0,uuid__WEBPACK_IMPORTED_MODULE_4__.default)(),
-          children: []
-        }]
-      }]
-    };
   },
   props: ["user", "team"],
   computed: {
@@ -30048,7 +30028,7 @@ var _hoisted_5 = {
   "class": "w-full mx-6 overflow-hidden text-left"
 };
 var _hoisted_6 = {
-  "class": "\r\n                            text-gray-900\r\n                            font-semibold\r\n                            whitespace-nowrap\r\n                            truncate\r\n                            input\r\n                        "
+  "class": "\n                            text-gray-900\n                            font-semibold\n                            whitespace-nowrap\n                            truncate\n                            input\n                        "
 };
 var _hoisted_7 = {
   "class": "flex flex-row justify-between w-16"
@@ -30062,7 +30042,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_SwitchVerticalIcon, {
     "class": "h-6 default-icon"
-  })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.item.name), 1
+  })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.item.label), 1
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PlusCircleIcon, {
     "class": "h-6 success-icon",
@@ -30160,7 +30140,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.treeValue = $event;
     }),
     multiple: true,
-    options: $options.elements,
+    options: $options.list,
     "default-expand-level": 1,
     alwaysOpen: true,
     noChildrenText: "No Sub-Folders"
@@ -33497,7 +33477,7 @@ var _hoisted_9 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Draggable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Draggable");
 
-  var _component_basic_tree_select = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("basic-tree-select");
+  var _component_BasicTreeSelect = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("BasicTreeSelect");
 
   var _component_app_layout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("app-layout");
 
@@ -33523,21 +33503,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "text-sm text-gray-800 font-bold"
       }, " Team Settings ", 8
       /* PROPS */
-      , _hoisted_5)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <h2 class=\"font-semibold text-xl text-gray-800 leading-tight\">\n                Dashboard\n            </h2> ")];
+      , _hoisted_5)])];
     }),
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Draggable, {
-        list: $data.myArray
+        list: $options.elements
       }, null, 8
       /* PROPS */
-      , ["list"])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_basic_tree_select, {
-        modelValue: $options.elements,
-        "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+      , ["list"])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BasicTreeSelect, {
+        elements: $options.elements,
+        "onUpdate:elements": _cache[0] || (_cache[0] = function ($event) {
           return $options.elements = $event;
         })
       }, null, 8
       /* PROPS */
-      , ["modelValue"])])])];
+      , ["elements"])])])];
     }),
     _: 1
     /* STABLE */
@@ -36150,7 +36130,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.item-sub {\r\n    margin: 0 0 0 2rem;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.item-sub {\n    margin: 0 0 0 2rem;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

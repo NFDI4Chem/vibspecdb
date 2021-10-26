@@ -3,7 +3,7 @@
         <treeselect
             v-model="treeValue"
             :multiple="true"
-            :options="elements"
+            :options="list"
             :default-expand-level="1"
             :alwaysOpen="true"
             noChildrenText="No Sub-Folders"
@@ -17,7 +17,7 @@ import "vue3-treeselect/dist/vue3-treeselect.css";
 
 export default {
     props: {
-        value: {
+        elements: {
             required: false,
             type: Array,
             default: [],
@@ -30,12 +30,12 @@ export default {
         };
     },
     computed: {
-        elements: {
+        list: {
             get() {
-                return this.value;
+                return this.elements;
             },
             set(value) {
-                this.$emit("input", value);
+                this.$emit("update:elements", value);
             },
         },
     },

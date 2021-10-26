@@ -40,7 +40,7 @@ export default {
     HandleAdd(id) {
       this.realValue.map((item) => {
         if (item.id === id) {
-          item.children.push({ name: `New Folder ${item.children.length+1}`, id: uuidv4(), children: [] })
+          item.children.push({ label: `New Folder ${item.children.length+1}`, id: uuidv4(), children: [] })
         }
         return item;
       })

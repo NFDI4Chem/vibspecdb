@@ -33,21 +33,17 @@
                     Team Settings
                 </a>
             </div>
-            <!-- <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Dashboard
-            </h2> -->
-        </template>
 
-        <!-- <welcome /> -->
+        </template>
 
         <div class="max-w-2lg mx-auto my-5 px-2">
             <div class="container bg-transparent w-auto h-auto w-full">
-                <Draggable :list="myArray" />
+                <Draggable :list="elements" />
             </div>
         </div>
         <div class="max-w-2lg mx-auto my-5 px-2">
             <div class="container bg-transparent w-auto h-auto w-full">
-                <basic-tree-select v-model="elements" />
+                <BasicTreeSelect v-model:elements="elements" />
             </div>
         </div>
     </app-layout>
@@ -57,8 +53,6 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Welcome from "@/Jetstream/Welcome.vue";
 import Draggable from "@/Components/FilesExplorer/Draggable";
-// import rawDisplayer from "@/Components/FilesExplorer/RawDisplayer";
-import { v4 as uuidv4 } from "uuid";
 import BasicTreeSelect from '../Components/TreeSelect/BasicTreeSelect.vue';
 
 export default {
@@ -67,28 +61,6 @@ export default {
         Welcome,
         Draggable,
         BasicTreeSelect,
-    },
-    data() {
-        return {
-            myArray: [
-                {
-                    name: "New Folder 1",
-                    id: uuidv4(),
-                    children: [
-                        {
-                            name: "New Folder 2",
-                            id: uuidv4(),
-                            children: [],
-                        },
-                        {
-                            name: "New Folder 3",
-                            id: uuidv4(),
-                            children: [],
-                        },
-                    ],
-                },
-            ],
-        };
     },
     props: ["user", "team"],
     computed: {
