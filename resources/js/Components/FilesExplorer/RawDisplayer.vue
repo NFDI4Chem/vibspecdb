@@ -1,4 +1,5 @@
 <template>
+    <!-- Usage: <rawDisplayer class="col-3" :value="myArray" title="List" /> -->
     <div>
         <h3>{{ title }}</h3>
         <pre>{{ valueString }}</pre>

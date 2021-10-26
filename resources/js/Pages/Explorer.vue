@@ -43,7 +43,11 @@
         <div class="max-w-2lg mx-auto my-5 px-2">
             <div class="container bg-transparent w-auto h-auto w-full">
                 <Draggable :list="myArray" />
-                <!-- <rawDisplayer class="col-3" :value="myArray" title="List" /> -->
+            </div>
+        </div>
+        <div class="max-w-2lg mx-auto my-5 px-2">
+            <div class="container bg-transparent w-auto h-auto w-full">
+                <basic-tree-select v-model="elements" />
             </div>
         </div>
     </app-layout>
@@ -53,15 +57,16 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Welcome from "@/Jetstream/Welcome.vue";
 import Draggable from "@/Components/FilesExplorer/Draggable";
-import rawDisplayer from "@/Components/FilesExplorer/RawDisplayer";
+// import rawDisplayer from "@/Components/FilesExplorer/RawDisplayer";
 import { v4 as uuidv4 } from "uuid";
+import BasicTreeSelect from '../Components/TreeSelect/BasicTreeSelect.vue';
 
 export default {
     components: {
         AppLayout,
         Welcome,
         Draggable,
-        rawDisplayer,
+        BasicTreeSelect,
     },
     data() {
         return {
@@ -86,5 +91,18 @@ export default {
         };
     },
     props: ["user", "team"],
+    computed: {
+        showTreeSelect() {
+            return this.$store.state.draggableStructure.showTreeSelect
+        },
+        elements: {
+            get() {
+                return this.$store.state.draggableStructure.folders
+            },
+            set(value) {
+                this.$store.dispatch('updateFolders', value)
+            },
+        },
+    },
 };
 </script>
