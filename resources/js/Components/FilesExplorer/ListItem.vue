@@ -6,7 +6,7 @@
                     <SwitchVerticalIcon class="h-6 default-icon" />
                 </div>
                 <div class="w-full mx-6 overflow-hidden text-left">
-                    <p
+                    <div
                         class="
                             text-gray-900
                             font-semibold
@@ -15,8 +15,11 @@
                             input
                         "
                     >
-                        {{ item.label }}
-                    </p>
+                        <input v-model="item.label" placeholder="Item Name" 
+                            maxlength="120"
+                            class="border-0 focus-visible:outline-none bg-transparent w-full"
+                        >
+                    </div>
                 </div>
                 <div class="flex flex-row justify-between w-16">
                     <PlusCircleIcon class="h-6 success-icon" @click="addAt" />
