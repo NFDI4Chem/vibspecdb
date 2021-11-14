@@ -21,7 +21,14 @@ class SocialController extends Controller
      */
     public function redirectToProvider($service)
     {
-        return Socialite::driver($service)->redirect();
+        if ($service === 'gitlab') { 
+            return Socialite::driver($service)
+                ->setHost(env('GITLAB_BASE_URL'))
+                ->stateless()
+                ->redirect();
+        } else {
+            return Socialite::driver($service)->redirect();
+        }
     }
 
     /**
@@ -31,10 +38,23 @@ class SocialController extends Controller
      */
     public function handleProviderCallback($service)
     {
-        $providerUser = Socialite::driver($service)->user();
+        $providerUser = null;
+
+        if ($service === 'gitlab') { 
+            $providerUser = Socialite::driver($service)
+                ->setHost(env('GITLAB_BASE_URL'))
+                ->stateless()
+                ->user();
+        } else {
+            $providerUser = Socialite::driver($service)->user();
+        }
+
+        $providerUserID = $providerUser->getId() ? 
+            $providerUser->getId() : 
+            ($providerUser->sub ? $providerUser->sub : '');
 
         $linkedSocialAccount = LinkedSocialAccount::where('provider_name', $service)
-            ->where('provider_id', $providerUser->getId())
+            ->where('provider_id', $providerUserID)
             ->first();
 
         $user = null;
