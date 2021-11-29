@@ -61,7 +61,7 @@
                   VibSpecDB
                 </h1>
                 <p class="mt-6 text-xl text-gray-500">
-                  New, highly visible, and consensus-driven NMR data repository and computational platform. The ultimate goal is to accelerate broader coordination and data sharing among natural product (NP) researchers by enabling storage, management, sharing and analysis of NMR data.
+                  Description
                 </p>
               </div>
               <div class="mt-10">
@@ -124,80 +124,6 @@
               lg:w-1/2
             "
           >
-            <div class="hidden sm:block">
-              <div
-                class="
-                  absolute
-                  inset-y-0
-                  left-1/2
-                  w-screen
-                  bg-gray-50
-                  rounded-l-3xl
-                  lg:left-80
-                  lg:right-0
-                  lg:w-full
-                "
-              ></div>
-              <svg
-                class="absolute top-8 right-1/2 -mr-3 lg:m-0 lg:left-0"
-                width="404"
-                height="392"
-                fill="none"
-                viewBox="0 0 404 392"
-              >
-                <defs>
-                  <pattern
-                    id="837c3e70-6c3a-44e6-8854-cc48c737b659"
-                    x="0"
-                    y="0"
-                    width="20"
-                    height="20"
-                    patternUnits="userSpaceOnUse"
-                  >
-                    <rect
-                      x="0"
-                      y="0"
-                      width="4"
-                      height="4"
-                      class="text-gray-200"
-                      fill="currentColor"
-                    />
-                  </pattern>
-                </defs>
-                <rect
-                  width="404"
-                  height="392"
-                  fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)"
-                />
-              </svg>
-            </div>
-            <div
-              class="
-                relative
-                pl-4
-                -mr-40
-                sm:mx-auto
-                sm:max-w-3xl
-                sm:px-0
-                lg:max-w-none
-                lg:h-full
-                lg:pl-12
-              "
-            >
-              <img
-                class="
-                  w-full
-                  rounded-md
-                  shadow-xl
-                  ring-1 ring-black ring-opacity-5
-                  lg:h-full
-                  lg:w-auto
-                  lg:max-w-none
-                "
-                src="/img/website.jpg"
-                alt=""
-              />
-            </div>
           </div>
         </div>
       </div>
@@ -207,38 +133,7 @@
           <div
             class="absolute inset-y-0 left-0 w-1/2 bg-gray-50 rounded-r-3xl"
           ></div>
-          <svg
-            class="absolute top-8 left-1/2 -ml-3"
-            width="404"
-            height="392"
-            fill="none"
-            viewBox="0 0 404 392"
-          >
-            <defs>
-              <pattern
-                id="8228f071-bcee-4ec8-905a-2a059a2cc4fb"
-                x="0"
-                y="0"
-                width="20"
-                height="20"
-                patternUnits="userSpaceOnUse"
-              >
-                <rect
-                  x="0"
-                  y="0"
-                  width="4"
-                  height="4"
-                  class="text-gray-200"
-                  fill="currentColor"
-                />
-              </pattern>
-            </defs>
-            <rect
-              width="404"
-              height="392"
-              fill="url(#8228f071-bcee-4ec8-905a-2a059a2cc4fb)"
-            />
-          </svg>
+          
         </div>
         <div
           class="
