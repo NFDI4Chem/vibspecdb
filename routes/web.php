@@ -36,8 +36,11 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (Request $request) {
-    $team = $request->user()->currentTeam;
-    $team->users = $team->allUsers();
+    $user = $request->user();
+    $team = $user->currentTeam;
+    if ($team) {
+        $team->users = $team->allUsers();
+    }
     return Inertia::render('Dashboard', [
         'team' => $team
     ]);
@@ -51,7 +54,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/explorer', function (Requ
     ]);
 })->name('explorer');
 
-
 // // AWS S3 Multipart Upload Routes
 // Route::name('s3.multipart.')->prefix('s3/multipart')
 //     ->group(function () {
@@ -63,3 +65,41 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/explorer', function (Requ
 //     });
 
 Route::get('/upload', [UploadController::class, 'store']);
+
+//////// admin routes 
+Route::group([
+    'prefix' => 'admin'
+], function () {
+    Route::group(['middleware' => ['auth', 'permission:manage roles|view statistics|manage platform']], function () {
+    
+        Route::get('console', [ConsoleController::class, 'index'])
+        ->name('console');
+
+        Route::group(['middleware' => ['auth', 'permission:manage roles|manage platform']], function () {
+            // Users
+            Route::get('users', [UsersController::class, 'index'])
+            ->name('users');
+        
+            Route::get('users/create', [UsersController::class, 'create'])
+            ->name('users.create');
+
+            Route::post('users', [UsersController::class, 'store'])
+            ->name('users.store');
+
+            Route::get('users/edit/{user}', [UsersController::class, 'edit'])
+            ->name('users.edit');
+
+            Route::put('users/edit/{user}', [UsersController::class, 'update'])
+            ->name('users.update');
+
+            Route::put('users/edit/{user}/password', [UsersController::class, 'updatePassword'])
+            ->name('users.update-password');
+
+            Route::put('users/edit/{user}/role', [UsersController::class, 'updateRole'])
+            ->name('users.update-role');
+
+            Route::delete('users/edit/{user}/photo', [UsersController::class, 'destroyPhoto'])
+            ->name('users.destroy-photo');
+        });
+    });
+});
