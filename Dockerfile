@@ -13,8 +13,6 @@ RUN docker-php-ext-install \
         tokenizer \
         xml
 
-RUN apk --no-cache add curl
-
 # Copy Composer binary from the Composer official Docker image
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -29,8 +27,8 @@ RUN composer install --no-interaction --optimize-autoloader --no-dev
 # Optimizing Configuration loading
 RUN php artisan config:clear
 # Optimizing Route loading
-RUN php artisan route:cache
+RUN php artisan route:clear
 # Optimizing View loading
-RUN php artisan view:cache
+RUN php artisan view:clear
 
 RUN chown -R application:application .
