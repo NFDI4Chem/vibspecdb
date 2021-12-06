@@ -8,6 +8,7 @@ variables:
 stages:
   - build
   - push
+  - redeploy
 build-image:
   stage: build
   script: 
@@ -17,3 +18,12 @@ docker-registry-auth:
   script:
    - docker login $DOCKER_REGISTRY -u $DOCKER_U -p $DOCKER_P
    - docker push ${DOCKER_USERNAME}/${NAME}:${TAG}
+rancher-redeploy:
+  stage: redeploy
+  script: 
+   - apk add curl 
+   - curl -L https://github.com/rancher/cli/releases/download/v2.4.13/rancher-linux-amd64-v2.4.13.tar.gz | tar zx
+   - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+   - chmod +x ./kubectl && mv ./kubectl /usr/local/bin && mv ./rancher-v2.4.13/rancher /usr/local/bin
+   - mkdir -p /root/.rancher/
+   - sleep 1h
