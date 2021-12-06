@@ -27,10 +27,9 @@ rancher-redeploy:
     RUNMODE: "other"
   stage: redeploy
   rules:
-    - if: ($CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'staging') && $CI_COMMIT_TAG == null
     - if: $CI_COMMIT_BRANCH == 'master'
       variables: 
-        RUNMODE: ""
+        RUNMODE: " "
     - if: $CI_COMMIT_BRANCH == 'staging'
       variables: 
         RUNMODE: "-staging"
