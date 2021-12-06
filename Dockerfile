@@ -15,8 +15,6 @@ RUN docker-php-ext-install \
 
 RUN apk --no-cache add curl
 
-RUN sleep 3h
-
 # Copy Composer binary from the Composer official Docker image
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
