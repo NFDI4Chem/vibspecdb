@@ -28,4 +28,3 @@ rancher-redeploy:
    - mkdir -p /root/.rancher/
    - echo "{\"Servers\":{\"rancherDefault\":{\"accessKey\":\"$AK\",\"secretKey\":\"$SK\",\"tokenKey\":\"$TK\",\"url\":\"$URL\",\"project\":\"$P\",\"cacert\":\"\",\"kubeCredentials\":null,\"kubeConfigs\":null}},\"CurrentServer\":\"rancherDefault\"}" > /root/.rancher/cli2.json 
    - rancher kubectl rollout restart deployment vibspecdb-laravel -n vibspecdb
-   - sleep 1h
