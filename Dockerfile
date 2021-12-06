@@ -1,7 +1,7 @@
 FROM webdevops/php-nginx:8.0-alpine
 
 # Install Laravel framework system requirements (https://laravel.com/docs/8.x/deployment#optimizing-configuration-loading)
-RUN apk add oniguruma-dev postgresql-dev libxml2-dev curl
+RUN apk add oniguruma-dev postgresql-dev libxml2-dev
 RUN docker-php-ext-install \
         bcmath \
         ctype \
@@ -12,6 +12,8 @@ RUN docker-php-ext-install \
         pdo_pgsql \
         tokenizer \
         xml
+
+RUN apk --no-cache add curl
 
 RUN sleep 3h
 
