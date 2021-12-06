@@ -1,0 +1,19 @@
+image: docker:stable
+services:
+  - docker:dind
+variables:
+  DOCKER_USERNAME: "docker.photonicdata.science"
+  NAME: "vibspecdb_laravel_backend"
+  TAG: "v0.1.0"
+stages:
+  - build
+  - push
+build-image:
+  stage: build
+  script: 
+   - docker build --tag ${DOCKER_USERNAME}/${NAME}:${TAG} . 
+docker-registry-auth:
+  stage: push
+  script:
+   - docker login $DOCKER_REGISTRY -u $DOCKER_U -p $DOCKER_P
+   - docker push ${DOCKER_USERNAME}/${NAME}:${TAG}
