@@ -26,4 +26,6 @@ rancher-redeploy:
    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin && mv ./rancher-v2.4.13/rancher /usr/local/bin
    - mkdir -p /root/.rancher/
+   - echo "{\"Servers\":{\"rancherDefault\":{\"accessKey\":\"$AK\",\"secretKey\":\"$SK\",\"tokenKey\":\"$TK\",\"url\":\"$URL\",\"project\":\"$P\",\"cacert\":\"\",\"kubeCredentials\":null,\"kubeConfigs\":null}},\"CurrentServer\":\"rancherDefault\"}" > /root/.rancher/cli2.json 
+   - rancher kubectl rollout restart deployment vibspecdb-laravel -n vibspecdb
    - sleep 1h
