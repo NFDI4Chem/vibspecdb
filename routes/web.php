@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Uppy\AwsS3MultipartController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\Admin\ConsoleController;
+use App\Http\Controllers\Admin\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,7 +66,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/explorer', function (Requ
 //         Route::delete('{uploadId}', ['as' => 'abortMultipartUpload', 'uses' => 'AwsS3MultipartController@abortMultipartUpload']);
 //     });
 
-Route::get('/upload', [UploadController::class, 'store']);
+ Route::get('/upload', [UploadController::class, 'store']);
 
 //////// admin routes 
 Route::group([

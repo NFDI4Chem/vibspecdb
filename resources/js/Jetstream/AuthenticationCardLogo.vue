@@ -1,6 +1,6 @@
 <template>
     <Link :href="'/'">
-        <jet-application-logo class="block w-auto" />
+        <!-- <jet-application-logo class="block w-auto" /> -->
     </Link>
 </template>
 

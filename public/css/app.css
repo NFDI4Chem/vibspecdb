@@ -1350,11 +1350,11 @@ select {
 .h-20 {
 	height: 5rem;
 }
-.h-0 {
-	height: 0px;
-}
 .h-full {
 	height: 100%;
+}
+.h-0 {
+	height: 0px;
 }
 .h-auto {
 	height: auto;

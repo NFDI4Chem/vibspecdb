@@ -7,6 +7,7 @@ import 'uplot/dist/uPlot.min.css';
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
+import helpers from "./Mixins/Global.js";
 
 import { store } from './store'
 
@@ -20,6 +21,7 @@ createInertiaApp({
             .use(plugin)
             .use(store)
             .mixin({ methods: { route } })
+            .mixin(helpers)
             .component('UplotVue', UplotVue)
             .mount(el);
     },
