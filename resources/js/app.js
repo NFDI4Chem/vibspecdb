@@ -3,11 +3,11 @@ require('./bootstrap');
 // import uPlot from 'uplot';
 import UplotVue from 'uplot-vue';
 import 'uplot/dist/uPlot.min.css';
+import helpers from "./Mixins/Global.js";
 
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
-import helpers from "./Mixins/Global.js";
 
 import { store } from './store'
 
