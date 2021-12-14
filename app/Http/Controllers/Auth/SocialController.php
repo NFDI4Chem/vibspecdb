@@ -67,12 +67,14 @@ class SocialController extends Controller
             }
             if (!$user) {
                 $user = tap(User::create([
-                    'name' => $providerUser->getName(),
+                    // 'name' => $providerUser->getName(),
+                    'first_name' => $providerUser->getName(),
+                    'last_name' => ' ',
                     'email' => $providerUser->getEmail()
                 ]), function (User $user) {
                     $user->ownedTeams()->save(Team::forceCreate([
                         'user_id' => $user->id,
-                        'name' => explode(' ', $user->name, 2)[0]."'s Team",
+                        'name' => explode(' ', $user->first_name . " " . $user->last_name, 2)[0]."'s Team",
                         'personal_team' => true,
                     ]));
                 });
