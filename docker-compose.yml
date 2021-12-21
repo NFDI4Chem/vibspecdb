@@ -75,10 +75,43 @@ services:
             interval: 30s
             timeout: 20s
             retries: 3
+    meilisearch:
+        image: 'getmeili/meilisearch:latest'
+        ports:
+            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+        volumes:
+            - 'sailmeilisearch:/data.ms'
+        networks:
+            - laravel-php-nginx
+        healthcheck:
+          test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:7700/health"]
+          retries: 3
+          timeout: 5s
+    rabbit:
+        hostname: 'rabbit'
+        image: rabbitmq:3.8.5-management
+        healthcheck:
+            test: rabbitmq-diagnostics -q ping
+            interval: 30s
+            timeout: 30s
+            retries: 3
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+            # - '15671:15671'
+            # - '5671:5671'
+        volumes:
+        - 'rabbitdata:/var/lib/rabbitmq/mnesia/'
+        networks:
+        - laravel-php-nginx
 volumes:
     sailpgsql:
         driver: local
     sailminio:
+        driver: local
+    sailmeilisearch:
+        driver: local
+    rabbitdata:
         driver: local
 
 # Create a bridged network to be used by containers.
