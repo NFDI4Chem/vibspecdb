@@ -69,6 +69,7 @@ Route::middleware(['auth:sanctum'])->get('/explorer', function (Request $request
 
 Route::get('/upload', [UploadController::class, 'store']);
 Route::get('/jobs', [PodcastController::class, 'store']);
+Route::get('/logging', [PodcastController::class, 'logging']);
 
 //////// admin routes 
 Route::group([

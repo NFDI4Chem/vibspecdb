@@ -27,4 +27,17 @@ class PodcastController extends Controller
 
         return ['status' => true];
     }
+
+    public function logging(Request $request)
+    {
+        \Log::info('This is some useful information.');
+
+        \Log::warning('Something could be going wrong.');
+
+        \Log::error('Something is really going wrong.');
+
+        return [
+            'logged' => true
+        ];
+    }
 }
