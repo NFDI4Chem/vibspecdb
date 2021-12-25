@@ -23,6 +23,7 @@ class PodcastController extends Controller
         // $podcast = new Podcast($podcastdata);
         // return $podcast;
 
+        \Log::info(now());
         ProcessPodcast::dispatch($podcast)->delay(now()->addMinutes(1));
 
         return ['status' => true];
