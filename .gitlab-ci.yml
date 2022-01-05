@@ -3,7 +3,7 @@ services:
   - docker:dind
 variables:
   DOCKER_USERNAME: "docker.photonicdata.science"
-  NAME: "vibspecdb_laravel_backend"
+  NAME: "serviceapp_laravel_backend"
   TAG: "v0.1.0"
 stages:
   - build
@@ -40,4 +40,4 @@ rancher-redeploy:
    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin && mv ./rancher-v2.4.13/rancher /usr/local/bin
    - mkdir -p /root/.rancher/
    - echo "{\"Servers\":{\"rancherDefault\":{\"accessKey\":\"$AK\",\"secretKey\":\"$SK\",\"tokenKey\":\"$TK\",\"url\":\"$URL\",\"project\":\"$P\",\"cacert\":\"\",\"kubeCredentials\":null,\"kubeConfigs\":null}},\"CurrentServer\":\"rancherDefault\"}" > /root/.rancher/cli2.json
-   - rancher kubectl rollout restart deployment vibspecdb-laravel -n vibspecdb${RUNMODE}
+   - rancher kubectl rollout restart deployment serviceapp-laravel -n serviceapp${RUNMODE}
