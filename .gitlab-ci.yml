@@ -40,5 +40,5 @@ rancher-redeploy:
    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin && mv ./rancher-v2.4.13/rancher /usr/local/bin
    - mkdir -p /root/.rancher/
    - echo "{\"Servers\":{\"rancherDefault\":{\"accessKey\":\"$AK\",\"secretKey\":\"$SK\",\"tokenKey\":\"$TK\",\"url\":\"$URL\",\"project\":\"$P\",\"cacert\":\"\",\"kubeCredentials\":null,\"kubeConfigs\":null}},\"CurrentServer\":\"rancherDefault\"}" > /root/.rancher/cli2.json
-   - sleep 1h
+  #  - sleep 1h
    - rancher kubectl rollout restart deployment serviceapp-laravel -n serviceapp${RUNMODE}
