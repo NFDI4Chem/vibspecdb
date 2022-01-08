@@ -10,6 +10,7 @@ use App\Http\Controllers\UploadController;
 use App\Http\Controllers\Admin\ConsoleController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Job\PodcastController;
+use App\Http\Controllers\Job\JobsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,7 @@ Route::middleware(['auth:sanctum'])->get('/explorer', function (Request $request
 Route::get('/upload', [UploadController::class, 'store']);
 Route::get('/jobs', [PodcastController::class, 'store']);
 Route::get('/logging', [PodcastController::class, 'logging']);
+Route::get('/jobs/create', [JobsController::class, 'create']);
 
 //////// admin routes 
 Route::group([
