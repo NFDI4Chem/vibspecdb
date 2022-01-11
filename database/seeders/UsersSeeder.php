@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Team;
 use Illuminate\Database\Seeder;
-use App\Actions\Fortify\CreateNewUser;
 
 class UsersSeeder extends Seeder
 {

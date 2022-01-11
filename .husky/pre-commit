@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx lint-staged
+./vendor/bin/php-cs-fixer fix --config .php-cs-fixer.php --allow-risky=yes

@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
             // Force Https for assets
             URL::forceScheme('https');
             // Force Https for signed URLs, verify email for example:
-            $this->app['request']->server->set('HTTPS','on');
+            $this->app['request']->server->set('HTTPS', 'on');
         }
     }
 }

@@ -27,7 +27,7 @@ Route::group([
     'prefix' => 'auth'
 ], function () {
     Route::get('/login/{service}', [SocialController::class, 'redirectToProvider']);
-    Route::get('/login/{service}/callback', [SocialController::class, 'handleProviderCallback']);    
+    Route::get('/login/{service}/callback', [SocialController::class, 'handleProviderCallback']);
 });
 
 Route::get('/', function () {
@@ -73,7 +73,7 @@ Route::get('/jobs', [PodcastController::class, 'store']);
 Route::get('/logging', [PodcastController::class, 'logging']);
 Route::get('/jobs/create', [JobsController::class, 'create']);
 
-//////// admin routes 
+//////// admin routes
 Route::group([
 
 
@@ -99,7 +99,6 @@ Route::group([
 
 ], function () {
     Route::group(['middleware' => ['auth', 'permission:manage roles|view statistics|manage platform']], function () {
-    
         Route::get('console', [ConsoleController::class, 'index'])
         ->name('console');
 
