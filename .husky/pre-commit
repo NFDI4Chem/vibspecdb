@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npx lint-staged
+# php artisan version:show --format=version-main --suppress-app-name
+# exit 1

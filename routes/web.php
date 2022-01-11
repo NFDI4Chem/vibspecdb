@@ -75,7 +75,28 @@ Route::get('/jobs/create', [JobsController::class, 'create']);
 
 //////// admin routes 
 Route::group([
+
+
+
+
+
+
+
+
+
+
+    
     'prefix' => 'admin'
+
+
+
+
+
+
+
+
+
+
 ], function () {
     Route::group(['middleware' => ['auth', 'permission:manage roles|view statistics|manage platform']], function () {
     

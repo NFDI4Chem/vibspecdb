@@ -46,6 +46,8 @@ format:
   commit: '{$commit}'
   version: 'version {$major}.{$minor}.{$patch} (commit {$commit})'
   version-only: 'version {$major}.{$minor}.{$patch}'
+  version-number: '{$major}.{$minor}.{$patch}'
+  version-main: '{$major}.{$minor}'
   full: '{$version-only}[.?={$prerelease}][+?={$buildmetadata}] (commit {$commit})'
   compact: 'v{$major}.{$minor}.{$patch}-{$commit}'
   timestamp-year: '{$timestamp.year}'
