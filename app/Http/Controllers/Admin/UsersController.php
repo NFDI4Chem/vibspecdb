@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
-use App\Actions\Fortify\PasswordValidationRules;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Auth\Events\Registered;
 use App\Actions\Fortify\CreateNewUser;
+use App\Actions\Fortify\PasswordValidationRules;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
-use App\Models\User;
+use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
+use Spatie\Permission\Models\Role;
 
 class UsersController extends Controller
 {

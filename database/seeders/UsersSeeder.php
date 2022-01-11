@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
-use App\Models\User;
 use App\Models\Team;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class UsersSeeder extends Seeder

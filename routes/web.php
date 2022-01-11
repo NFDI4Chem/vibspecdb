@@ -1,16 +1,16 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Auth\SocialController;
-use App\Http\Controllers\Uppy\AwsS3MultipartController;
-use App\Http\Controllers\UploadController;
 use App\Http\Controllers\Admin\ConsoleController;
 use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Job\PodcastController;
+use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Job\JobsController;
+use App\Http\Controllers\Job\PodcastController;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\Uppy\AwsS3MultipartController;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,28 +75,7 @@ Route::get('/jobs/create', [JobsController::class, 'create']);
 
 //////// admin routes
 Route::group([
-
-
-
-
-
-
-
-
-
-
-    
     'prefix' => 'admin'
-
-
-
-
-
-
-
-
-
-
 ], function () {
     Route::group(['middleware' => ['auth', 'permission:manage roles|view statistics|manage platform']], function () {
         Route::get('console', [ConsoleController::class, 'index'])

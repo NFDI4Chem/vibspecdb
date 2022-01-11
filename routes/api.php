@@ -20,7 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::middleware('auth:sanctum')->get('/info', function (Request $request) {
-
-
-        return "Hello world";
+    return "Hello world";
 });
