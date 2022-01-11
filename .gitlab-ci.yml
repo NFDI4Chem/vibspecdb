@@ -12,33 +12,33 @@ stages:
 build-image:
   stage: build
   rules:
-    - if: ($CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'staging') && $CI_COMMIT_TAG == null
+    - if: ($CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'staging') && $CI_COMMIT_TAG != null
   script: 
    - docker build --tag ${DOCKER_USERNAME}/${NAME}:${TAG} . 
 docker-registry-auth:
   stage: push
   rules:
-    - if: ($CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'staging') && $CI_COMMIT_TAG == null
+    - if: ($CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'staging') && $CI_COMMIT_TAG != null
   script:
    - docker login $DOCKER_REGISTRY -u $DOCKER_U -p $DOCKER_P
    - docker push ${DOCKER_USERNAME}/${NAME}:${TAG}
-rancher-redeploy:
-  variables:
-    RUNMODE: "other"
-  stage: redeploy
-  rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
-      variables: 
-        RUNMODE: " "
-    - if: $CI_COMMIT_BRANCH == 'staging'
-      variables: 
-        RUNMODE: "-staging"
-  script: 
-   - apk add curl 
-   - curl -L https://github.com/rancher/cli/releases/download/v2.4.13/rancher-linux-amd64-v2.4.13.tar.gz | tar zx
-   - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-   - chmod +x ./kubectl && mv ./kubectl /usr/local/bin && mv ./rancher-v2.4.13/rancher /usr/local/bin
-   - mkdir -p /root/.rancher/
-   - echo "{\"Servers\":{\"rancherDefault\":{\"accessKey\":\"$AK\",\"secretKey\":\"$SK\",\"tokenKey\":\"$TK\",\"url\":\"$URL\",\"project\":\"$P\",\"cacert\":\"\",\"kubeCredentials\":null,\"kubeConfigs\":null}},\"CurrentServer\":\"rancherDefault\"}" > /root/.rancher/cli2.json
-  #  - sleep 1h
-   - rancher kubectl rollout restart deployment serviceapp-laravel -n serviceapp${RUNMODE}
+# rancher-redeploy:
+#   variables:
+#     RUNMODE: "other"
+#   stage: redeploy
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == 'master'
+#       variables: 
+#         RUNMODE: " "
+#     - if: $CI_COMMIT_BRANCH == 'staging'
+#       variables: 
+#         RUNMODE: "-staging"
+#   script: 
+#    - apk add curl 
+#    - curl -L https://github.com/rancher/cli/releases/download/v2.4.13/rancher-linux-amd64-v2.4.13.tar.gz | tar zx
+#    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+#    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin && mv ./rancher-v2.4.13/rancher /usr/local/bin
+#    - mkdir -p /root/.rancher/
+#    - echo "{\"Servers\":{\"rancherDefault\":{\"accessKey\":\"$AK\",\"secretKey\":\"$SK\",\"tokenKey\":\"$TK\",\"url\":\"$URL\",\"project\":\"$P\",\"cacert\":\"\",\"kubeCredentials\":null,\"kubeConfigs\":null}},\"CurrentServer\":\"rancherDefault\"}" > /root/.rancher/cli2.json
+#   #  - sleep 1h
+#    - rancher kubectl rollout restart deployment serviceapp-laravel -n serviceapp${RUNMODE}
