@@ -9,6 +9,8 @@ stages:
   - build
   - push
   - redeploy
+before_script:
+  - TAG=$(cat version.txt)
 build-image:
   stage: build
   rules:
