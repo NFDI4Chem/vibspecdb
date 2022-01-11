@@ -13,10 +13,12 @@ before_script:
   - TAG=$(cat version.txt)
 build-image:
   stage: build
-  rules:
-    - if: ($CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'staging') && $CI_COMMIT_TAG != null
+  # rules:
+    # - if: ($CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'staging') && $CI_COMMIT_TAG != null
   script: 
-   - docker build --tag ${DOCKER_USERNAME}/${NAME}:${TAG} . 
+   - echo $CI_COMMIT_BRANCH
+   - echo $CI_COMMIT_TAG
+  #  - docker build --tag ${DOCKER_USERNAME}/${NAME}:${TAG} . 
 docker-registry-auth:
   stage: push
   rules:
