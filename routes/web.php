@@ -71,6 +71,40 @@ Route::get('/upload', [UploadController::class, 'store']);
 Route::get('/jobs', [PodcastController::class, 'store']);
 Route::get('/logging', [PodcastController::class, 'logging']);
 
+
+
+/// project and study routes ///
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('projects/{project}', [ProjectController::class, 'show'])
+        ->name('project');
+    Route::get('projects/{project}/settings', [ProjectController::class, 'settings'])
+        ->name('project.settings');
+    Route::delete('projects/{project}', [ProjectController::class, 'destroy'])
+        ->name('project.destroy');
+    Route::post('projects/create', [ProjectController::class, 'store'])
+        ->name('projects.create');
+    Route::put('projects/{project}/update', [ProjectController::class, 'update'])
+        ->name('projects.update');
+    Route::get('projects/{project}/activity', [ProjectController::class, 'activity'])
+        ->name('projects.activity');
+    
+    Route::get('studies/{study}', [StudyController::class, 'show'])
+        ->name('study');
+    Route::get('studies/{study}/settings', [StudyController::class, 'settings'])
+        ->name('study.settings');
+    Route::delete('studies/{study}', [StudyController::class, 'destroy'])
+        ->name('study.destroy');
+    Route::post('studies/create', [StudyController::class, 'store'])
+        ->name('studies.create');
+    Route::put('studies/{study}/update', [StudyController::class, 'update'])
+        ->name('studies.update');
+    Route::get('studies/{study}/activity', [StudyController::class, 'activity'])
+        ->name('studies.activity');
+});
+
+///              ///
+
 //////// admin routes 
 Route::group([
     'prefix' => 'admin'
