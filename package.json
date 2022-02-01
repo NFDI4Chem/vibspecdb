@@ -31,6 +31,7 @@
         "@headlessui/vue": "^1.4.2",
         "@vue-hero-icons/outline": "^1.7.2",
         "marked": "^4.0.4",
+        "@types/marked": "^4.0.1",
         "popper.js": "^1.16.1",
         "uplot": "^1.6.16",
         "uplot-vue": "^1.1.1",
