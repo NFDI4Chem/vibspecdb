@@ -10,6 +10,10 @@ use App\Http\Controllers\UploadController;
 use App\Http\Controllers\Admin\ConsoleController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Job\PodcastController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\StudyController;
+use App\Models\Project;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,14 +42,16 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum'])->get('/dashboard', function (Request $request) {
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (Request $request) {
     $user = $request->user();
     $team = $user->currentTeam;
     if ($team) {
         $team->users = $team->allUsers();
     }
+    $projects = Project::where('owner_id', $user->id)->where('team_id', $team->id)->get();
     return Inertia::render('Dashboard', [
-        'team' => $team
+        'team' => $team,
+        'projects' => $projects
     ]);
 })->name('dashboard');
 

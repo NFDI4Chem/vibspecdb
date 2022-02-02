@@ -12,43 +12,7 @@
         viewBox="0 0 529.16666 529.16669"
         version="1.1"
         id="svg8"
-        inkscape:version="0.92.3 (2405546, 2018-03-11)"
-        sodipodi:docname="png_db_ipht.svg"
-    >
-        <defs id="defs2" />
-        <sodipodi:namedview
-            id="base"
-            pagecolor="#ffffff"
-            bordercolor="#666666"
-            borderopacity="1.0"
-            inkscape:pageopacity="0.0"
-            inkscape:pageshadow="2"
-            inkscape:zoom="0.615"
-            inkscape:cx="1000"
-            inkscape:cy="1000"
-            inkscape:document-units="mm"
-            inkscape:current-layer="g4548"
-            showgrid="true"
-            units="px"
-            inkscape:window-width="2071"
-            inkscape:window-height="1443"
-            inkscape:window-x="1487"
-            inkscape:window-y="58"
-            inkscape:window-maximized="0"
-        >
-            <inkscape:grid type="xygrid" id="grid4518" />
-        </sodipodi:namedview>
-        <metadata id="metadata5">
-            <rdf:RDF>
-                <cc:Work rdf:about="">
-                    <dc:format>image/svg+xml</dc:format>
-                    <dc:type
-                        rdf:resource="http://purl.org/dc/dcmitype/StillImage"
-                    />
-                    <dc:title></dc:title>
-                </cc:Work>
-            </rdf:RDF>
-        </metadata>
+    >     
         <g
             inkscape:label="Layer 1"
             inkscape:groupmode="layer"
