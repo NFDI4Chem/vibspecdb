@@ -26,6 +26,7 @@ use App\Models\Project;
 |
 */
 
+
 Route::group([
     'prefix' => 'auth'
 ], function () {
@@ -41,6 +42,8 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::supportBubble();
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (Request $request) {
     $user = $request->user();

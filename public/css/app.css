@@ -1113,6 +1113,9 @@ select {
 .pointer-events-none {
 	pointer-events: none;
 }
+.pointer-events-auto {
+	pointer-events: auto;
+}
 .fixed {
 	position: fixed;
 }
@@ -1190,6 +1193,9 @@ select {
 .z-10 {
 	z-index: 10;
 }
+.z-30 {
+	z-index: 30;
+}
 .col-span-6 {
 	grid-column: span 6 / span 6;
 }
@@ -1201,6 +1207,9 @@ select {
 }
 .-m-2 {
 	margin: -0.5rem;
+}
+.m-4 {
+	margin: 1rem;
 }
 .mx-auto {
 	margin-left: auto;
@@ -1265,9 +1274,6 @@ select {
 .mt-1 {
 	margin-top: 0.25rem;
 }
-.ml-2 {
-	margin-left: 0.5rem;
-}
 .mb-6 {
 	margin-bottom: 1.5rem;
 }
@@ -1285,6 +1291,9 @@ select {
 }
 .ml-1 {
 	margin-left: 0.25rem;
+}
+.ml-2 {
+	margin-left: 0.5rem;
 }
 .-mr-0\.5 {
 	margin-right: -0.125rem;
@@ -1447,6 +1456,9 @@ select {
 }
 .h-1 {
 	height: 0.25rem;
+}
+.h-14 {
+	height: 3.5rem;
 }
 .min-h-screen {
 	min-height: 100vh;
@@ -1671,6 +1683,9 @@ select {
 .items-start {
 	align-items: flex-start;
 }
+.items-end {
+	align-items: flex-end;
+}
 .items-center {
 	align-items: center;
 }
@@ -1697,6 +1712,9 @@ select {
 }
 .gap-1 {
 	gap: 0.25rem;
+}
+.gap-3 {
+	gap: 0.75rem;
 }
 .gap-y-6 {
 	row-gap: 1.5rem;
@@ -2006,6 +2024,14 @@ select {
 .bg-indigo-700 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(67, 56, 202, var(--tw-bg-opacity));
+}
+.bg-purple-400 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(167, 139, 250, var(--tw-bg-opacity));
+}
+.bg-purple-500 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(139, 92, 246, var(--tw-bg-opacity));
 }
 .bg-opacity-25 {
 	--tw-bg-opacity: 0.25;
@@ -2430,6 +2456,9 @@ select {
 .underline {
 	text-decoration: underline;
 }
+.no-underline {
+	text-decoration: none;
+}
 .antialiased {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -2687,6 +2716,10 @@ select {
 	--tw-bg-opacity: 1;
 	background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
 }
+.hover\:bg-purple-600:hover {
+	--tw-bg-opacity: 1;
+	background-color: rgba(124, 58, 237, var(--tw-bg-opacity));
+}
 .hover\:text-gray-500:hover {
 	--tw-text-opacity: 1;
 	color: rgba(107, 114, 128, var(--tw-text-opacity));
@@ -2910,6 +2943,10 @@ select {
 .active\:bg-gray-50:active {
 	--tw-bg-opacity: 1;
 	background-color: rgba(249, 250, 251, var(--tw-bg-opacity));
+}
+.active\:bg-purple-600:active {
+	--tw-bg-opacity: 1;
+	background-color: rgba(124, 58, 237, var(--tw-bg-opacity));
 }
 .active\:text-gray-700:active {
 	--tw-text-opacity: 1;
