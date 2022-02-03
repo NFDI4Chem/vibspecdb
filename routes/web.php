@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Job\PodcastController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\StudyController;
+use App\Http\Controllers\FileSystemController;
 use App\Models\Project;
 
 
@@ -85,6 +86,8 @@ Route::get('/logging', [PodcastController::class, 'logging']);
 /// project and study routes ///
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::post('/storage/signed-storage-url',  [FileSystemController::class, 'signedStorageURL']);
+
     Route::get('projects/{project}', [ProjectController::class, 'show'])
         ->name('project');
     Route::get('projects/{project}/settings', [ProjectController::class, 'settings'])
@@ -110,6 +113,8 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('studies.update');
     Route::get('studies/{study}/activity', [StudyController::class, 'activity'])
         ->name('studies.activity');
+    Route::get('studies/{study}/files', [StudyController::class, 'files'])
+        ->name('study.files');
 });
 
 ///              ///
