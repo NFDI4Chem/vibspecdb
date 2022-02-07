@@ -1328,9 +1328,6 @@ select {
 .mb-4 {
 	margin-bottom: 1rem;
 }
-.-mt-px {
-	margin-top: -1px;
-}
 .mr-4 {
 	margin-right: 1rem;
 }
@@ -1597,9 +1594,6 @@ select {
 }
 .max-w-xl {
 	max-width: 36rem;
-}
-.max-w-6xl {
-	max-width: 72rem;
 }
 .max-w-4xl {
 	max-width: 56rem;
@@ -1871,12 +1865,15 @@ select {
 .whitespace-nowrap {
 	white-space: nowrap;
 }
+<<<<<<< HEAD
 .break-words {
 	overflow-wrap: break-word;
 }
 .break-all {
 	word-break: break-all;
 }
+=======
+>>>>>>> master
 .rounded-md {
 	border-radius: 0.375rem;
 }
@@ -1982,6 +1979,7 @@ select {
 	--tw-border-opacity: 1;
 	border-color: rgba(243, 244, 246, var(--tw-border-opacity));
 }
+<<<<<<< HEAD
 .border-gray-400 {
 	--tw-border-opacity: 1;
 	border-color: rgba(156, 163, 175, var(--tw-border-opacity));
@@ -1998,6 +1996,8 @@ select {
 	--tw-border-opacity: 1;
 	border-color: rgba(1, 157, 187, var(--tw-border-opacity));
 }
+=======
+>>>>>>> master
 .bg-white {
 	--tw-bg-opacity: 1;
 	background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
@@ -2295,14 +2295,14 @@ select {
 .pr-5 {
 	padding-right: 1.25rem;
 }
-.pt-8 {
-	padding-top: 2rem;
-}
 .pl-8 {
 	padding-left: 2rem;
 }
 .pr-3 {
 	padding-right: 0.75rem;
+}
+.pt-8 {
+	padding-top: 2rem;
 }
 .pr-1 {
 	padding-right: 0.25rem;
@@ -2510,14 +2510,6 @@ select {
 	--tw-text-opacity: 1;
 	color: rgba(16, 185, 129, var(--tw-text-opacity));
 }
-.text-gray-200 {
-	--tw-text-opacity: 1;
-	color: rgba(229, 231, 235, var(--tw-text-opacity));
-}
-.text-gray-300 {
-	--tw-text-opacity: 1;
-	color: rgba(209, 213, 219, var(--tw-text-opacity));
-}
 .text-rose-400 {
 	--tw-text-opacity: 1;
 	color: rgba(251, 113, 133, var(--tw-text-opacity));
@@ -2534,9 +2526,15 @@ select {
 	--tw-text-opacity: 1;
 	color: rgba(146, 64, 14, var(--tw-text-opacity));
 }
+<<<<<<< HEAD
 .text-sky-700 {
 	--tw-text-opacity: 1;
 	color: rgba(3, 105, 161, var(--tw-text-opacity));
+=======
+.text-gray-300 {
+	--tw-text-opacity: 1;
+	color: rgba(209, 213, 219, var(--tw-text-opacity));
+>>>>>>> master
 }
 .text-green-800 {
 	--tw-text-opacity: 1;
@@ -3288,10 +3286,6 @@ select {
 
 	.sm\:items-center {
 		align-items: center;
-	}
-
-	.sm\:justify-start {
-		justify-content: flex-start;
 	}
 
 	.sm\:justify-center {

@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
             // Force Https for assets
             URL::forceScheme('https');
             // Force Https for signed URLs, verify email for example:
-            $this->app['request']->server->set('HTTPS','on');
+            $this->app['request']->server->set('HTTPS', 'on');
         }
     }
 }

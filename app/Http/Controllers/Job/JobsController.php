@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Job;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use RenokiCo\PhpK8s\KubernetesCluster;
 
 class JobsController extends Controller

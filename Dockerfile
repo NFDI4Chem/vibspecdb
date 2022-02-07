@@ -32,3 +32,5 @@ RUN php artisan route:clear
 RUN php artisan view:clear
 
 RUN chown -R application:application .
+
+# Python install:

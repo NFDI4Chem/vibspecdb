@@ -1,10 +1,10 @@
-mode: absorb
+mode: increment
 blade-directive: version
 current:
   label: v
   major: 1
   minor: 0
-  patch: 1
+  patch: 5
   prerelease: ''
   buildmetadata: ''
   commit: 9b222e
@@ -44,8 +44,10 @@ format:
   prerelease: '{$prerelease}'
   buildmetadata: '{$buildmetadata}'
   commit: '{$commit}'
-  version: 'version {$major}.{$minor}.{$patch} (commit {$commit})'
-  version-only: 'version {$major}.{$minor}.{$patch}'
+  version: 'v{$major}.{$minor}.{$patch} (commit {$commit})'
+  version-only: 'v{$major}.{$minor}.{$patch}'
+  version-number: '{$major}.{$minor}.{$patch}'
+  version-main: '{$major}.{$minor}'
   full: '{$version-only}[.?={$prerelease}][+?={$buildmetadata}] (commit {$commit})'
   compact: 'v{$major}.{$minor}.{$patch}-{$commit}'
   timestamp-year: '{$timestamp.year}'

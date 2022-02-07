@@ -19,6 +19,6 @@ class UpdateTeamNameTest extends TestCase
         ]);
 
         $this->assertCount(1, $user->fresh()->ownedTeams);
-        $this->assertEquals('Test Team', $user->currentTeam->fresh()->name);
+        $this->assertSame('Test Team', $user->currentTeam->fresh()->name);
     }
 }

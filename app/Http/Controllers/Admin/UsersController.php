@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
-use App\Actions\Fortify\PasswordValidationRules;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Auth\Events\Registered;
 use App\Actions\Fortify\CreateNewUser;
+use App\Actions\Fortify\PasswordValidationRules;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
-use App\Models\User;
+use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
+use Spatie\Permission\Models\Role;
 
 class UsersController extends Controller
 {
@@ -26,7 +26,7 @@ class UsersController extends Controller
             'users' => User::orderBy('name')
                 ->filter($request->only('search', 'owner', 'role', 'trashed'))
                 ->get()
-                ->transform(function ($user) {  
+                ->transform(function ($user) {
                     return [
                         'id' => $user->id,
                         'first_name' => $user->first_name,
@@ -46,7 +46,9 @@ class UsersController extends Controller
 
     public function create()
     {
-        return Inertia::render('Console/Users/Create',[
+        return Inertia::render(
+            'Console/Users/Create',
+            [
             'roles' => Role::orderBy('name')
                 ->get()
                 ->map
@@ -101,7 +103,7 @@ class UsersController extends Controller
             'role' => 'required',
         ]);
         
-        if (Auth::user()->id == $user->id ) {
+        if (Auth::user()->id == $user->id) {
             return $request->wantsJson() ? new JsonResponse('', 405) : back()->withErrors([
                 'error_message' => 'Updating currently logged in user role is not allowed.'
             ]);
@@ -109,7 +111,7 @@ class UsersController extends Controller
         
         $role = $request->get('role');
         
-        if($user && $role){
+        if ($user && $role) {
             $user->syncRoles([$role]);
         }
 

@@ -71,17 +71,6 @@ class User extends Authenticatable # implements MustVerifyEmail
         return $this->hasMany(LinkedSocialAccount::class);
     }
 
-    
-    /**
-     * Get the default profile photo URL if no profile photo has been uploaded.
-     *
-     * @return string
-     */
-    protected function defaultProfilePhotoUrl()
-    {
-        return 'https://ui-avatars.com/api/?name='.urlencode($this->first_name.'+'.$this->last_name).'&color=7F9CF5&background=EBF4FF';
-    }
-
     public function scopeOrderByName($query)
     {
         return $query->orderBy('last_name')->orderBy('first_name');
@@ -89,7 +78,9 @@ class User extends Authenticatable # implements MustVerifyEmail
 
     public function scopeWhereRole($query, $role)
     {
-        return $query->whereHas("roles", function($q) use($role) { $q->where("name", $role); });
+        return $query->whereHas("roles", function ($q) use ($role) {
+            $q->where("name", $role);
+        });
     }
 
     public function scopeFilter($query, array $filters)
@@ -104,5 +95,15 @@ class User extends Authenticatable # implements MustVerifyEmail
             $query->whereRole($role);
         });
     }
-    }
 
+    
+    /**
+     * Get the default profile photo URL if no profile photo has been uploaded.
+     *
+     * @return string
+     */
+    protected function defaultProfilePhotoUrl()
+    {
+        return 'https://ui-avatars.com/api/?name='.urlencode($this->first_name.'+'.$this->last_name).'&color=7F9CF5&background=EBF4FF';
+    }
+}

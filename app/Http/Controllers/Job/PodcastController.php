@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Job;
 
-use App\Jobs\ProcessPodcast;
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessPodcast;
 
 use App\Models\Podcast;
 

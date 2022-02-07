@@ -1,6 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\ConsoleController;
+use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\Job\JobsController;
+use App\Http\Controllers\Job\PodcastController;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\Uppy\AwsS3MultipartController;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -33,7 +41,7 @@ Route::group([
     'prefix' => 'auth'
 ], function () {
     Route::get('/login/{service}', [SocialController::class, 'redirectToProvider']);
-    Route::get('/login/{service}/callback', [SocialController::class, 'handleProviderCallback']);    
+    Route::get('/login/{service}/callback', [SocialController::class, 'handleProviderCallback']);
 });
 
 Route::get('/', function () {
@@ -126,7 +134,6 @@ Route::group([
     'prefix' => 'admin'
 ], function () {
     Route::group(['middleware' => ['auth', 'permission:manage roles|view statistics|manage platform']], function () {
-    
         Route::get('console', [ConsoleController::class, 'index'])
         ->name('console');
 

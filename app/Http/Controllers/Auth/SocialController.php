@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use DB;
-use Auth;
-use App\Models\User;
-use App\Models\Team;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Auth\Events\Registered;
 use App\Models\LinkedSocialAccount;
+use App\Models\Team;
+use App\Models\User;
+use Auth;
+use Illuminate\Auth\Events\Registered;
+use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
 {
@@ -21,7 +19,7 @@ class SocialController extends Controller
      */
     public function redirectToProvider($service)
     {
-        if ($service === 'gitlab') { 
+        if ($service === 'gitlab') {
             return Socialite::driver($service)
                 ->setHost(env('GITLAB_BASE_URL'))
                 ->stateless()
@@ -40,7 +38,7 @@ class SocialController extends Controller
     {
         $providerUser = null;
 
-        if ($service === 'gitlab') { 
+        if ($service === 'gitlab') {
             $providerUser = Socialite::driver($service)
                 ->setHost(env('GITLAB_BASE_URL'))
                 ->stateless()
@@ -49,8 +47,8 @@ class SocialController extends Controller
             $providerUser = Socialite::driver($service)->user();
         }
 
-        $providerUserID = $providerUser->getId() ? 
-            $providerUser->getId() : 
+        $providerUserID = $providerUser->getId() ?
+            $providerUser->getId() :
             ($providerUser->sub ? $providerUser->sub : '');
 
         $linkedSocialAccount = LinkedSocialAccount::where('provider_name', $service)
