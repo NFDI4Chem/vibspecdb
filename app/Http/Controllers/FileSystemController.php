@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Aws\S3\S3Client;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
 use App\Models\FileSystemObject;
 use App\Models\Project;
 use App\Models\Study;
+use Aws\S3\S3Client;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class FileSystemController extends Controller
 {
-     /**
-     * Create a new signed URL.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    /**
+    * Create a new signed URL.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
     public function signedStorageURL(Request $request)
     {
         $file = $request->get('file');
@@ -29,7 +29,7 @@ class FileSystemController extends Controller
 
         $path = null;
 
-        if(array_key_exists('fullPath', $file)){
+        if (array_key_exists('fullPath', $file)) {
             $path = $file['fullPath'];
         }
         
@@ -49,18 +49,18 @@ class FileSystemController extends Controller
 
         $filePath = $environment . "/" . $project->uuid . "/" . $study->uuid . "/" . $relativefilePath;
 
-        if($hasDirectories){
-            $directories =  array_filter(explode('/', str_replace($filename, '' , $path)));
-            if($baseDirectory){
+        if ($hasDirectories) {
+            $directories =  array_filter(explode('/', str_replace($filename, '', $path)));
+            if ($baseDirectory) {
                 $level = 0;
             }
-            if(($level + count($directories) - 1) > $level){
+            if (($level + count($directories) - 1) > $level) {
                 for ($currentLevel; $currentLevel < ($level + count($directories) - 1); $currentLevel++) {
                     $parentFileSystemObject = FileSystemObject::firstOrCreate([
                         'name' => $directories[$currentLevel],
-                        'slug' => Str::slug($directories[$currentLevel],'-'),
+                        'slug' => Str::slug($directories[$currentLevel], '-'),
                         'description' => $directories[$currentLevel],
-                        'relative_url' => str_replace( '//', '/', '/' . explode($directories[$currentLevel], $path)[0] . "/" . $directories[$currentLevel]),
+                        'relative_url' => str_replace('//', '/', '/' . explode($directories[$currentLevel], $path)[0] . "/" . $directories[$currentLevel]),
                         'type' => 'directory',
                         'key' => $directories[$currentLevel],
                         'is_root' => $currentLevel == 0 ? 1 : 0,
@@ -70,9 +70,9 @@ class FileSystemController extends Controller
                     ]);
                     $childFileSystemObject = FileSystemObject::firstOrCreate([
                         'name' => $directories[$currentLevel+1],
-                        'slug' => Str::slug($directories[$currentLevel+1],'-'),
+                        'slug' => Str::slug($directories[$currentLevel+1], '-'),
                         'description' => $directories[$currentLevel+1],
-                        'relative_url' => str_replace( '//', '/', '/' . explode($directories[$currentLevel+1], $path)[0] . "/" . $directories[$currentLevel+1]),
+                        'relative_url' => str_replace('//', '/', '/' . explode($directories[$currentLevel+1], $path)[0] . "/" . $directories[$currentLevel+1]),
                         'type' => 'directory',
                         'key' => $directories[$currentLevel+1],
                         'is_root' => $currentLevel + 1 == 0 ? 1 : 0,
@@ -80,19 +80,19 @@ class FileSystemController extends Controller
                         'study_id' => $study->id,
                         'level' => $currentLevel+1,
                     ]);
-                    if(!$childFileSystemObject->parent_id){
+                    if (!$childFileSystemObject->parent_id) {
                         $childFileSystemObject->parent_id = $parentFileSystemObject->id;
                         $childFileSystemObject->save();
                         $parentFileSystemObject->has_children = 1;
                         $parentFileSystemObject->save();
                     }
                 }
-            }else{
+            } else {
                 $childFileSystemObject = FileSystemObject::firstOrCreate([
                     'name' => $directories[$currentLevel],
-                    'slug' => Str::slug($directories[$currentLevel],'-'),
+                    'slug' => Str::slug($directories[$currentLevel], '-'),
                     'description' => $directories[$currentLevel],
-                    'relative_url' => str_replace( '//', '/', '/' . explode($directories[$currentLevel], $path)[0] . "/" . $directories[$currentLevel]),
+                    'relative_url' => str_replace('//', '/', '/' . explode($directories[$currentLevel], $path)[0] . "/" . $directories[$currentLevel]),
                     'type' => 'directory',
                     'key' => $directories[$currentLevel],
                     'is_root' => $currentLevel == 0 ? 1 : 0,
@@ -103,14 +103,14 @@ class FileSystemController extends Controller
             }
         }
 
-        if($hasDirectories){
+        if ($hasDirectories) {
             $childFileSystemObject->has_children = 1;
             $childFileSystemObject->save();
         }
 
         $fileFileSystemObject = FileSystemObject::firstOrCreate([
             'name' => $filename,
-            'slug' => Str::slug($filename,'-'),
+            'slug' => Str::slug($filename, '-'),
             'description' => $filename,
             'relative_url' => $path,
             'type' => 'file',

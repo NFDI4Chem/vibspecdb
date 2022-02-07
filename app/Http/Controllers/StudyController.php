@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Actions\Study\CreateNewStudy;
 use App\Actions\Study\UpdateStudy;
+use App\Models\FileSystemObject;
 use App\Models\Study;
 use Illuminate\Contracts\Auth\StatefulGuard;
-use Laravel\Fortify\Actions\ConfirmPassword;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\FileSystemObject;
+use Laravel\Fortify\Actions\ConfirmPassword;
 
 class StudyController extends Controller
 {
@@ -97,7 +97,9 @@ class StudyController extends Controller
     public function destroy(Request $request, StatefulGuard $guard, Study $study)
     {
         $confirmed = app(ConfirmPassword::class)(
-            $guard, $request->user(), $request->password
+            $guard,
+            $request->user(),
+            $request->password
         );
 
         if (! $confirmed) {

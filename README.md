@@ -12,6 +12,7 @@ node: "^14.18.0"
 ### **Common**: install dependencies 
 ```bash
 composer install
+composer update
 npm install 
 npm run dev
 ```

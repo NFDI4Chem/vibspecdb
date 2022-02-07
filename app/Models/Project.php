@@ -22,7 +22,7 @@ class Project extends Model implements Auditable
         'description',
         'type',
         'uuid',
-        'access', 
+        'access',
         'access_type',
         'team_id',
         'owner_id',
@@ -53,5 +53,4 @@ class Project extends Model implements Auditable
     {
         return  env('APP_URL', null)."/projects/".urlencode($this->url);
     }
-
 }

@@ -1,21 +1,20 @@
 <?php
 
+use App\Http\Controllers\Admin\ConsoleController;
+use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\FileSystemController;
+use App\Http\Controllers\Job\JobsController;
+use App\Http\Controllers\Job\PodcastController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\StudyController;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\Uppy\AwsS3MultipartController;
+use App\Models\Project;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\Auth\SocialController;
-use App\Http\Controllers\Uppy\AwsS3MultipartController;
-use App\Http\Controllers\UploadController;
-use App\Http\Controllers\Admin\ConsoleController;
-use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Job\PodcastController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\StudyController;
-use App\Http\Controllers\FileSystemController;
-use App\Models\Project;
-use App\Http\Controllers\Job\JobsController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -88,7 +87,7 @@ Route::get('/jobs/create', [JobsController::class, 'create']);
 /// project and study routes ///
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::post('/storage/signed-storage-url',  [FileSystemController::class, 'signedStorageURL']);
+    Route::post('/storage/signed-storage-url', [FileSystemController::class, 'signedStorageURL']);
 
     Route::get('projects/{project}', [ProjectController::class, 'show'])
         ->name('project');
@@ -121,7 +120,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 ///              ///
 
-//////// admin routes 
+//////// admin routes
 Route::group([
     'prefix' => 'admin'
 ], function () {

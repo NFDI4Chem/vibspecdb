@@ -20,7 +20,7 @@ class FileSystemObject extends Model
         'compressionInfo',
         'kernelSessionInfo',
         'color',
-        'starred', 
+        'starred',
         'is_public',
         'is_deleted',
         'is_archived',

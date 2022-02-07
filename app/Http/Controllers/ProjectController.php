@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Actions\Project\CreateNewProject;
 use App\Actions\Project\UpdateProject;
 use App\Models\Project;
-use App\Models\Study;
 use Illuminate\Contracts\Auth\StatefulGuard;
-use Laravel\Fortify\Actions\ConfirmPassword;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Laravel\Fortify\Actions\ConfirmPassword;
 
 class ProjectController extends Controller
 {
@@ -44,7 +43,9 @@ class ProjectController extends Controller
     public function destroy(Request $request, StatefulGuard $guard, Project $project)
     {
         $confirmed = app(ConfirmPassword::class)(
-            $guard, $request->user(), $request->password
+            $guard,
+            $request->user(),
+            $request->password
         );
 
         if (! $confirmed) {

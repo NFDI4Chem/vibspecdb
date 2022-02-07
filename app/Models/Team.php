@@ -45,7 +45,7 @@ class Team extends JetstreamTeam
         'updated' => TeamUpdated::class,
         'deleted' => TeamDeleted::class,
     ];
-         /**
+    /**
      * Get the default team profile photo URL if no profile photo has been uploaded.
      *
      * @return string

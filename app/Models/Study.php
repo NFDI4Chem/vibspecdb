@@ -22,7 +22,7 @@ class Study extends Model implements Auditable
         'description',
         'type',
         'uuid',
-        'access', 
+        'access',
         'access_type',
         'team_id',
         'owner_id',
