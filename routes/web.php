@@ -14,6 +14,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\StudyController;
 use App\Http\Controllers\FileSystemController;
 use App\Models\Project;
+use App\Http\Controllers\Job\JobsController;
 
 
 /*
@@ -80,6 +81,7 @@ Route::middleware(['auth:sanctum'])->get('/explorer', function (Request $request
 Route::get('/upload', [UploadController::class, 'store']);
 Route::get('/jobs', [PodcastController::class, 'store']);
 Route::get('/logging', [PodcastController::class, 'logging']);
+Route::get('/jobs/create', [JobsController::class, 'create']);
 
 
 
