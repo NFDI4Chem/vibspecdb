@@ -3,7 +3,7 @@ services:
   - docker:dind
 variables:
   DOCKER_USERNAME: "docker.photonicdata.science"
-  NAME: "serviceapp_laravel_backend"
+  NAME: "vibspecdb_laravel_backend"
   TAG: "v0.1.0"
 stages:
   - build
@@ -38,4 +38,4 @@ build-image:
       variables: 
         RUNMODE: "-staging"
   script: 
-    - echo 'todot here'
+    - echo 'todos here'
