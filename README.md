@@ -1,7 +1,7 @@
 ## **Pre-requirements:** 
 
 ```
-php: "^7.3|^8.0"
+php: "^8.0.2"
 composer: "^2.2.4"
 npm: "^14.15.4|^16.13.0"
 node: "^14.18.0"
@@ -89,6 +89,8 @@ Inside this docker container run migration and iitial configuration:
 ```bash
 php artisan migrate:fresh
 npm run dev
+npx husky install
+chmod +x ./.husky/pre-*
 php artisan key:generate
 php artisan optimize
 php artisan config:clear

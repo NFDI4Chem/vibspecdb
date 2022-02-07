@@ -1599,16 +1599,16 @@ select {
 	--tw-translate-y: 0px;
 	transform: var(--tw-transform);
 }
-.translate-x-full {
-	--tw-translate-x: 100%;
-	transform: var(--tw-transform);
-}
 .-translate-x-full {
 	--tw-translate-x: -100%;
 	transform: var(--tw-transform);
 }
 .translate-x-0 {
 	--tw-translate-x: 0px;
+	transform: var(--tw-transform);
+}
+.translate-x-full {
+	--tw-translate-x: 100%;
 	transform: var(--tw-transform);
 }
 .translate-x-5 {
