@@ -1,0 +1,125 @@
+version: '3'
+services:
+    pgsql:
+        image: 'postgres:13'
+        ports:
+            - '${FORWARD_DB_PORT:-5432}:5432'
+        environment:
+            PGPASSWORD: '${DB_PASSWORD:-secret}'
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+        volumes:
+            - 'sailpgsql:/var/lib/postgresql/data'
+        networks:
+            - laravel-php-nginx
+        healthcheck:
+            test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
+            retries: 3
+            timeout: 5s
+    redis:
+        image: 'redis:alpine'
+        container_name: redis_server
+        ports:
+            - '${FORWARD_REDIS_PORT:-6379}:6379'
+        networks:
+            - laravel-php-nginx
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            retries: 3
+            timeout: 5s
+    backend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - '8000:80'
+        environment:
+            APP_ENV: "local"
+        depends_on:
+            - redis
+            - pgsql
+        volumes:
+            - '.:/app'
+        networks:
+            - laravel-php-nginx
+    mailhog:
+        image: 'mailhog/mailhog:latest'
+        ports:
+            - '${FORWARD_MAILHOG_PORT:-1025}:1025'
+            - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
+        networks:
+           - laravel-php-nginx
+    selenium:
+        profiles:
+            - donotstart
+        image: 'selenium/standalone-chrome'
+        volumes:
+                - '/dev/shm:/dev/shm'
+        networks:
+            - laravel-php-nginx
+    minio:
+        profiles:
+            - donotstart
+        image: 'minio/minio:latest'
+        ports:
+            - '${MINIO_PORT:-9000}:9000'
+            - '${FORWARD_MINIO_PORT:-9001}:9001'
+        environment:
+            MINIO_ROOT_USER: '${MINIO_ROOT_USER}'
+            MINIO_ROOT_PASSWORD: '${MINIO_ROOT_PASSWORD}'
+            MINIO_STORAGE_USE_HTTPS: 'false'
+        volumes:
+            - 'sailminio:/data'
+        networks:
+            - laravel-php-nginx
+        command: ["server", "--console-address", ":9001","/data"]
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+            interval: 30s
+            timeout: 20s
+            retries: 3
+    meilisearch:
+        image: 'getmeili/meilisearch:latest'
+        ports:
+            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+        volumes:
+            - 'sailmeilisearch:/data.ms'
+        networks:
+            - laravel-php-nginx
+        healthcheck:
+          test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:7700/health"]
+          retries: 3
+          timeout: 5s
+    rabbit:
+        hostname: 'rabbit'
+        image: rabbitmq:3.8.5-management
+        healthcheck:
+            test: rabbitmq-diagnostics -q ping
+            interval: 30s
+            timeout: 30s
+            retries: 3
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+            # - '15671:15671'
+            # - '5671:5671'
+        volumes:
+        - 'rabbitdata:/var/lib/rabbitmq/mnesia/'
+        networks:
+        - laravel-php-nginx
+volumes:
+    sailpgsql:
+        driver: local
+    sailminio:
+        driver: local
+    sailmeilisearch:
+        driver: local
+    rabbitdata:
+        driver: local
+
+# Create a bridged network to be used by containers.
+# This will allow us to easily target other containers in the same stack
+networks:
+    laravel-php-nginx:
+        driver: bridge

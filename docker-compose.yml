@@ -51,12 +51,16 @@ services:
         networks:
            - laravel-php-nginx
     selenium:
+        profiles:
+            - donotstart
         image: 'selenium/standalone-chrome'
         volumes:
                 - '/dev/shm:/dev/shm'
         networks:
             - laravel-php-nginx
     minio:
+        profiles:
+            - donotstart
         image: 'minio/minio:latest'
         ports:
             - '${MINIO_PORT:-9000}:9000'
