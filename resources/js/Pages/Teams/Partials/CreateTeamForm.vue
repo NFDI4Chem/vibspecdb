@@ -24,7 +24,7 @@
 
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="name" value="Team Name" />
-                <jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" autofocus />
+                <jet-input id="name" v-model="form.name" type="text" class="mt-1 block w-full" autofocus />
                 <jet-input-error :message="form.errors.name" class="mt-2" />
             </div>
         </template>

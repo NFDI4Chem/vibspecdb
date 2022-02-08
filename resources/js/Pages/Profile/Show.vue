@@ -48,7 +48,6 @@
     import UpdateProfileInformationForm from '@/Pages/Profile/Partials/UpdateProfileInformationForm.vue'
 
     export default {
-        props: ['sessions'],
 
         components: {
             AppLayout,
@@ -59,5 +58,6 @@
             UpdatePasswordForm,
             UpdateProfileInformationForm,
         },
+        props: ['sessions'],
     }
 </script>

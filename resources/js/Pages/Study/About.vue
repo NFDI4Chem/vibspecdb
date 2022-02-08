@@ -28,8 +28,8 @@
                   </div>
                 </div>
                 <p
-                  v-html="md(study.description)"
                   class="mt-3 text-gray-600"
+                  v-html="md(study.description)"
                 ></p>
               </div>
             </div>
@@ -44,11 +44,11 @@
 import { PlusSmIcon } from "@heroicons/vue/solid";
 import StudyContent from "@/Pages/Study/Content.vue";
 export default {
-  props: ["study", "project"],
   components: {
     StudyContent,
     PlusSmIcon,
   },
+  props: ["study", "project"],
   setup() {},
   mounted() {},
 };

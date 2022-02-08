@@ -23,7 +23,6 @@
     import Modal from './Modal.vue'
 
     export default {
-        emits: ['close'],
 
         components: {
             Modal,
@@ -40,6 +39,7 @@
                 default: true
             },
         },
+        emits: ['close'],
 
         methods: {
             close() {

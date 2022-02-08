@@ -48,10 +48,10 @@
                           </label>
                           <div class="mt-1">
                             <input
+                              id="project-name"
                               v-model="form.name"
                               type="text"
                               name="project-name"
-                              id="project-name"
                               class="block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                             />
                           </div>
@@ -66,7 +66,7 @@
                           <div class="mt-1">
                             <TabGroup>
                               <TabList class="flex items-center">
-                                <Tab as="template" v-slot="{ selected }">
+                                <Tab v-slot="{ selected }" as="template">
                                   <button
                                     :class="[
                                       selected
@@ -78,7 +78,7 @@
                                     Write
                                   </button>
                                 </Tab>
-                                <Tab as="template" v-slot="{ selected }">
+                                <Tab v-slot="{ selected }" as="template">
                                   <button
                                     :class="[
                                       selected
@@ -96,8 +96,8 @@
                                   <label for="comment" class="sr-only">Comment</label>
                                   <div>
                                     <textarea
-                                      v-model="form.description"
                                       id="description"
+                                      v-model="form.description"
                                       name="description"
                                       placeholder="Description (Optional)"
                                       rows="3"
@@ -109,8 +109,8 @@
                                   <div class="border-b">
                                     <div class="mx-px mt-px px-3 pt-2 pb-12">
                                       <span
-                                        class="text-gray-400 text-sm font-medium"
                                         v-if="form.description == ''"
+                                        class="text-gray-400 text-sm font-medium"
                                       >
                                         Nothing to preview
                                       </span>
@@ -180,9 +180,9 @@
                             <div class="relative flex items-start">
                               <div class="absolute flex items-center h-5">
                                 <input
-                                  :checked="form.is_public === true"
-                                  v-model="form.is_public"
                                   id="privacy-public"
+                                  v-model="form.is_public"
+                                  :checked="form.is_public === true"
                                   name="privacy"
                                   value="true"
                                   aria-describedby="privacy-public-description"
@@ -206,9 +206,9 @@
                               <div class="relative flex items-start">
                                 <div class="absolute flex items-center h-5">
                                   <input
-                                    :checked="form.is_public === false"
-                                    v-model="form.is_public"
                                     id="privacy-private-to-project"
+                                    v-model="form.is_public"
+                                    :checked="form.is_public === false"
                                     name="privacy"
                                     value="false"
                                     aria-describedby="privacy-private-to-project-description"
@@ -240,9 +240,9 @@
                           <label for="email" class="block text-sm font-medium text-gray-700">Public URL</label>
                           <div class="mt-1 flex rounded-md shadow-sm">
                             <div class="relative flex items-stretch flex-grow focus-within:z-10">
-                              <input @focus="$event.target.select()"  id="projectPublicURLCopy" v-model="project.public_url" type="text" class="rounded-l-md focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300" />
+                              <input id="projectPublicURLCopy"  v-model="project.public_url" type="text" class="rounded-l-md focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300" @focus="$event.target.select()" />
                             </div>
-                            <button @click="copyToClipboard(project.public_url, 'projectPublicURLCopy')" type="button" class="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                            <button type="button" class="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" @click="copyToClipboard(project.public_url, 'projectPublicURLCopy')">
                               <span><ClipboardCopyIcon class="h-5 w-5" aria-hidden="true" /></span>
                             </button>
                           </div>
@@ -260,14 +260,14 @@
                             <div v-if="linkAccess">
                               <div class="flex">
                                 <div class="flex-grow">
-                                  <input @focus="$event.target.select()" id="projectPrivateURLCopy" readonly type="text" :value="project.private_url" class="rounded-l-md focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300" />
+                                  <input id="projectPrivateURLCopy" readonly type="text" :value="project.private_url" class="rounded-l-md focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300" @focus="$event.target.select()" />
                                 </div>
-                                <button @click="copyToClipboard(project.private_url, 'projectPrivateURLCopy')" type="button" class="-ml-px relative inline-flex items-center space-x-2 px-2 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                                <button type="button" class="-ml-px relative inline-flex items-center space-x-2 px-2 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" @click="copyToClipboard(project.private_url, 'projectPrivateURLCopy')">
                                   <span><ClipboardCopyIcon class="h-5 w-5" aria-hidden="true" /></span>
                                 </button>
                               </div>
                               <div class="mt-3">
-                                  <Listbox as="div" v-model="selectedAccessType">
+                                  <Listbox v-model="selectedAccessType" as="div">
                                     <div class="relative">
                                       <div class="inline-flex shadow-sm rounded-md divide-x divide-indigo-600">
                                         <div class="relative z-0 inline-flex shadow-sm rounded-md divide-x divide-indigo-600">
@@ -284,7 +284,7 @@
 
                                       <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                                         <ListboxOptions class="origin-top-right absolute z-10 left-0 mt-2 w-72 rounded-md shadow-lg overflow-hidden bg-white divide-y divide-gray-200 ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                          <ListboxOption as="template" v-for="option in publishingOptions" :key="option.title" :value="option" v-slot="{ active, selectedAccessType }">
+                                          <ListboxOption v-for="option in publishingOptions" :key="option.title" v-slot="{ active, selectedAccessType }" as="template" :value="option">
                                             <li :class="[active ? 'text-white bg-indigo-500' : 'text-gray-900', 'cursor-default select-none relative p-4 text-sm']">
                                               <div class="flex flex-col">
                                                 <div class="flex justify-between">
@@ -322,8 +322,8 @@
                         </div>
                         <div class="mt-4 flex text-sm">
                           <a
-                            @click="toggleActivityDetails"
                             class="cursor-pointer group inline-flex items-center text-gray-500 hover:text-gray-900"
+                            @click="toggleActivityDetails"
                           >
                             <ExclamationCircleIcon
                               class="h-5 w-5 text-gray-400 group-hover:text-gray-500"
@@ -332,7 +332,7 @@
                             <span class="ml-2"> Activity </span>
                           </a>
                         </div>
-                        <project-activity :project="project" ref="activityDetailsElement"></project-activity>
+                        <project-activity ref="activityDetailsElement" :project="project"></project-activity>
                       </div>
                     </div>
                   </div>

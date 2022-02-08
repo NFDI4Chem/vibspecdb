@@ -39,11 +39,11 @@ const subNavigation = [
 ];
 
 export default {
-  props: ["study", "project", "current"],
   components: {
     StudyLayout,
     Link
   },
+  props: ["study", "project", "current"],
   setup() {
     return {
       subNavigation,

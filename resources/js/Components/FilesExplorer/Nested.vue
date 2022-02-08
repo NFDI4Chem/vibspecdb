@@ -1,10 +1,10 @@
 <template lang="">
   <draggable
       :list="list" 
-      @start="drag = true"
-      @end="drag = false"
       group="name"
       item-key="id"
+      @start="drag = true"
+      @end="drag = false"
   >
     <template #item="{ element }">
       <div class="item-group">
@@ -22,15 +22,27 @@ import ListItem from "@/Components/FilesExplorer/ListItem";
 import { v4 as uuidv4 } from 'uuid';
 
 export default {
-  name: 'nested',
+  name: 'Nested',
   components: {
     draggable,
     ListItem,
+  },
+  props: {
+    list: {
+      required: true,
+      type: Array,
+      default: null,
+    },
   },
   data() {
     return {
         drag: false,
     }
+  },
+  computed: {
+    realValue() {
+      return this.list ? this.list : [];
+    },
   },
   methods: {
     handleRemove(id) {
@@ -44,18 +56,6 @@ export default {
         }
         return item;
       })
-    },
-  },
-  computed: {
-    realValue() {
-      return this.list ? this.list : [];
-    },
-  },
-  props: {
-    list: {
-      required: true,
-      type: Array,
-      default: null,
     },
   },
 }

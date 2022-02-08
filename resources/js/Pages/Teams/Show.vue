@@ -10,7 +10,8 @@
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
                 <update-team-name-form :team="team" :permissions="permissions" />
 
-                <team-member-manager class="mt-10 sm:mt-0"
+                <team-member-manager
+class="mt-10 sm:mt-0"
                             :team="team"
                             :available-roles="availableRoles"
                             :user-permissions="permissions" />
@@ -33,11 +34,6 @@
     import UpdateTeamNameForm from '@/Pages/Teams/Partials/UpdateTeamNameForm.vue'
 
     export default {
-        props: [
-            'team',
-            'availableRoles',
-            'permissions',
-        ],
 
         components: {
             AppLayout,
@@ -46,5 +42,10 @@
             TeamMemberManager,
             UpdateTeamNameForm,
         },
+        props: [
+            'team',
+            'availableRoles',
+            'permissions',
+        ],
     }
 </script>

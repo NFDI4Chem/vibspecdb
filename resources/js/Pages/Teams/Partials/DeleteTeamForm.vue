@@ -34,7 +34,7 @@
                         Cancel
                     </jet-secondary-button>
 
-                    <jet-danger-button class="ml-2" @click="deleteTeam" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    <jet-danger-button class="ml-2" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="deleteTeam">
                         Delete Team
                     </jet-danger-button>
                 </template>
@@ -50,7 +50,6 @@
     import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
 
     export default {
-        props: ['team'],
 
         components: {
             JetActionSection,
@@ -58,6 +57,7 @@
             JetDangerButton,
             JetSecondaryButton,
         },
+        props: ['team'],
 
         data() {
             return {

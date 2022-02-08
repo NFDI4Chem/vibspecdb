@@ -14,9 +14,9 @@
           </div>
           <div class="flex-shrink-0 ml-4">
             <button
-              @click="openStudyCreateDialog()"
               type="button"
               class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              @click="openStudyCreateDialog()"
             >
               New Study
             </button>
@@ -52,9 +52,9 @@
                 out our documentation.
               </div>
               <button
-                @click="openStudyCreateDialog()"
                 type="button"
                 class="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 mt-6 focus:ring-offset-2 focus:ring-indigo-500"
+                @click="openStudyCreateDialog()"
               >
                 <svg
                   class="mx-auto h-12 w-12 text-gray-400"
@@ -79,7 +79,7 @@
           </div>
         </span>
         <span v-else>
-          <div :key="study.uuid" v-for="study in studies" class="mt-8">
+          <div v-for="study in studies" :key="study.uuid" class="mt-8">
             <Link :href="route('study', [study.id])">
               <div
                     class="flex justify-between items-center bg-white shadow-md rounded-lg px-6 py-6 hover:drop-shadow-xl cursor-pointer"
@@ -121,9 +121,9 @@
                         </span>
                         <span v-else class="inline-flex items-center">
                             <svg
+                            id="Capa_1"
                             class="h-3 w-3 text-gray-400 inline"
                             version="1.1"
-                            id="Capa_1"
                             xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink"
                             x="0px"
@@ -185,7 +185,7 @@
             </Link>
           </div>
         </span>
-        <study-create :project="project" ref="studyCreateElement"></study-create>
+        <study-create ref="studyCreateElement" :project="project"></study-create>
       </div>
     </div>
   </div>
@@ -201,13 +201,13 @@ export default {
     Link,
     StudyCreate,
   },
+  props: ["studies", "project"],
   setup() {
     const studyCreateElement = ref(null)
     return {
       studyCreateElement
     }
   },
-  props: ["studies", "project"],
   data() {
     return {};
   },

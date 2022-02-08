@@ -313,9 +313,6 @@
   </div>
 </template>
 
-<style scoped>
-</style>
-
 <script>
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
@@ -335,3 +332,6 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+</style>

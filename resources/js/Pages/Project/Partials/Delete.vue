@@ -29,9 +29,10 @@
                     Are you sure you want to delete your project? Once your project is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your project.
 
                     <div class="mt-4">
-                        <jet-input type="password" class="mt-1 block w-3/4" placeholder="Password"
-                                    ref="password"
-                                    v-model="form.password"
+                        <jet-input
+ref="password" v-model="form.password" type="password"
+                                    class="mt-1 block w-3/4"
+                                    placeholder="Password"
                                     @keyup.enter="deleteProject" />
 
                         <jet-input-error :message="form.errors.password" class="mt-2" />
@@ -43,7 +44,7 @@
                         Cancel
                     </jet-secondary-button>
 
-                    <jet-danger-button class="ml-2" @click="deleteProject" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    <jet-danger-button class="ml-2" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="deleteProject">
                         Delete Project
                     </jet-danger-button>
                 </template>
@@ -70,6 +71,8 @@
             JetSecondaryButton,
         },
 
+        props: ['project'],
+
         data() {
             return {
                 confirmingProjectDeletion: false,
@@ -79,8 +82,6 @@
                 })
             }
         },
-
-        props: ['project'],
 
         methods: {
             confirmProjectDeletion() {

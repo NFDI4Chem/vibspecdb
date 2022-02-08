@@ -85,7 +85,7 @@ Enter into your docker container command line interface of (`vibspecdb-laravel.t
 docker exec -it **idcontainerahere** bash
 ```
 
-Inside this docker container run migration and iitial configuration: 
+Inside this docker container run migration and initial configuration: 
 ```bash
 php artisan migrate:fresh
 npm run dev

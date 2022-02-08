@@ -11,10 +11,10 @@
             </label>
             <div class="mt-1 flex rounded-md shadow-sm">
               <input
+                id="name"
                 v-model="createProjectForm.name"
                 type="text"
                 name="name"
-                id="name"
                 autocomplete="off"
                 class="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 rounded sm:text-sm border-gray-300"
               />
@@ -23,7 +23,7 @@
           <div class="sm:col-span-6">
             <TabGroup v-slot="{ $selectedIndex }">
               <TabList class="flex items-center">
-                <Tab as="template" v-slot="{ selected }">
+                <Tab v-slot="{ selected }" as="template">
                   <button
                     :class="[
                       selected
@@ -35,7 +35,7 @@
                     Write
                   </button>
                 </Tab>
-                <Tab as="template" v-slot="{ selected }">
+                <Tab v-slot="{ selected }" as="template">
                   <button
                     :class="[
                       selected
@@ -53,8 +53,8 @@
                   <label for="comment" class="sr-only">Comment</label>
                   <div>
                     <textarea
-                      v-model="createProjectForm.description"
                       id="description"
+                      v-model="createProjectForm.description"
                       name="description"
                       placeholder="Description (Optional)"
                       rows="3"
@@ -66,8 +66,8 @@
                   <div class="border-b">
                     <div class="mx-px mt-px px-3 pt-2 pb-12">
                       <span
-                        class="text-gray-400 text-sm font-medium"
                         v-if="createProjectForm.description == ''"
+                        class="text-gray-400 text-sm font-medium"
                       >
                         Nothing to preview
                       </span>
@@ -131,9 +131,9 @@
                     aria-hidden="true"
                   >
                     <svg
+                      id="Capa_1"
                       class="h-3 w-3 text-gray-400 inline"
                       version="1.1"
-                      id="Capa_1"
                       xmlns="http://www.w3.org/2000/svg"
                       xmlns:xlink="http://www.w3.org/1999/xlink"
                       x="0px"
@@ -244,9 +244,9 @@
 
       <jet-button
         class="ml-2"
-        @click="createProject"
         :class="{ 'opacity-25': createProjectForm.processing }"
         :disabled="createProjectForm.processing"
+        @click="createProject"
       >
         Save
       </jet-button>
@@ -289,6 +289,8 @@ export default {
     JetInputError,
   },
 
+  props: [],
+
   data() {
     return {
       createProjectForm: this.$inertia.form({
@@ -305,8 +307,6 @@ export default {
       createProjectDialog: false,
     };
   },
-
-  props: [],
 
   methods: {
     createProject() {

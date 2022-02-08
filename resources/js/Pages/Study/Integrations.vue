@@ -21,10 +21,10 @@
 <script>
 import StudyContent from "@/Pages/Study/Content.vue";
 export default {
-  props: ["study", "project"],
   components: {
     StudyContent,
   },
+  props: ["study", "project"],
   setup() {
   },
   mounted() {},

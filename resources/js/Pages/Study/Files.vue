@@ -64,13 +64,13 @@
                     <template v-for="file in files" :key="file.name">
                       <div v-if="!file.has_children">
                         <div
-                          @click="displaySelected(file)"
                           :class="[
                             file.current
                               ? 'bg-gray-100 text-gray-900'
                               : 'cursor-pointer bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                             'cursor-pointer group w-full flex items-center pl-3 pr-2 py-2 text-sm font-medium rounded-md',
                           ]"
+                          @click="displaySelected(file)"
                         >
                           <span v-if="file.type == 'directory'">
                             <FolderIcon
@@ -87,16 +87,16 @@
                           {{ file.name }}
                         </div>
                       </div>
-                      <Disclosure as="div" v-else class="space-y-1" v-slot="{ open }">
+                      <Disclosure v-else v-slot="{ open }" as="div" class="space-y-1">
                         <div
                           v-if="selectedFileSystemObject"
-                          @click="displaySelected(file)"
                           :class="[
                             file.id == selectedFileSystemObject.id
                               ? 'cursor-pointer bg-gray-100 text-gray-900'
                               : 'cursor-pointer bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                             'group w-full flex items-center pr-2 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500',
                           ]"
+                          @click="displaySelected(file)"
                         >
                           <DisclosureButton>
                             <svg
@@ -128,11 +128,11 @@
                         </div>
                         <DisclosurePanel class="space-y-1">
                           <div
-                            @click="displaySelected(subItem)"
                             v-for="subItem in file.children"
                             :key="subItem.name"
                             as="div"
                             class="cursor-pointer group w-full flex items-center pl-10 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"
+                            @click="displaySelected(subItem)"
                           >
                             <span v-if="subItem.type == 'directory'">
                               <FolderIcon
@@ -158,8 +158,8 @@
                 class="min-w-0 p-6 flex-1 h-full flex flex-col overflow-y-auto lg:order-last"
               >
                 <div
-                  class="mb-3"
                   v-if="selectedFileSystemObject && selectedFileSystemObject.has_children"
+                  class="mb-3"
                 >
                   <ul
                     role="list"
@@ -221,7 +221,6 @@ import { FolderIcon, DocumentTextIcon } from "@heroicons/vue/solid";
 import { Inertia } from '@inertiajs/inertia';
 
 export default {
-  props: ["study", "project", "files"],
   components: {
     StudyContent,
     Disclosure,
@@ -230,6 +229,7 @@ export default {
     FolderIcon,
     DocumentTextIcon,
   },
+  props: ["study", "project", "files"],
   setup() {
     return {};
   },

@@ -32,9 +32,9 @@
           </span>
           <span v-else class="inline-flex items-center">
             <svg
+              id="Capa_1"
               class="h-3 w-3 text-gray-400 inline"
               version="1.1"
-              id="Capa_1"
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink"
               x="0px"
@@ -74,7 +74,7 @@
             </svg>
             <span class="ml-2">Private</span>
           </span>
-          <a @click="toggleDetails" class="cursor-pointer inline-flex items-center ml-7"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4"><path d="M4 15a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7a1 1 0 0 1 .7.3L13.42 5H21a1 1 0 0 1 .9 1.45L19.61 11l2.27 4.55A1 1 0 0 1 21 17h-8a1 1 0 0 1-.7-.3L10.58 15H4z" class="fill-current text-gray-400"></path> <rect width="2" height="20" x="2" y="2" rx="1" class="fill-current text-gray-600"></rect></svg> <span class="ml-2">View details</span></a>
+          <a class="cursor-pointer inline-flex items-center ml-7" @click="toggleDetails"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4"><path d="M4 15a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7a1 1 0 0 1 .7.3L13.42 5H21a1 1 0 0 1 .9 1.45L19.61 11l2.27 4.55A1 1 0 0 1 21 17h-8a1 1 0 0 1-.7-.3L10.58 15H4z" class="fill-current text-gray-400"></path> <rect width="2" height="20" x="2" y="2" rx="1" class="fill-current text-gray-600"></rect></svg> <span class="ml-2">View details</span></a>
           <project-details ref="projectDetailsElement" :project="project" />
         </div>
       </div>
@@ -110,15 +110,15 @@ export default {
     ProjectDetails
   },
   props: ["project", "studies"],
-  data() {
-    return {
-    };
-  },
   setup() {
     const projectDetailsElement = ref(null)
     return {
       projectDetailsElement
     }
+  },
+  data() {
+    return {
+    };
   },
   methods: {
     toggleDetails(){

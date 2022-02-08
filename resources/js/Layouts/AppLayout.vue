@@ -58,9 +58,9 @@
               <nav class="flex-1 px-2 bg-white space-y-1">
                 <div class="relative mb-4">
                   <jet-dropdown
+                    v-if="$page.props.jetstream.hasTeamFeatures"
                     align="center"
                     width="60"
-                    v-if="$page.props.jetstream.hasTeamFeatures"
                   >
                     <template #trigger>
                       <span class="min-w-100 rounded-md">
@@ -129,8 +129,8 @@
                           </template>
                           <div class="border-t border-gray-100"></div>
                           <jet-dropdown-link
-                            :href="route('teams.create')"
                             v-if="$page.props.jetstream.canCreateTeams"
+                            :href="route('teams.create')"
                           >
                             Create New Team
                           </jet-dropdown-link>
@@ -183,9 +183,9 @@
           <nav class="flex-1 px-2 bg-white space-y-1">
             <div class="relative mb-4">
               <jet-dropdown
+                v-if="$page.props.jetstream.hasTeamFeatures"
                 align="center"
                 width="60"
-                v-if="$page.props.jetstream.hasTeamFeatures"
               >
                 <template #trigger>
                   <span class="min-w-100 rounded-md">
@@ -252,8 +252,8 @@
                       </template>
                       <div class="border-t border-gray-100"></div>
                       <jet-dropdown-link
-                        :href="route('teams.create')"
                         v-if="$page.props.jetstream.canCreateTeams"
+                        :href="route('teams.create')"
                       >
                         Create New Team
                       </jet-dropdown-link>
@@ -399,8 +399,8 @@
                   </jet-dropdown-link>
 
                   <jet-dropdown-link
-                    :href="route('api-tokens.index')"
                     v-if="$page.props.jetstream.hasApiFeatures"
+                    :href="route('api-tokens.index')"
                   >
                     API Tokens
                   </jet-dropdown-link>
@@ -457,9 +457,6 @@ import { SearchIcon } from "@heroicons/vue/solid";
 const userNavigation = [];
 
 export default {
-  props: {
-    title: String,
-  },
   components: {
     JetBanner,
     JetApplicationLogo,
@@ -479,6 +476,9 @@ export default {
     MenuAlt2Icon,
     SearchIcon,
     XIcon,
+  },
+  props: {
+    title: String,
   },
   setup() {
     const sidebarOpen = ref(false);

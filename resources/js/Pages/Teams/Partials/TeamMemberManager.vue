@@ -23,21 +23,22 @@
                     <!-- Member Email -->
                     <div class="col-span-6 sm:col-span-4">
                         <jet-label for="email" value="Email" />
-                        <jet-input id="email" type="email" class="mt-1 block w-full" v-model="addTeamMemberForm.email" />
+                        <jet-input id="email" v-model="addTeamMemberForm.email" type="email" class="mt-1 block w-full" />
                         <jet-input-error :message="addTeamMemberForm.errors.email" class="mt-2" />
                     </div>
 
                     <!-- Role -->
-                    <div class="col-span-6 lg:col-span-4" v-if="availableRoles.length > 0">
+                    <div v-if="availableRoles.length > 0" class="col-span-6 lg:col-span-4">
                         <jet-label for="roles" value="Role" />
                         <jet-input-error :message="addTeamMemberForm.errors.role" class="mt-2" />
 
                         <div class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer">
-                            <button type="button" class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200"
+                            <button
+v-for="(role, i) in availableRoles" :key="role.key"
+                                            type="button"
+                                            class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200"
                                             :class="{'border-t border-gray-200 rounded-t-none': i > 0, 'rounded-b-none': i != Object.keys(availableRoles).length - 1}"
-                                            @click="addTeamMemberForm.role = role.key"
-                                            v-for="(role, i) in availableRoles"
-                                            :key="role.key">
+                                            @click="addTeamMemberForm.role = role.key">
                                 <div :class="{'opacity-50': addTeamMemberForm.role && addTeamMemberForm.role != role.key}">
                                     <!-- Role Name -->
                                     <div class="flex items-center">
@@ -86,14 +87,15 @@
                 <!-- Pending Team Member Invitation List -->
                 <template #content>
                     <div class="space-y-6">
-                        <div class="flex items-center justify-between" v-for="invitation in team.team_invitations" :key="invitation.id">
+                        <div v-for="invitation in team.team_invitations" :key="invitation.id" class="flex items-center justify-between">
                             <div class="text-gray-600">{{ invitation.email }}</div>
 
                             <div class="flex items-center">
                                 <!-- Cancel Team Invitation -->
-                                <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
-                                                    @click="cancelTeamInvitation(invitation)"
-                                                    v-if="userPermissions.canRemoveTeamMembers">
+                                <button
+v-if="userPermissions.canRemoveTeamMembers"
+                                                    class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
+                                                    @click="cancelTeamInvitation(invitation)">
                                     Cancel
                                 </button>
                             </div>
@@ -119,7 +121,7 @@
                 <!-- Team Member List -->
                 <template #content>
                     <div class="space-y-6">
-                        <div class="flex items-center justify-between" v-for="user in team.users" :key="user.id">
+                        <div v-for="user in team.users" :key="user.id" class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <img class="w-8 h-8 rounded-full" :src="user.profile_photo_url" :alt="user.first_name + ' ' + user.last_name">
                                 <div class="ml-4">{{ user.first_name }} {{ user.last_name }}</div>
@@ -127,27 +129,30 @@
 
                             <div class="flex items-center">
                                 <!-- Manage Team Member Role -->
-                                <button class="ml-2 text-sm text-gray-400 underline"
-                                        @click="manageRole(user)"
-                                        v-if="userPermissions.canAddTeamMembers && availableRoles.length">
+                                <button
+v-if="userPermissions.canAddTeamMembers && availableRoles.length"
+                                        class="ml-2 text-sm text-gray-400 underline"
+                                        @click="manageRole(user)">
                                     {{ displayableRole(user.membership.role) }}
                                 </button>
 
-                                <div class="ml-2 text-sm text-gray-400" v-else-if="availableRoles.length">
+                                <div v-else-if="availableRoles.length" class="ml-2 text-sm text-gray-400">
                                     {{ displayableRole(user.membership.role) }}
                                 </div>
 
                                 <!-- Leave Team -->
-                                <button class="cursor-pointer ml-6 text-sm text-red-500"
-                                                    @click="confirmLeavingTeam"
-                                                    v-if="$page.props.user.id === user.id">
+                                <button
+v-if="$page.props.user.id === user.id"
+                                                    class="cursor-pointer ml-6 text-sm text-red-500"
+                                                    @click="confirmLeavingTeam">
                                     Leave
                                 </button>
 
                                 <!-- Remove Team Member -->
-                                <button class="cursor-pointer ml-6 text-sm text-red-500"
-                                                    @click="confirmTeamMemberRemoval(user)"
-                                                    v-if="userPermissions.canRemoveTeamMembers">
+                                <button
+v-if="userPermissions.canRemoveTeamMembers"
+                                                    class="cursor-pointer ml-6 text-sm text-red-500"
+                                                    @click="confirmTeamMemberRemoval(user)">
                                     Remove
                                 </button>
                             </div>
@@ -166,11 +171,12 @@
             <template #content>
                 <div v-if="managingRoleFor">
                     <div class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer">
-                        <button type="button" class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200"
+                        <button
+v-for="(role, i) in availableRoles" :key="role.key"
+                                        type="button"
+                                        class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200"
                                         :class="{'border-t border-gray-200 rounded-t-none': i > 0, 'rounded-b-none': i !== Object.keys(availableRoles).length - 1}"
-                                        @click="updateRoleForm.role = role.key"
-                                        v-for="(role, i) in availableRoles"
-                                        :key="role.key">
+                                        @click="updateRoleForm.role = role.key">
                             <div :class="{'opacity-50': updateRoleForm.role && updateRoleForm.role !== role.key}">
                                 <!-- Role Name -->
                                 <div class="flex items-center">
@@ -196,7 +202,7 @@
                     Cancel
                 </jet-secondary-button>
 
-                <jet-button class="ml-2" @click="updateRole" :class="{ 'opacity-25': updateRoleForm.processing }" :disabled="updateRoleForm.processing">
+                <jet-button class="ml-2" :class="{ 'opacity-25': updateRoleForm.processing }" :disabled="updateRoleForm.processing" @click="updateRole">
                     Save
                 </jet-button>
             </template>
@@ -217,7 +223,7 @@
                     Cancel
                 </jet-secondary-button>
 
-                <jet-danger-button class="ml-2" @click="leaveTeam" :class="{ 'opacity-25': leaveTeamForm.processing }" :disabled="leaveTeamForm.processing">
+                <jet-danger-button class="ml-2" :class="{ 'opacity-25': leaveTeamForm.processing }" :disabled="leaveTeamForm.processing" @click="leaveTeam">
                     Leave
                 </jet-danger-button>
             </template>
@@ -238,7 +244,7 @@
                     Cancel
                 </jet-secondary-button>
 
-                <jet-danger-button class="ml-2" @click="removeTeamMember" :class="{ 'opacity-25': removeTeamMemberForm.processing }" :disabled="removeTeamMemberForm.processing">
+                <jet-danger-button class="ml-2" :class="{ 'opacity-25': removeTeamMemberForm.processing }" :disabled="removeTeamMemberForm.processing" @click="removeTeamMember">
                     Remove
                 </jet-danger-button>
             </template>
