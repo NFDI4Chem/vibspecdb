@@ -89,7 +89,10 @@ Inside this docker container run migration and initial configuration:
 ```bash
 php artisan migrate:fresh
 npm run dev
+npm install husky --save-dev
 npx husky install
+npm set-script prepare "husky install"
+npx husky add .husky/pre-commit "npm test"
 chmod +x ./.husky/pre-*
 php artisan key:generate
 php artisan optimize
