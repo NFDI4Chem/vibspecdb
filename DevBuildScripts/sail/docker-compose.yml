@@ -20,12 +20,8 @@ services:
         networks:
             - sail
         depends_on:
-            # - mysql
             - pgsql
             - redis
-            - meilisearch
-            - selenium
-            - minio
     mysql:
         profiles:
             - donotstart
@@ -76,6 +72,8 @@ services:
           retries: 3
           timeout: 5s
     meilisearch:
+        profiles:
+            - donotstart
         image: 'getmeili/meilisearch:latest'
         ports:
             - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
