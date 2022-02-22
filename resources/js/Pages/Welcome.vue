@@ -58,7 +58,7 @@
                     sm:text-5xl
                   "
                 >
-                  VibSpecDB
+                  ServiceApp
                 </h1>
                 <p class="mt-6 text-xl text-gray-500">
                   Description
