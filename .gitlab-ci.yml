@@ -13,7 +13,7 @@ stages:
   - redeploy
 before_script:
   - TAG=$(cat version.txt)
-.build-and-push:  
+build-and-push:  
   stage: build
   only:
     - master
@@ -45,16 +45,10 @@ rancher-redeploy:
   variables:
     RUNMODE: "other"
   stage: redeploy
-  # rules:
-  #   - if: $CI_COMMIT_BRANCH == 'master'
-  #     variables: 
-  #       RUNMODE: " "
-  #   - if: $CI_COMMIT_BRANCH == 'staging'
-  #     variables: 
-  #       RUNMODE: "-staging"
   script:
     - sleep 1h
-    - apt install curl
+    - apt update
+    - apt install curl -y
     - curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
     - chmod +x /usr/local/bin/argocd
-    - echo $(argocd version)
+    - argocd app set serviceapp-laravel -p image.tag=${TAG} --server ${ARGOCD_SERVER} --auth-token ${ARGOCD_TOKEN}
