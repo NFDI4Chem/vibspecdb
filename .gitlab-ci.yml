@@ -11,35 +11,6 @@ image:
 stages:
   - build
   - redeploy
-build-image:
-  stage: build
-  rules:
-    - if: ($CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'staging') && $CI_COMMIT_TAG == null
-  script:
-    - mkdir -p /kaniko/.docker
-    - |-
-       KANIKOPROXYBUILDARGS=""
-       KANIKOCFG="\"auths\":{\"${DOCKER_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${DOCKER_USER}" "${DOCKER_PASS}" | base64 | tr -d '\n')\"}}"
-       if [ "x${http_proxy}" != "x" -o "x${https_proxy}" != "x" ]; then
-         KANIKOCFG="${KANIKOCFG}, \"proxies\": { \"default\": { \"httpProxy\": \"${http_proxy}\", \"httpsProxy\": \"${https_proxy}\"}}"
-         KANIKOPROXYBUILDARGS="--build-arg=\"http_proxy=${http_proxy}\" --build-arg=\"https_proxy=${https_proxy}\""
-       fi
-       KANIKOCFG="{ ${KANIKOCFG} }"
-       echo "${KANIKOCFG}" > /kaniko/.docker/config.json
-    - >-
-       /kaniko/executor
-       --force
-       --image-fs-extract-retry 5
-       --context "${CI_PROJECT_DIR}"
-       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
-       --destination=image
-       --tarPath="${CI_PROJECT_DIR}/Docker_Image.tar"
-       --no-push
-       "${KANIKOPROXYBUILDARGS}"
-  artifacts:
-    name: "source-and-dockerfile"
-    paths:
-      - ./*
 build-and-push:  
   stage: build
   rules:
