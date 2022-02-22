@@ -9,16 +9,16 @@
     <template #form>
       <!-- Profile Photo -->
       <div
-        class="col-span-6 sm:col-span-4"
         v-if="user && $page.props.jetstream.managesProfilePhotos"
+        class="col-span-6 sm:col-span-4"
       >
         <!-- Profile Photo File Input -->
-        <input type="file" class="hidden" ref="photo" @change="updatePhotoPreview" />
+        <input ref="photo" type="file" class="hidden" @change="updatePhotoPreview" />
 
         <jet-label for="photo" value="Photo" />
 
         <!-- Current Profile Photo -->
-        <div v-if="user" class="mt-2" v-show="!photoPreview">
+        <div v-if="user" v-show="!photoPreview" class="mt-2">
           <img
             :src="user.profile_photo_url"
             :alt="user.first_name"
@@ -27,7 +27,7 @@
         </div>
 
         <!-- New Profile Photo Preview -->
-        <div class="mt-2" v-show="photoPreview">
+        <div v-show="photoPreview" class="mt-2">
           <span
             class="block rounded-full w-20 h-20"
             :style="
@@ -48,10 +48,10 @@
         </jet-secondary-button>
 
         <jet-secondary-button
+          v-if="user && user.profile_photo_url"
           type="button"
           class="mt-2"
           @click.prevent="deletePhoto"
-          v-if="user && user.profile_photo_url"
         >
           Remove Photo
         </jet-secondary-button>
@@ -64,9 +64,9 @@
         <jet-label for="first_name" value="First Name" />
         <jet-input
           id="first_name"
+          v-model="form.first_name"
           type="text"
           class="mt-1 block w-full"
-          v-model="form.first_name"
           autocomplete="first_name"
         />
         <jet-input-error :message="form.errors.first_name" class="mt-2" />
@@ -77,9 +77,9 @@
         <jet-label for="last_name" value="Last Name" />
         <jet-input
           id="last_name"
+          v-model="form.last_name"
           type="text"
           class="mt-1 block w-full"
-          v-model="form.last_name"
           autocomplete="last_name"
         />
         <jet-input-error :message="form.errors.last_name" class="mt-2" />
@@ -90,9 +90,9 @@
         <jet-label for="email" value="Email" />
         <jet-input
           id="email"
+          v-model="form.email"
           type="email"
           class="mt-1 block w-full"
-          v-model="form.email"
         />
         <jet-input-error :message="form.errors.email" class="mt-2" />
       </div>
@@ -101,10 +101,10 @@
         <jet-label for="password" value="Password" />
         <jet-input
           id="password"
+          ref="password"
+          v-model="form.password"
           type="password"
           class="mt-1 block w-full"
-          v-model="form.password"
-          ref="password"
           autocomplete="new-password"
         />
         <jet-input-error :message="form.errors.password" class="mt-2" />
@@ -114,9 +114,9 @@
         <jet-label for="password_confirmation" value="Confirm Password" />
         <jet-input
           id="password_confirmation"
+          v-model="form.password_confirmation"
           type="password"
           class="mt-1 block w-full"
-          v-model="form.password_confirmation"
           autocomplete="new-password"
         />
         <jet-input-error :message="form.errors.password_confirmation" class="mt-2" />

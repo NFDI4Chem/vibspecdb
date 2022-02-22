@@ -3,6 +3,7 @@
 
 # fix PHP formatting
 ./vendor/bin/php-cs-fixer fix --config .php-cs-fixer.php --allow-risky=yes
+npm run lint
 
 # update (patch + 1) App version
 php artisan version:patch

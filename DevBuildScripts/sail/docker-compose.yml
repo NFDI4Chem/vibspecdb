@@ -20,30 +20,28 @@ services:
         networks:
             - sail
         depends_on:
-            # - mysql
             - pgsql
             - redis
-            - meilisearch
-            - selenium
-            - minio
-    # mysql:
-    #     image: 'mysql:8.0'
-    #     ports:
-    #         - '${FORWARD_DB_PORT:-3306}:3306'
-    #     environment:
-    #         MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-    #         MYSQL_DATABASE: '${DB_DATABASE}'
-    #         MYSQL_USER: '${DB_USERNAME}'
-    #         MYSQL_PASSWORD: '${DB_PASSWORD}'
-    #         MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-    #     volumes:
-    #         - 'sailmysql:/var/lib/mysql'
-    #     networks:
-    #         - sail
-    #     healthcheck:
-    #       test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
-    #       retries: 3
-    #       timeout: 5s
+    mysql:
+        profiles:
+            - donotstart
+        image: 'mysql:8.0'
+        ports:
+            - '${FORWARD_DB_PORT:-3306}:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_DATABASE: '${DB_DATABASE}'
+            MYSQL_USER: '${DB_USERNAME}'
+            MYSQL_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        volumes:
+            - 'sailmysql:/var/lib/mysql'
+        networks:
+            - sail
+        healthcheck:
+          test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+          retries: 3
+          timeout: 5s
     pgsql:
         image: 'postgres:13'
         ports:
@@ -74,6 +72,8 @@ services:
           retries: 3
           timeout: 5s
     meilisearch:
+        profiles:
+            - donotstart
         image: 'getmeili/meilisearch:latest'
         ports:
             - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
@@ -93,12 +93,16 @@ services:
         networks:
             - sail
     selenium:
+        profiles:
+            - donotstart
         image: 'selenium/standalone-chrome'
         volumes:
                 - '/dev/shm:/dev/shm'
         networks:
             - sail
     minio:
+        profiles:
+            - donotstart
         image: 'minio/minio:latest'
         ports:
             - '${MINIO_PORT:-9000}:9000'
@@ -125,8 +129,8 @@ volumes:
         driver: local
     sailpgsql:
         driver: local
-    # sailmysql:
-    #     driver: local
+    sailmysql:
+        driver: local
     sailredis:
         driver: local
     sailmeilisearch:

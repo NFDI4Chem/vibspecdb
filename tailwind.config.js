@@ -9,6 +9,8 @@ module.exports = {
         "./storage/framework/views/*.php",
         "./resources/views/**/*.blade.php",
         "./resources/js/**/*.vue",
+        './vendor/spatie/laravel-support-bubble/config/**/*.php',
+        './vendor/spatie/laravel-support-bubble/resources/views/**/*.blade.php',
     ],
 
     theme: {
@@ -18,6 +20,18 @@ module.exports = {
             },
             colors: {
                 rose: colors.rose,
+                sky: colors.sky,
+                'teal': {
+                    100: '#019DBB',
+                    200: '#019DBB',
+                    300: '#019DBB',
+                    400: '#02abc9',
+                    500: '#019DBB',
+                    600: '#0088a0',
+                    700: '#019DBB',
+                    800: '#019DBB',
+                    900: '#019DBB',
+                },
             },
         },
     },
@@ -26,21 +40,4 @@ module.exports = {
         require("@tailwindcss/forms"),
         require("@tailwindcss/typography"),
     ],
-
-    rules: {
-        "at-rule-no-unknown": [
-            true,
-            {
-                ignoreAtRules: [
-                    "tailwind",
-                    "apply",
-                    "variants",
-                    "responsive",
-                    "screen",
-                ],
-            },
-        ],
-        "declaration-block-trailing-semicolon": null,
-        "no-descending-specificity": null,
-    },
 };

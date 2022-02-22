@@ -2,7 +2,8 @@
     <teleport to="body">
         <transition leave-active-class="duration-200">
             <div v-show="show" class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50" scroll-region>
-                <transition enter-active-class="ease-out duration-300"
+                <transition
+enter-active-class="ease-out duration-300"
                         enter-from-class="opacity-0"
                         enter-to-class="opacity-100"
                         leave-active-class="ease-in duration-200"
@@ -13,7 +14,8 @@
                     </div>
                 </transition>
 
-                <transition enter-active-class="ease-out duration-300"
+                <transition
+enter-active-class="ease-out duration-300"
                         enter-from-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         enter-to-class="opacity-100 translate-y-0 sm:scale-100"
                         leave-active-class="ease-in duration-200"
@@ -32,7 +34,6 @@
 import { onMounted, onUnmounted } from "vue";
 
 export default {
-        emits: ['close'],
 
         props: {
             show: {
@@ -45,19 +46,7 @@ export default {
                 default: true
             },
         },
-
-        watch: {
-            show: {
-                immediate: true,
-                handler: (show) => {
-                    if (show) {
-                        document.body.style.overflow = 'hidden'
-                    } else {
-                        document.body.style.overflow = null
-                    }
-                }
-            }
-        },
+        emits: ['close'],
 
         setup(props, {emit}) {
             const close = () => {
@@ -92,6 +81,19 @@ export default {
                     'xl': 'sm:max-w-xl',
                     '2xl': 'sm:max-w-2xl',
                 }[this.maxWidth]
+            }
+        },
+
+        watch: {
+            show: {
+                immediate: true,
+                handler: (show) => {
+                    if (show) {
+                        document.body.style.overflow = 'hidden'
+                    } else {
+                        document.body.style.overflow = null
+                    }
+                }
             }
         }
     }

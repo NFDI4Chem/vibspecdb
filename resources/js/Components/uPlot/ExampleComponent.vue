@@ -53,6 +53,9 @@ export default {
     this.getSize();
     window.addEventListener('resize', this.getSize);
   },
+  unmounted() {
+    window.removeEventListener('resize', this.getSize);
+  },
   methods: {
     onCreateFromTemplate(/* chart: uPlot */) {
       console.log("Created from template");
@@ -67,9 +70,6 @@ export default {
         // height: this.$refs.uplotexample.clientHeight,
       }
     }
-  },
-  unmounted() {
-    window.removeEventListener('resize', this.getSize);
   },
 }
 </script>

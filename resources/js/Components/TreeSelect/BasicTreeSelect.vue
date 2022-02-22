@@ -5,8 +5,8 @@
             :multiple="true"
             :options="list"
             :default-expand-level="1"
-            :alwaysOpen="true"
-            noChildrenText="No Sub-Folders"
+            :always-open="true"
+            no-children-text="No Sub-Folders"
         />
     </div>
 </template>
@@ -16,6 +16,7 @@ import Treeselect from "vue3-treeselect";
 import "vue3-treeselect/dist/vue3-treeselect.css";
 
 export default {
+    components: { Treeselect },
     props: {
         elements: {
             required: false,
@@ -23,7 +24,6 @@ export default {
             default: [],
         },
     },
-    components: { Treeselect },
     data() {
         return {
             treeValue: null,

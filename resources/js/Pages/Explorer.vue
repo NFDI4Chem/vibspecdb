@@ -17,8 +17,8 @@
                 </div>
                 <div class="flex mt-3 flex-row-reverse justify-end">
                     <img
-                        :key="user.id"
                         v-for="user in team.users"
+                        :key="user.id"
                         class="w-8 h-8 -mr-3 rounded-full border-3 border-dark"
                         :src="user.profile_photo_url"
                         :alt="user.name"
@@ -47,7 +47,7 @@
                 <Draggable :list="elements" />
             </div>
         </div>
-        <div class="max-w-2lg mx-auto my-5 px-2" v-if="true">
+        <div v-if="true" class="max-w-2lg mx-auto my-5 px-2">
             <div class="container bg-transparent w-auto h-auto w-full">
                 <BasicTreeSelect v-model:elements="elements" />
             </div>

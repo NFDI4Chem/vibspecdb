@@ -15,7 +15,8 @@
                             input
                         "
                     >
-                        <input v-model="item.label" placeholder="Item Name" 
+                        <input
+v-model="item.label" placeholder="Item Name" 
                             maxlength="120"
                             class="border-0 focus-visible:outline-none bg-transparent w-full"
                         >
@@ -43,6 +44,7 @@ export default {
         XCircleIcon,
         PlusCircleIcon,
     },
+    props: ["item"],
     methods: {
         removeAt() {
             this.$emit("remove", this.item.id);
@@ -51,7 +53,6 @@ export default {
             this.$emit("add", this.item.id);
         },
     },
-    props: ["item"],
 };
 </script>
 <style lang=""></style>

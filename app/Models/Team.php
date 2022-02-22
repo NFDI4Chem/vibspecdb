@@ -31,6 +31,10 @@ class Team extends JetstreamTeam
         'personal_team'
     ];
 
+    protected $appends = [
+        'profile_photo_url',
+    ];
+
     /**
      * The event map for the model.
      *
@@ -41,4 +45,13 @@ class Team extends JetstreamTeam
         'updated' => TeamUpdated::class,
         'deleted' => TeamDeleted::class,
     ];
+    /**
+     * Get the default team profile photo URL if no profile photo has been uploaded.
+     *
+     * @return string
+     */
+    protected function getProfilePhotoUrlAttribute()
+    {
+        return 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&color=7F9CF5&background=EBF4FF';
+    }
 }

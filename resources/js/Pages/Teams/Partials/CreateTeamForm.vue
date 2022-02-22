@@ -16,7 +16,7 @@
                     <img class="w-12 h-12 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name">
 
                     <div class="ml-4 leading-tight">
-                        <div>{{ $page.props.user.name }}</div>
+                        <div>{{ $page.props.user.first_name }} {{ $page.props.user.last_name }}</div>
                         <div class="text-gray-700 text-sm">{{ $page.props.user.email }}</div>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
 
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="name" value="Team Name" />
-                <jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" autofocus />
+                <jet-input id="name" v-model="form.name" type="text" class="mt-1 block w-full" autofocus />
                 <jet-input-error :message="form.errors.name" class="mt-2" />
             </div>
         </template>

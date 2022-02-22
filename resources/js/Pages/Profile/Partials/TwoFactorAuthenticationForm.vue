@@ -9,11 +9,11 @@
         </template>
 
         <template #content>
-            <h3 class="text-lg font-medium text-gray-900" v-if="twoFactorEnabled">
+            <h3 v-if="twoFactorEnabled" class="text-lg font-medium text-gray-900">
                 You have enabled two factor authentication.
             </h3>
 
-            <h3 class="text-lg font-medium text-gray-900" v-else>
+            <h3 v-else class="text-lg font-medium text-gray-900">
                 You have not enabled two factor authentication.
             </h3>
 
@@ -61,14 +61,15 @@
 
                 <div v-else>
                     <jet-confirms-password @confirmed="regenerateRecoveryCodes">
-                        <jet-secondary-button class="mr-3"
-                                        v-if="recoveryCodes.length > 0">
+                        <jet-secondary-button
+v-if="recoveryCodes.length > 0"
+                                        class="mr-3">
                             Regenerate Recovery Codes
                         </jet-secondary-button>
                     </jet-confirms-password>
 
                     <jet-confirms-password @confirmed="showRecoveryCodes">
-                        <jet-secondary-button class="mr-3" v-if="recoveryCodes.length === 0">
+                        <jet-secondary-button v-if="recoveryCodes.length === 0" class="mr-3">
                             Show Recovery Codes
                         </jet-secondary-button>
                     </jet-confirms-password>
@@ -109,6 +110,12 @@
 
                 qrCode: null,
                 recoveryCodes: [],
+            }
+        },
+
+        computed: {
+            twoFactorEnabled() {
+                return ! this.enabling && this.$page.props.user.two_factor_enabled
             }
         },
 
@@ -155,12 +162,6 @@
                     onSuccess: () => (this.disabling = false),
                 })
             },
-        },
-
-        computed: {
-            twoFactorEnabled() {
-                return ! this.enabling && this.$page.props.user.two_factor_enabled
-            }
         }
     }
 </script>

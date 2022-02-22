@@ -101,9 +101,9 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <button
+                    v-if="roles.length"
                     class="ml-2 text-sm text-gray-400 underline"
                     @click="manageRole(user)"
-                    v-if="roles.length"
                   >
                     <span
                       class="px-2 inline-flex text-xs leading-5 font-semibold capitalize rounded-full bg-indigo-100 text-green-800"
@@ -137,6 +137,8 @@
               class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer"
             >
               <button
+                v-for="(role, i) in roles"
+                :key="role.key"
                 type="button"
                 class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200"
                 :class="{
@@ -144,8 +146,6 @@
                   'rounded-b-none': i !== Object.keys(roles).length - 1,
                 }"
                 @click="updateRoleForm.role = role.name"
-                v-for="(role, i) in roles"
-                :key="role.key"
               >
                 <div
                   :class="{
@@ -183,7 +183,7 @@
                 </div>
               </button>
             </div>
-            <div class="my-2" v-if="updateRoleForm.error_message">
+            <div v-if="updateRoleForm.error_message" class="my-2">
               {{ updateRoleForm.error_message }}
             </div>
           </div>
@@ -196,9 +196,9 @@
 
           <jet-button
             class="ml-2"
-            @click="updateRole"
             :class="{ 'opacity-25': updateRoleForm.processing }"
             :disabled="updateRoleForm.processing"
+            @click="updateRole"
           >
             Save
           </jet-button>

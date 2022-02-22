@@ -3,10 +3,14 @@
 use App\Http\Controllers\Admin\ConsoleController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\FileSystemController;
 use App\Http\Controllers\Job\JobsController;
 use App\Http\Controllers\Job\PodcastController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\StudyController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\Uppy\AwsS3MultipartController;
+use App\Models\Project;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +26,7 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 
 Route::group([
     'prefix' => 'auth'
@@ -39,14 +44,18 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum'])->get('/dashboard', function (Request $request) {
+Route::supportBubble();
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (Request $request) {
     $user = $request->user();
     $team = $user->currentTeam;
     if ($team) {
         $team->users = $team->allUsers();
     }
+    $projects = Project::where('owner_id', $user->id)->where('team_id', $team->id)->get();
     return Inertia::render('Dashboard', [
-        'team' => $team
+        'team' => $team,
+        'projects' => $projects
     ]);
 })->name('dashboard');
 
@@ -72,6 +81,44 @@ Route::get('/upload', [UploadController::class, 'store']);
 Route::get('/jobs', [PodcastController::class, 'store']);
 Route::get('/logging', [PodcastController::class, 'logging']);
 Route::get('/jobs/create', [JobsController::class, 'create']);
+
+
+
+/// project and study routes ///
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::post('/storage/signed-storage-url', [FileSystemController::class, 'signedStorageURL']);
+
+    Route::get('projects/{project}', [ProjectController::class, 'show'])
+        ->name('project');
+    Route::get('projects/{project}/settings', [ProjectController::class, 'settings'])
+        ->name('project.settings');
+    Route::delete('projects/{project}', [ProjectController::class, 'destroy'])
+        ->name('project.destroy');
+    Route::post('projects/create', [ProjectController::class, 'store'])
+        ->name('projects.create');
+    Route::put('projects/{project}/update', [ProjectController::class, 'update'])
+        ->name('projects.update');
+    Route::get('projects/{project}/activity', [ProjectController::class, 'activity'])
+        ->name('projects.activity');
+    
+    Route::get('studies/{study}', [StudyController::class, 'show'])
+        ->name('study');
+    Route::get('studies/{study}/settings', [StudyController::class, 'settings'])
+        ->name('study.settings');
+    Route::delete('studies/{study}', [StudyController::class, 'destroy'])
+        ->name('study.destroy');
+    Route::post('studies/create', [StudyController::class, 'store'])
+        ->name('studies.create');
+    Route::put('studies/{study}/update', [StudyController::class, 'update'])
+        ->name('studies.update');
+    Route::get('studies/{study}/activity', [StudyController::class, 'activity'])
+        ->name('studies.activity');
+    Route::get('studies/{study}/files', [StudyController::class, 'files'])
+        ->name('study.files');
+});
+
+///              ///
 
 //////// admin routes
 Route::group([
