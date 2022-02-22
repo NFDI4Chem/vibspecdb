@@ -11,10 +11,13 @@ image:
 stages:
   - build
   - redeploy
-build-and-push:  
+before_script:
+  - TAG=$(cat version.txt)
+.build-and-push:  
   stage: build
-  rules:
-    - if: ($CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'staging') && $CI_COMMIT_TAG == null
+  only:
+    - master
+    - staging
   script:
     - mkdir -p /kaniko/.docker
     - |-
@@ -34,7 +37,11 @@ build-and-push:
       --destination "${DOCKER_REGISTRY}/${APP_NAME}:${CI_COMMIT_TAG}"
       --destination "${DOCKER_REGISTRY}/${APP_NAME}:latest"
       "${KANIKOPROXYBUILDARGS}"
-.rancher-redeploy:
+rancher-redeploy:
+  image: debian:latest
+  only:
+    - master
+    - staging
   variables:
     RUNMODE: "other"
   stage: redeploy
@@ -46,4 +53,6 @@ build-and-push:
       variables: 
         RUNMODE: "-staging"
   script: 
-    - echo 'todos here'
+    - curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+    - chmod +x /usr/local/bin/argocd
+    - echo $(argocd version)
