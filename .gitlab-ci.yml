@@ -52,7 +52,8 @@ rancher-redeploy:
   #   - if: $CI_COMMIT_BRANCH == 'staging'
   #     variables: 
   #       RUNMODE: "-staging"
-  script: 
+  script:
+    - apt install curl
     - curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
     - chmod +x /usr/local/bin/argocd
     - echo $(argocd version)
