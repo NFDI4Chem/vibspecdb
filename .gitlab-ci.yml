@@ -45,13 +45,13 @@ rancher-redeploy:
   variables:
     RUNMODE: "other"
   stage: redeploy
-  rules:
-    - if: $CI_COMMIT_BRANCH == 'master'
-      variables: 
-        RUNMODE: " "
-    - if: $CI_COMMIT_BRANCH == 'staging'
-      variables: 
-        RUNMODE: "-staging"
+  # rules:
+  #   - if: $CI_COMMIT_BRANCH == 'master'
+  #     variables: 
+  #       RUNMODE: " "
+  #   - if: $CI_COMMIT_BRANCH == 'staging'
+  #     variables: 
+  #       RUNMODE: "-staging"
   script: 
     - curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
     - chmod +x /usr/local/bin/argocd
