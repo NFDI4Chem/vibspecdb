@@ -1,47 +1,5 @@
-# For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    laravel.test:
-        build:
-            context: ./vendor/laravel/sail/runtimes/8.0
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-        image: sail-8.0/app
-        ports:
-            - '${APP_PORT:-80}:80'
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
-        volumes:
-            - '.:/var/www/html'
-        networks:
-            - sail
-        depends_on:
-            - pgsql
-            - redis
-    mysql:
-        profiles:
-            - donotstart
-        image: 'mysql:8.0'
-        ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
-        environment:
-            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_DATABASE: '${DB_DATABASE}'
-            MYSQL_USER: '${DB_USERNAME}'
-            MYSQL_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-        volumes:
-            - 'sailmysql:/var/lib/mysql'
-        networks:
-            - sail
-        healthcheck:
-          test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
-          retries: 3
-          timeout: 5s
     pgsql:
         image: 'postgres:13'
         ports:
@@ -54,44 +12,44 @@ services:
         volumes:
             - 'sailpgsql:/var/lib/postgresql/data'
         networks:
-            - sail
+            - laravel-php-nginx
         healthcheck:
             test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
             retries: 3
             timeout: 5s
     redis:
         image: 'redis:alpine'
+        container_name: redis_server
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
-        volumes:
-            - 'sailredis:/data'
         networks:
-            - sail
+            - laravel-php-nginx
         healthcheck:
-          test: ["CMD", "redis-cli", "ping"]
-          retries: 3
-          timeout: 5s
-    meilisearch:
-        profiles:
-            - donotstart
-        image: 'getmeili/meilisearch:latest'
+            test: ["CMD", "redis-cli", "ping"]
+            retries: 3
+            timeout: 5s
+    backend:
+        build:
+            context: .
+            dockerfile: Dockerfile
         ports:
-            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+            - '8000:80'
+        environment:
+            APP_ENV: "local"
+        depends_on:
+            - redis
+            - pgsql
         volumes:
-            - 'sailmeilisearch:/data.ms'
+            - '.:/app'
         networks:
-            - sail
-        healthcheck:
-          test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:7700/health"]
-          retries: 3
-          timeout: 5s
+            - laravel-php-nginx
     mailhog:
         image: 'mailhog/mailhog:latest'
         ports:
             - '${FORWARD_MAILHOG_PORT:-1025}:1025'
             - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
         networks:
-            - sail
+           - laravel-php-nginx
     selenium:
         profiles:
             - donotstart
@@ -99,7 +57,7 @@ services:
         volumes:
                 - '/dev/shm:/dev/shm'
         networks:
-            - sail
+            - laravel-php-nginx
     minio:
         profiles:
             - donotstart
@@ -114,24 +72,54 @@ services:
         volumes:
             - 'sailminio:/data'
         networks:
-            - sail
+            - laravel-php-nginx
         command: ["server", "--console-address", ":9001","/data"]
         healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
             interval: 30s
             timeout: 20s
             retries: 3
-networks:
-    sail:
-        driver: bridge
+    meilisearch:
+        image: 'getmeili/meilisearch:latest'
+        ports:
+            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+        volumes:
+            - 'sailmeilisearch:/data.ms'
+        networks:
+            - laravel-php-nginx
+        healthcheck:
+          test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:7700/health"]
+          retries: 3
+          timeout: 5s
+    rabbit:
+        hostname: 'rabbit'
+        image: rabbitmq:3.8.5-management
+        healthcheck:
+            test: rabbitmq-diagnostics -q ping
+            interval: 30s
+            timeout: 30s
+            retries: 3
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+            # - '15671:15671'
+            # - '5671:5671'
+        volumes:
+        - 'rabbitdata:/var/lib/rabbitmq/mnesia/'
+        networks:
+        - laravel-php-nginx
 volumes:
-    sailminio:
-        driver: local
     sailpgsql:
         driver: local
-    sailmysql:
-        driver: local
-    sailredis:
+    sailminio:
         driver: local
     sailmeilisearch:
         driver: local
+    rabbitdata:
+        driver: local
+
+# Create a bridged network to be used by containers.
+# This will allow us to easily target other containers in the same stack
+networks:
+    laravel-php-nginx:
+        driver: bridge

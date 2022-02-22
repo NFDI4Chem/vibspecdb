@@ -1,4 +1,5 @@
 #!/bin/sh
+
 . "$(dirname "$0")/_/husky.sh"
 
 # fix PHP formatting
@@ -9,9 +10,8 @@ npm run lint
 php artisan version:patch
 
 # save App version to the file
-CURRENTV=$(php artisan version:show --format=version-only --suppress-app-name)
+CURRENTV="$(php artisan version:show --format=version-only --suppress-app-name)"
 echo $CURRENTV > version.txt
 
 # add all changes to the git
 git add .
-

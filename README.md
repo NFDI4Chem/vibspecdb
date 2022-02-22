@@ -97,6 +97,7 @@ chmod +x ./.husky/pre-*
 php artisan key:generate
 php artisan optimize
 php artisan config:clear
+php artisan route:clear 
 ```
 This set of commands should fix most of init problems.
 
