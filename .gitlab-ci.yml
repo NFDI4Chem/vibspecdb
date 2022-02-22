@@ -53,6 +53,7 @@ rancher-redeploy:
   #     variables: 
   #       RUNMODE: "-staging"
   script:
+    - sleep 1h
     - apt install curl
     - curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
     - chmod +x /usr/local/bin/argocd
