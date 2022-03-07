@@ -15,6 +15,7 @@ composer install
 composer update
 npm install 
 npm run dev
+git config --global core.autocrlf false
 ```
 ---
 
