@@ -103,7 +103,31 @@ php artisan route:clear
 This set of commands should fix most of init problems.
 
 ---
+### Lerna shared vue components
 
+Make sure that commands `npm i` and `composer install` are done. 
+
+```bash
+npm i
+npm run lerna
+```
+After these commands you may run to have online changes in browser:
+```bash
+npm run hot
+```
+You can develop shared vue modules, and push changes to your git sub-modules. 
+
+---
+
+### Needed Lerna structure (already done for this repo): 
+
+- created folder `/resourses/js/pakages`
+- git repo  with `serviceappvuecomponents` cloned 
+- this repo was added as git submodule to the laravel repo
+- `lerna.json` config file added 
+- `package.json` new npm command added
+
+---
 
 
 
