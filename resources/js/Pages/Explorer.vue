@@ -27,44 +27,50 @@
             </div>
         </template>
 
-        <DummyButton />
-
-        <PyEditor :file="file" :visible="true" @toggleFilesTree="true" />
-
-        <div class="flex flex-row justify-center pt-20 mx-20">
-            <div class="w-1/2">
-                <TreeEditor
-                    :visible="true"
-                    :list="files"
-                    :dialog-status="false"
-                    @addFile="actions"
-                    @addFolder="actions"
-                    @changed="actions"
-                    @changeItem="actions"
-                    @remove="actions"
-                    @fileActivate="actions"
-                    @changeDialogStatus="actions"
-                />
-            </div>
+        <div v-if="true" class="active" >
+            <Table />
         </div>
 
+        <div v-if="false" class="disable" >
+            <DummyButton />
 
-        <div id="uplotExam" class="my-15">
-            <div class="container bg-transparent w-auto h-auto w-full">
-                <ExampleComponent />
-            </div>
-        </div>
+            <PyEditor :file="file" :visible="true" @toggleFilesTree="true" />
 
-        <div class="max-w-2lg mx-auto my-5 px-2">
-            <div class="container bg-transparent w-auto h-auto w-full">
-                <Draggable :list="elements" />
+            <div class="flex flex-row justify-center pt-20 mx-20">
+                <div class="w-1/2">
+                    <TreeEditor
+                        :visible="true"
+                        :list="files"
+                        :dialog-status="false"
+                        @addFile="actions"
+                        @addFolder="actions"
+                        @changed="actions"
+                        @changeItem="actions"
+                        @remove="actions"
+                        @fileActivate="actions"
+                        @changeDialogStatus="actions"
+                    />
+                </div>
+            </div>
+
+            <div id="uplotExam" class="my-15">
+                <div class="container bg-transparent w-auto h-auto w-full">
+                    <ExampleComponent />
+                </div>
+            </div>
+
+            <div class="max-w-2lg mx-auto my-5 px-2">
+                <div class="container bg-transparent w-auto h-auto w-full">
+                    <Draggable :list="elements" />
+                </div>
+            </div>
+            <div v-if="true" class="max-w-2lg mx-auto my-5 px-2">
+                <div class="container bg-transparent w-auto h-auto w-full">
+                    <BasicTreeSelect v-model:elements="elements" />
+                </div>
             </div>
         </div>
-        <div v-if="true" class="max-w-2lg mx-auto my-5 px-2">
-            <div class="container bg-transparent w-auto h-auto w-full">
-                <BasicTreeSelect v-model:elements="elements" />
-            </div>
-        </div>
+         
     </app-layout>
 </template>
 
@@ -80,8 +86,12 @@ import ExampleComponent from "@/Components/uPlot/ExampleComponent.vue";
 // import TreeEditor from "@/packages/serviceappvuecomponents/src/components/FilesTree/TreeEditor.vue";
 // import PyEditor from "@/packages/serviceappvuecomponents/src/components/PyEditor/PyEditor.vue";
 
-import { TreeEditor, PyEditor, DummyButton }  from "@/packages/serviceappvuecomponents/src";
-
+import {
+    TreeEditor,
+    PyEditor,
+    DummyButton,
+} from "@/packages/serviceappvuecomponents/src";
+import Table from "@/Shared/Table/Table.vue";
 
 import { ref } from "vue";
 
@@ -94,7 +104,8 @@ export default {
         ExampleComponent,
         DummyButton,
         TreeEditor,
-        PyEditor
+        PyEditor,
+        Table,
     },
     props: ["user", "team"],
     setup() {

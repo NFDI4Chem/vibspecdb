@@ -118,9 +118,17 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('study.files');
 });
 
-///              ///
 
-//////// admin routes
+Route::middleware(['auth:sanctum'])->get('/explorer', function (Request $request) {
+    $team = $request->user()->currentTeam;
+    $team->users = $team->allUsers();
+    return Inertia::render('Explorer', [
+        'team' => $team
+    ]);
+})->name('explorer');
+
+
+// admin routes
 Route::group([
     'prefix' => 'admin'
 ], function () {
