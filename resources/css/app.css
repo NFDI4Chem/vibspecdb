@@ -4,6 +4,8 @@
 
 @import 'custom/icons';
 
+@import '../js/packages/serviceappvuecomponents/src/assets/tailwind.css';
+
 
 .input {
   @apply cursor-auto;
