@@ -36,6 +36,19 @@ const style = {
     rowActions: "icons",
 };
 
+const visible = {
+    all: true,
+    theader: true,
+    tbody: true,
+    commonActions: true,
+    search: true,
+    rowActions: true,
+    checkBoxes: true,
+    pagination: true,
+    filters: true,
+    sort: true
+}
+
 const GlobalRowAction = (key) => {
   console.log(`Action "${key}" here`);
   switch (key) {
@@ -48,6 +61,10 @@ const GlobalRowAction = (key) => {
     default:
       alert("Global RowAction");
   }
+};
+
+const DetailsAction = (rowId, actionKey) => {
+  console.log("Open Details action", rowId, actionKey);
 };
 
 const actions = [
@@ -72,12 +89,16 @@ const data = {
             title: "Front-end Developer",
             email: "lindsay.walton@example.com",
             role: "Member",
+            detailsOpen: true,
+            details: []
         },
         {
             name: "Breddi Pitt",
             title: "Backs-end Developer",
             email: "bredi.pitti@example.com",
             role: "Admin",
+            detailsOpen: false,
+            details: []
         },
     ],
     actions: [
