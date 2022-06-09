@@ -16,7 +16,7 @@
             </div> 
             <div v-if="!team.personal_team">
                 <a :href="'/teams/'+ user.current_team.id " class="text-sm text-gray-800 font-bold">
-                    Team Settings
+                    Team Settingss
                 </a>
             </div>
         </template>
