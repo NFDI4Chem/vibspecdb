@@ -29,7 +29,7 @@ build-and-push:
        KANIKOCFG="\"auths\":{\"${DOCKER_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${DOCKER_USER}" "${DOCKER_PASS}" | base64 | tr -d '\n')\"}}"
        if [ "x${http_proxy}" != "x" -o "x${https_proxy}" != "x" ]; then
          KANIKOCFG="${KANIKOCFG}, \"proxies\": { \"default\": { \"httpProxy\": \"${http_proxy}\", \"httpsProxy\": \"${https_proxy, \"noProxy\": \"${no_proxy}\"}\"}}"
-         KANIKOPROXYBUILDARGS="--build-arg=\"http_proxy=${http_proxy}\" --build-arg=\"https_proxy=${https_proxy}\" --build-arg=\"no_proxy=${no_proxy}\""
+         KANIKOPROXYBUILDARGS="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy}  --build-arg "no_proxy=${no_proxy}"
        fi
        KANIKOCFG="{ ${KANIKOCFG} }"
        echo "${KANIKOCFG}" > /kaniko/.docker/config.json
