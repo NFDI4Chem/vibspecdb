@@ -1,27 +1,32 @@
 
 variables:
-    APP_NAME: "serviceapp_laravel_backend"
+    APP_NAME: "serviceapp_laravel_fpm"
+    NGINX_DOCKER_PATH: "${CI_PROJECT_DIR}/resources/ops/app"
+    TAG: "v0.1.0"
     DOCKER_REGISTRY: docker.photonicdata.science
     http_proxy: ${CI_PROXY}
     https_proxy: ${CIS_PROXY}
     no_proxy: ${DOCKER_REGISTRY}
-    TAG: "v0.1.0"
+    
+    NGINX_TAG: "v0.1.0"
+    NGINX_IMAGE_NAME: "serviceapp_nginx"
+    NGINX_DOCKER_PATH: "${CI_PROJECT_DIR}/resources/ops/nginx"
 
 image:
   name: gcr.io/kaniko-project/executor:v1.7.0-debug
   entrypoint: [""]
 stages:
-  - build
+  - build_nginx
+  - build_app
   - redeploy
 before_script:
   - TAG=$(cat version.txt)
-build-and-push:  
-  stage: build
+build-app:  
+  stage: build_app
   before_script:
     - TAG=$(cat version.txt)
   only:
-    - master
-    - staging
+    - deployment
   script:
     - mkdir -p /kaniko/.docker
     - |-
@@ -37,16 +42,39 @@ build-and-push:
       /kaniko/executor
       --force
       --context "${CI_PROJECT_DIR}"
-      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --dockerfile "${NGINX_DOCKER_PATH}/Dockerfile"
       --destination "${DOCKER_REGISTRY}/${APP_NAME}:${CI_COMMIT_TAG}"
       --destination "${DOCKER_REGISTRY}/${APP_NAME}:${TAG}"
       --destination "${DOCKER_REGISTRY}/${APP_NAME}:latest"
       "${KANIKOPROXYBUILDARGS}"
-rancher-redeploy:
+build-nginx:  
+  stage: build_nginx
+  only:
+    - deployment
+  script:
+    - mkdir -p /kaniko/.docker
+    - |-
+       KANIKOPROXYBUILDARGS=""
+       KANIKOCFG="\"auths\":{\"${DOCKER_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${DOCKER_USER}" "${DOCKER_PASS}" | base64 | tr -d '\n')\"}}"
+       if [ "x${http_proxy}" != "x" -o "x${https_proxy}" != "x" ]; then
+         KANIKOCFG="${KANIKOCFG}, \"proxies\": { \"default\": { \"httpProxy\": \"${http_proxy}\", \"httpsProxy\": \"${https_proxy}\", \"noProxy\": \"${no_proxy}\"}}"
+         KANIKOPROXYBUILDARGS="--build-arg=\"http_proxy=${http_proxy}\" --build-arg=\"https_proxy=${https_proxy}\" --build-arg=\"no_proxy=${no_proxy}\""
+       fi
+       KANIKOCFG="{ ${KANIKOCFG} }"
+       echo "${KANIKOCFG}" > /kaniko/.docker/config.json
+    - >-
+      /kaniko/executor
+      --force
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${NGINX_DOCKER_PATH}/Dockerfile"
+      --destination "${DOCKER_REGISTRY}/${NGINX_IMAGE_NAME}:${CI_COMMIT_TAG}"
+      --destination "${DOCKER_REGISTRY}/${NGINX_IMAGE_NAME}:${NGINX_TAG}"
+      --destination "${DOCKER_REGISTRY}/${NGINX_IMAGE_NAME}:latest"
+      "${KANIKOPROXYBUILDARGS}"
+.rancher-redeploy:
   image: debian:latest
   only:
-    - master
-    - staging
+    - deployment
   variables:
     RUNMODE: "other"
   stage: redeploy
@@ -55,4 +83,4 @@ rancher-redeploy:
     - apt install curl -y
     - curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
     - chmod +x /usr/local/bin/argocd
-    - argocd app set serviceapp-laravel -p image.tag=${TAG} --server ${ARGOCD_SERVER} --auth-token ${ARGOCD_TOKEN}
+    - argocd app set vibspec-laravel -p image.tag=${TAG} --server ${ARGOCD_SERVER} --auth-token ${ARGOCD_TOKEN}
