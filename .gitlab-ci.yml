@@ -7,7 +7,6 @@ variables:
     http_proxy: ${CI_PROXY}
     https_proxy: ${CIS_PROXY}
     no_proxy: ${DOCKER_REGISTRY}
-    
     NGINX_TAG: "v0.1.0"
     NGINX_IMAGE_NAME: "serviceapp_nginx"
     NGINX_DOCKER_PATH: "${CI_PROJECT_DIR}/resources/ops/nginx"
@@ -21,6 +20,7 @@ stages:
   - redeploy
 before_script:
   - TAG=$(cat version.txt)
+  - NGINX_TAG=${NGINX_TAG}
 build-app:  
   stage: build_app
   before_script:
