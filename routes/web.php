@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Http\Controllers\MicroserviceController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -81,6 +83,7 @@ Route::get('/upload', [UploadController::class, 'store']);
 Route::get('/jobs', [PodcastController::class, 'store']);
 Route::get('/logging', [PodcastController::class, 'logging']);
 Route::get('/jobs/create', [JobsController::class, 'create']);
+Route::get('/micro/check', [MicroserviceController::class, 'check']);
 
 
 

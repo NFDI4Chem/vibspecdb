@@ -45,11 +45,11 @@
         >
           <div>
             <div>
-              <jet-application-mark class="block h-12 w-auto" />
+              <jet-application-mark class="block h-30 w-auto" />
             </div>
             <div class="mt-10">
               <div class="mt-6 sm:max-w-xl">
-                <h1
+                <!-- <h1
                   class="
                     text-4xl
                     font-extrabold
@@ -62,7 +62,7 @@
                 </h1>
                 <p class="mt-6 text-xl text-gray-500">
                   Description
-                </p>
+                </p> -->
               </div>
               <div class="mt-10">
                 <a
