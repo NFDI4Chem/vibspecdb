@@ -83,4 +83,4 @@ rancher-redeploy:
     - apt install curl -y
     - curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
     - chmod +x /usr/local/bin/argocd
-    - argocd app set vibspec-laravel -p image.app.tag=${TAG} --server ${ARGOCD_SERVER} --auth-token ${ARGOCD_TOKEN}
+    - argocd app set vibspecdb-laravel -p image.app.tag=${TAG} --server ${ARGOCD_SERVER} --auth-token ${ARGOCD_TOKEN}
