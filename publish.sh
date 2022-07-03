@@ -3,7 +3,7 @@
 DOCKER_USERNAME=docker.photonicdata.science
 
 FPM_NAME=serviceapp_laravel_fpm
-FPM_TAG=v1.0.28
+FPM_TAG=$(cat ./version.txt)
 
 NGINX_NAME=serviceapp_nginx
 NGINX_TAG=v0.1.0
