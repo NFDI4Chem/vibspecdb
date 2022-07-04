@@ -167,3 +167,14 @@ Route::group([
         });
     });
 });
+
+
+/// job tests:
+Route::get('test/email', function(){
+  
+	$send_mail = 'test@gmail.com';
+  
+    dispatch(new App\Jobs\SendEmailJob($send_mail));
+  
+    dd('send mail successfully !!');
+});

@@ -19,10 +19,8 @@ services:
             retries: 3
             timeout: 5s
     redis:
-        profiles:
-            - donotstart
         image: 'redis:alpine'
-        container_name: redis_server
+        container_name: redis
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
         networks:
