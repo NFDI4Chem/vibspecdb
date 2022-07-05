@@ -15,7 +15,10 @@
 
         <!-- Scripts -->
         @routes
+        <!-- <script src="/socket.io/socket.io.js"></script> -->
         <script src="{{ mix('js/app.js') }}" defer></script>
+        <!-- <script src="/socket.io/socket.io.js"></script> -->
+        <!-- <script src="{{ mix('js/laravel-echo-setup.js') }}" type="text/javascript"></script> -->
     </head>
     <body class="font-sans antialiased h-full">
         @inertia
@@ -26,4 +29,13 @@
 
         <x-support-bubble />
     </body>
+    <script type="text/javascript">
+        var i = 0;
+        // window.Echo.channel('user-channel')
+        //  .listen('UserEvent', (data) => {
+        //     i++;
+        //     console.log('test here');
+        //     $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
+        // });
+    </script>
 </html>

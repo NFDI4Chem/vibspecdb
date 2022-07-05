@@ -40,6 +40,38 @@ services:
             - "9000:9000"
         networks: 
             - laravel-php-nginx
+    echo:
+        build:
+            context: .
+            dockerfile: ./resources/ops/echo/Dockerfile
+        container_name: echo
+        restart: unless-stopped
+        ports: 
+            - "6001:6001"
+        depends_on:
+            - "redis"
+        networks: 
+            - laravel-php-nginx
+    laravel-echo-server:
+        profiles:
+            - donotstart
+        image: oanhnn/laravel-echo-server
+        container_name: laravel-echo-server
+        depends_on:
+            - redis
+        environment:
+            LARAVEL_ECHO_SERVER_AUTH_HOST: http://localhost:8000
+            LARAVEL_ECHO_SERVER_DEBUG: 'true'
+            LARAVEL_ECHO_SERVER_DB: redis
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
+            REDIS_PREFIX: laravel_database_
+            REDIS_DB: 0
+        ports:
+            - 6001:6001
+        restart: unless-stopped
+        networks:
+            - laravel-php-nginx
     nginx:
         build:
             context: .
@@ -47,6 +79,7 @@ services:
         container_name: nginx
         volumes:
             - ./resources/ops/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ./public:/var/www/html
         ports:
             - ${APP_PORT}:80
         environment:

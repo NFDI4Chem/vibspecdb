@@ -2,20 +2,33 @@
     <app-layout title="Dashboard">
         <template #header>
             <div>
-                <div class="flex items-center text-sm text-gray-700 uppercase font-bold tracking-widest"> 
-                    <div v-if="team.personal_team">
-                        Your
-                    </div>
+                <div
+                    class="flex items-center text-sm text-gray-700 uppercase font-bold tracking-widest"
+                >
+                    <div v-if="team.personal_team">Your</div>
                     <div v-else>
                         {{ user.current_team.name }}
-                    </div>&nbsp;Dashboard
-                </div> 
-                <div v-if="team.users.length > 1" class="flex mt-3 flex-row-reverse justify-end">
-                    <img v-for="user in team.users" :key="user.id" class="w-8 h-8 -mr-3 rounded-full border-3 border-dark" :src="user.profile_photo_url" :alt="user.name" />
+                    </div>
+                    &nbsp;Dashboard
                 </div>
-            </div> 
+                <div
+                    v-if="team.users.length > 1"
+                    class="flex mt-3 flex-row-reverse justify-end"
+                >
+                    <img
+                        v-for="user in team.users"
+                        :key="user.id"
+                        class="w-8 h-8 -mr-3 rounded-full border-3 border-dark"
+                        :src="user.profile_photo_url"
+                        :alt="user.name"
+                    />
+                </div>
+            </div>
             <div v-if="!team.personal_team">
-                <a :href="'/teams/'+ user.current_team.id " class="text-sm text-gray-800 font-bold">
+                <a
+                    :href="'/teams/' + user.current_team.id"
+                    class="text-sm text-gray-800 font-bold"
+                >
                     Team Settingss
                 </a>
             </div>
@@ -27,18 +40,29 @@
 </template>
 
 <script>
-    import AppLayout from '@/Layouts/AppLayout.vue'
-    import TeamProjects from '@/Pages/Project/Index.vue'
+import AppLayout from "@/Layouts/AppLayout.vue";
+import TeamProjects from "@/Pages/Project/Index.vue";
 
-    export default {
-        components: {
-            AppLayout,
-            TeamProjects,
-        },
-        props: [
-            'user',
-            'team',
-            'projects'
-        ]
-    }
+export default {
+    components: {
+        AppLayout,
+        TeamProjects,
+    },
+    props: ["user", "team", "projects"],
+     mounted() {
+        console.log('mounted');
+        let  channel = Echo.channel('user-channel');
+        channel
+            .listen('.UserEvent',function (data){
+                console.log(data);
+                console.log('listended');
+            })
+    },
+    // listen() {
+    //     Echo.channel("user-channel").listen("UserEvent", (message) => {
+    //         // this.messages.push(message);
+    //         console.log('message here', message);
+    //     });
+    // },
+};
 </script>
