@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Notifications\JobCompleted;
+use App\Events\JobCompletedEvent;
 
 use App\Http\Controllers\MicroserviceController;
 
@@ -184,5 +185,12 @@ Route::get('test/notify', function(){
   
     $user = auth()->user();
     $user->notify(new JobCompleted());
-    dd('send mail successfully !!', $user);
+    dd('send notify successfully !!', $user);
+});
+
+Route::get('test/event', function(){
+  
+    $user = auth()->user();
+    broadcast(new JobCompletedEvent());
+    dd('send event successfully !!');
 });

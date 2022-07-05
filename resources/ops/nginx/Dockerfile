@@ -8,6 +8,7 @@ WORKDIR /var/www/html
 
 COPY . /var/www/html/
 
+# Build
 RUN npm ci
 RUN npm i -g lerna
 RUN npm run lerna
