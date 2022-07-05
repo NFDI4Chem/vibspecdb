@@ -15,6 +15,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Notifications\JobCompleted;
 
 use App\Http\Controllers\MicroserviceController;
 
@@ -172,9 +173,16 @@ Route::group([
 /// job tests:
 Route::get('test/email', function(){
   
-	$send_mail = 'test@gmail.com';
+	$send_mail = $user = auth()->user()->email;
   
     dispatch(new App\Jobs\SendEmailJob($send_mail));
   
     dd('send mail successfully !!');
+});
+
+Route::get('test/notify', function(){
+  
+    $user = auth()->user();
+    $user->notify(new JobCompleted());
+    dd('send mail successfully !!', $user);
 });
