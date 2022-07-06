@@ -40,16 +40,15 @@ services:
             - "9000:9000"
         networks: 
             - laravel-php-nginx
-    echo:
-        build:
-            context: .
-            dockerfile: ./resources/ops/echo/Dockerfile
-        container_name: echo
-        restart: unless-stopped
-        ports: 
-            - "6001:6001"
-        depends_on:
-            - "redis"
+    soketi:
+        image: 'quay.io/soketi/soketi:latest-16-alpine'
+        container_name: soketi
+        environment:
+            DEBUG: '1'
+            METRICS_SERVER_PORT: '9601'
+        ports:
+            - '${SOKETI_PORT:-6001}:6001'
+            - '${SOKETI_METRICS_SERVER_PORT:-9601}:9601'
         networks: 
             - laravel-php-nginx
     laravel-echo-server:

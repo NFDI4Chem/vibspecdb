@@ -194,7 +194,9 @@ Route::get('test/notify', function(){
 Route::get('test/event', function(){
   
     $user = auth()->user();
-    // broadcast(new JobCompletedEvent());
-    event(new \App\Events\JobCompletedEvent());
+    // broadcast(new ServerCreated('11'));
+    broadcast(new JobCompletedEvent());
+    // event(new OrderEvent('123'));
+    // event(new \App\Events\JobCompletedEvent());
     dd('send event successfully !!');
 });
