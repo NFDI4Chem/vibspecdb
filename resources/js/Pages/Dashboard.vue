@@ -57,6 +57,11 @@ export default {
                 console.log(data);
                 console.log('listended');
             })
+
+        Echo.private(`App.Models.User.${this.user.id}`)
+            .listen('.server.created', (e) => {
+                console.log('private channel works');
+        });
     },
     // listen() {
     //     Echo.channel("user-channel").listen("UserEvent", (message) => {

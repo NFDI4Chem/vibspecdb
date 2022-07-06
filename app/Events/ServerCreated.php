@@ -29,7 +29,7 @@ class ServerCreated implements ShouldBroadcast
      * @param  \App\Models\User  $user
      * @return void
      */
-    public function __construct($user="adsf")
+    public function __construct(User $user)
     {
         $this->user = $user;
     }
@@ -41,7 +41,7 @@ class ServerCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('user.1');
+        return new PrivateChannel('App.Models.User.'.$this->user->id);
     }
 
     /**
