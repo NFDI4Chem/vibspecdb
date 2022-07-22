@@ -27,11 +27,11 @@
             </div>
         </template>
 
-        <div v-if="true" class="active" >
+        <div v-if="false" class="active">
             <Table />
         </div>
 
-        <div v-if="true" class="disable" >
+        <div v-if="false" class="disable">
             <DummyButton />
 
             <PyEditor :file="file" :visible="true" @toggleFilesTree="true" />
@@ -70,7 +70,22 @@
                 </div>
             </div>
         </div>
-         
+
+        <div v-if="true" class="active">
+            <codemirror
+                v-model="code"
+                placeholder="Code goes here..."
+                :style="{ height: '400px' }"
+                :autofocus="true"
+                :indent-with-tab="true"
+                :tab-size="2"
+                :extensions="extensions"
+                @ready="log('ready', $event)"
+                @change="log('change', $event)"
+                @focus="log('focus', $event)"
+                @blur="log('blur', $event)"
+            />
+        </div>
     </app-layout>
 </template>
 
@@ -95,6 +110,11 @@ import Table from "@/Shared/Table/Table.vue";
 
 import { ref } from "vue";
 
+import { Codemirror } from "vue-codemirror";
+import { javascript } from "@codemirror/lang-javascript";
+import { python } from "@codemirror/lang-python";
+import { oneDark } from "@codemirror/theme-one-dark";
+
 export default {
     components: {
         AppLayout,
@@ -106,9 +126,13 @@ export default {
         TreeEditor,
         PyEditor,
         Table,
+        Codemirror,
     },
     props: ["user", "team"],
     setup() {
+        const code = ref(`from PIL import Image, ImageOps\nimport os.path`);
+        const extensions = [python(), oneDark];
+
         let file = ref({
             name: "main.py",
             folder: false,
@@ -174,6 +198,9 @@ export default {
             file,
             files,
             actions,
+            code,
+            extensions,
+            log: console.log,
         };
     },
     computed: {
