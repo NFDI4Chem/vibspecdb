@@ -77,7 +77,7 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Welcome from "@/Jetstream/Welcome.vue";
-import Draggable from "@/Components/FilesExplorer/Draggable";
+import Draggable from "@/Components/FilesExplorer/Draggable.vue";
 import BasicTreeSelect from "@/Components/TreeSelect/BasicTreeSelect.vue";
 
 import ExampleComponent from "@/Components/uPlot/ExampleComponent.vue";
