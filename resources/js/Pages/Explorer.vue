@@ -31,7 +31,7 @@
             <Table />
         </div>
 
-        <div v-if="false" class="disable" >
+        <div v-if="true" class="disable" >
             <DummyButton />
 
             <PyEditor :file="file" :visible="true" @toggleFilesTree="true" />

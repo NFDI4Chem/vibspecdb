@@ -1,9 +1,10 @@
 import Vuex from 'vuex'
-import modules from '@/store/modules'
+
+import draggableStructure from "@/store/modules/draggableStructure";
 
 export const store = new Vuex.Store({
   modules: {
-    ...modules,
+    draggableStructure,
   },
 })
 
