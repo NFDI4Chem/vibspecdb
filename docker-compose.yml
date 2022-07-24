@@ -18,6 +18,25 @@ services:
             test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
             retries: 3
             timeout: 5s
+    # mysql:
+    #     image: 'mysql:8.0'
+    #     container_name: mysql
+    #     ports:
+    #         - '${FORWARD_DB_PORT:-3306}:3306'
+    #     environment:
+    #         MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+    #         MYSQL_DATABASE: '${DB_DATABASE}'
+    #         MYSQL_USER: '${DB_USERNAME}'
+    #         MYSQL_PASSWORD: '${DB_PASSWORD}'
+    #         MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    #     volumes:
+    #         - 'sailmysql:/var/lib/mysql'
+    #     networks:
+    #         - laravel-php-nginx
+    #     healthcheck:
+    #         test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+    #         retries: 3
+    #         timeout: 5s
     redis:
         image: 'redis:alpine'
         container_name: redis
@@ -140,6 +159,8 @@ services:
         - laravel-php-nginx
 volumes:
     sailpgsql:
+        driver: local
+    sailmysql:
         driver: local
     sailminio:
         driver: local
