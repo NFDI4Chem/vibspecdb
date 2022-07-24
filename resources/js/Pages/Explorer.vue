@@ -86,6 +86,9 @@
                 @blur="log('blur', $event)"
             />
         </div>
+        <div v-if="true" class="active">
+            <Demo3Fold></Demo3Fold>
+        </div>
     </app-layout>
 </template>
 
@@ -115,19 +118,23 @@ import { javascript } from "@codemirror/lang-javascript";
 import { python } from "@codemirror/lang-python";
 import { oneDark } from "@codemirror/theme-one-dark";
 
+
+import Demo3Fold from "./Demo3Fold.vue"; // base style
+
 export default {
     components: {
-        AppLayout,
-        Welcome,
-        Draggable,
-        BasicTreeSelect,
-        ExampleComponent,
-        DummyButton,
-        TreeEditor,
-        PyEditor,
-        Table,
-        Codemirror,
-    },
+    AppLayout,
+    Welcome,
+    Draggable,
+    BasicTreeSelect,
+    ExampleComponent,
+    DummyButton,
+    TreeEditor,
+    PyEditor,
+    Table,
+    Codemirror,
+    Demo3Fold
+},
     props: ["user", "team"],
     setup() {
         const code = ref(`from PIL import Image, ImageOps\nimport os.path`);
@@ -194,13 +201,14 @@ export default {
             },
         ]);
         const actions = () => {};
+
         return {
             file,
             files,
             actions,
             code,
             extensions,
-            log: console.log,
+            log: console.log
         };
     },
     computed: {
