@@ -87,7 +87,7 @@
             />
         </div>
         <div v-if="true" class="active">
-            <Demo3Fold></Demo3Fold>
+            <UniFilesTree :tree="tree"></UniFilesTree>
         </div>
     </app-layout>
 </template>
@@ -119,7 +119,7 @@ import { python } from "@codemirror/lang-python";
 import { oneDark } from "@codemirror/theme-one-dark";
 
 
-import Demo3Fold from "./Demo3Fold.vue"; // base style
+import UniFilesTree from "@/Pages/UniFilesTree.vue"; // base style
 
 export default {
     components: {
@@ -133,7 +133,7 @@ export default {
     PyEditor,
     Table,
     Codemirror,
-    Demo3Fold
+    UniFilesTree
 },
     props: ["user", "team"],
     setup() {
@@ -151,6 +151,16 @@ export default {
             editing: false,
             deleting: false,
         });
+
+        const tree = [
+            { text: "node 1" },
+            { text: "node 2", children: [{ text: "node 2-1" }] },
+            { text: "node 3" },
+            { text: "node 4" },
+            { text: "node 5" },
+            { text: "node 6" },
+        ];
+
         let files = ref([
             {
                 id: 0,
@@ -208,7 +218,8 @@ export default {
             actions,
             code,
             extensions,
-            log: console.log
+            log: console.log,
+            tree
         };
     },
     computed: {
