@@ -120,6 +120,10 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('studies.activity');
     Route::get('studies/{study}/files', [StudyController::class, 'files'])
         ->name('study.files');
+    Route::get('studies/{study}/jobs', [StudyController::class, 'jobs'])
+        ->name('study.jobs');
+    Route::get('studies/{study}/submit-job', [StudyController::class, 'submitJob'])
+        ->name('study.submit-job');
 });
 
 

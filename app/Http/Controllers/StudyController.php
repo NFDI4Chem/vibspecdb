@@ -49,6 +49,33 @@ class StudyController extends Controller
         ]);
     }
 
+    
+
+    public function submitJob(Request $request, Study $study)
+    {
+        $files = [];
+
+        return Inertia::render('Study/SubmitJob', [
+            'study' => $study,
+            'project' => $study->project,
+            'files' => $files
+        ]);
+
+    }
+
+    public function Jobs(Request $request, Study $study)
+    {
+        $jobs = [];
+
+        return Inertia::render('Study/Jobs', [
+            'study' => $study,
+            'project' => $study->project,
+            'jobs' => $jobs
+        ]);
+
+    }
+
+
     public function Files(Request $request, Study $study)
     {
 
@@ -68,9 +95,16 @@ class StudyController extends Controller
         ])->orderBy('type')->get();
 
         $new = array();
-        foreach ($files as $a){
+        foreach ($files as $a) {
           $id = $a['parent_id'] ? $a['parent_id'] : 0;
+
+          # activate dropable:
+          $a['$droppable'] = false;
+          foreach ($a['children'] as $child) {
+            $child['$droppable'] = ($child['type'] == 'directory' ? true : false);
+          }
           $new[$id][] = $a;
+          # # #
         }
         
         
@@ -79,6 +113,7 @@ class StudyController extends Controller
           foreach ($parent as $k=>$l){
               if(isset($list[$l['id']])){
                   $l['children'] = createTree($list, $list[$l['id']]);
+                  $l['$droppable'] = ($l['type'] == 'directory' ? true : false);
               }
               $tree[] = $l;
           } 

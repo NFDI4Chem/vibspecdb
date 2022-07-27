@@ -10,10 +10,19 @@ class FileSystemController extends Controller
 {
     public function children(Request $request, $study, $fileId)
     {
+        $files = FileSystemObject::with('children')->where([
+            ['id', $fileId],
+        ])->orderBy('type')->get();
+
+        foreach ($files as $file) {
+            $file['$droppable'] = ($file['type'] == 'directory' ? true : false);
+            foreach ($file['children'] as $child) {
+                $child['$droppable'] = ($child['type'] == 'directory' ? true : false);
+            }
+        }
+
         return [
-            'files' => FileSystemObject::with('children')->where([
-                ['id', $fileId],
-            ])->orderBy('type')->get(),
+            'files' => $files,
         ];
     }
 }

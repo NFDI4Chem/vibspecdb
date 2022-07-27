@@ -46,7 +46,7 @@
                   class="h-full min-w-sidebar relative flex flex-col  border-r border-gray-200 overflow-y-auto"
                 >
                   <UniFilesTree 
-                    @folderClick="displaySelected" 
+                    @itemClick="displaySelected" 
                     class="mr-2 min-w-min" 
                     :tree="files" 
                   />
