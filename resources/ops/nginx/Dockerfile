@@ -5,8 +5,6 @@ FROM node:16.13.1-alpine3.13 AS assets-build
 
 ARG PPROXY=""
 ARG PSPROXY=""
-ARG SSH_PRIVATE_KEY=""
-ARG SSH_KNOWN_HOSTS=""
 ARG RELEASE_HOST=""
 ARG RELEASE_KEY=""
 
@@ -20,15 +18,20 @@ WORKDIR /var/www/html
 COPY . /var/www/html/
 
 # Add git host key:
-RUN if [ -z "$RELEASE_KEY" ]; then \
-    echo "RELEASE_KEY not set" \
-  else \
-    mkdir -p ~/.ssh && chmod 700 ~/.ssh && \
+# RUN if [ -z "$RELEASE_KEY" ]; then \
+#     echo "RELEASE_KEY not set" \
+#   else \
+#     mkdir -p ~/.ssh && chmod 700 ~/.ssh && \
+#     echo "$RELEASE_KEY" | tr -d '\r' > ~/.ssh/id_rsa && \
+#     echo "$RELEASE_HOST" >> ~/.ssh/known_hosts && \
+#     chmod 644 ~/.ssh/known_hosts && chmod 400 ~/.ssh/id_rsa; \
+#   fi
+###
+
+RUN mkdir -p ~/.ssh && chmod 700 ~/.ssh && \
     echo "$RELEASE_KEY" | tr -d '\r' > ~/.ssh/id_rsa && \
     echo "$RELEASE_HOST" >> ~/.ssh/known_hosts && \
-    chmod 644 ~/.ssh/known_hosts && chmod 400 ~/.ssh/id_rsa; \
-  fi
-###
+    chmod 644 ~/.ssh/known_hosts && chmod 400 ~/.ssh/id_rsa
 
 RUN cat ~/.ssh/known_hosts
 RUN cat ~/.ssh/id_rsa 
