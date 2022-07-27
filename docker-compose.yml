@@ -18,6 +18,26 @@ services:
             test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
             retries: 3
             timeout: 5s
+    # mysql:
+    #     image: 'mysql:8.0.29'
+    #     container_name: mysql
+    #     ports:
+    #         - '${FORWARD_DB_PORT:-3306}:3306'
+    #     environment:
+    #         MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+    #         MYSQL_DATABASE: '${DB_DATABASE}'
+    #         MYSQL_USER: '${DB_USERNAME}'
+    #         MYSQL_PASSWORD: '${DB_PASSWORD}'
+    #         MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    #     volumes:
+    #         - 'sailmysql:/var/lib/mysql'
+    #     networks:
+    #         - laravel-php-nginx
+    #     healthcheck:
+    #         test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+    #         retries: 3
+    #         timeout: 5s
+
     redis:
         image: 'redis:alpine'
         container_name: redis
@@ -29,32 +49,58 @@ services:
             test: ["CMD", "redis-cli", "ping"]
             retries: 3
             timeout: 5s
-    php:
+    laravel.dev:
+        container_name: laravel_sail
         build:
-            context: .
-            dockerfile: ./resources/ops/app/Dockerfile
-        container_name: php
-        volumes: 
-            - '.:/var/www/html'
-        ports: 
-            - "9000:9000"
-        networks: 
-            - laravel-php-nginx
-    nginx:
-        build:
-            context: .
-            dockerfile: ./resources/ops/nginx/Dockerfile
-        container_name: nginx
-        volumes:
-            - ./resources/ops/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            context: ./docker/8.1
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+                XDEBUG: ${SAIL_DEBUG}
+        image: sail-8.1/app
         ports:
-            - ${APP_PORT}:80
+            - '${APP_PORT:-80}:80'
         environment:
-            - NGINX_PORT=80
-        networks: 
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+            # XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+            # XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+        volumes:
+            - '.:/var/www/html'
+            - ./vendor:/var/www/html/vendor
+        networks:
             - laravel-php-nginx
+        depends_on:
+            - pgsql
+            - redis            
+    # php:
+    #     build:
+    #         context: .
+    #         dockerfile: ./resources/ops/app/Dockerfile
+    #     container_name: php
+    #     volumes: 
+    #         - '.:/var/www/html'
+    #     ports: 
+    #         - "9000:9000"
+    #     networks: 
+    #         - laravel-php-nginx
+    # nginx:
+    #     build:
+    #         context: .
+    #         dockerfile: ./resources/ops/nginx/Dockerfile
+    #     container_name: nginx
+    #     volumes:
+    #         - ./resources/ops/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    #         - ./public/build:/var/www/html/build
+    #     ports:
+    #         - ${APP_PORT}:80
+    #     environment:
+    #         - NGINX_PORT=80
+    #     networks: 
+    #         - laravel-php-nginx
     mailhog:
         image: 'mailhog/mailhog:latest'
+        container_name: mailhog
         ports:
             - '${FORWARD_MAILHOG_PORT:-1025}:1025'
             - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
@@ -115,7 +161,11 @@ services:
         networks:
         - laravel-php-nginx
 volumes:
+    sailvendor:
+        driver: local
     sailpgsql:
+        driver: local
+    sailmysql:
         driver: local
     sailminio:
         driver: local
