@@ -21,7 +21,7 @@ stages:
 before_script:
   - TAG=$(cat version.txt)
   - NGINX_TAG=${NGINX_TAG}
-build-app:  
+.build-app:  
   stage: build_app
   before_script:
     - TAG=$(cat version.txt)
@@ -47,7 +47,7 @@ build-app:
       --destination "${DOCKER_REGISTRY}/${APP_NAME}:${TAG}"
       --destination "${DOCKER_REGISTRY}/${APP_NAME}:latest"
       "${KANIKOPROXYBUILDARGS}"
-.build-nginx:  
+build-nginx:  
   stage: build_nginx
   only:
     - deployment

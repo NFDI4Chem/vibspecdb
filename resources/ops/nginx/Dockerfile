@@ -8,6 +8,9 @@ WORKDIR /var/www/html
 
 COPY . /var/www/html/
 
+# RUN npm config set proxy ${http_proxy}
+# RUN npm config set https-proxy
+
 RUN npm ci
 RUN npm i -g lerna
 RUN npm run lerna
