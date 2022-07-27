@@ -12,7 +12,7 @@ WORKDIR /var/www/html
 COPY . /var/www/html/
 
 RUN npm config set proxy ${http_proxy}
-RUN npm config set ${https_proxy}
+RUN npm config set https-proxy ${https_proxy}
 
 RUN npm ci
 RUN npm i -g lerna
