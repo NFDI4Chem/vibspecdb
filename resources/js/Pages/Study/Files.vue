@@ -1,172 +1,123 @@
 <template>
   <div>
-    <study-content :project="project" :study="study" current="Files">
+    <study-content 
+      :project="project" 
+      :study="study" 
+      current="Files">
       <template #study-section>
         <div class="divide-y divide-gray-200 sm:col-span-9">
-          <div class="py-6 px-4 sm:p-6">
-            <div class="flex flex-item">
-              <h2 class="text-lg leading-6 font-medium text-gray-900">Data set</h2>
-            </div>
-            <div>
-              <form class="dropzone py-2">
-                <div id="dropzone-message" class="text-center">
-                  <div
-                    type="button"
-                    class="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    <svg
-                      class="mx-auto h-12 w-12 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      stroke="currentColor"
-                      fill="none"
-                      viewBox="0 0 48 48"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6"
-                      />
-                    </svg>
-                    <span class="mt-2 block text-sm font-medium text-gray-900">
-                      Drop Files or Folders to upload to the selected folder below
-                    </span>
-                    <div v-if="progress > 0" class="relative mt-5">
-                        <div class="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-                          <div
-                            :style="'width: '+progress+'%'"
-                            class="
-                              shadow-none
-                              flex flex-col
-                              text-center
-                              whitespace-nowrap
-                              text-white
-                              justify-center
-                              bg-green-500
-                            "
-                          ></div>
-                        </div>
-                      </div>
+          <div v-if="files">
+            <nav
+              v-if="$page.props.selectedFolder"
+              class="flex p-3"
+              aria-label="Breadcrumb"
+            >
+              <ol role="list" class="flex items-center space-x-2">
+                <li>
+                  <div>
+                    <a class="text-gray-400 hover:text-gray-900">
+                      <HomeIcon class="flex-shrink-0 h-5 w-5" aria-hidden="true" />
+                      <span class="sr-only">Home</span>
+                    </a>
                   </div>
-                </div>
-              </form>
-            </div>
-          </div>
-          <div v-if="files.length > 0">
-            <div class="min-w-0 flex-1 min-h-screen border-t border-gray-200 lg:flex">
-              <aside class="hidden py-3 px-2 lg:block lg:flex-shrink-0 lg:order-first">
-                <div
-                  v-if="files.length > 0"
-                  class="h-full relative flex flex-col w-64 border-r border-gray-200 bg-gray-100 overflow-y-auto"
+                </li>
+                <li
+                  v-for="page in $page.props.selectedFolder.split('/')"
+                  :key="page.name"
                 >
-                  <nav class="flex-1 px-2 pt-3 space-y-1 bg-white" aria-label="Sidebar">
-                    <template v-for="file in files" :key="file.name">
-                      <div v-if="!file.has_children">
-                        <div
-                          :class="[
-                            file.current
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'cursor-pointer bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                            'cursor-pointer group w-full flex items-center pl-3 pr-2 py-2 text-sm font-medium rounded-md',
-                          ]"
-                          @click="displaySelected(file)"
-                        >
-                          <span v-if="file.type == 'directory'">
-                            <FolderIcon
-                              class="-ml-1.5 mr-1 h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                          </span>
-                          <span v-else>
-                            <DocumentTextIcon
-                              class="-ml-1.5 mr-1 h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                          </span>
-                          {{ file.name }}
-                        </div>
-                      </div>
-                      <Disclosure v-else v-slot="{ open }" as="div" class="space-y-1">
-                        <div
-                          v-if="selectedFileSystemObject"
-                          :class="[
-                            file.id == selectedFileSystemObject.id
-                              ? 'cursor-pointer bg-gray-100 text-gray-900'
-                              : 'cursor-pointer bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                            'group w-full flex items-center pr-2 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500',
-                          ]"
-                          @click="displaySelected(file)"
-                        >
-                          <DisclosureButton>
-                            <svg
-                              :class="[
-                                open ? 'text-gray-400 rotate-90' : 'text-gray-300',
-                                'mr-2 flex-shrink-0 h-5 w-5 transform group-hover:text-gray-400 transition-colors ease-in-out duration-150',
-                              ]"
-                              viewBox="0 0 20 20"
-                              aria-hidden="true"
-                            >
-                              <path d="M6 6L14 10L6 14V6Z" fill="currentColor" />
-                            </svg>
-                          </DisclosureButton>
-                          <span>
-                            <span v-if="file.type == 'directory'">
-                              <FolderIcon
-                                class="inline -ml-1.5 mr-1 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            </span>
-                            <span v-else>
-                              <DocumentTextIcon
-                                class="inline -ml-1.5 mr-1 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            </span>
-                            {{ file.name }}
-                          </span>
-                        </div>
-                        <DisclosurePanel class="space-y-1">
-                          <div
-                            v-for="subItem in file.children"
-                            :key="subItem.name"
-                            as="div"
-                            class="cursor-pointer group w-full flex items-center pl-10 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"
-                            @click="displaySelected(subItem)"
-                          >
-                            <span v-if="subItem.type == 'directory'">
-                              <FolderIcon
-                                class="-ml-1.5 mr-1 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            </span>
-                            <span v-else>
-                              <DocumentTextIcon
-                                class="-ml-1.5 mr-1 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            </span>
-                            {{ subItem.name }}
-                          </div>
-                        </DisclosurePanel>
-                      </Disclosure>
-                    </template>
-                  </nav>
+                  <div v-if="page != ''" class="flex items-center">
+                    <ChevronRightIcon
+                      class="flex-shrink-0 h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                    <a
+                      class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
+                      :aria-current="page ? 'page' : undefined"
+                      >{{ page }}</a
+                    >
+                  </div>
+                </li>
+              </ol>
+            </nav>
+            <div class="min-w-0 flex-1 min-h-screen border-t border-gray-200 lg:flex">
+              <aside class="py-3 px-2">
+                <div
+                  v-if="files != null"
+                  class="h-full min-w-sidebar relative flex flex-col  border-r border-gray-200 overflow-y-auto"
+                >
+                  <UniFilesTree 
+                    @itemClick="displaySelected" 
+                    class="mr-2 min-w-min" 
+                    :tree="files" 
+                  />
                 </div>
               </aside>
               <section
                 class="min-w-0 p-6 flex-1 h-full flex flex-col overflow-y-auto lg:order-last"
               >
+                <div>
+                  <form class="dropzone py-2 mb-3">
+                    <div id="dropzone-message" class="text-center">
+                      <div
+                        type="button"
+                        class="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      >
+                        <svg
+                          class="mx-auto h-12 w-12 text-gray-400"
+                          xmlns="http://www.w3.org/2000/svg"
+                          stroke="currentColor"
+                          fill="none"
+                          viewBox="0 0 48 48"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6"
+                          />
+                        </svg>
+                        <span class="mt-2 block text-sm font-medium text-gray-900">
+                          Drop Files or Folders to upload to
+                          <span v-if="$page.props.selectedFolder"
+                            >"{{ $page.props.selectedFolder }}"</span
+                          >
+                          folder
+                        </span>
+
+                        <div v-if="progress > 0" class="relative mt-5">
+                          <div
+                            class="overflow-hidden h-2 text-xs flex rounded bg-gray-200"
+                          >
+                            <div
+                              :style="'width: ' + progress + '%'"
+                              class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
+                            ></div>
+                          </div>
+                        </div>
+                        <div v-if="progress > 0">
+                          <span class="mt-2 block text-sm font-medium text-gray-900">
+                            {{ status }} ({{ progress }}%)
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
                 <div
-                  v-if="selectedFileSystemObject && selectedFileSystemObject.has_children"
                   class="mb-3"
+                  v-if="
+                    $page.props.selectedFileSystemObject &&
+                    $page.props.selectedFileSystemObject.has_children
+                  "
                 >
                   <ul
                     role="list"
                     class="mb-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4"
                   >
                     <li
-                      v-for="file in selectedFileSystemObject.children"
+                      v-for="file in $page.props.selectedFileSystemObject.children"
                       :key="file.key"
                       class="relative shadow rounded-lg"
                     >
@@ -175,7 +126,8 @@
                       >
                         <span v-if="file.type == 'directory'">
                           <FolderIcon
-                            class="h-28 w-28 text-gray-400 flex-shrink-0 mx-auto"
+                            @dblclick.stop="displaySelected(file)"
+                            class="cursor-pointer h-28 w-28 text-gray-400 flex-shrink-0 mx-auto"
                             aria-hidden="true"
                           />
                         </span>
@@ -200,8 +152,25 @@
                   </ul>
                 </div>
                 <div v-else>
-                  <div>
-                    {{ selectedFileSystemObject }}
+                  <div class="">
+                    <span
+                      v-if="
+                        $page.props.selectedFileSystemObject &&
+                        $page.props.selectedFileSystemObject.type == 'file'
+                      "
+                    >
+                      <div
+                        class="rounded-md border my-3 flex justify-center items-center"
+                        v-if="true"
+                      >
+                      </div>
+                      <!-- {{$page.props.selectedFileSystemObject}} -->
+                      <File-details
+                        :study="study"
+                        :file="$page.props.selectedFileSystemObject"
+                        :url="$page.props.selectedFileSystemObject.uploadURL"
+                      ></File-details>
+                    </span>
                   </div>
                 </div>
               </section>
@@ -216,9 +185,15 @@
 <script>
 import { Dropzone } from "dropzone";
 import StudyContent from "@/Pages/Study/Content.vue";
+import FileDetails from "@/Shared/FileDetails.vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { FolderIcon, DocumentTextIcon } from "@heroicons/vue/solid";
 import { Inertia } from '@inertiajs/inertia';
+import axiosRetry from "axios-retry";
+
+import {ChevronRightIcon, HomeIcon} from "@heroicons/vue/solid";
+
+import UniFilesTree from "@/Pages/UniFilesTree.vue";
 
 export default {
   components: {
@@ -228,6 +203,10 @@ export default {
     DisclosurePanel,
     FolderIcon,
     DocumentTextIcon,
+    ChevronRightIcon,
+    UniFilesTree,
+    FileDetails,
+    HomeIcon
   },
   props: ["study", "project", "files"],
   setup() {
@@ -236,11 +215,14 @@ export default {
   data() {
     return {
       progress: 0,
-      selectedFileSystemObject: null,
+      status: null,
+      selectedFileSystemObject: null
     };
   },
   mounted() {
     const vm = this;
+    vm.$page.props.selectedFileSystemObject = vm.files;
+    vm.$page.props.selectedFolder = "/";
     let options = {
       url: "/",
       method: "put",
@@ -253,19 +235,36 @@ export default {
       autoProcessQueue: false,
       uploadMultiple: false,
       disablePreviews: true,
-      parallelUploads: 100,
-      maxFiles: 100,
-      dictDefaultMessage: document.querySelector("#dropzone-message").innerHTML,
+      parallelUploads: 1,
+      maxFiles: 1000,
+      dictDefaultMessage: 'Here Direct message', //document.querySelector("#dropzone-message").innerHTML,
       done(){
         console.log("hi")
       },
       accept(file, done) {
         const url = "/storage/signed-storage-url";
-        axios
+
+        const client = axios.create({ baseURL: window.location.origin });
+        axiosRetry(client, {
+          retries: 3,
+          retryCondition: (error) => {
+            return error.response.status === 500;
+          },
+        });
+
+        client
           .post(url, {
             file: file,
             project_id: vm.project.id,
             study_id: vm.study.id,
+          })
+          .catch((err) => {
+            // The first request fails
+            if (err.response.status !== 200 || err.response.status !== 201) {
+              throw new Error(
+                `API call failed with status code: ${err.response.status} after multiple attempts`
+              );
+            }
           })
           .then(function (response) {
             let data = response.data;
@@ -274,30 +273,70 @@ export default {
               delete headers.Host;
             }
             file.uploadURL = data.url;
-            done();
             setTimeout(() => vm.dropzone.processFile(file));
+            done();
           });
       },
-      totaluploadprogress: function(progress) {
-        vm.progress = progress
+      totaluploadprogress: function (progress) {
+        vm.progress = Math.ceil(progress);
       },
-      queuecomplete: function(){
-        Inertia.reload()
-        this.selectedFileSystemObject = this.files[0];
-      }
+      queuecomplete: function () {
+        vm.status = "UPLOAD COMPLETE";
+        Inertia.reload();
+        this.$page.props.selectedFileSystemObject = this.files[0];
+      },
     };
     this.dropzone = new Dropzone(this.$el, options);
 
     vm.dropzone.on("processing", (file) => {
+      vm.status = "UPLOAD IN PROGRESS";
       vm.dropzone.options.url = file.uploadURL;
     });
 
-    this.selectedFileSystemObject = this.files[0];
+    // this.$page.props.selectedFileSystemObject = "root";
+    this.files[0].$folded = false;
   },
   methods: {
     displaySelected(file) {
-      this.selectedFileSystemObject = file;
+      console.log('file', file)
+      this.$page.props.selectedFileSystemObject = file;
+
+      let sFolder = "/";
+      if (this.$page.props.selectedFileSystemObject.name == "/") {
+        sFolder = "/";
+      } else {
+        if (this.$page.props.selectedFileSystemObject.type != "file") {
+          sFolder = this.$page.props.selectedFileSystemObject.relative_url;
+        } else {
+          if (this.$page.props.selectedFileSystemObject.parent_id == null) {
+            sFolder = "/";
+          } else {
+            sFolder = this.$page.props.selectedFileSystemObject.relative_url.replace(
+              "/" + this.$page.props.selectedFileSystemObject.name,
+              ""
+            );
+          }
+        }
+      }
+      this.$page.props.selectedFolder = sFolder;
+
+      if (file.has_children && file.level > 0 && !file.children) {
+        file.loading = true;
+        axios
+          .get("/api/v1/files/children/" + this.study.id + "/" + file.id)
+          .then((response) => {
+            file.children = response.data.files[0].children;
+            file.loading = false;
+          });
+      }
     },
   },
 };
 </script>
+
+
+<style lang="scss" scoped>
+.min-w-sidebar {
+    width: 30rem;
+}
+</style>

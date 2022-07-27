@@ -10,19 +10,15 @@
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
-        <!-- Styles -->
-        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-
-        <!-- Scripts -->
+        @vite(['resources/js/app.js'])
         @routes
-        <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased h-full">
         @inertia
 
-        @env ('local')
-            <script src="http://localhost:3000/browser-sync/browser-sync-client.js"></script>
-        @endenv
+        <!-- @env ('local') -->
+            <!-- <script src="http://localhost:3000/browser-sync/browser-sync-client.js"></script> -->
+        <!-- @endenv -->
 
         <x-support-bubble />
     </body>

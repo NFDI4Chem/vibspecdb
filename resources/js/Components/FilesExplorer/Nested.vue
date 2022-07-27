@@ -18,7 +18,7 @@
 
 <script>
 import draggable from "vuedraggable";
-import ListItem from "@/Components/FilesExplorer/ListItem";
+import ListItem from "@/Components/FilesExplorer/ListItem.vue";
 import { v4 as uuidv4 } from 'uuid';
 
 export default {

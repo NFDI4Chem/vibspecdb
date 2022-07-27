@@ -30,12 +30,16 @@
 import StudyLayout from "@/Pages/Study/Layout.vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import {
-  DatabaseIcon,
+  InformationCircleIcon,
   FolderOpenIcon,
+  BriefcaseIcon,
+  TemplateIcon,
 } from "@heroicons/vue/outline";
 const subNavigation = [
-  { name: "About", route: "study", icon: DatabaseIcon },
+  { name: "About", route: "study", icon: InformationCircleIcon },
   { name: "Files", route: "study.files", icon: FolderOpenIcon },
+  { name: "Jobs", route: "study.jobs", icon: BriefcaseIcon },
+  { name: "Submit Job", route: "study.submit-job", icon: TemplateIcon },
 ];
 
 export default {

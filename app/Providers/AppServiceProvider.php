@@ -24,11 +24,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+    
         if (config('app.env') === 'production') {
             // Force Https for assets
             URL::forceScheme('https');
             // Force Https for signed URLs, verify email for example:
-            $this->app['request']->server->set('HTTPS', 'on');
+            // $this->app['request']->server->set('HTTPS', 'on');
         }
+        
     }
 }

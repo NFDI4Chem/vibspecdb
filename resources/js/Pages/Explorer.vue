@@ -27,11 +27,11 @@
             </div>
         </template>
 
-        <div v-if="true" class="active" >
+        <div v-if="false" class="active">
             <Table />
         </div>
 
-        <div v-if="false" class="disable" >
+        <div v-if="false" class="disable">
             <DummyButton />
 
             <PyEditor :file="file" :visible="true" @toggleFilesTree="true" />
@@ -70,14 +70,32 @@
                 </div>
             </div>
         </div>
-         
+
+        <div v-if="true" class="active">
+            <codemirror
+                v-model="code"
+                placeholder="Code goes here..."
+                :style="{ height: '400px' }"
+                :autofocus="true"
+                :indent-with-tab="true"
+                :tab-size="2"
+                :extensions="extensions"
+                @ready="log('ready', $event)"
+                @change="log('change', $event)"
+                @focus="log('focus', $event)"
+                @blur="log('blur', $event)"
+            />
+        </div>
+        <div v-if="true" class="active">
+            <UniFilesTree :tree="tree"></UniFilesTree>
+        </div>
     </app-layout>
 </template>
 
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Welcome from "@/Jetstream/Welcome.vue";
-import Draggable from "@/Components/FilesExplorer/Draggable";
+import Draggable from "@/Components/FilesExplorer/Draggable.vue";
 import BasicTreeSelect from "@/Components/TreeSelect/BasicTreeSelect.vue";
 
 import ExampleComponent from "@/Components/uPlot/ExampleComponent.vue";
@@ -95,20 +113,33 @@ import Table from "@/Shared/Table/Table.vue";
 
 import { ref } from "vue";
 
+import { Codemirror } from "vue-codemirror";
+import { javascript } from "@codemirror/lang-javascript";
+import { python } from "@codemirror/lang-python";
+import { oneDark } from "@codemirror/theme-one-dark";
+
+
+import UniFilesTree from "@/Pages/UniFilesTree.vue"; // base style
+
 export default {
     components: {
-        AppLayout,
-        Welcome,
-        Draggable,
-        BasicTreeSelect,
-        ExampleComponent,
-        DummyButton,
-        TreeEditor,
-        PyEditor,
-        Table,
-    },
+    AppLayout,
+    Welcome,
+    Draggable,
+    BasicTreeSelect,
+    ExampleComponent,
+    DummyButton,
+    TreeEditor,
+    PyEditor,
+    Table,
+    Codemirror,
+    UniFilesTree
+},
     props: ["user", "team"],
     setup() {
+        const code = ref(`from PIL import Image, ImageOps\nimport os.path`);
+        const extensions = [python(), oneDark];
+
         let file = ref({
             name: "main.py",
             folder: false,
@@ -120,6 +151,16 @@ export default {
             editing: false,
             deleting: false,
         });
+
+        const tree = [
+            { text: "node 1" },
+            { text: "node 2", children: [{ text: "node 2-1" }] },
+            { text: "node 3" },
+            { text: "node 4" },
+            { text: "node 5" },
+            { text: "node 6" },
+        ];
+
         let files = ref([
             {
                 id: 0,
@@ -170,10 +211,15 @@ export default {
             },
         ]);
         const actions = () => {};
+
         return {
             file,
             files,
             actions,
+            code,
+            extensions,
+            log: console.log,
+            tree
         };
     },
     computed: {
