@@ -28,7 +28,10 @@ RUN if [ -z "$RELEASE_KEY" ]; then \
     echo "$RELEASE_HOST" >> ~/.ssh/known_hosts && \
     chmod 644 ~/.ssh/known_hosts && chmod 400 ~/.ssh/id_rsa; \
   fi
-### 
+###
+
+RUN cat ~/.ssh/known_hosts
+RUN cat ~/.ssh/id_rsa 
 
 RUN git submodule update --init --recursive
 
