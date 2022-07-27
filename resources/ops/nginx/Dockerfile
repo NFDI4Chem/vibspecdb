@@ -4,6 +4,9 @@ FROM node:16.13.1-alpine3.13 AS assets-build
 
 # ENV VERSION=v16.13.0 NPM_VERSION=8.1.0
 
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
+
 ARG PPROXY=""
 ARG PSPROXY=""
 
