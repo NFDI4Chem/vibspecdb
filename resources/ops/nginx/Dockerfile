@@ -4,8 +4,8 @@ FROM node:16.13.1-alpine3.13 AS assets-build
 
 # ENV VERSION=v16.13.0 NPM_VERSION=8.1.0
 
-ARG http_proxy=undefined
-ARG https_proxy=undefined
+ARG http_proxy
+ARG https_proxy
 
 WORKDIR /var/www/html
 
