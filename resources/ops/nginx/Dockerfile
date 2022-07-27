@@ -4,20 +4,17 @@ FROM node:16.13.1-alpine3.13 AS assets-build
 
 # ENV VERSION=v16.13.0 NPM_VERSION=8.1.0
 
-ARG http_proxy
-ARG https_proxy
 ARG PPROXY
+ARG PSPROXY
 
 WORKDIR /var/www/html
 
 COPY . /var/www/html/
 
 RUN npm config set proxy ${PPROXY}
-RUN npm config set https-proxy ${https_proxy}
+RUN npm config set https-proxy ${PSPROXY}
 
 RUN npm ci
-RUN npm i -g lerna
-RUN npm run lerna
 RUN npm run build
 
 FROM nginx:1.19-alpine AS nginx

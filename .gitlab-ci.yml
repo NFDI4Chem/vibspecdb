@@ -72,6 +72,7 @@ build-nginx:
       --destination "${DOCKER_REGISTRY}/${NGINX_IMAGE_NAME}:latest"
       "${KANIKOPROXYBUILDARGS}"
       --build-arg="PPROXY=${CI_PROXY}"
+      --build-arg="PSPROXY=${CIS_PROXY}"
 rancher-redeploy:
   image: debian:latest
   only:
