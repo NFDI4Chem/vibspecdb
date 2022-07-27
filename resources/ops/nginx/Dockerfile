@@ -23,9 +23,9 @@ COPY . /var/www/html/
 RUN if [ -z "$SSH_PRIVATE_KEY" ]; then \
     echo "SSH_PRIVATE_KEY not set" \
   else \
-    mkdir -p ~/.ssh && chmod 700 ~/.ssh \
-    echo "$RELEASE_KEY" | tr -d '\r' > ~/.ssh/id_rsa \
-    echo "$RELEASE_HOST" >> ~/.ssh/known_hosts \
+    mkdir -p ~/.ssh && chmod 700 ~/.ssh && \
+    echo "$RELEASE_KEY" | tr -d '\r' > ~/.ssh/id_rsa && \
+    echo "$RELEASE_HOST" >> ~/.ssh/known_hosts && \
     chmod 644 ~/.ssh/known_hosts && chmod 400 ~/.ssh/id_rsa \
   fi
 ### 
