@@ -23,9 +23,9 @@ COPY . /var/www/html/
 RUN if [ -z "$SSH_PRIVATE_KEY" ]; then \
     echo "SSH_PRIVATE_KEY not set" \
   else \
-    mkdir -p ~/.ssh && chmod 700 ~/.ssh \
+    mkdir -p ~/.ssh && chmod 700 ~/.ssh; \
   fi
-### 
+###
 
 RUN git submodule update --init --recursive
 
