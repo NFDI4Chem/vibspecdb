@@ -1,2 +1,3 @@
 [submodule "resources/js/packages/serviceappvuecomponents"]
+	path = resources/js/packages/serviceappvuecomponents 
 	url = ssh://git@git.photonicdata.science:30024/serviceapp/serviceappvuecomponents.git
