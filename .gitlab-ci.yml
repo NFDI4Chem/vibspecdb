@@ -47,6 +47,7 @@ before_script:
       --destination "${DOCKER_REGISTRY}/${APP_NAME}:${TAG}"
       --destination "${DOCKER_REGISTRY}/${APP_NAME}:latest"
       "${KANIKOPROXYBUILDARGS}"
+      --build-arg="PPROXY=${CI_PROXY}"
 build-nginx:  
   stage: build_nginx
   only:

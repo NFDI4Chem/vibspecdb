@@ -6,12 +6,13 @@ FROM node:16.13.1-alpine3.13 AS assets-build
 
 ARG http_proxy
 ARG https_proxy
+ARG PPROXY
 
 WORKDIR /var/www/html
 
 COPY . /var/www/html/
 
-RUN npm config set proxy ${http_proxy}
+RUN npm config set proxy ${PPROXY}
 RUN npm config set https-proxy ${https_proxy}
 
 RUN npm ci
