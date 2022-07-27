@@ -73,7 +73,7 @@ build-nginx:
       "${KANIKOPROXYBUILDARGS}"
       --build-arg="PPROXY=${CI_PROXY}"
       --build-arg="PSPROXY=${CIS_PROXY}"
-      --build-arg="RELEASE_HOST=${RELEASE_HOST_IP}"
+      --build-arg="RELEASE_HOST=git.photonicdata.science:30024"
       --build-arg="RELEASE_KEY=${RELEASE_SSH_KEY}"
 rancher-redeploy:
   image: debian:latest

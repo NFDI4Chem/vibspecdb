@@ -8,6 +8,8 @@ ARG PSPROXY=""
 ARG RELEASE_HOST=""
 ARG RELEASE_KEY=""
 
+ARG DEV=""
+
 # ENV VERSION=v16.13.0 NPM_VERSION=8.1.0
 
 RUN apk update && apk upgrade && \
