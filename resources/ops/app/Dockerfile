@@ -1,3 +1,32 @@
+
+FROM node:16.13.1-alpine3.13 AS assets-build
+
+
+ARG PPROXY=""
+ARG PSPROXY=""
+ARG RELEASE_HOST_IP=""
+
+
+# ENV VERSION=v16.13.0 NPM_VERSION=8.1.0
+
+WORKDIR /var/www/html
+COPY . /var/www/html/
+
+RUN npm config set proxy ${PPROXY}
+RUN npm config set https-proxy ${PSPROXY}
+
+RUN if [ -z "$RELEASE_HOST_IP" ]; then \
+    echo "local env active" \
+  else \
+    npm config set proxy ${PPROXY} && \
+    npm config set https-proxy ${PSPROXY}; \
+  fi
+
+RUN npm ci
+RUN npm run build
+
+#################################
+
 FROM php:8.1.1-fpm-alpine AS base
 
 RUN apk add --update zlib-dev libpng-dev libzip-dev $PHPIZE_DEPS
@@ -51,6 +80,7 @@ RUN composer dump-autoload -o
 FROM build-fpm AS fpm
 
 COPY --from=build-fpm /var/www/html /var/www/html
+COPY --from=assets-build /var/www/html/public /var/www/html/
 
 RUN chown -R www-data:www-data storage
 # RUN chmod -R 755 /var/www/html/storage
