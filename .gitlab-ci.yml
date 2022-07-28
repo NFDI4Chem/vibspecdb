@@ -7,7 +7,7 @@ variables:
     http_proxy: ${CI_PROXY}
     https_proxy: ${CIS_PROXY}
     no_proxy: ${DOCKER_REGISTRY}
-    NGINX_TAG: "v0.1.1"
+    NGINX_TAG: "v0.1.2"
     NGINX_IMAGE_NAME: "serviceapp_nginx"
     NGINX_DOCKER_PATH: "${CI_PROJECT_DIR}/resources/ops/nginx"
 
@@ -94,4 +94,4 @@ rancher-redeploy:
     - curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
     - chmod +x /usr/local/bin/argocd
     - argocd app set vibspecdb-laravel -p image.app.tag=${TAG} --server ${ARGOCD_SERVER} --auth-token ${ARGOCD_TOKEN}
-    - argocd app set vibspecdb-laravel -p image.nginx.tag=${TAG} --server ${ARGOCD_SERVER} --auth-token ${ARGOCD_TOKEN}
+    - argocd app set vibspecdb-laravel -p image.nginx.tag=${NGINX_TAG} --server ${ARGOCD_SERVER} --auth-token ${ARGOCD_TOKEN}

@@ -80,7 +80,7 @@ RUN composer dump-autoload -o
 FROM build-fpm AS fpm
 
 COPY --from=build-fpm /var/www/html /var/www/html
-COPY --from=assets-build /var/www/html/public /var/www/html/
+COPY --from=assets-build /var/www/html/public/build /var/www/html/public/build
 
 RUN chown -R www-data:www-data storage
 # RUN chmod -R 755 /var/www/html/storage
