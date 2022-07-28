@@ -18,12 +18,12 @@ stages:
   - build_images
   - redeploy
 before_script:
-  - TAG=$(cat version.txt)
-  - NGINX_TAG=${NGINX_TAG}
+  - TAG=$(sed -n 2p version.txt)
+  - NGINX_TAG=$(sed -n 4p version.txt)
 build-app:  
   stage: build_images
   before_script:
-    - TAG=$(cat version.txt)
+    - TAG=$(sed -n 2p version.txt)
   only:
     - deployment
   variables:
@@ -53,6 +53,8 @@ build-app:
       --build-arg="RELEASE_HOST_IP=${RELEASE_HOST_IP}"
 build-nginx:  
   stage: build_images
+  before_script:
+    - NGINX_TAG=$(sed -n 4p version.txt)
   only:
     - deployment
   variables:

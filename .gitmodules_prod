@@ -1,3 +1,0 @@
-[submodule "resources/js/packages/serviceappvuecomponents"]
-	path = resources/js/packages/serviceappvuecomponents 
-	url = ../serviceappvuecomponents.git
