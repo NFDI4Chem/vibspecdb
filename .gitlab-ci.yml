@@ -15,18 +15,19 @@ image:
   name: gcr.io/kaniko-project/executor:v1.7.0-debug
   entrypoint: [""]
 stages:
-  - build_nginx
-  - build_app
+  - build_images
   - redeploy
 before_script:
   - TAG=$(cat version.txt)
   - NGINX_TAG=${NGINX_TAG}
 build-app:  
-  stage: build_app
+  stage: build_images
   before_script:
     - TAG=$(cat version.txt)
   only:
     - deployment
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   script:
     - mkdir -p /kaniko/.docker
     - |-
@@ -51,7 +52,7 @@ build-app:
       --build-arg="PSPROXY=${CIS_PROXY}"
       --build-arg="RELEASE_HOST_IP=${RELEASE_HOST_IP}"
 build-nginx:  
-  stage: build_nginx
+  stage: build_images
   only:
     - deployment
   variables:
