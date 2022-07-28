@@ -21,7 +21,6 @@ stages:
 before_script:
   - TAG=$(cat version.txt)
   - NGINX_TAG=${NGINX_TAG}
-  - cp ./.gitmodules_prod ./.gitmodules
 .build-app:  
   stage: build_app
   before_script:

@@ -20,17 +20,20 @@ COPY . /var/www/html/
 
 # RUN git submodule update --init --recursive
 
-RUN if [ -z "$PPROXY" ]; then \
-    echo "http proxy not set" \
-  else \
-    npm config set proxy ${PPROXY}; \
-  fi
+RUN npm config set proxy ${PPROXY}
+RUN npm config set https-proxy ${PSPROXY}
 
-RUN if [ -z "$PSPROXY" ]; then \
-    echo "http proxy not set" \
-  else \
-    npm config set https-proxy ${PSPROXY}; \
-  fi
+# RUN if [ -z "$PPROXY" ]; then \
+#     echo "http proxy not set" \
+#   else \
+#     npm config set proxy ${PPROXY}; \
+#   fi
+
+# RUN if [ -z "$PSPROXY" ]; then \
+#     echo "http proxy not set" \
+#   else \
+#     npm config set https-proxy ${PSPROXY}; \
+#   fi
 
 
 RUN npm ci
