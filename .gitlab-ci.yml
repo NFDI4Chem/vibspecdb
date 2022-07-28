@@ -21,6 +21,7 @@ stages:
 before_script:
   - TAG=$(cat version.txt)
   - NGINX_TAG=${NGINX_TAG}
+  - cp ./.gitmodules_prod ./.gitmodules
 .build-app:  
   stage: build_app
   before_script:
@@ -53,9 +54,8 @@ build-nginx:
     - deployment
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
-  before_script:
-    - cp ./.gitmodules_prod ./.gitmodules
   script:
+    - cp ./.gitmodules_prod ./.gitmodules
     - mkdir -p /kaniko/.docker
     - |-
        KANIKOPROXYBUILDARGS=""
