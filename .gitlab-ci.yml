@@ -60,7 +60,6 @@ build-nginx:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
-    - cp ./.gitmodules_prod ./.gitmodules
     - mkdir -p /kaniko/.docker
     - |-
        KANIKOPROXYBUILDARGS=""
