@@ -50,7 +50,6 @@ build-app:
       "${KANIKOPROXYBUILDARGS}"
       --build-arg="PPROXY=${CI_PROXY}"
       --build-arg="PSPROXY=${CIS_PROXY}"
-      --build-arg="RELEASE_HOST_IP=${RELEASE_HOST_IP}"
 build-nginx:  
   stage: build_images
   before_script:
@@ -81,7 +80,6 @@ build-nginx:
       "${KANIKOPROXYBUILDARGS}"
       --build-arg="PPROXY=${CI_PROXY}"
       --build-arg="PSPROXY=${CIS_PROXY}"
-      --build-arg="RELEASE_HOST_IP=${RELEASE_HOST_IP}"
 rancher-redeploy:
   image: debian:latest
   only:
