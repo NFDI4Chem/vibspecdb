@@ -13,8 +13,6 @@ ARG RELEASE_HOST_IP=""
 WORKDIR /var/www/html
 COPY . /var/www/html/
 
-RUN npm config set proxy ${PPROXY}
-RUN npm config set https-proxy ${PSPROXY}
 
 RUN if [ -z "$RELEASE_HOST_IP" ]; then \
     echo "local env active" \
