@@ -16,12 +16,12 @@ COPY . /var/www/html/
 RUN npm config set proxy ${PPROXY}
 RUN npm config set https-proxy ${PSPROXY}
 
-# RUN if [ -z "$RELEASE_HOST_IP" ]; then \
-#     echo "local env active" \
-#   else \
-#     npm config set proxy ${PPROXY} && \
-#     npm config set https-proxy ${PSPROXY}; \
-#   fi
+RUN if [ -z "$RELEASE_HOST_IP" ]; then \
+    echo "local env active" \
+  else \
+    npm config set proxy ${PPROXY} && \
+    npm config set https-proxy ${PSPROXY}; \
+  fi
 
 RUN npm ci
 RUN npm run build
