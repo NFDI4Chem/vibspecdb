@@ -3,10 +3,10 @@
 DOCKER_USERNAME=docker.photonicdata.science
 
 FPM_NAME=serviceapp_laravel_fpm
-FPM_TAG=$(cat ./version.txt)
+FPM_TAG=$(sed -n 2p version.txt)
 
 NGINX_NAME=serviceapp_nginx
-NGINX_TAG=v0.1.0
+NGINX_TAG=$(sed -n 4p version.txt)
 
 docker-compose build
 

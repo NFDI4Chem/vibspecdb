@@ -1,6 +1,0 @@
-{
-  "packages": [
-    "resources/js/packages/*"
-  ],
-  "version": "independent"
-}
