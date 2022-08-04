@@ -4,7 +4,7 @@
       :study="study" 
       current="Jobs">
       <template #study-section>
-        <div>{{'Title'}}</div>
+        <UploadFormUppy :pid="3" @uploaded="onUploaded" />
       </template>
     </study-content >
   </div>
@@ -13,19 +13,26 @@
 <script>
 import { reactive, toRefs } from 'vue';
 import StudyContent from "@/Pages/Study/Content.vue";
+import UploadFormUppy from '@/Components/UploadForm/UploadFormUppy.vue'
 
 export default {
   components: {
-    StudyContent
+    StudyContent,
+    UploadFormUppy
   },
   props: ["study", "project", "jobs"],
   setup () {
     const state = reactive({
       count: 0,
     })
+
+    const onUploaded = (data) => {
+      console.log('onUploaded', data)
+    }
   
     return {
       ...toRefs(state),
+      onUploaded,
     }
   }
 }
