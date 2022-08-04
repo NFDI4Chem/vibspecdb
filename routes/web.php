@@ -9,7 +9,7 @@ use App\Http\Controllers\Job\PodcastController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\StudyController;
 use App\Http\Controllers\UploadController;
-use App\Http\Controllers\Uppy\AwsS3MultipartController;
+use App\Http\Controllers\Uppy\S3MinioController;
 use App\Models\Project;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -70,15 +70,7 @@ Route::middleware(['auth:sanctum'])->get('/explorer', function (Request $request
     ]);
 })->name('explorer');
 
-// // AWS S3 Multipart Upload Routes
-// Route::name('s3.multipart.')->prefix('s3/multipart')
-//     ->group(function () {
-//         Route::post('/', ['as' => 'createMultipartUpload', 'uses' => 'AwsS3MultipartController@createMultipartUpload']);
-//         Route::get('{uploadId}', ['as' => 'getUploadedParts', 'uses' => 'AwsS3MultipartController@getUploadedParts']);
-//         Route::get('{uploadId}/{partNumber}', ['as' => 'signPartUpload', 'uses' => 'AwsS3MultipartController@signPartUpload']);
-//         Route::post('{uploadId}/complete', ['as' => 'completeMultipartUpload', 'uses' => 'AwsS3MultipartController@completeMultipartUpload']);
-//         Route::delete('{uploadId}', ['as' => 'abortMultipartUpload', 'uses' => 'AwsS3MultipartController@abortMultipartUpload']);
-//     });
+// // AWS S3 Multipart Upload Route
 
 Route::get('/upload', [UploadController::class, 'store']);
 Route::get('/jobs', [PodcastController::class, 'store']);
@@ -124,6 +116,8 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('study.jobs');
     Route::get('studies/{study}/submit-job', [StudyController::class, 'submitJob'])
         ->name('study.submit-job');
+    Route::get('studies/{study}/file-upload', [StudyController::class, 'fileUpload'])
+        ->name('study.file-upload');
 });
 
 
@@ -134,6 +128,7 @@ Route::middleware(['auth:sanctum'])->get('/explorer', function (Request $request
         'team' => $team
     ]);
 })->name('explorer');
+
 
 
 // admin routes
@@ -190,3 +185,12 @@ Route::get('test/notify', function(){
     $user->notify(new JobCompleted());
     dd('send mail successfully !!', $user);
 });
+
+
+
+Route::post('/s3/multipart', [S3MinioController::class, 'createMultipartUpload']);
+Route::options('/s3/multipart', [S3MinioController::class, 'createMultipartUploadOptions']);
+Route::get('/s3/multipart/{uploadId}', [S3MinioController::class, 'getUploadedParts']);
+Route::get('/s3/multipart/{uploadId}/batch', [S3MinioController::class, 'prepareUploadParts']);
+Route::post('/s3/multipart/{uploadId}/complete', [S3MinioController::class, 'completeMultipartUpload']);
+Route::delete('/s3/multipart/{uploadId}', [S3MinioController::class, 'abortMultipartUpload']);

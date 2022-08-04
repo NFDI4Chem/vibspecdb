@@ -63,6 +63,18 @@ class StudyController extends Controller
 
     }
 
+    public function fileUpload(Request $request, Study $study)
+    {
+        $files = [];
+
+        return Inertia::render('Study/UploadFiles', [
+            'study' => $study,
+            'project' => $study->project,
+            'files' => $files
+        ]);
+
+    }
+
     public function Jobs(Request $request, Study $study)
     {
         $jobs = [];
