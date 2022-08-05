@@ -331,8 +331,7 @@
                 <path
                   d="M12 21V5a5 5 0 0 1 4-2h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4.34a2 2 0 0 0-1.42.59l-.83.82A2 2 0 0 1 12 21z"
                   class="fill-current text-gray-600"
-                ></path></svg
-            ></a>
+                ></path></svg></a>
             <Menu as="div" class="ml-3 relative">
               <div>
                 <MenuButton
