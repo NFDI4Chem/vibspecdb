@@ -4,7 +4,7 @@
       :study="study" 
       current="Jobs">
       <template #study-section>
-        <UploadFormUppy :pid="3" @uploaded="onUploaded" />
+        <UploadFormUppy pid="3" @uploaded="onUploaded" />
         <Button @click="testAction">RunMe</Button>
         {{listRecent}}
       </template>

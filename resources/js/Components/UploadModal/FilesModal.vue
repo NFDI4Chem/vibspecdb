@@ -73,10 +73,9 @@
                     <div class="absolute inset-0 px-4 sm:px-6 h-48">
                         <!-- <div class="h-full border-2 border-dashed border-gray-200" aria-hidden="true" /> -->
                         <UploadFormUppy
-                            :pid="3"
+                            pid="3"
                             @uploaded="onUploaded"
                             :dashboardHeight="600"
-                            :dashboardWidth="400"
                             :maxFileSize="5000000000"
                             @handleProgress="onHandleProgress"
                         />

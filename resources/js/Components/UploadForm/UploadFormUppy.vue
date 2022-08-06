@@ -120,7 +120,7 @@ export default {
         setupDashboard() {
             this.uppy.use(Dashboard, {
                 target: this.$refs["uppy-dashboard-drag-drop-area"],
-                inline: false,
+                inline: true,
                 height: this.dashboardHeight,
                 width: this.dashboardWidth,
                 hideUploadButton: false,
@@ -275,10 +275,8 @@ export default {
             let neW = Math.round(window.innerWidth - 36 * 2 - 80);
             neW = neW > 900 ? 900 : neW;
             this.uppy.getPlugin("Dashboard").setOptions({
-                // width: this.dashboardWidth != 920 ? this.dashboardWidth : Math.round(window.innerWidth - 36 * 2 - 80),
-                // height: this.dashboardHeight != 700 ? this.dashboardHeight : Math.round((neW * 3) / 4),
+                height: this.dashboardHeight != 700 ? this.dashboardHeight : Math.round((neW * 3) / 4),
                 width: Math.round(window.innerWidth - 36 * 2 - 80),
-                height: Math.round((neW * 3) / 4),
             });
         },
         handleProgress(data) {
