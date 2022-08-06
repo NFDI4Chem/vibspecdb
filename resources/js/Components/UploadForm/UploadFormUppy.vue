@@ -91,7 +91,7 @@ export default {
         // this.setupXHRUpload()
         this.setupImageEditor()
         this.setupS3Multipart();
-        this.user = JSON.parse(localStorage.getItem("user"));
+        // this.user = JSON.parse(localStorage.getItem("user"));
         this.onWindowResize();
     },
     methods: {
@@ -120,7 +120,7 @@ export default {
         setupDashboard() {
             this.uppy.use(Dashboard, {
                 target: this.$refs["uppy-dashboard-drag-drop-area"],
-                inline: true,
+                inline: false,
                 height: this.dashboardHeight,
                 width: this.dashboardWidth,
                 hideUploadButton: false,
@@ -131,7 +131,7 @@ export default {
                 // metaFields: [
                 //     { id: "name", name: "Name", placeholder: "File name" },
                 // ],
-                 metaFields: (file) => {
+                metaFields: (file) => {
                   const fields = [{ id: 'name', name: 'File name' }]
                   if (file.type.startsWith('image/')) {
                     fields.push({ id: 'location', name: 'Photo Location' })
@@ -155,6 +155,7 @@ export default {
         setupEvents() {
             this.uppy.on("upload-success", this.handleUploadSuccess);
             this.uppy.on("file-added", this.handleFileAdded);
+            this.uppy.on("progress", this.handleProgress);
             this.uppy.on(
                 "dashboard:file-edit-complete",
                 this.handleFileEditComplete
@@ -168,6 +169,7 @@ export default {
         unSetupEvents() {
             this.uppy.off("upload-success", this.handleUploadSuccess);
             this.uppy.off("file-added", this.handleFileAdded);
+            this.uppy.off("progress", this.handleProgress);
             this.uppy.off(
                 "dashboard:file-edit-complete",
                 this.handleFileEditComplete
@@ -198,6 +200,7 @@ export default {
             // console.log('handleFileEditComplete fired', file)
         },
         onBeforeFileAdded(currentFile, files) {
+            console.log(this.uppy.state)
             return currentFile;
         },
         onBeforeUpload(files) {
@@ -268,13 +271,19 @@ export default {
             // return res.data;
         },
         onWindowResize() {
+            console.log('test resize');
             let neW = Math.round(window.innerWidth - 36 * 2 - 80);
             neW = neW > 900 ? 900 : neW;
             this.uppy.getPlugin("Dashboard").setOptions({
+                // width: this.dashboardWidth != 920 ? this.dashboardWidth : Math.round(window.innerWidth - 36 * 2 - 80),
+                // height: this.dashboardHeight != 700 ? this.dashboardHeight : Math.round((neW * 3) / 4),
                 width: Math.round(window.innerWidth - 36 * 2 - 80),
                 height: Math.round((neW * 3) / 4),
             });
         },
+        handleProgress(data) {
+            this.$emit('handleProgress', data)
+        }
     },
 
     beforeDestroy() {
