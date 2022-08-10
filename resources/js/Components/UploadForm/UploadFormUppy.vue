@@ -1,27 +1,22 @@
 <template>
     <div>
+        <div ref="progress-bar"></div>
         <div ref="uppy-dashboard-drag-drop-area" class="uploader-class"></div>
     </div>
 </template>
 
 <script>
-/* eslint-disable */
 
-import "@uppy/core/dist/style.css";
-import "@uppy/dashboard/dist/style.css";
-import "@uppy/image-editor/dist/style.css";
+
 
 import Uppy from "@uppy/core";
 import Dashboard from "@uppy/dashboard";
 import ProgressBar from "@uppy/progress-bar";
-// import XHRUpload from "@uppy/xhr-upload";
 import AwsS3Multipart from "@uppy/aws-s3-multipart";
 import ImageEditor from "@uppy/image-editor";
-// import Tus from '@uppy/tus'
+
 import { mapActions } from "vuex";
-// import api from "@/services/api/adminFiles";
-// import UppyCheckUniqueFile from './plufings/UppyCheckUniqueFile'
-// import uppyCustomPlugin from '@/plugins/uppyCustomPlugin'
+
 import { v4 as uuidv4 } from "uuid";
 
 export default {
@@ -86,16 +81,21 @@ export default {
         this.uppy.setMeta({ token: "ab5kjfg" }); // TODO
         this.setupDashboard();
         this.setupEvents();
-        // this.setupTusUpload()
-        // this.uppy.use(uppyCustomPlugin)
-        // this.setupXHRUpload()
         this.setupImageEditor()
         this.setupS3Multipart();
         // this.user = JSON.parse(localStorage.getItem("user"));
         this.onWindowResize();
+        // this.setupProgressBar();
     },
     methods: {
         // ...mapActions(['saveFile']),
+        setupProgressBar() {
+            this.uppy.use(ProgressBar, {
+                target: this.$refs["progress-bar"],
+                fixed: false,
+                hideAfterFinish: true,
+            })
+        },
         setupUppy() {
             this.uppy = new Uppy({
                 id: this.id,
@@ -145,13 +145,6 @@ export default {
                 autoOpenFileEditor: true,
             });
         },
-        setupXHRUpload() {
-            this.uppy.use(XHRUpload, {
-                endpoint: "https://xhr-server.herokuapp.com/upload",
-                formData: true,
-                fieldName: "files[]",
-            });
-        },
         setupEvents() {
             this.uppy.on("upload-success", this.handleUploadSuccess);
             this.uppy.on("file-added", this.handleFileAdded);
@@ -164,6 +157,7 @@ export default {
               console.log('successful files:', result.successful)
               console.log('failed files:', result.failed)
             })
+            this.uppy.on('upload-progress', this.handleUpladProgress);
             window.addEventListener("resize", this.onWindowResize);
         },
         unSetupEvents() {
@@ -178,6 +172,7 @@ export default {
               console.log('successful files:', result.successful)
               console.log('failed files:', result.failed)
             })
+            this.uppy.off('upload-progress', this.handleUpladProgress);
             window.removeEventListener("resize", this.onWindowResize);
         },
         async handleUploadSuccess(file, data) {
@@ -200,7 +195,7 @@ export default {
             // console.log('handleFileEditComplete fired', file)
         },
         onBeforeFileAdded(currentFile, files) {
-            console.log(this.uppy.state)
+            console.log('state', this.uppy.state)
             return currentFile;
         },
         onBeforeUpload(files) {
@@ -214,16 +209,6 @@ export default {
                     "X-CSRF-TOKEN": document
                         .querySelector('meta[name="csrf-token"]')
                         .getAttribute("content"),
-                },
-            });
-        },
-        setupTusUpload() {
-            this.uppy.use(Tus, {
-                endpoint: "http://127.0.0.1:1080", // use your tus endpoint here
-                resume: true,
-                retryDelays: [0, 1000, 3000, 5000],
-                onSuccess: () => {
-                    console.log("we finished all the uploads, Tus works");
                 },
             });
         },
@@ -281,6 +266,10 @@ export default {
         },
         handleProgress(data) {
             this.$emit('handleProgress', data)
+        },
+        handleUpladProgress(file, progress) {
+            // console.log('progress', progress);
+            this.$emit('uploadProgress', file, progress)
         }
     },
 

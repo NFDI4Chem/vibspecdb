@@ -7,6 +7,17 @@
 @import '../js/packages/serviceappvuecomponents/src/assets/tailwind.css';
 
 
+@import "@uppy/core/dist/style.css";
+@import "@uppy/dashboard/dist/style.css";
+@import "@uppy/image-editor/dist/style.css";
+@import '@uppy/progress-bar/dist/style.css';
+
+.uppy-Dashboard-inner {
+  border-radius: 0px;
+}
+
+
+
 .input {
   @apply cursor-auto;
 }
