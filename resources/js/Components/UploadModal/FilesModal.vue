@@ -20,6 +20,8 @@
             class="modal-header"
         />
 
+        <button @click="getUppyStatus">Get It</button>
+
         <DialogPanel
             class="pointer-events-auto"
             v-show="view !== 'min'"
@@ -58,6 +60,10 @@ import { MinusIcon } from "@heroicons/vue/outline";
 
 import UploadFormUppy from "@/Components/UploadForm/UploadFormUppy.vue";
 import ModalHeader from "./ModalHeader.vue";
+
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const show = ref(true);
 const view = ref("med");
@@ -118,6 +124,13 @@ const onHandleProgress = (prog) => {
 const onUploadProgress = (file, { uploader, bytesUploaded, bytesTotal }) => {
     //   console.log('onUploadProgress', uploader, bytesUploaded, bytesTotal)
 };
+
+const getUppyStatus = () => {
+    console.log('test', store.state.filesUppy.uppy)
+    UploadFormUppyRef.value.setUppyState(store.state.filesUppy.uppy);
+    updateUppySize('max');
+}
+
 </script>
 
 <style lang="scss" scoped>

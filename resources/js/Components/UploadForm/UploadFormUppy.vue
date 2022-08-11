@@ -193,11 +193,13 @@ export default {
             // console.log('handleFileEditComplete fired', file)
         },
         onBeforeFileAdded(currentFile, files) {
-            console.log("state", this.uppy.state);
+            // console.log("state", this.uppy.state);
             return currentFile;
         },
         onBeforeUpload(files) {
-            return files;
+            // console.log({files, state: this.uppy.state})
+            this.$emit('onBeforeUpload', {files, state: this.uppy.getState()});
+            // return {files, state: this.uppy.state};
         },
         setupS3Multipart() {
             this.uppy.use(AwsS3Multipart, {
@@ -273,6 +275,9 @@ export default {
                     height,
                 });
             }
+        },
+        setUppyState(state) {
+            this.uppy.setState(state);
         },
         handleProgress(data) {
             this.$emit("handleProgress", data);
