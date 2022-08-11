@@ -4,38 +4,45 @@
         class="z-10 fixed bottom-0 right-0"
         @close="show = true"
         :open="show"
+        :class="{
+            ['mini-preview']: view === 'min',
+            ['med-preview']: view === 'med',
+            ['max-preview']: view === 'max',
+        }"
     >
         <ModalHeader
             :show="true"
             :progress="progress"
             @changeView="changeViewModal"
+            @closeView="closeViewModal"
             :view="view"
             :title="title"
+            class="modal-header"
         />
 
         <DialogPanel
-            class="pointer-events-auto w-screen max-w-2xl size-preview"
-            :class="{ ['mini-preview']: view === 'min' }"
+            class="pointer-events-auto"
             v-show="view !== 'min'"
+            :class="{
+                ['mini-preview']: view === 'min',
+                ['med-preview']: view === 'med',
+                ['max-preview']: view === 'max',
+            }"
         >
             <div
-                class="flex flex-col overflow-y-auto bg-white shadow-xl h-full"
-                :class="{ ['mini-preview']: view === 'min' }"
+                class="flex flex-col overflow-y-auto bg-white shadow-xl h-full w-full"
             >
-                <div v-if="false"
-                    class="border-t-2 border-dotted border-gray-300 mb-6"
-                ></div>
-
                 <div class="relative flex-1">
-                    <div class="absolute inset-0 h-48">
+                    <div class="absolute inset-0 h-full">
                         <UploadFormUppy
                             pid="3"
                             @uploaded="onUploaded"
-                            :dashboardHeight="600"
                             :maxFileSize="maxFileSize"
                             @handleProgress="onHandleProgress"
                             @uploadProgress="onUploadProgress"
                             :title="title"
+                            ref="UploadFormUppyRef"
+                            @mounted="onUppyMounted"
                         />
                     </div>
                 </div>
@@ -45,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted  } from "vue";
 import { Dialog, DialogPanel } from "@headlessui/vue";
 import { MinusIcon } from "@heroicons/vue/outline";
 
@@ -57,16 +64,48 @@ const view = ref("med");
 const progress = ref(0);
 const maxFileSize = 5 * 1000 * 1000 * 1000; // Gb / Mb / Kb
 
+const UploadFormUppyRef = ref()
+
 const props = defineProps({
     title: {
         type: String,
-        default: 'Upload Files',
-    }
+        default: "Upload Files",
+    },
 });
 
+
+const onUppyMounted = () => {
+  updateUppySize(view.value);
+}
+
+const updateUppySize = (type) => {
+    let size = {width: 0, height: 0};
+    switch(type) {
+        case 'min':
+            size = { width: 0, height: 0};
+            break;
+        case 'med':
+            size = { width: 500, height: 600};
+            break;
+        case 'max':
+            size = { width: window.innerWidth, height: window.innerHeight - 50};
+            break;
+        default:
+            size = { width: 0, height: 0};
+            break;
+    }
+    UploadFormUppyRef.value.setUppySize(size);
+}
+
+
 const changeViewModal = (type) => {
+    updateUppySize(type);
     view.value = type;
 };
+
+const closeViewModal = () => {
+    show.value = false;
+}
 
 const onUploaded = (data) => {
     console.log("onUploaded", data);
@@ -82,7 +121,12 @@ const onUploadProgress = (file, { uploader, bytesUploaded, bytesTotal }) => {
 </script>
 
 <style lang="scss" scoped>
-.size-preview {
+
+.max-preview {
+    width: 100vw;
+    height: calc(100vh - 50px);
+}
+.med-preview {
     height: 600px;
     width: 500px;
 }
@@ -90,5 +134,4 @@ const onUploadProgress = (file, { uploader, bytesUploaded, bytesTotal }) => {
     height: 50px;
     width: 500px;
 }
-
 </style>

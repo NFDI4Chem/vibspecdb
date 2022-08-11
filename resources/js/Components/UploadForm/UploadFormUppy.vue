@@ -6,9 +6,6 @@
 </template>
 
 <script>
-
-
-
 import Uppy from "@uppy/core";
 import Dashboard from "@uppy/dashboard";
 import ProgressBar from "@uppy/progress-bar";
@@ -81,11 +78,12 @@ export default {
         this.uppy.setMeta({ token: "ab5kjfg" }); // TODO
         this.setupDashboard();
         this.setupEvents();
-        this.setupImageEditor()
+        this.setupImageEditor();
         this.setupS3Multipart();
         // this.user = JSON.parse(localStorage.getItem("user"));
         this.onWindowResize();
         // this.setupProgressBar();
+        this.$emit('mounted');
     },
     methods: {
         // ...mapActions(['saveFile']),
@@ -94,7 +92,7 @@ export default {
                 target: this.$refs["progress-bar"],
                 fixed: false,
                 hideAfterFinish: true,
-            })
+            });
         },
         setupUppy() {
             this.uppy = new Uppy({
@@ -113,9 +111,9 @@ export default {
             });
         },
         setupImageEditor() {
-          this.uppy.use(ImageEditor, { 
-            target: Dashboard 
-          })
+            this.uppy.use(ImageEditor, {
+                target: Dashboard,
+            });
         },
         setupDashboard() {
             this.uppy.use(Dashboard, {
@@ -125,19 +123,19 @@ export default {
                 width: this.dashboardWidth,
                 hideUploadButton: false,
                 showProgressDetails: true,
-                note: 'Images only, 2–3 files, up to 1 MB (TODO: change limits here)',
+                note: "Images only, 2–3 files, up to 1 MB (TODO: change limits here)",
                 browserBackButtonClose: false,
                 // theme: this.theme,
                 // metaFields: [
                 //     { id: "name", name: "Name", placeholder: "File name" },
                 // ],
                 metaFields: (file) => {
-                  const fields = [{ id: 'name', name: 'File name' }]
-                  if (file.type.startsWith('image/')) {
-                    fields.push({ id: 'location', name: 'Photo Location' })
-                    fields.push({ id: 'alt', name: 'Alt text' })
-                  }
-                  return fields
+                    const fields = [{ id: "name", name: "File name" }];
+                    if (file.type.startsWith("image/")) {
+                        fields.push({ id: "location", name: "Photo Location" });
+                        fields.push({ id: "alt", name: "Alt text" });
+                    }
+                    return fields;
                 },
                 animateOpenClose: true,
                 // locale: this.getLocale()
@@ -153,11 +151,11 @@ export default {
                 "dashboard:file-edit-complete",
                 this.handleFileEditComplete
             );
-            this.uppy.on('complete', result => {
-              console.log('successful files:', result.successful)
-              console.log('failed files:', result.failed)
-            })
-            this.uppy.on('upload-progress', this.handleUpladProgress);
+            this.uppy.on("complete", (result) => {
+                console.log("successful files:", result.successful);
+                console.log("failed files:", result.failed);
+            });
+            this.uppy.on("upload-progress", this.handleUpladProgress);
             window.addEventListener("resize", this.onWindowResize);
         },
         unSetupEvents() {
@@ -168,11 +166,11 @@ export default {
                 "dashboard:file-edit-complete",
                 this.handleFileEditComplete
             );
-            this.uppy.off('complete', result => {
-              console.log('successful files:', result.successful)
-              console.log('failed files:', result.failed)
-            })
-            this.uppy.off('upload-progress', this.handleUpladProgress);
+            this.uppy.off("complete", (result) => {
+                console.log("successful files:", result.successful);
+                console.log("failed files:", result.failed);
+            });
+            this.uppy.off("upload-progress", this.handleUpladProgress);
             window.removeEventListener("resize", this.onWindowResize);
         },
         async handleUploadSuccess(file, data) {
@@ -195,7 +193,7 @@ export default {
             // console.log('handleFileEditComplete fired', file)
         },
         onBeforeFileAdded(currentFile, files) {
-            console.log('state', this.uppy.state)
+            console.log("state", this.uppy.state);
             return currentFile;
         },
         onBeforeUpload(files) {
@@ -256,21 +254,33 @@ export default {
             // return res.data;
         },
         onWindowResize() {
-            console.log('test resize');
+            console.log("test resize");
             let neW = Math.round(window.innerWidth - 36 * 2 - 80);
             neW = neW > 900 ? 900 : neW;
-            this.uppy.getPlugin("Dashboard").setOptions({
-                height: this.dashboardHeight != 700 ? this.dashboardHeight : Math.round((neW * 3) / 4),
-                width: Math.round(window.innerWidth - 36 * 2 - 80),
-            });
+            // this.uppy.getPlugin("Dashboard").setOptions({
+            //     height: this.dashboardHeight != 700 ? this.dashboardHeight : Math.round((neW * 3) / 4),
+            //     width: Math.round(window.innerWidth - 36 * 2 - 80),
+            // });
+        },
+        setUppySize({ width, height }) {
+            if (width) {
+                this.uppy.getPlugin("Dashboard").setOptions({
+                    width,
+                });
+            }
+            if (height) {
+                this.uppy.getPlugin("Dashboard").setOptions({
+                    height,
+                });
+            }
         },
         handleProgress(data) {
-            this.$emit('handleProgress', data)
+            this.$emit("handleProgress", data);
         },
         handleUpladProgress(file, progress) {
             // console.log('progress', progress);
-            this.$emit('uploadProgress', file, progress)
-        }
+            this.$emit("uploadProgress", file, progress);
+        },
     },
 
     beforeDestroy() {

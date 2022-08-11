@@ -1,9 +1,10 @@
 <template>
     <div
-        class="flex justify-between items-center mini-preview px-2 bg-white"
+        class="flex justify-between items-center px-2 bg-white"
+        :class="{['mini-header']: ['min', 'med'].includes(view), ['max-header']: ['max'].includes(view)}"
         v-if="show"
     >
-        <div class="flex justify-between items-center mini-preview bg-white gap-2">
+        <div class="flex justify-between items-center bg-white gap-2">
           <radial-progress-bar
               v-if="progress > 0"
               :diameter="40"
@@ -20,24 +21,33 @@
           <div class="text-lg font-medium text-gray-900">{{title}}</div>
         </div>
 
-        <div class="flex justify-between items-center mini-preview bg-white gap-2">
+        <div class="flex justify-between items-center bg-white gap-2">
             <button
                 v-if="view !== 'min'"
-                @click="changeView('min')"
+                @click="changeView(view === 'med' ? 'min' : 'med')"
                 title="Minimize window to bottom panel"
                 type="button"
                 class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
             >
                 <span class="sr-only">Hide panel</span>
-                <MinusIcon class="h-8 w-8" aria-hidden="true" />
+                <MinusCircleIcon class="h-6 w-6" aria-hidden="true" />
             </button>
             <button
+                v-if="view !== 'max'"
                 @click="changeView(view === 'med' ? 'max' : 'med')"
                 type="button"
                 class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
             >
                 <span class="sr-only">Show panel</span>
-                <ArrowsExpandIcon class="h-8 w-8" aria-hidden="true" />
+                <ArrowsExpandIcon class="h-6 w-6" aria-hidden="true" />
+            </button>
+            <button
+                @click="closeModal()"
+                type="button"
+                class="rounded-md bg-white text-red-300 hover:text-red-500 focus:outline-none"
+            >
+                <span class="sr-only">Close panel</span>
+                <XCircleIcon class="h-6 w-6" aria-hidden="true" />
             </button>
         </div>
     </div>
@@ -45,7 +55,7 @@
 
 <script setup>
 import RadialProgressBar from "vue3-radial-progress";
-import { MinusIcon, ArrowsExpandIcon } from "@heroicons/vue/outline";
+import { MinusCircleIcon, ArrowsExpandIcon, XCircleIcon } from "@heroicons/vue/outline";
 
 const props = defineProps({
     progress: Number,
@@ -66,11 +76,28 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(["changeView"]);
+const emit = defineEmits(["changeView", "closeView"]);
 
 const changeView = (state) => {
     emit("changeView", state);
 };
+
+const closeModal = () => {
+    emit("closeView");
+}
+
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+.mini-header {
+    height: 50px;
+    width: 500px;
+}
+
+.max-header {
+    height: 50px;
+    width: 100vw;
+}
+
+</style>
