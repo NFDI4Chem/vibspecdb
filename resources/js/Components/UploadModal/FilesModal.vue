@@ -20,7 +20,7 @@
             class="modal-header"
         />
 
-        <button @click="getUppyStatus">Get It</button>
+        <!-- <button @click="getUppyStatus">Get It</button> -->
 
         <DialogPanel
             class="pointer-events-auto"
@@ -45,6 +45,8 @@
                             :title="title"
                             ref="UploadFormUppyRef"
                             @mounted="onUppyMounted"
+                            :state="uppyState"
+                            :stopUpload="false"
                         />
                     </div>
                 </div>
@@ -54,23 +56,55 @@
 </template>
 
 <script setup>
-import { ref, onMounted  } from "vue";
+import { ref, onMounted, computed, watch  } from "vue";
 import { Dialog, DialogPanel } from "@headlessui/vue";
 import { MinusIcon } from "@heroicons/vue/outline";
 
 import UploadFormUppy from "@/Components/UploadForm/UploadFormUppy.vue";
 import ModalHeader from "./ModalHeader.vue";
 
-import { useStore } from 'vuex'
+import { useStore } from "vuex";
 
-const store = useStore()
+const store = useStore();
 
-const show = ref(true);
+// const show = ref(true);
 const view = ref("med");
 const progress = ref(0);
 const maxFileSize = 5 * 1000 * 1000 * 1000; // Gb / Mb / Kb
+const UploadFormUppyRef = ref();
 
-const UploadFormUppyRef = ref()
+const show = computed({
+    get() {
+        return store.state.Uppy.show.files;
+    },
+    set(val) {
+        store.dispatch("updateShow", {files: val});
+    },
+});
+
+const uppyState = computed({
+    get() {
+        // console.log('Files Modal changes get')
+        return store.state.Uppy.uppy;
+    },
+    set(val) {
+        // console.log('Files Modal changes', val)
+        // store.dispatch("updateShow", {files: val});
+    },
+});
+
+const uppyStartUpload = computed({
+    get() {
+        return store.state.Uppy.startUpload.files;
+    }
+});
+
+watch(uppyStartUpload, (newValue, oldValue) => {
+//   console.log('uppyStartUpload watcher', newValue, oldValue);
+  if (newValue) { UploadFormUppyRef.value.upload(); }
+});
+
+
 
 const props = defineProps({
     title: {
@@ -79,30 +113,31 @@ const props = defineProps({
     },
 });
 
-
 const onUppyMounted = () => {
-  updateUppySize(view.value);
-}
+    updateUppySize(view.value);
+};
 
 const updateUppySize = (type) => {
-    let size = {width: 0, height: 0};
-    switch(type) {
-        case 'min':
-            size = { width: 0, height: 0};
+    let size = { width: 0, height: 0 };
+    switch (type) {
+        case "min":
+            size = { width: 0, height: 0 };
             break;
-        case 'med':
-            size = { width: 500, height: 600};
+        case "med":
+            size = { width: 500, height: 600 };
             break;
-        case 'max':
-            size = { width: window.innerWidth, height: window.innerHeight - 50};
+        case "max":
+            size = {
+                width: window.innerWidth,
+                height: window.innerHeight - 50,
+            };
             break;
         default:
-            size = { width: 0, height: 0};
+            size = { width: 0, height: 0 };
             break;
     }
     UploadFormUppyRef.value.setUppySize(size);
-}
-
+};
 
 const changeViewModal = (type) => {
     updateUppySize(type);
@@ -111,7 +146,7 @@ const changeViewModal = (type) => {
 
 const closeViewModal = () => {
     show.value = false;
-}
+};
 
 const onUploaded = (data) => {
     console.log("onUploaded", data);
@@ -126,15 +161,17 @@ const onUploadProgress = (file, { uploader, bytesUploaded, bytesTotal }) => {
 };
 
 const getUppyStatus = () => {
-    console.log('test', store.state.filesUppy.uppy)
-    UploadFormUppyRef.value.setUppyState(store.state.filesUppy.uppy);
-    updateUppySize('max');
-}
+    console.log("test", store.state.filesUppy.uppy);
+    UploadFormUppyRef.value.setUppyState(store.state.Uppy.uppy);
+    view.value = "max";
+    updateUppySize("max");
+};
+
+// defineExpose({ UploadFormUppyRef })
 
 </script>
 
 <style lang="scss" scoped>
-
 .max-preview {
     width: 100vw;
     height: calc(100vh - 50px);

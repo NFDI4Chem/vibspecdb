@@ -63,6 +63,14 @@ export default {
             type: String,
             default: "3",
         },
+        state: {
+            type: Object,
+            default: () => { return {} },
+        },
+        stopUpload: {
+            type: Boolean,
+            default: false,
+        },
     },
     components: {
         Uppy,
@@ -73,6 +81,13 @@ export default {
             user: null,
         };
     },
+    // watch: {
+    //     // whenever question changes, this function will run
+    //     state(newState, oldState) {
+    //         console.log('watcher!', newState);
+    //         this.setUppyState(this.newState);
+    //     },
+    // },
     mounted() {
         this.setupUppy();
         this.uppy.setMeta({ token: "ab5kjfg" }); // TODO
@@ -83,6 +98,7 @@ export default {
         // this.user = JSON.parse(localStorage.getItem("user"));
         this.onWindowResize();
         // this.setupProgressBar();
+        this.setUppyState(this.state);
         this.$emit('mounted');
     },
     methods: {
@@ -198,8 +214,14 @@ export default {
         },
         onBeforeUpload(files) {
             // console.log({files, state: this.uppy.state})
+            this.$emit('update:UppyState', this.uppy.getState());
             this.$emit('onBeforeUpload', {files, state: this.uppy.getState()});
             // return {files, state: this.uppy.state};
+            if (this.stopUpload) { return {} }
+        },
+        upload() {
+            console.log('start upload');
+            this.uppy.upload();
         },
         setupS3Multipart() {
             this.uppy.use(AwsS3Multipart, {
@@ -280,17 +302,24 @@ export default {
             this.uppy.setState(state);
         },
         handleProgress(data) {
+            // console.log('handleProgress', this.uppy.getState())
+            this.$emit('update:UppyState', this.uppy.getState());
             this.$emit("handleProgress", data);
         },
         handleUpladProgress(file, progress) {
             // console.log('progress', progress);
+            // console.log('handleUpladProgress', this.uppy.getState())
+            this.$emit('update:UppyState', this.uppy.getState());
             this.$emit("uploadProgress", file, progress);
         },
+        closeUppy() {
+            this.unSetupEvents();
+            this.uppy.close();
+        }
     },
 
     beforeDestroy() {
-        this.unSetupEvents();
-        this.uppy.close();
+        this.closeUppy();
     },
 };
 </script>

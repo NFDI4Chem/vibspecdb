@@ -1,12 +1,12 @@
 import Vuex from 'vuex'
 
 import draggableStructure from "@/store/modules/draggableStructure";
-import filesUppy from "@/store/modules/filesUppy";
+import Uppy from "@/store/modules/Uppy";
 
 export const store = new Vuex.Store({
   modules: {
     draggableStructure,
-    filesUppy
+    Uppy
   },
 })
 
