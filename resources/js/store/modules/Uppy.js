@@ -4,6 +4,8 @@ import * as types from '@/store/mutation-types'
 const getters = {
   uppy: (state) => state.uppy,
   show: (state) => state.show,
+  viewMode: (state) => state.viewMode,
+  progress: (state) => state.progress,
   startUpload: (state) => state.startUpload
 }
 
@@ -17,9 +19,21 @@ const mutations = {
       ...payload
     }
   },
-  updateStartUpload: (state, payload) => {
+  uppyUploading: (state, payload) => {
     state.startUpload = {
       ...state.startUpload,
+      ...payload
+    }
+  },
+  updateProgress: (state, payload) => {
+    state.progress = {
+      ...state.progress,
+      ...payload
+    }
+  },
+  updateViewMode: (state, payload) => {
+    state.viewMode = {
+      ...state.viewMode,
       ...payload
     }
   },
@@ -32,17 +46,29 @@ const actions = {
   updateShow: ({ commit }, payload) => {
     commit('updateShow', payload)
   },
-  updateStartUpload: ({ commit }, payload) => {
-    commit('updateStartUpload', payload)
+  uppyUploading: ({ commit }, payload) => {
+    commit('uppyUploading', payload)
+  },
+  updateProgress: ({ commit }, payload) => {
+    commit('updateProgress', payload)
+  },
+  updateViewMode: ({ commit }, payload) => {
+    commit('updateViewMode', payload)
   },
 }
 
 const state = {
+  viewMode: {
+    files: false
+  },
   show: {
     files: false
   },
   startUpload: {
     files: false
+  },
+  progress: {
+    files: 0
   },
   uppy: {
     plugins: {},

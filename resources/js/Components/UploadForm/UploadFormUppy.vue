@@ -206,6 +206,9 @@ export default {
             console.log('start upload');
             this.uppy.upload();
         },
+        cancelAll() {
+            this.uppy.cancelAll();
+        },
         setupS3Multipart() {
             this.uppy.use(AwsS3Multipart, {
                 limit: 4,

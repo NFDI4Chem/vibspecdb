@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch  } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { Dialog, DialogPanel } from "@headlessui/vue";
 import { MinusIcon } from "@heroicons/vue/outline";
 
@@ -68,7 +68,7 @@ import { useStore } from "vuex";
 const store = useStore();
 
 // const show = ref(true);
-const view = ref("med");
+// const view = ref("med");
 const progress = ref(0);
 const maxFileSize = 5 * 1000 * 1000 * 1000; // Gb / Mb / Kb
 const UploadFormUppyRef = ref();
@@ -78,7 +78,15 @@ const show = computed({
         return store.state.Uppy.show.files;
     },
     set(val) {
-        store.dispatch("updateShow", {files: val});
+        store.dispatch("updateShow", { files: val });
+    },
+});
+const view = computed({
+    get() {
+        return store.state.Uppy.viewMode.files;
+    },
+    set(val) {
+        store.dispatch("updateViewMode", { files: val });
     },
 });
 
@@ -93,18 +101,22 @@ const uppyState = computed({
     },
 });
 
-const uppyStartUpload = computed({
+const uppyUploading = computed({
     get() {
         return store.state.Uppy.startUpload.files;
+    },
+    set(val) {
+        store.dispatch("uppyUploading", { files: val });
+    },
+});
+
+watch(uppyUploading, (newValue, oldValue) => {
+    if (newValue) {
+        UploadFormUppyRef.value.upload();
+    } else {
+        closeViewModal();
     }
 });
-
-watch(uppyStartUpload, (newValue, oldValue) => {
-//   console.log('uppyStartUpload watcher', newValue, oldValue);
-  if (newValue) { UploadFormUppyRef.value.upload(); }
-});
-
-
 
 const props = defineProps({
     title: {
@@ -114,7 +126,7 @@ const props = defineProps({
 });
 
 const onUppyMounted = () => {
-    updateUppySize(view.value);
+    updateUppySize('med');
 };
 
 const updateUppySize = (type) => {
@@ -142,10 +154,14 @@ const updateUppySize = (type) => {
 const changeViewModal = (type) => {
     updateUppySize(type);
     view.value = type;
+    store.dispatch("updateViewMode", { files: type });
 };
 
 const closeViewModal = () => {
     show.value = false;
+    store.dispatch("updateProgress", { files: 0 });
+    store.dispatch("uppyUploading", { files: false });
+    UploadFormUppyRef.value.cancelAll();
 };
 
 const onUploaded = (data) => {
@@ -154,6 +170,7 @@ const onUploaded = (data) => {
 
 const onHandleProgress = (prog) => {
     progress.value = prog;
+    store.dispatch("updateProgress", { files: prog });
 };
 
 const onUploadProgress = (file, { uploader, bytesUploaded, bytesTotal }) => {
@@ -168,7 +185,6 @@ const getUppyStatus = () => {
 };
 
 // defineExpose({ UploadFormUppyRef })
-
 </script>
 
 <style lang="scss" scoped>
