@@ -1,6 +1,5 @@
 <template>
     <div>
-        <div ref="progress-bar"></div>
         <div ref="uppy-dashboard-drag-drop-area" class="uploader-class"></div>
     </div>
 </template>
@@ -28,11 +27,11 @@ export default {
             default: () => [],
         },
         dashboardHeight: {
-            type: Number,
+            type: [Number, String],
             default: 700,
         },
         dashboardWidth: {
-            type: Number,
+            type: [Number, String],
             default: 920,
         },
         maxFileSize: {
@@ -96,20 +95,12 @@ export default {
         this.setupImageEditor();
         this.setupS3Multipart();
         // this.user = JSON.parse(localStorage.getItem("user"));
-        this.onWindowResize();
-        // this.setupProgressBar();
+        // this.onWindowResize();
         this.setUppyState(this.state);
         this.$emit('mounted');
     },
     methods: {
         // ...mapActions(['saveFile']),
-        setupProgressBar() {
-            this.uppy.use(ProgressBar, {
-                target: this.$refs["progress-bar"],
-                fixed: false,
-                hideAfterFinish: true,
-            });
-        },
         setupUppy() {
             this.uppy = new Uppy({
                 id: this.id,
@@ -142,9 +133,7 @@ export default {
                 note: "Images only, 2–3 files, up to 1 MB (TODO: change limits here)",
                 browserBackButtonClose: false,
                 // theme: this.theme,
-                // metaFields: [
-                //     { id: "name", name: "Name", placeholder: "File name" },
-                // ],
+                // locale: this.getLocale(),
                 metaFields: (file) => {
                     const fields = [{ id: "name", name: "File name" }];
                     if (file.type.startsWith("image/")) {
@@ -154,7 +143,6 @@ export default {
                     return fields;
                 },
                 animateOpenClose: true,
-                // locale: this.getLocale()
                 proudlyDisplayPoweredByUppy: false,
                 autoOpenFileEditor: true,
             });
@@ -172,7 +160,7 @@ export default {
                 console.log("failed files:", result.failed);
             });
             this.uppy.on("upload-progress", this.handleUpladProgress);
-            window.addEventListener("resize", this.onWindowResize);
+            // window.addEventListener("resize", this.onWindowResize);
         },
         unSetupEvents() {
             this.uppy.off("upload-success", this.handleUploadSuccess);
@@ -187,7 +175,7 @@ export default {
                 console.log("failed files:", result.failed);
             });
             this.uppy.off("upload-progress", this.handleUpladProgress);
-            window.removeEventListener("resize", this.onWindowResize);
+            // window.removeEventListener("resize", this.onWindowResize);
         },
         async handleUploadSuccess(file, data) {
             console.log("upload-success fired", file, data);
@@ -199,24 +187,19 @@ export default {
             this.$emit("uploaded", res.status);
         },
         handleFileAdded(file) {
-            // console.log('file-addeds fired', file)
             this.uppy.setFileMeta(file.id, {
                 user_id: this.user._id ? this.user._id : "general",
                 store_name: [uuidv4(), file.name.split(".").pop()].join("."),
             });
         },
         handleFileEditComplete(file) {
-            // console.log('handleFileEditComplete fired', file)
         },
         onBeforeFileAdded(currentFile, files) {
-            // console.log("state", this.uppy.state);
             return currentFile;
         },
         onBeforeUpload(files) {
-            // console.log({files, state: this.uppy.state})
             this.$emit('update:UppyState', this.uppy.getState());
             this.$emit('onBeforeUpload', {files, state: this.uppy.getState()});
-            // return {files, state: this.uppy.state};
             if (this.stopUpload) { return {} }
         },
         upload() {
@@ -271,20 +254,6 @@ export default {
         async FileDbCheck(name, path) {
             const fix_name = name.split(" ").join("");
             return fix_name;
-            // const res = await api.getCheckUniqueFile({
-            //     name: fix_name,
-            //     path,
-            // });
-            // return res.data;
-        },
-        onWindowResize() {
-            console.log("test resize");
-            let neW = Math.round(window.innerWidth - 36 * 2 - 80);
-            neW = neW > 900 ? 900 : neW;
-            // this.uppy.getPlugin("Dashboard").setOptions({
-            //     height: this.dashboardHeight != 700 ? this.dashboardHeight : Math.round((neW * 3) / 4),
-            //     width: Math.round(window.innerWidth - 36 * 2 - 80),
-            // });
         },
         setUppySize({ width, height }) {
             if (width) {
@@ -302,13 +271,10 @@ export default {
             this.uppy.setState(state);
         },
         handleProgress(data) {
-            // console.log('handleProgress', this.uppy.getState())
             this.$emit('update:UppyState', this.uppy.getState());
             this.$emit("handleProgress", data);
         },
         handleUpladProgress(file, progress) {
-            // console.log('progress', progress);
-            // console.log('handleUpladProgress', this.uppy.getState())
             this.$emit('update:UppyState', this.uppy.getState());
             this.$emit("uploadProgress", file, progress);
         },

@@ -5,7 +5,7 @@
                 <div class="divide-y divide-gray-200 sm:col-span-9">
                     <div v-if="files">
                         <nav
-                            v-if="$page.props.selectedFolder"
+                            v-if="selectTreeFolder"
                             class="flex p-3"
                             aria-label="Breadcrumb"
                         >
@@ -24,7 +24,7 @@
                                     </div>
                                 </li>
                                 <li
-                                    v-for="page in $page.props.selectedFolder.split(
+                                    v-for="page in selectTreeFolder.split(
                                         '/'
                                     )"
                                     :key="page.name"
@@ -61,148 +61,12 @@
                                         class="mr-2 min-w-min"
                                         :tree="files"
                                     />
-                                    
                                 </div>
                             </aside>
                             <section
                                 class="min-w-0 p-6 flex-1 h-full flex flex-col overflow-y-auto lg:order-last"
                             >
-                                <div>
-                                    <form class="dropzone py-2 mb-3">
-                                        <div
-                                            id="dropzone-message"
-                                            class="text-center"
-                                        >
-                                            <div
-                                                type="button"
-                                                class="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                            >
-                                                <svg
-                                                    class="mx-auto h-12 w-12 text-gray-400"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    stroke="currentColor"
-                                                    fill="none"
-                                                    viewBox="0 0 48 48"
-                                                    aria-hidden="true"
-                                                >
-                                                    <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6"
-                                                    />
-                                                </svg>
-                                                <span
-                                                    class="mt-2 block text-sm font-medium text-gray-900"
-                                                >
-                                                    Drop Files or Folders to
-                                                    upload to
-                                                    <span
-                                                        v-if="
-                                                            $page.props
-                                                                .selectedFolder
-                                                        "
-                                                        >"{{
-                                                            $page.props
-                                                                .selectedFolder
-                                                        }}"</span
-                                                    >
-                                                    folder
-                                                </span>
-
-                                                <div
-                                                    v-if="progress > 0"
-                                                    class="relative mt-5"
-                                                >
-                                                    <div
-                                                        class="overflow-hidden h-2 text-xs flex rounded bg-gray-200"
-                                                    >
-                                                        <div
-                                                            :style="
-                                                                'width: ' +
-                                                                progress +
-                                                                '%'
-                                                            "
-                                                            class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
-                                                        ></div>
-                                                    </div>
-                                                </div>
-                                                <div v-if="progress > 0">
-                                                    <span
-                                                        class="mt-2 block text-sm font-medium text-gray-900"
-                                                    >
-                                                        {{ status }} ({{
-                                                            progress
-                                                        }}%)
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="mb-3" v-if="selectTreeItem && selectTreeItem.has_children">
-                                    <ul
-                                        role="list"
-                                        class="mb-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4"
-                                    >
-                                        <li
-                                            v-for="file in selectTreeItem.children"
-                                            :key="file.key"
-                                            class="relative shadow rounded-lg"
-                                        >
-                                            <div
-                                                class="group block w-full aspect-w-10 aspect-h-7 py-4 bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden"
-                                            >
-                                                <span
-                                                    v-if="
-                                                        file.type == 'directory'
-                                                    "
-                                                >
-                                                    <FolderIcon
-                                                        @dblclick.stop="
-                                                            displaySelected(
-                                                                file
-                                                            )
-                                                        "
-                                                        class="cursor-pointer h-28 w-28 text-gray-400 flex-shrink-0 mx-auto"
-                                                        aria-hidden="true"
-                                                    />
-                                                </span>
-                                                <span v-else>
-                                                    <DocumentTextIcon
-                                                        class="h-28 w-28 text-gray-400 flex-shrink-0 mx-auto"
-                                                        aria-hidden="true"
-                                                    />
-                                                </span>
-                                            </div>
-                                            <p
-                                                class="mt-2 px-2 py-1 block text-sm font-medium text-gray-900 pointer-events-none"
-                                            >
-                                                {{ file.name }}
-                                            </p>
-                                            <p
-                                                class="block text-sm font-medium text-gray-500 pointer-events-none"
-                                            >
-                                                {{ file.size }}
-                                            </p>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div v-else>
-                                    <div class="">
-                                        <span v-if="selectTreeItem && selectTreeItem.type == 'file'">
-                                            <div
-                                                class="rounded-md border my-3 flex justify-center items-center"
-                                                v-if="true"
-                                            ></div>
-                                            <File-details
-                                                :study="study"
-                                                :file="selectTreeItem"
-                                                :url="selectTreeItem.uploadURL"
-                                            ></File-details>
-                                        </span>
-                                    </div>
-                                </div>
+                                <div></div>
                             </section>
                         </div>
                     </div>
@@ -212,184 +76,56 @@
     </div>
 </template>
 
-<script>
-
-import { ref, computed, onMounted, reactive} from "vue";
-
-import { Dropzone } from "dropzone";
-import StudyContent from "@/Pages/Study/Content.vue";
-import FileDetails from "@/Shared/FileDetails.vue";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { FolderIcon, DocumentTextIcon } from "@heroicons/vue/solid";
-import { Inertia } from '@inertiajs/inertia';
-import axiosRetry from "axios-retry";
+<script setup>
 
 import {ChevronRightIcon, HomeIcon} from "@heroicons/vue/solid";
-
+import StudyContent from "@/Pages/Study/Content.vue";
 import UniFilesTree from "@/Pages/UniFilesTree.vue";
+import { ref, computed, onMounted, reactive } from "vue";
 
-export default {
-  components: {
-    StudyContent,
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    FolderIcon,
-    DocumentTextIcon,
-    ChevronRightIcon,
-    UniFilesTree,
-    FileDetails,
-    HomeIcon
-  },
-  props: ["study", "project", "files"],
-  setup(props) {
+const props = defineProps(["study", "project", "files"]);
 
+const selectTreeItem = ref();
+const selectTreeFolder = ref();
 
-    const treeFilled = computed(() =>  {
-      return props?.files?.length > 0 && props?.files[0].children?.length > 0
-    });
+const treeFilled = computed(() => {
+    return props?.files?.length > 0 && props?.files[0].children?.length > 0;
+});
 
-    const selectTreeItem = ref(props.files);
-    const selectTreeFolder = ref('/');
+const displaySelected = (file) => {
+  selectTreeItem.value = file;
 
-    const displaySelected = (file) => {
-      selectTreeItem.value = file;
-
-      let sFolder = "/";
-      if (selectTreeItem.value.name == "/") {
+  let sFolder = "/";
+  if (selectTreeItem.value.name == "/") {
+    sFolder = "/";
+  } else {
+    if (selectTreeItem.value.type != "file") {
+      sFolder = selectTreeItem.value.relative_url;
+    } else {
+      if (selectTreeItem.value.parent_id == null) {
         sFolder = "/";
       } else {
-        if (selectTreeItem.value.type != "file") {
-          sFolder = selectTreeItem.value.relative_url;
-        } else {
-          if (selectTreeItem.value.parent_id == null) {
-            sFolder = "/";
-          } else {
-            sFolder = selectTreeItem.value.relative_url.replace(
-              "/" + selectTreeItem.value.name,
-              ""
-            );
-          }
-        }
-      }
-
-      console.log('selectTreeItem.value', selectTreeItem.value)
-      selectTreeFolder.value = sFolder;
-
-      if (file.has_children && file.level > 0 && !file.children) {
-        file.loading = true;
-        axios
-          .get("/api/v1/files/children/" + props.study.id + "/" + file.id)
-          .then((response) => {
-            file.children = response.data.files[0].children;
-            file.loading = false;
-          });
+        sFolder = selectTreeItem.value.relative_url.replace(
+          "/" + selectTreeItem.value.name,
+          ""
+        );
       }
     }
-
-    onMounted(() => {
-        selectTreeItem.value = props.files;
-        selectTreeFolder.value = "/";
-    });
-
-
-    return {
-      treeFilled,
-      displaySelected,
-      selectTreeItem,
-      selectTreeFolder
-    };
-  },
-  data() {
-    return {
-      progress: 0,
-      status: null,
-      selectedFileSystemObject: null
-    };
-  },
-  mounted() {
-    const vm = this;
-    // vm.$page.props.selectedFileSystemObject = vm.files;
-    // vm.$page.props.selectedFolder = "/";
-
-    let options = {
-      url: "/",
-      method: "put",
-      sending(file, xhr) {
-        let _send = xhr.send;
-        xhr.send = () => {
-          _send.call(xhr, file);
-        };
-      },
-      autoProcessQueue: false,
-      uploadMultiple: false,
-      disablePreviews: true,
-      parallelUploads: 1,
-      maxFiles: 1000,
-      dictDefaultMessage: 'Here Direct message', //document.querySelector("#dropzone-message").innerHTML,
-      done(){
-        console.log("hi")
-      },
-      accept(file, done) {
-        const url = "/storage/signed-storage-url";
-
-        const client = axios.create({ baseURL: window.location.origin });
-        axiosRetry(client, {
-          retries: 3,
-          retryCondition: (error) => {
-            return error.response.status === 500;
-          },
-        });
-
-        client
-          .post(url, {
-            file: file,
-            project_id: vm.project.id,
-            study_id: vm.study.id,
-          })
-          .catch((err) => {
-            // The first request fails
-            if (err.response.status !== 200 || err.response.status !== 201) {
-              throw new Error(
-                `API call failed with status code: ${err.response.status} after multiple attempts`
-              );
-            }
-          })
-          .then(function (response) {
-            let data = response.data;
-            let headers = data.headers;
-            if ("Host" in headers) {
-              delete headers.Host;
-            }
-            file.uploadURL = data.url;
-            setTimeout(() => vm.dropzone.processFile(file));
-            done();
-          });
-      },
-      totaluploadprogress: function (progress) {
-        vm.progress = Math.ceil(progress);
-      },
-      queuecomplete: function () {
-        vm.status = "UPLOAD COMPLETE";
-        Inertia.reload();
-        vm.$page.props.selectedFileSystemObject = vm.files[0];
-      },
-    };
-    vm.dropzone = new Dropzone(this.$el, options);
-
-    vm.dropzone.on("processing", (file) => {
-      vm.status = "UPLOAD IN PROGRESS";
-      vm.dropzone.options.url = file.uploadURL;
-    });
-
-    // this.$page.props.selectedFileSystemObject = "root";
-    vm.files[0].$folded = false;
   }
-};
+
+  selectTreeFolder.value = sFolder;
+
+  if (file.has_children && file.level > 0 && !file.children) {
+    file.loading = true;
+    axios
+      .get("/api/v1/files/children/" + props.study.id + "/" + file.id)
+      .then((response) => {
+        file.children = response.data.files[0].children;
+        file.loading = false;
+      });
+  }
+}
+
 </script>
 
-<style lang="scss" scoped>
-.min-w-sidebar {
-    width: 30rem;
-}
-</style>
+<style lang="scss" scoped></style>
