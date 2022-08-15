@@ -76,38 +76,38 @@ const UploadFormUppyRef = ref();
 
 const show = computed({
     get() {
-        return store.state.Uppy.show.files;
+        return store.state.Uppy.files.show;
     },
     set(val) {
-        store.dispatch("updateShow", { files: val });
+        store.dispatch("updateFilesData", { show: val });
     },
 });
 const view = computed({
     get() {
-        return store.state.Uppy.viewMode.files;
+        return store.state.Uppy.files.viewMode;
     },
     set(val) {
-        store.dispatch("updateViewMode", { files: val });
+        store.dispatch("updateFilesData", { viewMode: val });
     },
 });
 
 const uppyState = computed({
     get() {
         // console.log('Files Modal changes get')
-        return store.state.Uppy.uppy;
+        return store.state.Uppy.files.uppy;
     },
     set(val) {
         // console.log('Files Modal changes', val)
-        // store.dispatch("updateShow", {files: val});
+        // store.dispatch("updateFilesData", {uppy: val});
     },
 });
 
 const uppyUploading = computed({
     get() {
-        return store.state.Uppy.startUpload.files;
+        return store.state.Uppy.files.uploading;
     },
     set(val) {
-        store.dispatch("uppyUploading", { files: val });
+        store.dispatch("updateFilesData", { uploading: val });
     },
 });
 
@@ -155,13 +155,12 @@ const updateUppySize = (type) => {
 const changeViewModal = (type) => {
     updateUppySize(type);
     view.value = type;
-    store.dispatch("updateViewMode", { files: type });
+    store.dispatch("updateFilesData", { viewMode: type });
 };
 
 const closeViewModal = () => {
     show.value = false;
-    store.dispatch("updateProgress", { files: 0 });
-    store.dispatch("uppyUploading", { files: false });
+    store.dispatch("updateFilesData", { uploading: false , progress: 0});
     UploadFormUppyRef.value.cancelAll();
 };
 
@@ -171,7 +170,7 @@ const onUploaded = (data) => {
 
 const onHandleProgress = (prog) => {
     progress.value = prog;
-    store.dispatch("updateProgress", { files: prog });
+    store.dispatch("updateFilesData", { progress: prog });
 };
 
 const onUploadProgress = (file, { uploader, bytesUploaded, bytesTotal }) => {
@@ -179,7 +178,7 @@ const onUploadProgress = (file, { uploader, bytesUploaded, bytesTotal }) => {
 };
 
 const getUppyStatus = () => {
-    console.log("test", store.state.filesUppy.uppy);
+    console.log("test", store.state.Uppy.files.uppy);
     UploadFormUppyRef.value.setUppyState(store.state.Uppy.uppy);
     view.value = "max";
     updateUppySize("max");
