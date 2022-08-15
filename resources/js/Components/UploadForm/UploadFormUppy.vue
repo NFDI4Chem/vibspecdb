@@ -22,6 +22,10 @@ export default {
             type: String,
             default: "uppy",
         },
+        dashboardLimitText: {
+            type: String,
+            default: "Limit Here",
+        },
         value: {
             type: Array,
             default: () => [],
@@ -130,7 +134,7 @@ export default {
                 width: this.dashboardWidth,
                 hideUploadButton: false,
                 showProgressDetails: true,
-                note: "Images only, 2–3 files, up to 1 MB (TODO: change limits here)",
+                note: this.dashboardLimitText,
                 browserBackButtonClose: false,
                 // theme: this.theme,
                 // locale: this.getLocale(),
@@ -144,7 +148,7 @@ export default {
                 },
                 animateOpenClose: true,
                 proudlyDisplayPoweredByUppy: false,
-                autoOpenFileEditor: true,
+                autoOpenFileEditor: false,
             });
         },
         setupEvents() {

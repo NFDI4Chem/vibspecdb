@@ -24,13 +24,23 @@
         <div class="flex justify-between items-center bg-white gap-2">
             <button
                 v-if="view !== 'min'"
-                @click="changeView(view === 'med' ? 'min' : 'med')"
+                @click="changeView('min')"
                 title="Minimize window to bottom panel"
                 type="button"
                 class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
             >
                 <span class="sr-only">Hide panel</span>
                 <MinusCircleIcon class="h-6 w-6" aria-hidden="true" />
+            </button>
+            <button
+                v-if="['max', 'min'].includes(view)"
+                @click="changeView('med')"
+                title="Show medium size files upload modal"
+                type="button"
+                class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
+            >
+                <span class="sr-only">Medium panel</span>
+                <CreditCardIcon class="h-7 w-7" aria-hidden="true" />
             </button>
             <button
                 v-if="view !== 'max'"
@@ -44,7 +54,7 @@
             <button
                 @click="closeModal()"
                 type="button"
-                class="rounded-md bg-white text-red-300 hover:text-red-500 focus:outline-none"
+                class="ml-2 rounded-md bg-white text-red-300 hover:text-red-500 focus:outline-none"
             >
                 <span class="sr-only">Close panel</span>
                 <XCircleIcon class="h-6 w-6" aria-hidden="true" />
@@ -55,7 +65,7 @@
 
 <script setup>
 import RadialProgressBar from "vue3-radial-progress";
-import { MinusCircleIcon, ArrowsExpandIcon, XCircleIcon } from "@heroicons/vue/outline";
+import { MinusCircleIcon, ArrowsExpandIcon, XCircleIcon, CreditCardIcon } from "@heroicons/vue/outline";
 
 const props = defineProps({
     progress: Number,

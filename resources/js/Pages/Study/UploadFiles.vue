@@ -2,99 +2,116 @@
     <div>
         <study-content :project="project" :study="study" current="Upload Files">
             <template #study-section>
-                <UploadFormUppy
-                    pid="3"
-                    id="JobsUppyInstance"
-                    v-if="!uppyUploading"
-                    :maxFileSize="maxFileSize"
-                    @uploaded="onUploaded"
-                    @onBeforeUpload="onBeforeUploadUppy"
-                    ref="UploadFormUppyRef"
-                    dashboardWidth="100%"
-                    dashboardHeight="700"
-                    @handleProgress="handleProgress"
-                    @uploadProgress="uploadProgress"
-                    v-model:UppyState="UppyState"
-                    :stopUpload="true"
-                />
-                <div v-else>
-                    <div
-                        class="uploading-progress flex flex-row justify-center gap-20 items-center py-10 px-12"
-                    >
-                        <div>
-                            <radial-progress-bar
-                                :diameter="350"
-                                :innerStrokeWidth="15"
-                                :strokeWidth="15"
-                                :completed-steps="progress"
-                                innerStrokeColor="#ccd1d3"
-                                startColor="#059faf"
-                                stopColor="#0b659d"
-                                :total-steps="100"
-                            >
-                                <img
-                                    src="/imgs/uploading/UploadingIcon.png"
-                                    alt=""
-                                    class="w-3/4 h-auto"
-                                />
-                            </radial-progress-bar>
-                        </div>
+                <div class="relative">
+                    <UploadFormUppy
+                        class="sticky top-0 left-0 right-0 bottom-0"
+                        pid="3"
+                        id="JobsUppyInstance"
+                        v-if="!uppyUploading"
+                        :maxFileSize="maxFileSize"
+                        @uploaded="onUploaded"
+                        @onBeforeUpload="onBeforeUploadUppy"
+                        ref="UploadFormUppyRef"
+                        dashboardWidth="100%"
+                        dashboardHeight="700"
+                        @handleProgress="handleProgress"
+                        @uploadProgress="uploadProgress"
+                        v-model:UppyState="UppyState"
+                        :stopUpload="true"
+                        dashboardLimitText="Images only, 2–3 files, up to 5 Gb (TODO: change limits here)"
+                    />
+                    <!-- <Transition name="fade"> -->
                         <div
-                            class="uploading-description flex flex-col items-center gap-5"
-                        >
-                            <div class="font-bold text-5xl text-gray-700">
-                                Uploading files
-                            </div>
-                            <div class="text-3xl">{{ progress }}%</div>
-                            <div class="text-center text-2xl p-5 bg-gray-200">
-                                {{
-                                    progress < 100
-                                        ? uploadingText
-                                        : uploadedText
-                                }}
-                            </div>
-                            <div
-                                class="mt-5 text-sky-600 text-2xl hover:cursor-pointer"
-                                @click="cancelUploading"
-                                v-if="progress < 100"
-                            >
-                                Cancel upload
-                            </div>
-                            <div
-                                class="mt-5 text-sky-600 text-2xl hover:cursor-pointer"
-                                @click="uploadStart"
-                                v-else
-                            >
-                                Upload More
-                            </div>
-                        </div>
-                    </div>
-                    <div class="border-t-gray-200 border-t-2 border-b-2 h-14">
-                        <div
-                            class="h-full flex flex-row justify-between px-4 text-gray-400 text-lg"
+                            v-if="uppyUploading"
+                            :class="uppyUploading ? 'sticky' : 'absolute top-0 left-0 right-0 bottom-0'"
                         >
                             <div
-                                class="flex flex-row gap-3 h-full items-center hover:cursor-pointer"
+                                class="uploading-progress flex flex-row justify-center gap-20 items-center py-10 px-12"
                             >
-                                <ExternalLinkIcon
-                                    class="h-6 w-6 rotate-90"
-                                    aria-hidden="true"
-                                />
-                                <div class="uppercase text-grey-200 font-bold" @click="showModal">
-                                    Show Modal
+                                <div>
+                                    <radial-progress-bar
+                                        :diameter="350"
+                                        :innerStrokeWidth="15"
+                                        :strokeWidth="15"
+                                        :completed-steps="progress"
+                                        innerStrokeColor="#ccd1d3"
+                                        startColor="#059faf"
+                                        stopColor="#0b659d"
+                                        :total-steps="100"
+                                    >
+                                        <img
+                                            src="/imgs/uploading/UploadingIcon.png"
+                                            alt=""
+                                            class="w-3/4 h-auto"
+                                        />
+                                    </radial-progress-bar>
+                                </div>
+                                <div
+                                    class="uploading-description flex flex-col items-center gap-5"
+                                >
+                                    <div
+                                        class="font-bold text-5xl text-gray-700"
+                                    >
+                                        Uploading files
+                                    </div>
+                                    <div class="text-3xl">{{ progress }}%</div>
+                                    <div
+                                        class="text-center text-2xl p-5 bg-gray-200"
+                                    >
+                                        {{
+                                            progress < 100
+                                                ? uploadingText
+                                                : uploadedText
+                                        }}
+                                    </div>
+                                    <div
+                                        class="mt-5 text-sky-600 text-2xl hover:cursor-pointer"
+                                        @click="cancelUploading"
+                                        v-if="progress < 100"
+                                    >
+                                        Cancel upload
+                                    </div>
+                                    <div
+                                        class="mt-5 text-sky-600 text-2xl hover:cursor-pointer"
+                                        @click="uploadStart"
+                                        v-else
+                                    >
+                                        Upload More
+                                    </div>
                                 </div>
                             </div>
                             <div
-                                class="flex flex-row h-full items-center hover:cursor-pointer"
+                                class="border-t-gray-200 border-t-2 border-b-2 h-14"
                             >
-                                <InformationCircleIcon
-                                    
-                                    class="h-8 w-8 text-gray-500"
-                                    aria-hidden="true"
-                                />
+                                <div
+                                    class="h-full flex flex-row justify-between px-4 text-gray-400 text-lg"
+                                >
+                                    <div
+                                        class="flex flex-row gap-3 h-full items-center hover:cursor-pointer"
+                                    >
+                                        <ExternalLinkIcon
+                                            class="h-6 w-6 rotate-90"
+                                            aria-hidden="true"
+                                        />
+                                        <div
+                                            class="uppercase text-grey-200 font-bold"
+                                            @click="showModal"
+                                        >
+                                            Show Modal
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex flex-row h-full items-center hover:cursor-pointer"
+                                    >
+                                        <InformationCircleIcon
+                                            class="h-8 w-8 text-gray-500"
+                                            aria-hidden="true"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    <!-- </Transition> -->
                 </div>
             </template>
         </study-content>
@@ -169,16 +186,18 @@ const delay = (time) => {
 };
 
 const onBeforeUploadUppy = async ({ files, state }) => {
+    store.dispatch("updateViewMode", { files: "med" });
     store.dispatch("updateUppyState", state);
     store.dispatch("updateShow", { files: true });
     uppyShow.value = false;
     await delay(100);
     store.dispatch("uppyUploading", { files: true });
+    
 };
 
 const showModal = () => {
-    store.dispatch("updateViewMode", { files: 'med' });
-}
+    store.dispatch("updateViewMode", { files: "med" });
+};
 
 const handleProgress = () => {};
 
@@ -207,4 +226,14 @@ const cancelUploading = () => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+</style>
