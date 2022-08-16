@@ -226,7 +226,7 @@ import axiosRetry from "axios-retry";
 
 import {ChevronRightIcon, HomeIcon} from "@heroicons/vue/solid";
 
-import UniFilesTree from "@/Pages/UniFilesTree.vue";
+import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue"; 
 
 export default {
   components: {

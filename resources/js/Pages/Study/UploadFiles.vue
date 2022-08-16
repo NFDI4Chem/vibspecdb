@@ -2,118 +2,83 @@
     <div>
         <study-content :project="project" :study="study" current="Upload Files">
             <template #study-section>
-                <div class="relative">
-                    <UploadFormUppy
-                        class="sticky top-0 left-0 right-0 bottom-0"
-                        pid="3"
-                        id="JobsUppyInstance"
-                        v-if="!uppyUploading"
-                        :maxFileSize="maxFileSize"
-                        @uploaded="onUploaded"
-                        @onBeforeUpload="onBeforeUploadUppy"
-                        ref="UploadFormUppyRef"
-                        dashboardWidth="100%"
-                        dashboardHeight="700"
-                        @handleProgress="handleProgress"
-                        @uploadProgress="uploadProgress"
-                        v-model:UppyState="UppyState"
-                        :stopUpload="true"
-                        dashboardLimitText="Images only, 2–3 files, up to 5 Gb (TODO: change limits here)"
-                    />
-                    <!-- <Transition name="fade"> -->
-                    <div
-                        v-if="uppyUploading"
-                        :class="
-                            uppyUploading
-                                ? 'sticky'
-                                : 'absolute top-0 left-0 right-0 bottom-0'
-                        "
-                    >
-                        <div
-                            class="uploading-progress flex flex-row justify-center gap-20 items-center py-10 px-12"
+                <div class="divide-y divide-gray-200 sm:col-span-9">
+                    <div v-if="files">
+                        <nav
+                            v-if="selectTreeFolder"
+                            class="flex p-3"
+                            aria-label="Breadcrumb"
                         >
-                            <div>
-                                <radial-progress-bar
-                                    :diameter="350"
-                                    :innerStrokeWidth="15"
-                                    :strokeWidth="15"
-                                    :completed-steps="progress"
-                                    innerStrokeColor="#ccd1d3"
-                                    startColor="#059faf"
-                                    stopColor="#0b659d"
-                                    :total-steps="100"
-                                >
-                                    <img
-                                        src="/imgs/uploading/UploadingIcon.png"
-                                        alt=""
-                                        class="w-3/4 h-auto"
-                                    />
-                                </radial-progress-bar>
-                            </div>
-                            <div
-                                class="uploading-description flex flex-col items-center gap-5"
-                            >
-                                <div class="font-bold text-5xl text-gray-700">
-                                    Uploading files
-                                </div>
-                                <div class="text-3xl">{{ progress }}%</div>
-                                <div
-                                    class="text-center text-2xl p-5 bg-gray-200"
-                                >
-                                    {{
-                                        progress < 100
-                                            ? uploadingText
-                                            : uploadedText
-                                    }}
-                                </div>
-                                <div
-                                    class="mt-5 text-sky-600 text-2xl hover:cursor-pointer"
-                                    @click="cancelUploading"
-                                    v-if="progress < 100"
-                                >
-                                    Cancel upload
-                                </div>
-                                <div
-                                    class="mt-5 text-sky-600 text-2xl hover:cursor-pointer"
-                                    @click="uploadStart"
-                                    v-else
-                                >
-                                    Upload More
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            class="border-t-gray-200 border-t-2 border-b-2 h-14"
-                        >
-                            <div
-                                class="h-full flex flex-row justify-between px-4 text-gray-400 text-lg"
-                            >
-                                <div
-                                    class="flex flex-row gap-3 h-full items-center hover:cursor-pointer"
-                                >
-                                    <ExternalLinkIcon
-                                        class="h-6 w-6 rotate-90"
-                                        aria-hidden="true"
-                                    />
-                                    <div
-                                        class="uppercase text-grey-200 font-bold"
-                                        @click="showModal"
-                                    >
-                                        Show Modal
+                            <ol role="list" class="flex items-center space-x-2">
+                                <li>
+                                    <div>
+                                        <a
+                                            class="text-gray-400 hover:text-gray-900"
+                                        >
+                                            <HomeIcon
+                                                class="flex-shrink-0 h-5 w-5"
+                                                aria-hidden="true"
+                                            />
+                                            <span class="sr-only">Home</span>
+                                        </a>
                                     </div>
-                                </div>
-                                <div
-                                    class="flex flex-row h-full items-center hover:cursor-pointer"
+                                </li>
+                                <li
+                                    v-for="page in selectTreeFolder.split('/')"
+                                    :key="page.name"
                                 >
-                                    <InformationCircleIcon
-                                        class="h-8 w-8 text-gray-500"
-                                        aria-hidden="true"
+                                    <div
+                                        v-if="page != ''"
+                                        class="flex items-center"
+                                    >
+                                        <ChevronRightIcon
+                                            class="flex-shrink-0 h-5 w-5 text-gray-400"
+                                            aria-hidden="true"
+                                        />
+                                        <a
+                                            class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
+                                            :aria-current="
+                                                page ? 'page' : undefined
+                                            "
+                                            >{{ page }}</a
+                                        >
+                                    </div>
+                                </li>
+                            </ol>
+                        </nav>
+                        <div
+                            class="min-w-0 flex-1 min-h-fit border-t border-gray-200 lg:flex"
+                        >
+                            <aside class="py-3 px-2">
+                                <div
+                                    v-if="treeFilled"
+                                    class="aside-menu relative flex flex-col border-r border-gray-200 overflow-y-auto"
+                                >
+                                    <UniFilesTree
+                                        @itemClick="displaySelected"
+                                        class="mr-2 min-w-min"
+                                        :tree="files"
+                                        :options="treeOptions"
                                     />
+                                    <!-- {{files}} -->
                                 </div>
-                            </div>
+                            </aside>
+                            <section
+                                class="min-w-0 px-6 py-2 flex-1 flex flex-col overflow-y-auto lg:order-last"
+                                ref="sectionRef"
+                            >
+                                <div class="flex flex-col gap-2 text-gray-500 border-b-2 h-10 items-left pt-1">
+                                    <div class="text-lg flex gap-2">
+                                        <div>
+                                            Uploading files to the folder:
+                                            <strong class="text-gray-600">{{ selectTreeFolder }}</strong>
+                                        </div>
+                                    </div>
+                                    <Uploader :width="sectionWidth" />
+                                </div>
+                            </section>
                         </div>
                     </div>
-                    <!-- </Transition> -->
                 </div>
             </template>
         </study-content>
@@ -121,122 +86,73 @@
 </template>
 
 <script setup>
-import { reactive, toRefs, ref, onMounted, computed } from "vue";
+import { ChevronRightIcon, HomeIcon } from "@heroicons/vue/solid";
 import StudyContent from "@/Pages/Study/Content.vue";
-import UploadFormUppy from "@/Components/UploadForm/UploadFormUppy.vue";
-// import UppyUploadForm from "@/Components/UploadForm/UppyUploadForm.vue";
-import Button from "@/Jetstream/Button.vue";
+import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue";
+import Uploader from "@/Components/UploadForm/Uploader.vue";
 
-import RadialProgressBar from "vue3-radial-progress";
+import { ref, computed, onMounted, reactive } from "vue";
 
-import {
-    ExternalLinkIcon,
-    InformationCircleIcon,
-} from "@heroicons/vue/outline";
+const props = defineProps(["study", "project", "files"]);
 
-import { useStore } from "vuex";
+const selectTreeItem = ref();
+const selectTreeFolder = ref("/");
 
-const props = defineProps(["study", "project", "jobs"]);
-
-const listRecent = ref({});
-const uploadingText =
-    "We're uploading your files to the main server. Feel free to work on your tasks in the meantime.";
-const uploadedText = "Upload completed";
-
-const store = useStore();
-const maxFileSize = 5 * 1000 * 1000 * 1000; // Gb / Mb / Kb
-const uppyShow = ref(true);
-const UploadFormUppyRef = ref();
-
-const progress = computed({
-    get() {
-        return store.state.Uppy.files.progress;
-    },
+const treeFilled = computed(() => {
+    return props?.files?.length > 0 && props?.files[0].children?.length > 0;
 });
 
-const uppyUploading = computed({
-    get() {
-        return store.state.Uppy.files.uploading;
-    },
-    set(val) {
-        store.dispatch("updateFilesData", { uploading: val });
-    },
-});
-
-const UppyState = computed({
-    get() {
-        return store.state.Uppy.uppy;
-    },
-    set(val) {
-        store.dispatch("updateFilesData", { uppy: val });
-    },
-});
-
-const onUploaded = (data) => {
-    console.log("onUploaded", data);
+const treeOptions = {
+    checkable: false,
 };
 
-const testAction = () => {
-    axios.get("/projects/1/activity").then((response) => {
-        console.log("response", response);
-        listRecent = response?.data?.audit;
-    });
-};
-
-const delay = (time) => {
-    return new Promise((resolve) => setTimeout(resolve, time));
-};
-
-const onBeforeUploadUppy = async ({ files, state }) => {
-    store.dispatch("updateFilesData", {
-        show: true,
-        uppy: state,
-        viewMode: "med",
-    });
-    uppyShow.value = false;
-    await delay(100);
-    store.dispatch("updateFilesData", { uploading: true });
-};
-
-const showModal = () => {
-    store.dispatch("updateFilesData", { viewMode: "med" });
-};
-
-const handleProgress = () => {};
-
-const uploadProgress = () => {};
-
-const uploadModalStart = () => {
-    store.dispatch("updateFilesData", { uploading: true });
-};
+const sectionRef = ref();
+const sectionWidth = ref();
 
 onMounted(() => {
-    // UploadFormUppyRef.value.setUppySize({ width: 500, height: 600 });
+    sectionWidth.value = sectionRef.value.clientWidth;
 });
 
-const setSize = () => {
-    UploadFormUppyRef.value.setUppySize({ width: 500, height: 600 });
-};
+const displaySelected = (file) => {
+    //   file.$folded = true;
+    selectTreeItem.value = file;
 
-const uploadStart = () => {
-    uppyShow.value = true;
-};
+    let sFolder = "/";
+    if (selectTreeItem.value.name == "/") {
+        sFolder = "/";
+    } else {
+        if (selectTreeItem.value.type != "file") {
+            sFolder = selectTreeItem.value.relative_url;
+        } else {
+            if (selectTreeItem.value.parent_id == null) {
+                sFolder = "/";
+            } else {
+                sFolder = "/" + selectTreeItem.value.relative_url.replace(
+                    "/" + selectTreeItem.value.name,
+                    ""
+                );
+            }
+        }
+    }
 
-const updateState = () => {};
+    selectTreeFolder.value = sFolder;
 
-const cancelUploading = () => {
-    uppyUploading.value = false;
+    if (file.has_children && file.level > 0 && !file.children) {
+        file.loading = true;
+        axios
+            .get("/api/v1/files/children/" + props.study.id + "/" + file.id)
+            .then((response) => {
+                file.children = response.data.files[0].children;
+                file.loading = false;
+            });
+    }
 };
 </script>
 
 <style lang="scss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 1s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
+.aside-menu {
+    width: 500px;
+    height: 50vh;
+    overflow-x: auto;
 }
 </style>

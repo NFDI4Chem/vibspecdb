@@ -19,6 +19,8 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('files')->group(function () {
         Route::get('/children/{study}/{file}', [FileSystemController::class, 'children']);
+        Route::post('/create', [FileSystemController::class, 'create']);
+        Route::delete('/delete/{id}', [FileSystemController::class, 'delete']);
     });
 
 });

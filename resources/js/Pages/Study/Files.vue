@@ -49,12 +49,12 @@
                             </ol>
                         </nav>
                         <div
-                            class="min-w-0 flex-1 min-h-screen border-t border-gray-200 lg:flex"
+                            class="min-w-0 flex-1 min-h-fit border-t border-gray-200 lg:flex"
                         >
                             <aside class="py-3 px-2">
                                 <div
                                     v-if="treeFilled"
-                                    class="h-full min-w-sidebar relative flex flex-col border-r border-gray-200 overflow-y-auto"
+                                    class="aside-menu relative flex flex-col border-r border-gray-200 overflow-y-auto"
                                 >
                                     <UniFilesTree
                                         @itemClick="displaySelected"
@@ -64,9 +64,9 @@
                                 </div>
                             </aside>
                             <section
-                                class="min-w-0 p-6 flex-1 h-full flex flex-col overflow-y-auto lg:order-last"
+                                class="min-w-0 p-6 flex-1 flex flex-col overflow-y-auto lg:order-last"
                             >
-                                <div></div>
+                                <Uploader />
                             </section>
                         </div>
                     </div>
@@ -80,13 +80,16 @@
 
 import {ChevronRightIcon, HomeIcon} from "@heroicons/vue/solid";
 import StudyContent from "@/Pages/Study/Content.vue";
-import UniFilesTree from "@/Pages/UniFilesTree.vue";
+
+import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue"; 
+import Uploader from "@/Components/UploadForm/Uploader.vue"
+
 import { ref, computed, onMounted, reactive } from "vue";
 
 const props = defineProps(["study", "project", "files"]);
 
 const selectTreeItem = ref();
-const selectTreeFolder = ref();
+const selectTreeFolder = ref('/');
 
 const treeFilled = computed(() => {
     return props?.files?.length > 0 && props?.files[0].children?.length > 0;
@@ -128,4 +131,11 @@ const displaySelected = (file) => {
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.aside-menu {
+    width: 300px;
+    height: 50vh;
+    overflow-x: auto;
+}
+
+</style>

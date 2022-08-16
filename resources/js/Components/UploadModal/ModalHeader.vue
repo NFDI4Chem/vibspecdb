@@ -44,7 +44,7 @@
             </button>
             <button
                 v-if="view !== 'max'"
-                @click="changeView(view === 'med' ? 'max' : 'med')"
+                @click="changeView('max')"
                 type="button"
                 class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
             >
