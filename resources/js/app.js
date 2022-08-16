@@ -11,6 +11,8 @@ import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
+import Popper from "vue3-popper";
+
 import PersistentLayout from '@/Layouts/PersistentLayout.vue'
 
 import { store } from './store'
@@ -33,6 +35,7 @@ createInertiaApp({
             .mixin({ methods: { route } })
             .mixin(helpers)
             .component('UplotVue', UplotVue)
+            .component('Popper', Popper)
             .mount(el);
     },
 });

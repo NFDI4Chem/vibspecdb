@@ -13,11 +13,11 @@
     >
         <div class="relative z-0">
             <div
-                class="flex justify-between gap-2 items-center whitespace-nowrap hover:cursor-pointer ml-2"
+                class="flex justify-between gap-2 items-center whitespace-nowrap ml-2"
             >
                 <div
                     @click="onItemClick(node)"
-                    class="flex flex-row gap-2 items-center hover:cursor-pointer"
+                    class="flex flex-row gap-2 items-center"
                 >
                     <div class="flex items-center" v-if="options.checkable">
                         <input
@@ -47,6 +47,7 @@
                         class="text-gray-500 w-4"
                     />
                     <input
+                        role="button"
                         v-model="node.name"
                         class="focus-visible:outline-none"
                         :class="{ ['text-teal-500']: node.edit }"
@@ -57,7 +58,7 @@
                     <PlusSmIcon
                         v-if="!node.edit && node.type === 'directory'"
                         class="text-gray-500 w-6"
-                        @click="addChildren(tree, node)"
+                        @click="addChildren(node)"
                     />
                     <PencilIcon
                         v-if="!node.edit && node.name !== '/'"
@@ -74,7 +75,7 @@
                     />
                     <PlusSmIcon
                         v-if="node.edit"
-                        class="text-gray-400 w-6 rotate-45"
+                        class="text-gray-400 w-6 rotate-45 mr-[-2px]"
                         @click="node.edit = false"
                     />
                     <TrashIcon
@@ -137,6 +138,16 @@ export default {
                 checkable: false;
             },
         },
+        onRemoveItem: {
+            type: Function,
+            required: false,
+            default: () => {}
+        },
+        onAddChildren: {
+            type: Function,
+            required: false,
+            default: () => {}
+        },
     },
     components: {
         Tree: Tree.mixPlugins([Fold, Draggable, Check]),
@@ -169,25 +180,10 @@ export default {
             console.log(node);
         },
         removeItem(tree, node, path) {
-            node.loading = true;
-           
-            axios.delete("/api/v1/files/delete/" + node.id).then((response) => {
-                // console.log("data", response?.data);
-                node.loading = false;
-                tree.removeNodeByPath(path);
-            });
+            this.onRemoveItem(tree, node, path);
         },
-        addChildren(tree, node) {
-            node.loading = true;
-            axios.post("/api/v1/files/create", node).then((response) => {
-                if (node.children) {
-                    node.children.push(response?.data);
-                } else {
-                    node.children = [response?.data];
-                };
-                node.loading = false;
-                node.$folded = false;
-            });
+        addChildren(node) {
+            this.onAddChildren(node);
         },
         handleTreeChange() {
             const store = this.$refs.tree.treesStore.store;

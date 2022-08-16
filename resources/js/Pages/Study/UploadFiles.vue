@@ -17,7 +17,6 @@
                                         >
                                             <HomeIcon
                                                 class="flex-shrink-0 h-5 w-5"
-                                                aria-hidden="true"
                                             />
                                             <span class="sr-only">Home</span>
                                         </a>
@@ -33,7 +32,6 @@
                                     >
                                         <ChevronRightIcon
                                             class="flex-shrink-0 h-5 w-5 text-gray-400"
-                                            aria-hidden="true"
                                         />
                                         <a
                                             class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
@@ -47,31 +45,79 @@
                             </ol>
                         </nav>
                         <div
-                            class="min-w-0 flex-1 min-h-fit border-t border-gray-200 lg:flex"
+                            class="min-w-0 flex-1 min-h-fit border-t border-gray-200 lg:flex px-1"
                         >
-                            <aside class="py-3 px-2">
+                            <aside class="py-1 px-4">
+                                <div
+                                    class="mr-5 flex flex-row justify-between items-center py-2.5 gap-2"
+                                >
+                                    <div class="font-bold">Files Tree</div>
+                                    <Popper
+                                        placement="bottom"
+                                        openDelay="50"
+                                        arrow
+                                        :content="helpers?.FileTreeHelper"
+                                        class="light-popper"
+                                    >
+                                        <InformationCircleIcon
+                                            class="h-6 w-6 text-gray-500"
+                                        />
+                                    </Popper>
+                                </div>
                                 <div
                                     v-if="treeFilled"
                                     class="aside-menu relative flex flex-col border-r border-gray-200 overflow-y-auto"
                                 >
                                     <UniFilesTree
                                         @itemClick="displaySelected"
-                                        class="mr-2 min-w-min"
+                                        class="mr-5 min-w-min"
                                         :tree="files"
                                         :options="treeOptions"
+                                        :onRemoveItem="onRemoveItem"
+                                        :onAddChildren="onAddChildren"
                                     />
                                     <!-- {{files}} -->
                                 </div>
                             </aside>
                             <section
-                                class="min-w-0 px-6 py-2 flex-1 flex flex-col overflow-y-auto lg:order-last"
+                                class="min-w-0 px-5 py-2 flex-1 flex flex-col overflow-y-auto lg:order-last"
                                 ref="sectionRef"
                             >
-                                <div class="flex flex-col gap-2 text-gray-500 border-b-2 h-10 items-left pt-1">
-                                    <div class="text-lg flex gap-2">
-                                        <div>
-                                            Uploading files to the folder:
-                                            <strong class="text-gray-600">{{ selectTreeFolder }}</strong>
+                                <!-- <div class="flex flex-col gap-2 text-gray-500 border-b-2 h-10 items-left pt-1"> -->
+                                <div
+                                    class="flex flex-col gap-2 text-gray-500 h-10 items-left pt-1"
+                                >
+                                    <div class="text-lg flex flex-col gap-1">
+                                        <div
+                                            class="flex flex-row gap-1 justify-between items-center"
+                                        >
+                                            <div>
+                                                Uploading files to the folder:
+                                            </div>
+                                            <Popper
+                                                placement="bottom"
+                                                openDelay="50"
+                                                arrow
+                                                :content="
+                                                    helpers?.FileBrowserHelper
+                                                "
+                                                class="light-popper"
+                                            >
+                                                <InformationCircleIcon
+                                                    class="h-6 w-6 text-gray-500"
+                                                />
+                                            </Popper>
+                                        </div>
+                                        <div
+                                            class="flex flex-row gap-3 items-center"
+                                        >
+                                            <CollectionIcon
+                                                class="h-5 w-5 text-gray-500"
+                                            />
+                                            <strong
+                                                class="text-gray-600 force-wrap"
+                                                >{{ selectTreeFolder }}</strong
+                                            >
                                         </div>
                                     </div>
                                     <Uploader :width="sectionWidth" />
@@ -86,7 +132,12 @@
 </template>
 
 <script setup>
-import { ChevronRightIcon, HomeIcon } from "@heroicons/vue/solid";
+import {
+    ChevronRightIcon,
+    HomeIcon,
+    InformationCircleIcon,
+    CollectionIcon,
+} from "@heroicons/vue/solid";
 import StudyContent from "@/Pages/Study/Content.vue";
 import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue";
 import Uploader from "@/Components/UploadForm/Uploader.vue";
@@ -97,6 +148,13 @@ const props = defineProps(["study", "project", "files"]);
 
 const selectTreeItem = ref();
 const selectTreeFolder = ref("/");
+
+const helpers = {
+    FileBrowserHelper:
+        "File browser will upload files to the folder selected at the right side. In case of no folder selected, a root folder of the Study will be used with the sing \/",
+    FileTreeHelper: 
+        "File tree browser is able to rename, move, delete files and create new folders. For quick workflow, internal folder files are loaded when the parent folder is opened."
+};
 
 const treeFilled = computed(() => {
     return props?.files?.length > 0 && props?.files[0].children?.length > 0;
@@ -113,6 +171,27 @@ onMounted(() => {
     sectionWidth.value = sectionRef.value.clientWidth;
 });
 
+const onRemoveItem = (tree, node, path) => {
+    node.loading = true;
+    axios.delete("/api/v1/files/delete/" + node.id).then((response) => {
+        node.loading = false;
+        tree.removeNodeByPath(path);
+    });
+};
+
+const onAddChildren = (node) => {
+    node.loading = true;
+    axios.post("/api/v1/files/create", node).then((response) => {
+        if (node.children) {
+            node.children.push(response?.data);
+        } else {
+            node.children = [response?.data];
+        }
+        node.loading = false;
+        node.$folded = false;
+    });
+};
+
 const displaySelected = (file) => {
     //   file.$folded = true;
     selectTreeItem.value = file;
@@ -127,10 +206,12 @@ const displaySelected = (file) => {
             if (selectTreeItem.value.parent_id == null) {
                 sFolder = "/";
             } else {
-                sFolder = "/" + selectTreeItem.value.relative_url.replace(
-                    "/" + selectTreeItem.value.name,
-                    ""
-                );
+                sFolder =
+                    "/" +
+                    selectTreeItem.value.relative_url.replace(
+                        "/" + selectTreeItem.value.name,
+                        ""
+                    );
             }
         }
     }
@@ -154,5 +235,10 @@ const displaySelected = (file) => {
     width: 500px;
     height: 50vh;
     overflow-x: auto;
+}
+.force-wrap {
+    -ms-word-break: break-all;
+    word-break: break-all;
+    white-space: pre-wrap;
 }
 </style>
