@@ -29,6 +29,7 @@ build-app:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
+    - sleep 1h
     - mkdir -p /kaniko/.docker
     - |-
        KANIKOPROXYBUILDARGS=""
