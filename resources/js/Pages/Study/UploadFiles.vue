@@ -49,34 +49,20 @@
                         >
                             <aside class="py-1 px-4">
                                 <div
-                                    class="mr-5 flex flex-row justify-between items-center py-2.5 gap-2"
-                                >
-                                    <div class="font-bold">Files Tree</div>
-                                    <Popper
-                                        placement="bottom"
-                                        openDelay="50"
-                                        arrow
-                                        :content="helpers?.FileTreeHelper"
-                                        class="light-popper"
-                                    >
-                                        <InformationCircleIcon
-                                            class="h-6 w-6 text-gray-500"
-                                        />
-                                    </Popper>
-                                </div>
-                                <div
                                     v-if="treeFilled"
                                     class="aside-menu relative flex flex-col border-r border-gray-200 overflow-y-auto"
                                 >
-                                    <UniFilesTree
-                                        @itemClick="displaySelected"
-                                        class="mr-5 min-w-min"
-                                        :tree="files"
-                                        :options="treeOptions"
-                                        :onRemoveItem="onRemoveItem"
-                                        :onAddChildren="onAddChildren"
-                                    />
-                                    <!-- {{files}} -->
+                                    <div class="mr-5">
+                                        <UniFilesTree
+                                            @itemClick="TreeItemClick"
+                                            class="mr-5 min-w-min"
+                                            :tree="files"
+                                            :options="treeOptions"
+                                            :onRemoveItem="onRemoveItem"
+                                            :onAddChildren="onAddChildren"
+                                            :activeItem="activeItem"
+                                        />
+                                    </div>
                                 </div>
                             </aside>
                             <section
@@ -98,24 +84,54 @@
                                                 placement="bottom"
                                                 openDelay="50"
                                                 arrow
-                                                :content="
-                                                    helpers?.FileBrowserHelper
-                                                "
                                                 class="light-popper"
                                             >
                                                 <InformationCircleIcon
                                                     class="h-6 w-6 text-gray-500"
                                                 />
+                                                <template #content>
+                                                    <div>
+                                                        <div
+                                                            class="flex justify-center items-center h-6 bg-gray-500 text-white font-bold py-0 px-2 rounded mb-4"
+                                                        >
+                                                            File Uploader Info
+                                                        </div>
+                                                        <div>
+                                                            File Uploader will
+                                                            upload files to the
+                                                            <strong
+                                                                >selected
+                                                                folder</strong
+                                                            >
+                                                            from the
+                                                            <em>Files Tree</em>.
+                                                        </div>
+                                                        <div class="mt-2">
+                                                            In case where no
+                                                            folder is selected,
+                                                            a root folder of the
+                                                            Study will be used
+                                                            with the Sign:
+                                                            <strong
+                                                                class="flex flex-row justify-center items-center gap-2 bg-gray-100 mt-2"
+                                                            >
+                                                                <CollectionIcon
+                                                                    class="h-5 w-5 text-gray-500"
+                                                                />/</strong
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                </template>
                                             </Popper>
                                         </div>
                                         <div
                                             class="flex flex-row gap-3 items-center"
                                         >
                                             <CollectionIcon
-                                                class="h-5 w-5 text-gray-500"
+                                                class="h-4 w-4 text-gray-500"
                                             />
                                             <strong
-                                                class="text-gray-600 force-wrap"
+                                                class="flex items-center text-sm text-gray-600 force-wrap"
                                                 >{{ selectTreeFolder }}</strong
                                             >
                                         </div>
@@ -143,18 +159,13 @@ import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue";
 import Uploader from "@/Components/UploadForm/Uploader.vue";
 
 import { ref, computed, onMounted, reactive } from "vue";
+import { useStore } from "vuex";
 
 const props = defineProps(["study", "project", "files"]);
 
 const selectTreeItem = ref();
 const selectTreeFolder = ref("/");
-
-const helpers = {
-    FileBrowserHelper:
-        "File browser will upload files to the folder selected at the right side. In case of no folder selected, a root folder of the Study will be used with the sing \/",
-    FileTreeHelper: 
-        "File tree browser is able to rename, move, delete files and create new folders. For quick workflow, internal folder files are loaded when the parent folder is opened."
-};
+const store = useStore();
 
 const treeFilled = computed(() => {
     return props?.files?.length > 0 && props?.files[0].children?.length > 0;
@@ -166,6 +177,15 @@ const treeOptions = {
 
 const sectionRef = ref();
 const sectionWidth = ref();
+
+const activeItem = computed({
+    get() {
+        return store.state.FilesTree.files.activeItem;
+    },
+    set(val) {
+        store.dispatch("updateFilesTreeData", { activeItem: val });
+    },
+});
 
 onMounted(() => {
     sectionWidth.value = sectionRef.value.clientWidth;
@@ -192,8 +212,16 @@ const onAddChildren = (node) => {
     });
 };
 
+const TreeItemClick = (file) => {
+    displaySelected(file);
+    storeSelected(file);
+};
+
+const storeSelected = (file) => {
+    activeItem.value = file;
+};
+
 const displaySelected = (file) => {
-    //   file.$folded = true;
     selectTreeItem.value = file;
 
     let sFolder = "/";
@@ -203,16 +231,13 @@ const displaySelected = (file) => {
         if (selectTreeItem.value.type != "file") {
             sFolder = selectTreeItem.value.relative_url;
         } else {
-            if (selectTreeItem.value.parent_id == null) {
-                sFolder = "/";
-            } else {
-                sFolder =
-                    "/" +
-                    selectTreeItem.value.relative_url.replace(
-                        "/" + selectTreeItem.value.name,
-                        ""
-                    );
-            }
+            sFolder =
+                selectTreeItem.value.parent_id == null
+                    ? "/"
+                    : selectTreeItem.value.relative_url.replace(
+                          "/" + selectTreeItem.value.name,
+                          ""
+                      );
         }
     }
 

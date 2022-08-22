@@ -31,6 +31,7 @@ class FileSystemController extends Controller
         $input = $request->all();
 
         $folderName = "NewFolder";
+        $relativeURL = $input["relative_url"] != '/' ? $input["relative_url"] . "/" . $folderName : "/" . $folderName;
 
         $object = FileSystemObject::create([
             "has_children" => FALSE,
@@ -46,7 +47,7 @@ class FileSystemController extends Controller
             "project_id" => $input["project_id"],
             "study_id" => $input["study_id"],
             "type" => "directory",
-            "relative_url" => $input["relative_url"] . "/" . $folderName,
+            "relative_url" => $relativeURL,
             "level" =>(int)$input["level"] + 1,
             "owner_id" => $input["owner_id"],
             "children" => []

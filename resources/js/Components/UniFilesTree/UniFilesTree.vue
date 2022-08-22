@@ -1,4 +1,52 @@
 <template>
+    <div class="flex flex-row justify-between items-center py-2.5 gap-2">
+        <div class="font-bold">Files Tree</div>
+        <Popper placement="bottom" openDelay="50" arrow class="light-popper">
+            <InformationCircleIcon class="h-6 w-6 text-gray-500" />
+            <template #content>
+                <div>
+                    <div
+                        class="h-6 bg-gray-500 text-white font-bold px-2 rounded mb-4 text-center"
+                    >
+                        Files Tree Info
+                    </div>
+                    <div>
+                        <div
+                            class="flex flex-row items-center justify-left gap-0"
+                        >
+                            <div class="mr-2">
+                                <strong>To rename</strong> item use:
+                            </div>
+                            <PencilIcon class="text-gray-500 w-4 h-4" />
+                        </div>
+                        <div
+                            class="flex flex-row items-center justify-left gap-0"
+                        >
+                            <div class="mr-2">
+                                <strong>To move</strong> item hold and move
+                                icons:
+                            </div>
+                            <FolderIcon class="text-gray-500 w-4" />,
+                            <DocumentTextIcon class="text-gray-500 w-4" />
+                        </div>
+                        <div
+                            class="flex flex-row items-center justify-left gap-3"
+                        >
+                            <div class="mr-2">
+                                <strong>To delete</strong> item use:
+                            </div>
+                            <TrashIcon class="text-red-400 w-4 h-4" />
+                        </div>
+                    </div>
+                    <div class="italic mt-2">
+                        For quick workflow folder files are loaded when the
+                        parent folder is opened.
+                    </div>
+                </div>
+            </template>
+        </Popper>
+    </div>
+
     <Tree
         ref="tree"
         :value="tree"
@@ -10,14 +58,18 @@
         @before-drop="onBeforeDrop"
         :rootNode="{ $droppable: false, $draggable: true }"
         @change="handleTreeChange"
+        class="files-tree"
     >
-        <div class="relative z-0">
+        <div
+            class="relative z-0"
+            :class="{ ['active-node']: node.id === activeItem.id }"
+        >
             <div
                 class="flex justify-between gap-2 items-center whitespace-nowrap ml-2"
             >
                 <div
-                    @click="onItemClick(node)"
-                    class="flex flex-row gap-2 items-center"
+                    @click="onItemClick(node, path, tree)"
+                    class="flex flex-row gap-2 items-center w-full"
                 >
                     <div class="flex items-center" v-if="options.checkable">
                         <input
@@ -40,17 +92,17 @@
                     </b>
                     <FolderIcon
                         v-if="node.type === 'directory'"
-                        class="text-gray-500 w-5"
+                        class="text-gray-500 w-5 active-field"
                     />
                     <DocumentTextIcon
                         v-if="node.type === 'file'"
-                        class="text-gray-500 w-4"
+                        class="text-gray-500 w-4 active-field"
                     />
                     <input
                         role="button"
                         v-model="node.name"
-                        class="focus-visible:outline-none"
-                        :class="{ ['text-teal-500']: node.edit }"
+                        class="focus-visible:outline-none active-field w-full"
+                        :class="{ ['text-teal-500']: node.edit}"
                         :readonly="node.edit ? false : 'readonly'"
                     />
                 </div>
@@ -123,6 +175,7 @@ import {
     ChevronRightIcon,
     CheckIcon,
     TrashIcon,
+    InformationCircleIcon,
 } from "@heroicons/vue/solid";
 
 export default {
@@ -141,12 +194,21 @@ export default {
         onRemoveItem: {
             type: Function,
             required: false,
-            default: () => {}
+            default: () => {},
         },
         onAddChildren: {
             type: Function,
             required: false,
-            default: () => {}
+            default: () => {},
+        },
+        activeItem: {
+            type: Object,
+            required: false,
+            default: () => {
+                return {
+                    id: -1,
+                };
+            },
         },
     },
     components: {
@@ -159,6 +221,7 @@ export default {
         ChevronRightIcon,
         CheckIcon,
         TrashIcon,
+        InformationCircleIcon,
     },
     data() {
         return {};
@@ -203,5 +266,16 @@ export default {
 <style lang="scss" scoped>
 .tree-item {
     color: black;
+}
+</style>
+
+<style lang="scss">
+// .files-tree .tree-node {
+//     padding: 0 !important;
+// }
+
+.active-node .active-field {
+    color: rgb(13, 138, 172);
+    font-weight: bold;
 }
 </style>
