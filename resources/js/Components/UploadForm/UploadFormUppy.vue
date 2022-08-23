@@ -68,7 +68,9 @@ export default {
         },
         state: {
             type: Object,
-            default: () => { return {} },
+            default: () => {
+                return {};
+            },
         },
         stopUpload: {
             type: Boolean,
@@ -92,8 +94,8 @@ export default {
     //     },
     // },
     mounted() {
+        console.log('Date.now()', Date.now());
         this.setupUppy();
-        this.uppy.setMeta({ token: "ab5kjfg" }); // TODO
         this.setupDashboard();
         this.setupEvents();
         this.setupImageEditor();
@@ -101,7 +103,7 @@ export default {
         // this.user = JSON.parse(localStorage.getItem("user"));
         // this.onWindowResize();
         this.setUppyState(this.state);
-        this.$emit('mounted');
+        this.$emit("mounted");
     },
     methods: {
         // ...mapActions(['saveFile']),
@@ -139,7 +141,12 @@ export default {
                 // theme: this.theme,
                 // locale: this.getLocale(),
                 metaFields: (file) => {
-                    const fields = [{ id: "name", name: "File name" }];
+                    const fields = [{ 
+                        path:  [
+                            'project' + $page.props.project.id,
+                            'study' + $page.props.study.id
+                        ].join('/')
+                    }];
                     if (file.type.startsWith("image/")) {
                         fields.push({ id: "location", name: "Photo Location" });
                         fields.push({ id: "alt", name: "Alt text" });
@@ -184,11 +191,10 @@ export default {
         async handleUploadSuccess(file, data) {
             console.log("upload-success fired", file, data);
             const params = {
-                aws: false,
-                transformed: false,
+                defined: false,
             };
-            const res = await this.FileDbSave(file, params);
-            this.$emit("uploaded", res.status);
+            // const res = await this.FileDbSave(file, params);
+            // this.$emit("uploaded", res.status);
         },
         handleFileAdded(file) {
             this.uppy.setFileMeta(file.id, {
@@ -196,18 +202,37 @@ export default {
                 store_name: [uuidv4(), file.name.split(".").pop()].join("."),
             });
         },
-        handleFileEditComplete(file) {
-        },
+        handleFileEditComplete(file) {},
         onBeforeFileAdded(currentFile, files) {
             return currentFile;
         },
+
+        setMetaGeneral(timestamp) {
+            this.uppy.setMeta({ 
+                path:  [
+                    'project' + this.$page.props.project.id,
+                    'study' + this.$page.props.study.id,
+                    ''
+                ].join('/'),
+                micro: timestamp
+            });
+        },
+
         onBeforeUpload(files) {
-            this.$emit('update:UppyState', this.uppy.getState());
-            this.$emit('onBeforeUpload', {files, state: this.uppy.getState()});
-            if (this.stopUpload) { return {} }
+            const timestamp = Date.now();
+            this.setMetaGeneral(timestamp);
+            this.$emit("update:UppyState", this.uppy.getState());
+            this.$emit("onBeforeUpload", {
+                files,
+                state: this.uppy.getState(),
+                timestamp
+            });
+            if (this.stopUpload) {
+                return {};
+            }
         },
         upload() {
-            console.log('start upload');
+            console.log("start upload");
             this.uppy.upload();
         },
         cancelAll() {
@@ -227,23 +252,25 @@ export default {
         // Save file to the MongoDB
         async FileDbSave(
             {
-                id,
+                id: uppyid,
                 size,
-                meta: { user_id, type: contenttype, name, store_name },
+                type,
+                s3Multipart: {key, uploadId},
+                meta: { path, micro, name },
             },
-            { aws, transformed }
+            { defined }
         ) {
-            const path = [user_id, store_name].join("/");
             const dbData = {
-                name: name,
+                owner_id: this.$page.props.user.id,
+                team_id: this.$page.props.user.current_team.id,
+                project_id: this.project.id,
+                key,
+                uploadId,
+                name,
                 path,
                 size,
-                contenttype,
-                aws,
-                transformed,
-                folder: false,
-                pid: this.pid,
-                fid: Date.now().toString(),
+                type,
+                micro,
             };
             try {
                 await this.saveFile(dbData);
@@ -278,17 +305,17 @@ export default {
             this.uppy.setState(state);
         },
         handleProgress(data) {
-            this.$emit('update:UppyState', this.uppy.getState());
+            this.$emit("update:UppyState", this.uppy.getState());
             this.$emit("handleProgress", data);
         },
         handleUpladProgress(file, progress) {
-            this.$emit('update:UppyState', this.uppy.getState());
+            this.$emit("update:UppyState", this.uppy.getState());
             this.$emit("uploadProgress", file, progress);
         },
         closeUppy() {
             this.unSetupEvents();
             this.uppy.close();
-        }
+        },
     },
 
     beforeDestroy() {

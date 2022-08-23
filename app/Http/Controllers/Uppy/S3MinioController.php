@@ -92,10 +92,14 @@ class S3MinioController extends Controller
     {
         $type = $request->input('type');
         $filenameRequest = $request->input('filename');
+        $filepathRequest = $request->input('metadata')['path'] ?? '/';
+        $filenameMicroAdd = isset($request->input('metadata')['micro']) && !empty($request->input('metadata')['micro']) ? $request->input('metadata')['micro'] : False;
         $fileName = pathinfo($filenameRequest, PATHINFO_FILENAME);
         $fileExtension = pathinfo($filenameRequest, PATHINFO_EXTENSION);
+        
         $folder = config('uppy-s3-multipart-upload.s3.bucket.folder') ? config('uppy-s3-multipart-upload.s3.bucket.folder').'/' : '';
-        $key = $folder.Str::of($fileName.'_'.microtime())->slug('_').'.'.$fileExtension;
+        $file = $filenameMicroAdd ? Str::of($filenameMicroAdd.'_'.$fileName)->slug('_').'.'.$fileExtension : $filenameRequest;
+        $key = $folder.$filepathRequest.$file;
 
         try {
             $result = $this->client->createMultipartUpload([
