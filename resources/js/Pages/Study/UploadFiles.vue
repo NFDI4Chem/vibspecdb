@@ -180,7 +180,7 @@ const sectionWidth = ref();
 
 const activeItem = computed({
     get() {
-        return store.state.FilesTree.files.activeItem;
+        return store.getters.Treefiles.activeItem;
     },
     set(val) {
         store.dispatch("updateFilesTreeData", { activeItem: val });

@@ -1,5 +1,5 @@
 const getters = {
-    files: (state) => state.files,
+    Treefiles: (state) => state.files,
 };
 
 const mutations = {

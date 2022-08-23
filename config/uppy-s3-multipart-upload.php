@@ -6,7 +6,7 @@ return [
             /*
              * Folder on bucket to save the file
              */
-            'folder' => 'images',
+            'folder' => 'uploads',
         ],
         'presigned_url' => [
             /*
