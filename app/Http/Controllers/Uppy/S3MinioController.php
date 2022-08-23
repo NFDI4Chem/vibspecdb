@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Throwable;
 
+use App\Models\FileSystemObject;
+use App\Models\Project;
+use App\Models\Study;
+
 class S3MinioController extends Controller
 {
     protected $client;
@@ -43,6 +47,54 @@ class S3MinioController extends Controller
         return response([
             'message' => 'No content',
         ], 204);
+    }
+
+    protected function storeCustomFileObject(Request $request) {
+
+        $type = $request->input('type') ?? '';
+        $name = $request->input('filename') ?? '';
+        $FileMetadata = $request->get('metadata');
+
+        // $project = Project::find($FileMetadata['project_id'] ?? -1);
+        // $study = Study::find($FileMetadata['study_id'] ?? -1);
+
+        $level = $FileMetadata['level'] ?? 1;
+        $baseId = $FileMetadata['base_id'] ?? 0;
+        $relativePath = $FileMetadata['path'] ?? '';
+        $micro = $FileMetadata['micro'] ?? '';
+
+        $environment = env('APP_ENV', 'local');
+        $filePath = implode('/', [
+            $environment, 
+            ($project->uuid ?? 'common'),
+            ($study->uuid ?? 'common') . $relativePath,
+            ""
+        ]);
+
+        // create item
+        FileSystemObject::firstOrCreate([
+            'name' => $name,
+            'slug' => Str::slug($name, '-'),
+            'description' => $name,
+            'relative_url' => $relativePath,
+            'type' => 'file', # directory
+            'key' => $name,
+            'is_root' => false,
+            'project_id' => (int) ($FileMetadata['project_id'] ?? -1),
+            'study_id' => (int) ($FileMetadata['study_id'] ?? -1),
+            'level' => $level + 1,
+            'parent_id' => (int)$baseId,
+            'owner_id' => auth()->user()->id,
+        ]);
+
+        return [
+            // 'project' => $project,
+            // 'study' => $study,
+            'path' => $filePath,
+            'micro' => $micro,
+            'type' => $type,
+            'name' => $name,
+        ];
     }
 
     /*
@@ -90,22 +142,21 @@ class S3MinioController extends Controller
     */
     public function createMultipartUpload(Request $request)
     {
-        $type = $request->input('type');
-        $filenameRequest = $request->input('filename');
-        $filepathRequest = $request->input('metadata')['path'] ?? '/';
-        $filenameMicroAdd = isset($request->input('metadata')['micro']) && !empty($request->input('metadata')['micro']) ? $request->input('metadata')['micro'] : False;
-        $fileName = pathinfo($filenameRequest, PATHINFO_FILENAME);
-        $fileExtension = pathinfo($filenameRequest, PATHINFO_EXTENSION);
-        
-        $folder = config('uppy-s3-multipart-upload.s3.bucket.folder') ? config('uppy-s3-multipart-upload.s3.bucket.folder').'/' : '';
-        $file = $filenameMicroAdd ? Str::of($filenameMicroAdd.'_'.$fileName)->slug('_').'.'.$fileExtension : $filenameRequest;
-        $key = $folder.$filepathRequest.$file;
+
+        $fileObject = $this->storeCustomFileObject($request);
+        // return $fileObject;
+
+        $fileName = pathinfo($fileObject['name'], PATHINFO_FILENAME);
+        $fileExtension = pathinfo($fileObject['name'], PATHINFO_EXTENSION);
+
+        $folder = $fileObject['path'];
+        $key = $folder.$fileObject['name'];
 
         try {
             $result = $this->client->createMultipartUpload([
                 'Bucket'             => $this->bucket,
                 'Key'                => $key,
-                'ContentType'        => $type,
+                'ContentType'        => $fileObject['type'],
                 'ContentDisposition' => 'inline',
             ]);
         } catch (Throwable $exception) {

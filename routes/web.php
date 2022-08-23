@@ -118,6 +118,8 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('study.submit-job');
     Route::get('studies/{study}/file-upload', [StudyController::class, 'fileUpload'])
         ->name('study.file-upload');
+    Route::post('studies/{study}/file-upload/update', [StudyController::class, 'fileUploadForm'])
+        ->name('study.file-upload.update');
 });
 
 

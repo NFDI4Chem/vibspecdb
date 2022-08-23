@@ -42,12 +42,15 @@
                             :maxFileSize="maxFileSize"
                             @handleProgress="onHandleProgress"
                             @uploadProgress="onUploadProgress"
+                            @onBeforeUpload="onBeforeUpload"
+                            @onBeforeRetry="onBeforeRetry"
                             :title="title"
                             ref="UploadFormUppyRef"
                             @mounted="onUppyMounted"
                             :state="uppyState"
                             :stopUpload="false"
                             dashboardLimitText="Images only, 2–3 files, up to 5 Gb (TODO: change limits here)"
+                            :baseFolder="activeItem"
                         />
                     </div>
                 </div>
@@ -82,6 +85,13 @@ const show = computed({
         store.dispatch("updateFilesData", { show: val });
     },
 });
+
+const activeItem = computed({
+    get() {
+        return store.getters.Treefiles.activeItem;
+    }
+});
+
 const view = computed({
     get() {
         return store.state.Uppy.files.viewMode;
@@ -128,6 +138,7 @@ const props = defineProps({
 
 const onUppyMounted = () => {
     updateUppySize('med');
+    store.dispatch("updateFilesData", { uploaded: false });
 };
 
 const updateUppySize = (type) => {
@@ -166,7 +177,16 @@ const closeViewModal = () => {
 
 const onUploaded = (data) => {
     console.log("onUploaded", data);
+    store.dispatch("updateFilesData", { uploaded: true });
 };
+
+const onBeforeRetry = () => {
+    store.dispatch("updateFilesData", { uploaded: false });
+}
+
+const onBeforeUpload = () => {
+    store.dispatch("updateFilesData", { uploaded: false });
+}
 
 const onHandleProgress = (prog) => {
     progress.value = prog;

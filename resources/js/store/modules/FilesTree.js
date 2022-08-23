@@ -20,7 +20,7 @@ const actions = {
 const state = {
     files: {
         activeItem: {
-            id: -1,
+            id: 0,
         },
     },
 };

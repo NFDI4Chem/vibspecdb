@@ -6,7 +6,7 @@
                     <div v-if="files">
                         <nav
                             v-if="selectTreeFolder"
-                            class="flex p-3"
+                            class="flex p-3 w-full overflow-hidden cursor-pointer select-none"
                             aria-label="Breadcrumb"
                         >
                             <ol role="list" class="flex items-center space-x-2">
@@ -45,17 +45,15 @@
                             </ol>
                         </nav>
                         <div
-                            class="min-w-0 flex-1 min-h-fit border-t border-gray-200 lg:flex px-1"
+                            class="min-w-0 flex-1  border-t border-gray-200 lg:flex px-1"
                         >
-                            <aside class="py-1 px-4">
-                                <div
-                                    v-if="treeFilled"
-                                    class="aside-menu relative flex flex-col border-r border-gray-200 overflow-y-auto"
+                            <aside class="py-1 px-4" v-if="treeFilled">
+                                <div                                    
+                                    class="aside-menu relative flex flex-col overflow-y-auto"
                                 >
-                                    <div class="mr-5">
+                                    <div class="mr-5 min-w-fit">
                                         <UniFilesTree
                                             @itemClick="TreeItemClick"
-                                            class="mr-5 min-w-min"
                                             :tree="files"
                                             :options="treeOptions"
                                             :onRemoveItem="onRemoveItem"
@@ -66,16 +64,15 @@
                                 </div>
                             </aside>
                             <section
-                                class="min-w-0 px-5 py-2 flex-1 flex flex-col overflow-y-auto lg:order-last"
+                                class="min-w-0 px-5 py-5 flex-1 flex flex-col overflow-y-auto lg:order-last h-full border-l border-gray-200"
                                 ref="sectionRef"
                             >
-                                <!-- <div class="flex flex-col gap-2 text-gray-500 border-b-2 h-10 items-left pt-1"> -->
                                 <div
-                                    class="flex flex-col gap-2 text-gray-500 h-10 items-left pt-1"
+                                    class="flex flex-col gap-2 text-gray-500h-full items-left pt-1"
                                 >
                                     <div class="text-lg flex flex-col gap-1">
                                         <div
-                                            class="flex flex-row gap-1 justify-between items-center"
+                                            class="flex flex-row flex-wrap gap-1 justify-between items-center"
                                         >
                                             <div>
                                                 Uploading files to the folder:
@@ -136,7 +133,11 @@
                                             >
                                         </div>
                                     </div>
-                                    <Uploader :width="sectionWidth" />
+                                    <Uploader
+                                        :width="sectionWidth"
+                                        :baseFolder="activeItem"
+                                        @uploaded="onUploaded"
+                                    />
                                 </div>
                             </section>
                         </div>
@@ -157,8 +158,9 @@ import {
 import StudyContent from "@/Pages/Study/Content.vue";
 import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue";
 import Uploader from "@/Components/UploadForm/Uploader.vue";
+import { useForm, usePage } from '@inertiajs/inertia-vue3'
 
-import { ref, computed, onMounted, reactive } from "vue";
+import { ref, computed, onMounted, reactive, watch } from "vue";
 import { useStore } from "vuex";
 
 const props = defineProps(["study", "project", "files"]);
@@ -177,6 +179,7 @@ const treeOptions = {
 
 const sectionRef = ref();
 const sectionWidth = ref();
+const filesTreeKey = ref(1);
 
 const activeItem = computed({
     get() {
@@ -186,6 +189,33 @@ const activeItem = computed({
         store.dispatch("updateFilesTreeData", { activeItem: val });
     },
 });
+
+const FilesUploaded = computed({
+    get() {
+        return store.state.Uppy.files.uploaded;
+    },
+    set(val) {
+        store.dispatch("updateFilesData", { uploaded: val });
+    },
+});
+
+const study = computed(() => usePage().props.value.study)
+
+watch(FilesUploaded, (newValue, oldValue) => {
+    if (newValue) {
+        MakeReload();
+    }
+});
+
+const MakeReload = () => {
+        const form = useForm({
+            email: null,
+        })
+        form.post(route("study.file-upload.update", study.value.id), {
+            preserveScroll: true,
+            onSuccess: () => form.reset(),
+        })
+}
 
 onMounted(() => {
     sectionWidth.value = sectionRef.value.clientWidth;
@@ -212,13 +242,18 @@ const onAddChildren = (node) => {
     });
 };
 
-const TreeItemClick = (file) => {
-    displaySelected(file);
-    storeSelected(file);
+const TreeItemClick = (file, parent) => {
+    const itemData = file.type === "directory" ? file : parent;
+    displaySelected(itemData);
+    storeSelected(itemData);
 };
 
 const storeSelected = (file) => {
     activeItem.value = file;
+};
+
+const onUploaded = () => {
+    console.log("files uploaded");
 };
 
 const displaySelected = (file) => {

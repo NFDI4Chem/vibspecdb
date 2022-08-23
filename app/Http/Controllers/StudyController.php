@@ -76,6 +76,15 @@ class StudyController extends Controller
 
     }
 
+
+    public function fileUploadForm(Request $request, Study $study)
+    {
+        return redirect(url()->previous())->with('success', 'Your Data has been updated successfully');
+
+    }
+
+    
+
     public function Jobs(Request $request, Study $study)
     {
         $jobs = [];

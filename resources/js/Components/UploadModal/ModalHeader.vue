@@ -1,24 +1,29 @@
 <template>
     <div
-        class="flex justify-between items-center px-2 bg-white"
-        :class="{['mini-header']: ['min', 'med'].includes(view), ['max-header']: ['max'].includes(view)}"
+        class="flex justify-between items-center px-2 bg-white border-teal-500"
+        :class="{
+            ['border-t border-l']: view === 'min',
+            ['border-t border-l border-b-gray border-b']: view === 'med',
+            ['mini-header']: ['min', 'med'].includes(view),
+            ['max-header border-b']: ['max'].includes(view),
+        }"
         v-if="show"
     >
         <div class="flex justify-between items-center bg-white gap-2">
-          <radial-progress-bar
-              v-if="progress > 0"
-              :diameter="40"
-              :innerStrokeWidth="4"
-              :strokeWidth="4"
-              :completed-steps="progress"
-              innerStrokeColor="#ccd1d3"
-              startColor="#1c7591"
-              stopColor="#0d9ecb"
-              :total-steps="100"
-          >
-              <div class="text-[9px] pt-[1px] font-bold">{{ progress }}%</div>
-          </radial-progress-bar>
-          <div class="text-lg font-medium text-gray-900">{{title}}</div>
+            <radial-progress-bar
+                v-if="progress > 0"
+                :diameter="40"
+                :innerStrokeWidth="4"
+                :strokeWidth="4"
+                :completed-steps="progress"
+                innerStrokeColor="#ccd1d3"
+                startColor="#1c7591"
+                stopColor="#0d9ecb"
+                :total-steps="100"
+            >
+                <div class="text-[9px] pt-[1px] font-bold">{{ progress }}%</div>
+            </radial-progress-bar>
+            <div class="text-lg font-medium text-gray-900">{{ title }}</div>
         </div>
 
         <div class="flex justify-between items-center bg-white gap-2">
@@ -65,13 +70,18 @@
 
 <script setup>
 import RadialProgressBar from "vue3-radial-progress";
-import { MinusCircleIcon, ArrowsExpandIcon, XCircleIcon, CreditCardIcon } from "@heroicons/vue/outline";
+import {
+    MinusCircleIcon,
+    ArrowsExpandIcon,
+    XCircleIcon,
+    CreditCardIcon,
+} from "@heroicons/vue/outline";
 
 const props = defineProps({
     progress: Number,
     title: {
         type: String,
-        default: 'Upload Files',
+        default: "Upload Files",
     },
     show: {
         type: Boolean,
@@ -94,12 +104,10 @@ const changeView = (state) => {
 
 const closeModal = () => {
     emit("closeView");
-}
-
+};
 </script>
 
 <style lang="scss" scoped>
-
 .mini-header {
     height: 50px;
     width: 500px;
@@ -109,5 +117,4 @@ const closeModal = () => {
     height: 50px;
     width: 100vw;
 }
-
 </style>

@@ -76,6 +76,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        baseFolder: {
+            type: Object,
+            required: false,
+        },
     },
     components: {
         Uppy,
@@ -94,7 +98,7 @@ export default {
     //     },
     // },
     mounted() {
-        console.log('Date.now()', Date.now());
+        console.log("Date.now()", Date.now());
         this.setupUppy();
         this.setupDashboard();
         this.setupEvents();
@@ -141,17 +145,21 @@ export default {
                 // theme: this.theme,
                 // locale: this.getLocale(),
                 metaFields: (file) => {
-                    const fields = [{ 
-                        path:  [
-                            'project' + $page.props.project.id,
-                            'study' + $page.props.study.id
-                        ].join('/')
-                    }];
+                    /*
+                    const fields = [
+                        {
+                            path: [
+                                "project" + $page.props.project.id,
+                                "study" + $page.props.study.id,
+                            ].join("/"),
+                        },
+                    ];
                     if (file.type.startsWith("image/")) {
                         fields.push({ id: "location", name: "Photo Location" });
                         fields.push({ id: "alt", name: "Alt text" });
                     }
                     return fields;
+                    */
                 },
                 animateOpenClose: true,
                 proudlyDisplayPoweredByUppy: false,
@@ -161,6 +169,7 @@ export default {
         setupEvents() {
             this.uppy.on("upload-success", this.handleUploadSuccess);
             this.uppy.on("file-added", this.handleFileAdded);
+            this.uppy.on("upload-retry", this.onBeforeRetry);
             this.uppy.on("progress", this.handleProgress);
             this.uppy.on(
                 "dashboard:file-edit-complete",
@@ -176,6 +185,7 @@ export default {
         unSetupEvents() {
             this.uppy.off("upload-success", this.handleUploadSuccess);
             this.uppy.off("file-added", this.handleFileAdded);
+            this.uppy.off("upload-retry", this.onBeforeRetry);
             this.uppy.off("progress", this.handleProgress);
             this.uppy.off(
                 "dashboard:file-edit-complete",
@@ -188,19 +198,22 @@ export default {
             this.uppy.off("upload-progress", this.handleUpladProgress);
             // window.removeEventListener("resize", this.onWindowResize);
         },
-        async handleUploadSuccess(file, data) {
+        handleUploadSuccess(file, data) {
             console.log("upload-success fired", file, data);
             const params = {
                 defined: false,
             };
             // const res = await this.FileDbSave(file, params);
             // this.$emit("uploaded", res.status);
+            this.$emit("uploaded", 200);
         },
         handleFileAdded(file) {
+            /*
             this.uppy.setFileMeta(file.id, {
                 user_id: this.user._id ? this.user._id : "general",
                 store_name: [uuidv4(), file.name.split(".").pop()].join("."),
             });
+            */
         },
         handleFileEditComplete(file) {},
         onBeforeFileAdded(currentFile, files) {
@@ -208,14 +221,21 @@ export default {
         },
 
         setMetaGeneral(timestamp) {
-            this.uppy.setMeta({ 
-                path:  [
-                    'project' + this.$page.props.project.id,
-                    'study' + this.$page.props.study.id,
-                    ''
-                ].join('/'),
-                micro: timestamp
+            const { id, relative_url, name, level } = this.baseFolder;
+            this.uppy.setMeta({
+                base_id: id,
+                path: relative_url,
+                level,
+                project_id: this.$page.props.project.id,
+                study_id: this.$page.props.study.id,
+                micro: timestamp,
             });
+        },
+
+        onBeforeRetry() {
+            const timestamp = Date.now();
+            this.setMetaGeneral(timestamp);
+            this.$emit("onBeforeRetry");
         },
 
         onBeforeUpload(files) {
@@ -225,14 +245,14 @@ export default {
             this.$emit("onBeforeUpload", {
                 files,
                 state: this.uppy.getState(),
-                timestamp
+                timestamp,
             });
             if (this.stopUpload) {
                 return {};
             }
         },
         upload() {
-            console.log("start upload");
+            console.log("start upload", this.baseFolder);
             this.uppy.upload();
         },
         cancelAll() {
@@ -255,7 +275,7 @@ export default {
                 id: uppyid,
                 size,
                 type,
-                s3Multipart: {key, uploadId},
+                s3Multipart: { key, uploadId },
                 meta: { path, micro, name },
             },
             { defined }
@@ -283,11 +303,6 @@ export default {
                         : "UNDEFINED",
                 };
             }
-        },
-        // Check the file in MongoDB:
-        async FileDbCheck(name, path) {
-            const fix_name = name.split(" ").join("");
-            return fix_name;
         },
         setUppySize({ width, height }) {
             if (width) {

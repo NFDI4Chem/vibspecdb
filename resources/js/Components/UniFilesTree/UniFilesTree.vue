@@ -52,7 +52,7 @@
         :value="tree"
         v-slot="{ node, index, path, tree }"
         draggable
-        edgeScroll
+        :edgeScroll="true"
         :foldAllAfterMounted="false"
         @drop="ondrop"
         @before-drop="onBeforeDrop"
@@ -166,6 +166,8 @@
 import "he-tree-vue/dist/he-tree-vue.css";
 import { Tree, Fold, Draggable, Check } from "he-tree-vue";
 
+// const emit = defineEmits(["itemClick"]);
+
 import {
     PencilIcon,
     PlusSmIcon,
@@ -227,8 +229,9 @@ export default {
         return {};
     },
     methods: {
-        onItemClick(node) {
-            this.$emit("itemClick", node);
+        onItemClick(node, path, tree) {
+            const parent = this.$refs.tree.getNodeParentByPath(path);
+            this.$emit("itemClick", node, parent);
         },
         toggleFold(tree, node, path) {
             tree.toggleFold(node, path);
@@ -270,9 +273,10 @@ export default {
 </style>
 
 <style lang="scss">
-// .files-tree .tree-node {
-//     padding: 0 !important;
-// }
+.files-tree .tree-node {
+    // padding: 0 !important;
+    min-width: 300px;
+}
 
 .active-node .active-field {
     color: rgb(13, 138, 172);

@@ -16,6 +16,7 @@
             v-model:UppyState="UppyState"
             :stopUpload="true"
             dashboardLimitText="Images only, 2–3 files, up to 5 Gb (TODO: change limits here)"
+            :baseFolder="baseFolder"
         />
         <div
             v-if="uppyUploading"
@@ -26,11 +27,11 @@
             "
         >
             <div
-                class="uploading-progress flex flex-row justify-center gap-5 items-center py-10 px-6"
+                class="uploading-progress flex flex-row flex-wrap justify-center gap-5 items-center py-10 px-6"
             >
                 <div>
                     <radial-progress-bar
-                        :diameter="width/3"
+                        :diameter="width / 3"
                         :innerStrokeWidth="15"
                         :strokeWidth="15"
                         :completed-steps="progress"
@@ -105,7 +106,6 @@
 </template>
 
 <script setup>
-
 import { reactive, toRefs, ref, onMounted, computed } from "vue";
 import UploadFormUppy from "@/Components/UploadForm/UploadFormUppy.vue";
 import Button from "@/Jetstream/Button.vue";
@@ -128,8 +128,17 @@ const maxFileSize = 5 * 1000 * 1000 * 1000; // Gb / Mb / Kb
 const uppyShow = ref(true);
 const UploadFormUppyRef = ref();
 
-
-const props = defineProps(['width']);
+const props = defineProps({
+    width: {
+        type: Number,
+        required: false,
+        default: 320
+    },
+    baseFolder: {
+        type: Object,
+        required: false,
+    },
+});
 
 const progress = computed({
     get() {
@@ -156,7 +165,8 @@ const UppyState = computed({
 });
 
 const onUploaded = (data) => {
-    console.log("onUploaded", data);
+    console.log('log here 1')
+    this.$emit("uploaded", data);
 };
 
 const delay = (time) => {
@@ -167,7 +177,7 @@ const onBeforeUploadUppy = async ({ files, state }) => {
     store.dispatch("updateFilesData", {
         show: true,
         uppy: state,
-        viewMode: "med",
+        viewMode: "min",
     });
     uppyShow.value = false;
     await delay(100);
@@ -203,7 +213,6 @@ const updateState = () => {};
 const cancelUploading = () => {
     uppyUploading.value = false;
 };
-
 </script>
 
 <style lang="scss" scoped></style>

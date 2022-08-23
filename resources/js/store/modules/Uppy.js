@@ -24,6 +24,7 @@ const state = {
         viewMode: false,
         show: false,
         uploading: false,
+        uploaded: false,
         progress: 0,
         uppy: {
             plugins: {},
