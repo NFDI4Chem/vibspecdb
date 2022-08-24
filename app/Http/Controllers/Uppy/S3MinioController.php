@@ -165,7 +165,7 @@ class S3MinioController extends Controller
         $fileExtension = pathinfo($fileObject['name'], PATHINFO_EXTENSION);
 
         $folder = $fileObject['path'];
-        $key = $folder.$fileObject['name'];
+        $key = str_replace('//', '/', $folder.$fileObject['name']);
 
         try {
             $result = $this->client->createMultipartUpload([

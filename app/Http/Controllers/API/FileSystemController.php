@@ -12,6 +12,9 @@ class FileSystemController extends Controller
     {
         $files = FileSystemObject::with('children')->where([
             ['id', $fileId],
+            ['project_id', $study->project->id],
+            ['study_id', $study->id],
+            ['is_processed', TRUE]
         ])->orderBy('type')->get();
 
         foreach ($files as $file) {

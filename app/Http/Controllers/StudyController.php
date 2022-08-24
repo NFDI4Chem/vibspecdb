@@ -171,9 +171,9 @@ class StudyController extends Controller
 
     private function getStudyFiles($study) {
         $files = FileSystemObject::where([
-            // ['level', 0],
             ['project_id', $study->project->id],
             ['study_id', $study->id],
+            ['is_processed', TRUE]
         ])
         ->orderBy('type')->get();
 
