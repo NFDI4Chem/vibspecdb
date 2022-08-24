@@ -49,45 +49,58 @@ class S3MinioController extends Controller
         ], 204);
     }
 
+    protected function filterString(String $str) {
+        return mb_convert_encoding($str, 'UTF-8', 'UTF-8');
+    }
+
     protected function storeCustomFileObject(Request $request) {
 
-        $type = $request->input('type') ?? '';
-        $name = $request->input('filename') ?? '';
-        $FileMetadata = $request->get('metadata');
+        try {
+            $type = $request->input('type') ?? '';
+            $name = $this->filterString($request->input('filename') ?? '');
+            $FileMetadata = $request->get('metadata');
 
-        // $project = Project::find($FileMetadata['project_id'] ?? -1);
-        // $study = Study::find($FileMetadata['study_id'] ?? -1);
+            // $project = Project::find($FileMetadata['project_id'] ?? -1);
+            // $study = Study::find($FileMetadata['study_id'] ?? -1);
 
-        $level = $FileMetadata['level'] ?? 1;
-        $baseId = $FileMetadata['base_id'] ?? 0;
-        $relativePath = $FileMetadata['path'] ?? '';
-        $micro = $FileMetadata['micro'] ?? '';
+            $level = (int)$FileMetadata['level'] ?? 1;
+            $baseId = (int)$FileMetadata['base_id'] ?? 0;
+            $relativePath = $FileMetadata['path'] ?? '';
+            $micro = $FileMetadata['micro'] ?? '';
 
-        $environment = env('APP_ENV', 'local');
-        $filePath = implode('/', [
-            $environment, 
-            ($project->uuid ?? 'common'),
-            ($study->uuid ?? 'common') . $relativePath,
-            ""
-        ]);
+            $environment = env('APP_ENV', 'local');
+            $filePath = implode('/', [
+                $environment, 
+                ($project->uuid ?? 'common'),
+                ($study->uuid ?? 'common') . $relativePath,
+                ""
+            ]);
 
-        // create item
-        $newFileObject = FileSystemObject::firstOrCreate([
-            'name' => $name,
-            'slug' => Str::slug($name, '-'),
-            'description' => $name,
-            'relative_url' => $relativePath,
-            'type' => 'file', # directory
-            'key' => $name,
-            'is_root' => false,
-            'project_id' => (int) ($FileMetadata['project_id'] ?? -1),
-            'study_id' => (int) ($FileMetadata['study_id'] ?? -1),
-            'level' => $level + 1,
-            'parent_id' => (int)$baseId,
-            'owner_id' => auth()->user()->id,
-        ]);
+            // create item
+            $newFileObject = FileSystemObject::firstOrCreate([
+                'name' => $name,
+                'slug' => Str::slug($name, '-'),
+                'description' => $name,
+                'relative_url' => $relativePath,
+                'type' => 'file', # directory
+                'key' => $name,
+                'is_root' => false,
+                'project_id' => (int) ($FileMetadata['project_id'] ?? -1),
+                'study_id' => (int) ($FileMetadata['study_id'] ?? -1),
+                'level' => $level + 1,
+                'parent_id' => $baseId,
+                'owner_id' => auth()->user()->id,
+                'is_processed' => FALSE,
+            ]);
 
-        FileSystemObject::where('id', $newFileObject->parent_id ?? 0)->update(['has_children' => TRUE]);
+            FileSystemObject::where('id', $newFileObject->parent_id ?? 0)->update(['has_children' => TRUE]);
+
+        } catch (Throwable $exception) {
+            return response()
+                ->json([
+                    'message' => $exception->getMessage(),
+                ]);
+        }
 
         return [
             // 'project' => $project,

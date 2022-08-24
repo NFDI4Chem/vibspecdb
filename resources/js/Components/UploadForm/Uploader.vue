@@ -51,7 +51,7 @@
                     class="uploading-description flex flex-col items-center gap-5"
                 >
                     <div class="font-bold text-5xl text-gray-700 text-center">
-                        Uploading files
+                        {{ progress < 100 ? "Uploading files" : "Files Uploaded" }}
                     </div>
                     <div class="text-3xl">{{ progress }}%</div>
                     <div class="text-center text-2xl p-5 bg-gray-200">
@@ -66,7 +66,7 @@
                     </div>
                     <div
                         class="mt-5 text-sky-600 text-2xl hover:cursor-pointer"
-                        @click="uploadStart"
+                        @click="showModal"
                         v-else
                     >
                         Upload More

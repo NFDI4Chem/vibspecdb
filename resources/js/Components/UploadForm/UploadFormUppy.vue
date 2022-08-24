@@ -203,9 +203,7 @@ export default {
             const params = {
                 defined: false,
             };
-            // const res = await this.FileDbSave(file, params);
-            // this.$emit("uploaded", res.status);
-            this.$emit("uploaded", 200);
+            this.$emit("uploaded", file, data);
         },
         handleFileAdded(file) {
             /*
@@ -224,12 +222,22 @@ export default {
             const { id, relative_url, name, level } = this.baseFolder;
             this.uppy.setMeta({
                 base_id: id,
-                path: relative_url,
+                path: relative_url === '/' ? '' : relative_url,
                 level,
                 project_id: this.$page.props.project.id,
                 study_id: this.$page.props.study.id,
                 micro: timestamp,
             });
+        },
+
+        cleanString(input) {
+            let output = "";
+            for (let i=0; i<input.length; i++) {
+                if (input.charCodeAt(i) <= 127) {
+                    output += input.charAt(i);
+                }
+            }
+            return output;
         },
 
         onBeforeRetry() {
@@ -268,41 +276,6 @@ export default {
                         .getAttribute("content"),
                 },
             });
-        },
-        // Save file to the MongoDB
-        async FileDbSave(
-            {
-                id: uppyid,
-                size,
-                type,
-                s3Multipart: { key, uploadId },
-                meta: { path, micro, name },
-            },
-            { defined }
-        ) {
-            const dbData = {
-                owner_id: this.$page.props.user.id,
-                team_id: this.$page.props.user.current_team.id,
-                project_id: this.project.id,
-                key,
-                uploadId,
-                name,
-                path,
-                size,
-                type,
-                micro,
-            };
-            try {
-                await this.saveFile(dbData);
-                return { status: true };
-            } catch (err) {
-                return {
-                    status: false,
-                    error: err.response
-                        ? err.response.data.errors.msg
-                        : "UNDEFINED",
-                };
-            }
         },
         setUppySize({ width, height }) {
             if (width) {
