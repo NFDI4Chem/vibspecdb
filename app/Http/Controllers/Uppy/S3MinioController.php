@@ -72,7 +72,7 @@ class S3MinioController extends Controller
         ]);
 
         // create item
-        FileSystemObject::firstOrCreate([
+        $newFileObject = FileSystemObject::firstOrCreate([
             'name' => $name,
             'slug' => Str::slug($name, '-'),
             'description' => $name,
@@ -86,6 +86,8 @@ class S3MinioController extends Controller
             'parent_id' => (int)$baseId,
             'owner_id' => auth()->user()->id,
         ]);
+
+        FileSystemObject::where('id', $newFileObject->parent_id ?? 0)->update(['has_children' => TRUE]);
 
         return [
             // 'project' => $project,

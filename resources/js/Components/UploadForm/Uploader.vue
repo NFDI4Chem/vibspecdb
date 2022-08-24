@@ -27,7 +27,7 @@
             "
         >
             <div
-                class="uploading-progress flex flex-row flex-wrap justify-center gap-5 items-center py-10 px-6"
+                class="uploading-progress flex flex-row flex-wrap justify-center gap-10 items-center py-10 px-6"
             >
                 <div>
                     <radial-progress-bar
@@ -215,4 +215,9 @@ const cancelUploading = () => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.uploading-description {
+    max-width: 400px;
+}
+
+</style>

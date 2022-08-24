@@ -1,7 +1,8 @@
 <template>
-    <Dialog
+    <div
+        v-if="show"
         as="div"
-        class="z-10 fixed bottom-0 right-0"
+        class="z-10000 fixed bottom-0 right-0"
         @close="show = true"
         :open="show"
         :class="{
@@ -16,13 +17,13 @@
             @changeView="changeViewModal"
             @closeView="closeViewModal"
             :view="view"
-            :title="title"
+            :title="combinedTitle"
             class="modal-header"
         />
 
         <!-- <button @click="getUppyStatus">Get It</button> -->
 
-        <DialogPanel
+        <div
             class="pointer-events-auto"
             v-show="view !== 'min'"
             :class="{
@@ -55,8 +56,9 @@
                     </div>
                 </div>
             </div>
-        </DialogPanel>
-    </Dialog>
+        </div>
+
+    </div>
 </template>
 
 <script setup>
@@ -89,7 +91,7 @@ const show = computed({
 const activeItem = computed({
     get() {
         return store.getters.Treefiles.activeItem;
-    }
+    },
 });
 
 const view = computed({
@@ -109,6 +111,15 @@ const uppyState = computed({
     set(val) {
         // console.log('Files Modal changes', val)
         // store.dispatch("updateFilesData", {uppy: val});
+    },
+});
+
+const uploaded = computed({
+    get() {
+        return store.state.Uppy.files.uploaded;
+    },
+    set(val) {
+        store.dispatch("updateFilesData", { uploaded: val });
     },
 });
 
@@ -136,9 +147,14 @@ const props = defineProps({
     },
 });
 
+const combinedTitle = computed(() => {
+    return (!uploaded.value) ? `Uploading ...` : `Files Uploaded`;
+})
+
 const onUppyMounted = () => {
-    updateUppySize('med');
-    store.dispatch("updateFilesData", { uploaded: false });
+    updateUppySize("med");
+    // store.dispatch("updateFilesData", { uploaded: false });
+    uploaded.value = false;
 };
 
 const updateUppySize = (type) => {
@@ -171,22 +187,25 @@ const changeViewModal = (type) => {
 
 const closeViewModal = () => {
     show.value = false;
-    store.dispatch("updateFilesData", { uploading: false , progress: 0});
+    store.dispatch("updateFilesData", { uploading: false, progress: 0 });
     UploadFormUppyRef.value.cancelAll();
 };
 
 const onUploaded = (data) => {
     console.log("onUploaded", data);
-    store.dispatch("updateFilesData", { uploaded: true });
+    // store.dispatch("updateFilesData", { uploaded: true });
+    uploaded.value = true;
 };
 
 const onBeforeRetry = () => {
-    store.dispatch("updateFilesData", { uploaded: false });
-}
+    // store.dispatch("updateFilesData", { uploaded: false });
+    uploaded.value = false;
+};
 
 const onBeforeUpload = () => {
-    store.dispatch("updateFilesData", { uploaded: false });
-}
+    // store.dispatch("updateFilesData", { uploaded: false });
+    uploaded.value = false;
+};
 
 const onHandleProgress = (prog) => {
     progress.value = prog;
@@ -210,14 +229,14 @@ const getUppyStatus = () => {
 <style lang="scss" scoped>
 .max-preview {
     width: 100vw;
-    height: calc(100vh - 50px);
+    height: calc(100vh);
 }
 .med-preview {
-    height: 600px;
-    width: 500px;
+    height: 650px;
+    min-width: 300px;
 }
 .mini-preview {
     height: 50px;
-    width: 500px;
+    width: 350px;
 }
 </style>

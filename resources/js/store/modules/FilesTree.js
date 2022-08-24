@@ -21,6 +21,7 @@ const state = {
     files: {
         activeItem: {
             id: 0,
+            path: '/'
         },
     },
 };

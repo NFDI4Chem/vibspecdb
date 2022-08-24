@@ -3,9 +3,9 @@
         class="flex justify-between items-center px-2 bg-white border-teal-500"
         :class="{
             ['border-t border-l']: view === 'min',
-            ['border-t border-l border-b-gray border-b']: view === 'med',
-            ['mini-header']: ['min', 'med'].includes(view),
-            ['max-header border-b']: ['max'].includes(view),
+            ['border-t border-l border-b-gray border-b med-header']: view === 'med',
+            ['mini-header']: ['min'].includes(view),
+            ['max-header border-b px-5']: ['max'].includes(view),
         }"
         v-if="show"
     >
@@ -23,7 +23,7 @@
             >
                 <div class="text-[9px] pt-[1px] font-bold">{{ progress }}%</div>
             </radial-progress-bar>
-            <div class="text-lg font-medium text-gray-900">{{ title }}</div>
+            <div class="text-lg  text-gray-900 font-bold">{{ title }}</div>
         </div>
 
         <div class="flex justify-between items-center bg-white gap-2">
@@ -110,7 +110,12 @@ const closeModal = () => {
 <style lang="scss" scoped>
 .mini-header {
     height: 50px;
-    width: 500px;
+    width: 350px;
+}
+
+.med-header {
+    height: 50px;
+    width: 450px;
 }
 
 .max-header {

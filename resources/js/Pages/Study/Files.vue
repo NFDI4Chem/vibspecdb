@@ -56,17 +56,17 @@
                                     v-if="treeFilled"
                                     class="aside-menu relative flex flex-col border-r border-gray-200 overflow-y-auto"
                                 >
-                                    <UniFilesTree
+                                    <!-- <UniFilesTree
                                         @itemClick="displaySelected"
                                         class="mr-2 min-w-min"
                                         :tree="files"
-                                    />
+                                    /> -->
                                 </div>
                             </aside>
                             <section
                                 class="min-w-0 p-6 flex-1 flex flex-col overflow-y-auto lg:order-last"
                             >
-                                <Uploader />
+                                <!-- <Uploader /> -->
                             </section>
                         </div>
                     </div>

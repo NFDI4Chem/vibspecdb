@@ -1,7 +1,7 @@
 <template>
-  <div class="default-layout-class">
+  <div class="default-layout-class relative">
     <slot />
-    <FilesModal :title="title"/>
+    <FilesModal :title="title" />
   </div>
 </template>
 
@@ -9,6 +9,6 @@
 
 import FilesModal from '@/Components/UploadModal/FilesModal.vue'
 
-const title = 'Upload Some Files';
+const title = 'Upload Files';
 
 </script>

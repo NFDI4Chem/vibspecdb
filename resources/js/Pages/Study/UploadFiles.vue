@@ -45,10 +45,10 @@
                             </ol>
                         </nav>
                         <div
-                            class="min-w-0 flex-1  border-t border-gray-200 lg:flex px-1"
+                            class="flex-1 border-t border-gray-200 xl:flex px-1 py-3 height-limited"
                         >
                             <aside class="py-1 px-4" v-if="treeFilled">
-                                <div                                    
+                                <div
                                     class="aside-menu relative flex flex-col overflow-y-auto"
                                 >
                                     <div class="mr-5 min-w-fit">
@@ -64,7 +64,7 @@
                                 </div>
                             </aside>
                             <section
-                                class="min-w-0 px-5 py-5 flex-1 flex flex-col overflow-y-auto lg:order-last h-full border-l border-gray-200"
+                                class="min-w-0 px-5 py-5 flex-1 flex flex-col overflow-y-auto lg:order-last h-full xl:border-l border-gray-200"
                                 ref="sectionRef"
                             >
                                 <div
@@ -158,7 +158,7 @@ import {
 import StudyContent from "@/Pages/Study/Content.vue";
 import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue";
 import Uploader from "@/Components/UploadForm/Uploader.vue";
-import { useForm, usePage } from '@inertiajs/inertia-vue3'
+import { useForm, usePage } from "@inertiajs/inertia-vue3";
 
 import { ref, computed, onMounted, reactive, watch } from "vue";
 import { useStore } from "vuex";
@@ -190,6 +190,7 @@ const activeItem = computed({
     },
 });
 
+
 const FilesUploaded = computed({
     get() {
         return store.state.Uppy.files.uploaded;
@@ -199,23 +200,27 @@ const FilesUploaded = computed({
     },
 });
 
-const study = computed(() => usePage().props.value.study)
+const study = computed(() => usePage().props.value.study);
 
 watch(FilesUploaded, (newValue, oldValue) => {
     if (newValue) {
-        MakeReload();
+        if (activeItem.value.id === 0) {
+            MakeReload();
+        } else {
+            showChildsAPI(activeItem.value);
+        }
     }
 });
 
 const MakeReload = () => {
-        const form = useForm({
-            email: null,
-        })
-        form.post(route("study.file-upload.update", study.value.id), {
-            preserveScroll: true,
-            onSuccess: () => form.reset(),
-        })
-}
+    const form = useForm({
+        email: null,
+    });
+    form.post(route("study.file-upload.update", study.value.id), {
+        preserveScroll: true,
+        onSuccess: () => form.reset(),
+    });
+};
 
 onMounted(() => {
     sectionWidth.value = sectionRef.value.clientWidth;
@@ -253,7 +258,17 @@ const storeSelected = (file) => {
 };
 
 const onUploaded = () => {
-    console.log("files uploaded");
+    console.log("files uploaded (UploadFiles.vue)");
+};
+
+const showChildsAPI = (file) => {
+    file.loading = true;
+    axios
+        .get("/api/v1/files/children/" + props.study.id + "/" + file.id)
+        .then((response) => {
+            file.children = response.data.files[0].children;
+            file.loading = false;
+        });
 };
 
 const displaySelected = (file) => {
@@ -279,23 +294,20 @@ const displaySelected = (file) => {
     selectTreeFolder.value = sFolder;
 
     if (file.has_children && file.level > 0 && !file.children) {
-        file.loading = true;
-        axios
-            .get("/api/v1/files/children/" + props.study.id + "/" + file.id)
-            .then((response) => {
-                file.children = response.data.files[0].children;
-                file.loading = false;
-            });
+        showChildsAPI(file);
     }
 };
 </script>
 
 <style lang="scss" scoped>
 .aside-menu {
-    width: 500px;
-    height: 50vh;
-    overflow-x: auto;
+    min-width: 300px;
+    max-height: 1000px;
 }
+
+// .height-limited {
+//     max-height: 900px;
+// }
 .force-wrap {
     -ms-word-break: break-all;
     word-break: break-all;
