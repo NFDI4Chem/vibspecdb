@@ -60,28 +60,29 @@ class S3MinioController extends Controller
             $name = $this->filterString($request->input('filename') ?? '');
             $FileMetadata = $request->get('metadata');
 
-            // $project = Project::find($FileMetadata['project_id'] ?? -1);
-            // $study = Study::find($FileMetadata['study_id'] ?? -1);
+            $project = Project::find($FileMetadata['project_id'] ?? -1);
+            $study = Study::find($FileMetadata['study_id'] ?? -1);
 
-            $level = (int)$FileMetadata['level'] ?? 1;
-            $baseId = (int)$FileMetadata['base_id'] ?? 0;
-            $relativePath = $FileMetadata['path'] ?? '';
+            $level = (int)($FileMetadata['level'] ?? 1);
+            $baseId = (int)($FileMetadata['base_id'] ?? 0);
+            $relativePath = $FileMetadata['path'] ?? '/';
             $micro = $FileMetadata['micro'] ?? '';
 
             $environment = env('APP_ENV', 'local');
-            $filePath = implode('/', [
+            $filePath = str_replace('//', '/', implode('/', [
                 $environment, 
                 ($project->uuid ?? 'common'),
                 ($study->uuid ?? 'common') . $relativePath,
                 ""
-            ]);
+            ]));
 
             // create item
             $newFileObject = FileSystemObject::firstOrCreate([
                 'name' => $name,
                 'slug' => Str::slug($name, '-'),
                 'description' => $name,
-                'relative_url' => $relativePath,
+                'path' => $relativePath,
+                'relative_url' =>  str_replace('//', '/', $filePath),
                 'type' => 'file', # directory
                 'key' => $name,
                 'is_root' => false,
@@ -93,7 +94,16 @@ class S3MinioController extends Controller
                 'is_processed' => FALSE,
             ]);
 
+            // return $newFileObject;
+
             FileSystemObject::where('id', $newFileObject->parent_id ?? 0)->update(['has_children' => TRUE]);
+
+            return [
+                'path' => $filePath,
+                'micro' => $micro,
+                'type' => $type,
+                'name' => $name,
+            ];
 
         } catch (Throwable $exception) {
             return response()
@@ -101,15 +111,6 @@ class S3MinioController extends Controller
                     'message' => $exception->getMessage(),
                 ]);
         }
-
-        return [
-            // 'project' => $project,
-            // 'study' => $study,
-            'path' => $filePath,
-            'micro' => $micro,
-            'type' => $type,
-            'name' => $name,
-        ];
     }
 
     /*
@@ -160,9 +161,6 @@ class S3MinioController extends Controller
 
         $fileObject = $this->storeCustomFileObject($request);
         // return $fileObject;
-
-        $fileName = pathinfo($fileObject['name'], PATHINFO_FILENAME);
-        $fileExtension = pathinfo($fileObject['name'], PATHINFO_EXTENSION);
 
         $folder = $fileObject['path'];
         $key = str_replace('//', '/', $folder.$fileObject['name']);

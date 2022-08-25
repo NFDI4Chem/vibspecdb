@@ -302,7 +302,7 @@ const displaySelected = (file) => {
 <style lang="scss" scoped>
 .aside-menu {
     min-width: 300px;
-    max-height: 1000px;
+    // max-height: 1000px;
 }
 
 // .height-limited {

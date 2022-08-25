@@ -175,10 +175,7 @@ export default {
                 "dashboard:file-edit-complete",
                 this.handleFileEditComplete
             );
-            this.uppy.on("complete", (result) => {
-                console.log("successful files:", result.successful);
-                console.log("failed files:", result.failed);
-            });
+            this.uppy.on("complete", this.handleComplete);
             this.uppy.on("upload-progress", this.handleUpladProgress);
             // window.addEventListener("resize", this.onWindowResize);
         },
@@ -191,10 +188,7 @@ export default {
                 "dashboard:file-edit-complete",
                 this.handleFileEditComplete
             );
-            this.uppy.off("complete", (result) => {
-                console.log("successful files:", result.successful);
-                console.log("failed files:", result.failed);
-            });
+            this.uppy.off("complete", this.handleComplete);
             this.uppy.off("upload-progress", this.handleUpladProgress);
             // window.removeEventListener("resize", this.onWindowResize);
         },
@@ -214,16 +208,21 @@ export default {
             */
         },
         handleFileEditComplete(file) {},
+        handleComplete(result) {
+            console.log("successful files:", result.successful);
+            console.log("failed files:", result.failed);
+        },
         onBeforeFileAdded(currentFile, files) {
             return currentFile;
         },
 
         setMetaGeneral(timestamp) {
             const { id, relative_url, name, level } = this.baseFolder;
+            console.log('relative_url', relative_url)
             this.uppy.setMeta({
                 base_id: id,
-                path: relative_url === '/' ? '' : relative_url,
-                level,
+                path: relative_url,
+                level: level ? level : 1,
                 project_id: this.$page.props.project.id,
                 study_id: this.$page.props.study.id,
                 micro: timestamp,
