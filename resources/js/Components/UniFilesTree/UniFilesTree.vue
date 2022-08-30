@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-row justify-between items-center py-2.5 gap-2">
-        <div class="font-bold">Files Tree</div>
+    <div class="flex flex-row justify-between items-center py-2.5 gap-2" v-if="options.showInfo">
+        <div class="font-bold">{{options.title}}</div>
         <Popper placement="bottom" openDelay="50" arrow class="light-popper">
             <InformationCircleIcon class="h-6 w-6 text-gray-500" />
             <template #content>
@@ -13,6 +13,7 @@
                     <div>
                         <div
                             class="flex flex-row items-center justify-left gap-0"
+                            v-if="options.editable"
                         >
                             <div class="mr-2">
                                 <strong>To rename</strong> item use:
@@ -31,6 +32,7 @@
                         </div>
                         <div
                             class="flex flex-row items-center justify-left gap-3"
+                            v-if="options.deleteable"
                         >
                             <div class="mr-2">
                                 <strong>To delete</strong> item use:
@@ -51,7 +53,7 @@
         ref="tree"
         :value="tree"
         v-slot="{ node, index, path, tree }"
-        draggable
+        :draggable="options.draggable"
         :edgeScroll="true"
         :foldAllAfterMounted="false"
         @drop="ondrop"
@@ -108,12 +110,12 @@
                 </div>
                 <div class="flex flex-row">
                     <PlusSmIcon
-                        v-if="!node.edit && node.type === 'directory'"
+                        v-if="!node.edit && node.type === 'directory' && options.createable"
                         class="text-gray-500 w-6"
                         @click="addChildren(node)"
                     />
                     <PencilIcon
-                        v-if="!node.edit && node.name !== '/'"
+                        v-if="!node.edit && node.name !== '/' && options.editable"
                         @click="node.edit = true"
                         class="text-gray-500 w-4"
                     />
@@ -131,7 +133,7 @@
                         @click="node.edit = false"
                     />
                     <TrashIcon
-                        v-if="!node.edit && node.name !== '/'"
+                        v-if="!node.edit && node.name !== '/' && options.deleteable"
                         class="text-red-400 w-4 ml-2"
                         @click="removeItem(tree, node, path)"
                     />
@@ -190,7 +192,15 @@ export default {
             type: Object,
             required: false,
             default: () => {
-                checkable: false;
+                return {
+                    checkable: false,
+                    deleteable: true,
+                    editable: true,
+                    createable: true,
+                    draggable: true,
+                    showInfo: true,
+                    title: 'Files Tree',
+                }
             },
         },
         onRemoveItem: {

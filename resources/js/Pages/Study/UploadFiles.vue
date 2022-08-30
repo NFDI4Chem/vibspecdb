@@ -160,10 +160,13 @@ import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue";
 import Uploader from "@/Components/UploadForm/Uploader.vue";
 import { useForm, usePage } from "@inertiajs/inertia-vue3";
 
+import { useFiles } from "@/VueComposable/useFiles";
+
 import { ref, computed, onMounted, reactive, watch } from "vue";
 import { useStore } from "vuex";
 
 const props = defineProps(["study", "project", "files"]);
+const { showChildsAPI } = useFiles();
 
 const selectTreeItem = ref();
 const selectTreeFolder = ref("/");
@@ -175,11 +178,16 @@ const treeFilled = computed(() => {
 
 const treeOptions = {
     checkable: false,
+    deleteable: true,
+    editable: true,
+    createable: true,
+    draggable: false,
+    showInfo: true,
+    title: 'Files Tree',
 };
 
 const sectionRef = ref();
 const sectionWidth = ref();
-const filesTreeKey = ref(1);
 
 const activeItem = computed({
     get() {
@@ -261,15 +269,6 @@ const onUploaded = () => {
     console.log("files uploaded (UploadFiles.vue)");
 };
 
-const showChildsAPI = (file) => {
-    file.loading = true;
-    axios
-        .get("/api/v1/files/children/" + props.study.id + "/" + file.id)
-        .then((response) => {
-            file.children = response.data.files[0].children;
-            file.loading = false;
-        });
-};
 
 const displaySelected = (file) => {
     selectTreeItem.value = file;
@@ -302,12 +301,8 @@ const displaySelected = (file) => {
 <style lang="scss" scoped>
 .aside-menu {
     min-width: 300px;
-    // max-height: 1000px;
 }
 
-// .height-limited {
-//     max-height: 900px;
-// }
 .force-wrap {
     -ms-word-break: break-all;
     word-break: break-all;

@@ -3,7 +3,13 @@
   <jet-banner />
   <div>
     <div class="flex flex-1">
-      <div class=" flex flex-col min-h-screen" :class="{'w-14': !sidebarOpen, 'w-64': sidebarOpen}">
+      <div 
+        class="md:flex flex-col min-h-screen hidden" 
+        :class="{
+          'w-14': !sidebarOpen,
+          'w-64': sidebarOpen,
+        }"
+      >
         <div
           class="flex flex-col flex-grow border-r border-gray-200 pt-5 bg-white overflow-y-auto"
         >
@@ -295,7 +301,7 @@ import {
   XIcon,
 } from "@heroicons/vue/outline";
 import { SearchIcon } from "@heroicons/vue/solid";
-import { sidebarOpen } from "@/VueStore/store";
+import { sidebarOpen } from "@/VueComposable/store";
 
 export default {
   components: {
