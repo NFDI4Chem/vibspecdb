@@ -278,7 +278,7 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import JetBanner from "@/Jetstream/Banner.vue";
 import JetDropdown from "@/Jetstream/Dropdown.vue";
 import JetDropdownLink from "@/Jetstream/DropdownLink.vue";
-import { ref } from "vue";
+
 import {
   Dialog,
   DialogOverlay,
@@ -295,8 +295,7 @@ import {
   XIcon,
 } from "@heroicons/vue/outline";
 import { SearchIcon } from "@heroicons/vue/solid";
-
-const userNavigation = [];
+import { sidebarOpen } from "@/VueStore/store";
 
 export default {
   components: {
@@ -323,10 +322,7 @@ export default {
     title: String,
   },
   setup() {
-    const sidebarOpen = ref(true);
-
     return {
-      userNavigation,
       sidebarOpen,
     };
   },
