@@ -3,18 +3,27 @@
   <jet-banner />
   <div>
     <div class="flex flex-1">
-      <div class=" flex w-64 flex-col min-h-screen" v-if="sidebarOpen">
+      <div class=" flex flex-col min-h-screen" :class="{'w-14': !sidebarOpen, 'w-64': sidebarOpen}">
         <div
           class="flex flex-col flex-grow border-r border-gray-200 pt-5 bg-white overflow-y-auto"
         >
-          <div class="flex items-center flex-shrink-0 px-4">
+          <button
+            v-if="!sidebarOpen"
+            type="button"
+            class="p-4 pb-4 pt-0 border-b border-gray-200 text-gray-500 focus:outline-none"
+            @click="sidebarOpen = !sidebarOpen"
+          >
+            <span class="sr-only">Open sidebar</span>
+            <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
+          </button>
+          <div class="flex items-center flex-shrink-0 px-4" v-if="sidebarOpen">
             <Link :href="route('dashboard')">
               <jet-application-logo class="block h-10 w-auto" />
             </Link>
           </div>
           <div class="mt-5 flex-grow flex flex-col">
             <nav class="flex-1 px-2 bg-white space-y-1">
-              <div class="relative mb-4">
+              <div class="relative mb-4" v-if="sidebarOpen">
                 <jet-dropdown
                   v-if="$page.props.jetstream.hasTeamFeatures"
                   align="center"
@@ -97,7 +106,7 @@
               </div>
               <Link
                 :href="route('dashboard')"
-                class="my-6 text-gray-900 group flex items-center px-2 py-3 text-sm font-medium rounded-md"
+                class="my-2 text-gray-900 group flex items-center px-2 py-3 text-sm font-medium rounded-md"
               >
                 <svg
                   class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
@@ -114,14 +123,14 @@
                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
                   />
                 </svg>
-                Dashboard
+                <div v-if="sidebarOpen">Dashboard</div> 
               </Link>
             </nav>
           </div>
         </div>
       </div>
       <div class="flex flex-col flex-1">
-        <div class="sticky top-0 z-9 flex-shrink-0 flex h-16 bg-white shadow border-b">
+        <div class="sticky top-0 z-9 flex-shrink-0 flex h-16 bg-white shadow border-b" v-if="sidebarOpen">
           <button
             type="button"
             class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none"
@@ -252,7 +261,7 @@
         <main class="flex-1 relative overflow-y-auto focus:outline-none">
           <div class="bg-white border-b">
             <div class="px-12">
-              <div class="flex justify-between py-6">
+              <div class="flex justify-between py-5">
                 <slot name="header"></slot>
               </div>
             </div>
@@ -314,7 +323,7 @@ export default {
     title: String,
   },
   setup() {
-    const sidebarOpen = ref(false);
+    const sidebarOpen = ref(true);
 
     return {
       userNavigation,
