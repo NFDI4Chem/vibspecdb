@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-row justify-between items-center py-2.5 gap-2" v-if="options.showInfo">
-        <div class="font-bold">{{options.title}}</div>
-        <Popper placement="bottom" openDelay="50" arrow class="light-popper">
+    <div class="flex flex-row justify-between items-center py-2.5 gap-2">
+        <div class="font-bold" v-if="options.showTitle">{{options.title}}</div>
+        <Popper placement="bottom" openDelay="50" arrow class="light-popper" v-if="options.showInfo">
             <InformationCircleIcon class="h-6 w-6 text-gray-500" />
             <template #content>
                 <div>
@@ -77,7 +77,7 @@
                         <input
                             type="checkbox"
                             :checked="node.$checked"
-                            @change="tree.toggleCheck(node, path)"
+                            @change="handleCheck(node, path, tree)"
                         />
                     </div>
                     <b v-if="node.type === 'directory'">
@@ -243,6 +243,11 @@ export default {
             const parent = this.$refs.tree.getNodeParentByPath(path);
             this.$emit("itemClick", node, parent);
         },
+        handleCheck(node, path, tree) {
+            tree.toggleCheck(node, path)
+            const checked = this.getAllChecked(tree)
+            this.$emit("onCheck", checked)
+        },
         toggleFold(tree, node, path) {
             tree.toggleFold(node, path);
         },
@@ -269,9 +274,16 @@ export default {
             );
             // get the parent of dragNode
             // this.$refs.tree.getNodeParentByPath(store.startPath)
-            console.log("drag", dragNode);
-            console.log("target", targetNode);
+            console.log("drag", dragNode)
+            console.log("target", targetNode)
         },
+        getAllChecked(tree){
+            const checked = [];
+            tree.walkTreeData((node) => {
+                node.$checked && checked.push(node)
+            })
+            return checked
+        }
     },
 };
 </script>

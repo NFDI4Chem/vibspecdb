@@ -176,6 +176,8 @@ const treeFilled = computed(() => {
     return props?.files?.length > 0 && props?.files[0].children?.length > 0;
 });
 
+// console.log('files', props?.files)
+
 const treeOptions = {
     checkable: false,
     deleteable: true,
@@ -183,6 +185,7 @@ const treeOptions = {
     createable: true,
     draggable: false,
     showInfo: true,
+    showTitle: true,
     title: 'Files Tree',
 };
 
