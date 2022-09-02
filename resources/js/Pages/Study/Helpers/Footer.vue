@@ -4,29 +4,30 @@
     >
         <div>Submit Job Process:</div>
         <div class="flex flex-row">
-            <div><strong>Step {{active}}</strong></div>
-            <div class="mx-5 stepper">
-                <Points :n="n" :active="active" />
+            <div>
+                <strong>{{ current.name }}</strong>
+            </div>
+            <div class="ml-5 stepper">
+                <Points :steps="steps" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-
+import { computed } from "vue";
 import Points from "@/Pages/Study/Helpers/Points.vue";
-const props = defineProps(["n", "active"]);
+const props = defineProps(["steps"]);
 
+const current = computed(() => {
+    return props.steps.find((s) => s.status === "current");
+});
 </script>
 
 <style lang="scss" scoped>
-
 .stepper {
-    width: 40px;
-    overflow: hidden;
     display: flex;
     justify-items: center;
     align-items: center;
 }
-
 </style>

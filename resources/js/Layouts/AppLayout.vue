@@ -264,7 +264,7 @@
           </div>
         </div>
 
-        <main class="flex-1 relative overflow-y-auto focus:outline-none">
+        <main class="flex flex-1 flex-col relative overflow-y-auto focus:outline-none">
           <div class="bg-white border-b">
             <div class="px-12">
               <div class="flex justify-between py-5">

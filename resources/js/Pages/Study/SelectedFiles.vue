@@ -94,8 +94,11 @@ const tableConfig = ref({
 
 
 const dataRow = computed(() => {
+  const id_start = (tableConfig.value.currentPage-1)*tableConfig.value.perPage;
+  const id_end = tableConfig.value.currentPage*tableConfig.value.perPage;
+
   return {
-      rows: props.files.slice(0, tableConfig.value.perPage),
+      rows: props.files.slice(id_start, id_end),
       pagination: {
           currentPage: tableConfig.value.currentPage,
           perPage: tableConfig.value.perPage,

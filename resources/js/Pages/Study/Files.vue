@@ -2,50 +2,54 @@
     <div>
         <study-content :project="project" :study="study" current="Files">
             <template #study-section>
-                <div class="divide-y divide-gray-200 sm:col-span-9">
-                    <div v-if="files">
-                        <div
-                            class="min-w-0 flex-1 min-h-fit border-t border-gray-200 lg:flex"
-                        >
-                            <aside class="py-3 px-2 pl-4">
+                <div class="flex flex-1 flex-col justify-between">
+                    <div class="divide-y divide-gray-200 sm:col-span-9 h-full">
+                        <div v-if="files" class="h-full">
+                            <div
+                                class="min-w-0 flex-1 min-h-fit border-t border-gray-200 lg:flex h-full"
+                            >
+                                <aside class="py-3 px-2 pl-4">
+                                    <div
+                                        v-if="treeFilled"
+                                        class="aside-menu relative flex flex-col overflow-y-auto"
+                                    >
+                                        <div class="mr-5 min-w-fit">
+                                            <UniFilesTree
+                                                @itemClick="TreeItemClick"
+                                                :tree="files"
+                                                :options="treeOptions"
+                                                :onRemoveItem="onRemoveItem"
+                                                :onAddChildren="onAddChildren"
+                                                :activeItem="activeItem"
+                                                @onCheck="onFilesTreeCheck"
+                                            />
+                                        </div>
+                                    </div>
+                                </aside>
                                 <div
-                                    v-if="treeFilled"
-                                    class="aside-menu relative flex flex-col overflow-y-auto"
+                                    class="border-r border-gray-200 min-h-fit my-3 "
+                                ></div>
+                                <section
+                                    class="min-w-0 p-6 flex-1 flex flex-col overflow-y-auto lg:order-last"
                                 >
-                                    <div class="mr-5 min-w-fit">
-                                        <UniFilesTree
-                                            @itemClick="TreeItemClick"
-                                            :tree="files"
-                                            :options="treeOptions"
-                                            :onRemoveItem="onRemoveItem"
-                                            :onAddChildren="onAddChildren"
-                                            :activeItem="activeItem"
-                                            @onCheck="onFilesTreeCheck"
+                                    <div v-if="checkedFiles.length > 0">
+                                        <div class="font-bold">
+                                            Selected files:
+                                        </div>
+                                        <SelectedFiles
+                                            :files="checkedFiles"
+                                            @onShowDetails="onShowDetails"
                                         />
                                     </div>
-                                </div>
-                            </aside>
-                            <div
-                                class="border-r border-gray-200 min-h-fit my-3"
-                            ></div>
-                            <section
-                                class="min-w-0 p-6 flex-1 flex flex-col overflow-y-auto lg:order-last"
-                            >
-                                <div v-if="checkedFiles.length > 0">
-                                    <div class="font-bold">Selected files:</div>
-                                    <SelectedFiles
-                                        :files="checkedFiles"
-                                        @onShowDetails="onShowDetails"
-                                    />
-                                </div>
-                                <div v-else>
-                                    <div>No files were selected</div>
-                                </div>
-                            </section>
+                                    <div v-else>
+                                        <div>No files were selected</div>
+                                    </div>
+                                </section>
+                            </div>
                         </div>
                     </div>
+                    <Footer :steps="steps" />
                 </div>
-                <Footer :n="3" :active="1" />
             </template>
         </study-content>
     </div>
@@ -132,6 +136,12 @@ const displaySelected = (file) => {
         showChildsAPI(file);
     }
 };
+
+const steps = [
+    { name: "Step 1", href: "#", status: "current" },
+    { name: "Step 2", href: "#", status: "" },
+    { name: "Step 3", href: "#", status: "" },
+];
 </script>
 
 <style lang="scss" scoped>
@@ -139,5 +149,4 @@ const displaySelected = (file) => {
     min-width: 300px;
     overflow-x: auto;
 }
-
 </style>

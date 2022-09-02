@@ -2,7 +2,7 @@
   <div>
     <study-layout :project="project" :study="study">
       <template #scontent>
-        <div class="bg-white shadow-md rounded-lg">
+        <div class="bg-white shadow-md rounded-lg flex flex-col flex-1">
           <div class="md:hidden">
             <label for="tabs" class="sr-only">Select a tab</label>
             <select class="block w-full focus:ring-sky-500 focus:border-sky-500 border-gray-300 rounded-md">
