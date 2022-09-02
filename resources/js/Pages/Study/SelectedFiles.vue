@@ -7,6 +7,7 @@
         :title="title"
         :style="style"
         class="m-3"
+        :mobileHide="[2,3]"
         @onPaginationChange="onPaginationChange"
         :detailSlot="detailSlot"
     />
