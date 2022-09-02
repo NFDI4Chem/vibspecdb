@@ -98,6 +98,30 @@ class StudyController extends Controller
     }
 
 
+    public function Models(Request $request, Study $study)
+    {
+        $models = [
+            [
+                'id' => 1,
+                'name' => 'Image Negative',
+                'description' => 'Creates negative view of the image',
+                'href' => '#',
+                'price' => '$256',
+                'options' => '8 colors',
+                'imageSrc' => '/imgs/uploading/UploadingIcon.png',
+                'imageAlt' => 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
+            ],
+        ];
+
+        return Inertia::render('Study/Models', [
+            'study' => $study,
+            'project' => $study->project,
+            'models' => $models
+        ]);
+
+    }
+
+
     public function Files(Request $request, Study $study)
     {
 

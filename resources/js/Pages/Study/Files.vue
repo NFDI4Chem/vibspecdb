@@ -27,7 +27,7 @@
                                     </div>
                                 </aside>
                                 <div
-                                    class="border-r border-gray-200 min-h-fit my-3 "
+                                    class="border-r border-gray-200 min-h-fit my-3"
                                 ></div>
                                 <section
                                     class="min-w-0 p-6 flex-1 flex flex-col overflow-y-auto lg:order-last"
@@ -137,11 +137,17 @@ const displaySelected = (file) => {
     }
 };
 
-const steps = [
-    { name: "Step 1", href: "#", status: "current" },
-    { name: "Step 2", href: "#", status: "" },
-    { name: "Step 3", href: "#", status: "" },
-];
+const link_url = {
+    files: `/studies/${props?.study?.id}/files`,
+    models: `/studies/${props?.study?.id}/models`,
+    jobs: `/studies/${props?.study?.id}/jobs`,
+}
+
+const steps = computed(() => [
+    { name: "Step 1: select files to process", href: link_url.files, status: "current" },
+    { name: "Step 2: select model to process", href: link_url.models, status: "" },
+    { name: "Step 3: view job details", href: link_url.jobs, status: "" },
+]);
 </script>
 
 <style lang="scss" scoped>

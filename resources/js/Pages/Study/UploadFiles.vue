@@ -2,8 +2,8 @@
     <div>
         <study-content :project="project" :study="study" current="Upload Files">
             <template #study-section>
-                <div class="divide-y divide-gray-200 sm:col-span-9">
-                    <div v-if="files">
+                <div class="divide-y divide-gray-200 sm:col-span-9 h-full">
+                    <div v-if="files" class="h-full">
                         <nav
                             v-if="selectTreeFolder"
                             class="flex p-3 w-full overflow-hidden cursor-pointer select-none"
@@ -45,7 +45,7 @@
                             </ol>
                         </nav>
                         <div
-                            class="flex-1 border-t border-gray-200 xl:flex px-1 py-3 height-limited"
+                            class="h-full  border-t border-gray-200 xl:flex px-1 py-3 pb-12 height-limited"
                         >
                             <aside class="py-1 px-4" v-if="treeFilled">
                                 <div
@@ -63,8 +63,11 @@
                                     </div>
                                 </div>
                             </aside>
+                            <div
+                                class="border-r border-gray-200 min-h-fit my-3 "
+                            ></div>
                             <section
-                                class="min-w-0 px-5 py-5 flex-1 flex flex-col overflow-y-auto lg:order-last h-full xl:border-l border-gray-200"
+                                class="min-w-0 px-5 py-5 flex-1 flex flex-col overflow-y-auto lg:order-last h-full"
                                 ref="sectionRef"
                             >
                                 <div

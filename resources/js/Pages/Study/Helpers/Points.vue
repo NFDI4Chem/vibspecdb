@@ -29,8 +29,8 @@
                         <div class="h-0.5 w-full bg-teal-600" />
                     </div>
                     <a
-                        href="#"
-                        class="relative flex h-4 w-4 items-center justify-center rounded-full bg-teal-600 hover:bg-teal-900"
+                        :href="step.href"
+                        class="pointer-events-none relative flex h-4 w-4 items-center justify-center rounded-full bg-teal-600 hover:bg-teal-900"
                     >
                         <span class="sr-only">{{ step.name }}</span>
                     </a>
@@ -46,8 +46,8 @@
                         <div class="h-0.5 w-full bg-gray-200" />
                     </div>
                     <a
-                        href="#"
-                        class="relative flex h-4 w-4 items-center justify-center rounded-full border-2 border-teal-600 bg-white"
+                        :href="step.href"
+                        class="pointer-events-none relative flex h-4 w-4 items-center justify-center rounded-full border-2 border-teal-600 bg-white"
                         aria-current="step"
                     >
                         <span
@@ -65,8 +65,8 @@
                         <div class="h-0.5 w-full bg-gray-200" />
                     </div>
                     <a
-                        href="#"
-                        class="group relative flex h-4 w-4 items-center justify-center rounded-full border-2 border-gray-300 bg-white hover:border-gray-400"
+                        :href="step.href"
+                        class="pointer-events-none group relative flex h-4 w-4 items-center justify-center rounded-full border-2 border-gray-300 bg-white hover:border-gray-400"
                     >
                         <span
                             class="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300"
