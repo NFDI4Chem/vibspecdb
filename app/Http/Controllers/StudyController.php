@@ -28,7 +28,7 @@ class StudyController extends Controller
 
     public function show(Request $request, Study $study)
     {
-        return Inertia::render('Study/About', [
+        return Inertia::render('Study/About/About', [
             'study' => $study,
             'project' => $study->project
         ]);
@@ -54,12 +54,10 @@ class StudyController extends Controller
 
     public function submitJob(Request $request, Study $study)
     {
-        $files = [];
-
-        return Inertia::render('Study/SubmitJob', [
+        return Inertia::render('Study/SubmitJob/SubmitJob', [
             'study' => $study,
             'project' => $study->project,
-            'files' => $files
+            // 'files' => $files
         ]);
 
     }
@@ -68,7 +66,7 @@ class StudyController extends Controller
     {
         $files = $this->getStudyFiles($study);
 
-        return Inertia::render('Study/UploadFiles', [
+        return Inertia::render('Study/UploadFiles/UploadFiles', [
             'study' => $study,
             'project' => $study->project,
             'files' => $files
@@ -89,7 +87,7 @@ class StudyController extends Controller
     {
         $jobs = [];
 
-        return Inertia::render('Study/Jobs', [
+        return Inertia::render('Study/Jobs/Jobs', [
             'study' => $study,
             'project' => $study->project,
             'jobs' => $jobs
@@ -113,7 +111,7 @@ class StudyController extends Controller
             ],
         ];
 
-        return Inertia::render('Study/Models', [
+        return Inertia::render('Study/SelectModel/Models', [
             'study' => $study,
             'project' => $study->project,
             'models' => $models
@@ -128,7 +126,7 @@ class StudyController extends Controller
         $tree = $this->getStudyFiles($study);
 
 
-        return Inertia::render('Study/Files', [
+        return Inertia::render('Study/Files/Files', [
             'study' => $study,
             'project' => $study->project,
             'files' => $tree

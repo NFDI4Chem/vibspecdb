@@ -32,12 +32,12 @@
                                 <section
                                     class="min-w-0 p-6 flex-1 flex flex-col overflow-y-auto lg:order-last"
                                 >
-                                    <div v-if="checkedFiles.length > 0">
+                                    <div v-if="selectedFiles.length > 0">
                                         <div class="font-bold">
                                             Selected files:
                                         </div>
-                                        <SelectedFiles
-                                            :files="checkedFiles"
+                                        <FilesTable
+                                            :files="selectedFiles"
                                             @onShowDetails="onShowDetails"
                                         />
                                     </div>
@@ -58,11 +58,12 @@
 <script setup>
 import { ChevronRightIcon, HomeIcon } from "@heroicons/vue/solid";
 import StudyContent from "@/Pages/Study/Content.vue";
-import SelectedFiles from "@/Pages/Study/SelectedFiles.vue";
+import FilesTable from "@/Pages/Study/Files/FilesTable.vue";
 import Footer from "@/Pages/Study/Helpers/Footer.vue";
 
 import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue";
 import { useFiles } from "@/VueComposable/useFiles";
+import { selectedFiles } from "@/VueComposable/store";
 
 import { ref, computed, onMounted, reactive } from "vue";
 
@@ -70,10 +71,11 @@ const props = defineProps(["study", "project", "files"]);
 const { showChildsAPI } = useFiles();
 
 const selectTreeFolder = ref("/");
-const checkedFiles = ref([]);
+
+console.log('selectedFiles', selectedFiles)
 
 const onFilesTreeCheck = (checked) => {
-    checkedFiles.value = checked
+    selectedFiles.value = checked
         .filter((f) => f.type === "file")
         .map((f) => {
             return {
@@ -94,7 +96,7 @@ const onFilesTreeCheck = (checked) => {
 };
 
 const onShowDetails = (rowId) => {
-    checkedFiles.value = checkedFiles.value.map((item) => {
+    selectedFiles.value = selectedFiles.value.map((item) => {
         return rowId === item.id
             ? {
                   ...item,

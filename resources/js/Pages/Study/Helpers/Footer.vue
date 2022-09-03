@@ -2,9 +2,9 @@
     <div
         class="mt-2 px-5 h-10 w-full border-t border-gray-200 flex flex-row justify-end md:justify-between items-center"
     >
-        <div class="hidden md:block">Submit Job Process</div>
-        <div class="flex flex-row justify-end">
-            <div class="whitespace-nowrap text-clip text-ellipsis desc-footer">
+        <div class="hidden md:block flex-none">Submit Job Process</div>
+        <div class="flex flex-row justify-end grow truncate">
+            <div class="whitespace-nowrap text-clip text-ellipsis desc-footer hidden lg:block">
                 <strong>{{ current?.name }}</strong>
             </div>
             <div class="ml-5 stepper">
@@ -31,8 +31,8 @@ const current = computed(() => {
     align-items: center;
 }
 .desc-footer {
-    max-width: 30%;
-    overflow: hidden;
-    text-overflow: ellipsis ellipsis;
+    // width: 100%;
+    // overflow: hidden;
+    // text-overflow: ellipsis ellipsis;
 }
 </style>

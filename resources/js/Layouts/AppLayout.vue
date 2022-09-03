@@ -7,7 +7,7 @@
         class="md:flex flex-col min-h-screen hidden" 
         :class="{
           'w-14': !sidebarOpen,
-          'w-64': sidebarOpen,
+          'w-64 min-width': sidebarOpen,
         }"
       >
         <div
@@ -39,7 +39,7 @@
                     <span class="min-w-100 rounded-md">
                       <button
                         type="button"
-                        class="text-base flex min-w-full py-4 items-center px-3 py-2 border font-light leading-4 font-large rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition"
+                        class="text-base flex min-w-full py-4 items-center px-3 border font-light leading-4 font-large rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition"
                       >
                         {{ $page.props.user.current_team.name }}
 
@@ -351,3 +351,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.min-width {
+  min-width: 16rem;
+}
+</style>
