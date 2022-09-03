@@ -1,9 +1,12 @@
 import { usePage } from "@inertiajs/inertia-vue3";
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export const useFiles = () => {
 
   const study = computed(() => usePage().props.value.study)
+
+  const vueFiles = ref([])
+  // const vueSelectedFiles = ref([])
 
   const showChildsAPI = (file) => {
     file.loading = true;
@@ -15,6 +18,8 @@ export const useFiles = () => {
         });
   };
   return {
-    showChildsAPI
+    showChildsAPI,
+    vueFiles,
+    // vueSelectedFiles
   }
 }

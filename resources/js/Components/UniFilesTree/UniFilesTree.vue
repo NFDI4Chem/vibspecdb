@@ -213,6 +213,11 @@ export default {
             required: false,
             default: () => {},
         },
+        checked: {
+            type: Array,
+            required: false,
+            default: () => [],
+        },
         activeItem: {
             type: Object,
             required: false,
@@ -237,6 +242,9 @@ export default {
     },
     data() {
         return {};
+    },
+    mounted() {
+        this.setChecked();
     },
     methods: {
         onItemClick(node, path, tree) {
@@ -283,6 +291,12 @@ export default {
                 node.$checked && checked.push(node)
             })
             return checked
+        },
+        setChecked() {
+            const tree = this.$refs.tree;
+            tree.walkTreeData((node) => {
+                if (this.checked.includes(node.id)) { node.$checked = true; }
+            })
         }
     },
 };

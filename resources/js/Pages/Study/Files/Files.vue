@@ -4,7 +4,7 @@
             <template #study-section>
                 <div class="flex flex-1 flex-col justify-between">
                     <div class="divide-y divide-gray-200 sm:col-span-9 h-full">
-                        <div v-if="files" class="h-full">
+                        <div v-if="vueFiles" class="h-full">
                             <div
                                 class="min-w-0 flex-1 min-h-fit border-t border-gray-200 lg:flex h-full"
                             >
@@ -16,12 +16,13 @@
                                         <div class="mr-5 min-w-fit">
                                             <UniFilesTree
                                                 @itemClick="TreeItemClick"
-                                                :tree="files"
+                                                :tree="vueFiles"
                                                 :options="treeOptions"
                                                 :onRemoveItem="onRemoveItem"
                                                 :onAddChildren="onAddChildren"
                                                 :activeItem="activeItem"
                                                 @onCheck="onFilesTreeCheck"
+                                                :checked="checkedFiles"
                                             />
                                         </div>
                                     </div>
@@ -68,11 +69,11 @@ import { selectedFiles } from "@/VueComposable/store";
 import { ref, computed, onMounted, reactive } from "vue";
 
 const props = defineProps(["study", "project", "files"]);
-const { showChildsAPI } = useFiles();
+const { showChildsAPI, vueFiles } = useFiles();
 
-const selectTreeFolder = ref("/");
+vueFiles.value = computed(() => props.files);
+const checkedFiles = computed(() => selectedFiles.value.map((f) => f.id));
 
-console.log('selectedFiles', selectedFiles)
 
 const onFilesTreeCheck = (checked) => {
     selectedFiles.value = checked
@@ -116,8 +117,8 @@ const treeFilled = computed(() => {
     return props?.files?.length > 0 && props?.files[0].children?.length > 0;
 });
 
-const onRemoveItem = (tree, node, path) => {};
-const onAddChildren = (node) => {};
+const onRemoveItem = () => {};
+const onAddChildren = () => {};
 const activeItem = computed(() => {
     return {};
 });
