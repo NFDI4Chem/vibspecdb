@@ -106,9 +106,27 @@ class StudyController extends Controller
                 'href' => '#',
                 'price' => '$256',
                 'options' => '8 colors',
-                'imageSrc' => '/imgs/uploading/UploadingIcon.png',
+                'imageSrc' => '/imgs/models/negative.jpg',
+                'disabled' => FALSE,
                 'imageAlt' => 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
+                'input' => 'JOBID/InputData',
+                'output' => 'JOBID/OutputData',
+                'startscript' => 'print_r(\'test here\')',
             ],
+            [
+                'id' => 2,
+                'name' => 'Sample model',
+                'description' => 'Some sample model',
+                'href' => '#',
+                'price' => '$256',
+                'options' => '8 colors',
+                'imageSrc' => '/imgs/models/gears.jpg',
+                'disabled' => TRUE,
+                'imageAlt' => 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
+                'input' => 'JOBID/InputData',
+                'output' => 'JOBID/OutputData',
+                'startscript' => 'print_r(\'test here\')',
+            ]
         ];
 
         return Inertia::render('Study/SelectModel/Models', [

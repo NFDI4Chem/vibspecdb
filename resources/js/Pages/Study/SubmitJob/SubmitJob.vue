@@ -4,34 +4,22 @@
             <template #study-section>
                 <div class="flex flex-1 flex-col justify-between">
                     <div class="divide-y divide-gray-200 sm:col-span-9 h-full">
-                        <div class="h-full">
-                            <div
-                                class="flex-1 min-h-fit border-t border-gray-200 flex-row h-full"
-                            >
-                                <div
-                                    class="p-6 flex-1 flex flex-col overflow-y-auto lg:order-last"
+                                            <div class="flex justify-start p-2 px-6 flex-row">
+                        <div class="font-bold">Check Job overview and submit Job</div>
+                    </div>
+                        <div class="py-3 px-6">
+                            <JobPreview
+                                :files="selectedFiles"
+                                @onShowDetails="onShowDetails"
+                                :model="selectedModel"
+                            />
+                            <div class="grow flex flex-1 flex-row justify-end my-3">
+                                <button
+                                    :disabled="!selectedFiles.length || !selectedModel"
+                                    class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-5 rounded disabled:opacity-25"
                                 >
-                                    <div v-if="selectedFiles?.length" class="flex-1 flex-row">
-                                        <div>Selected files: </div>
-                                        <FilesTable
-                                            :files="selectedFiles"
-                                            @onShowDetails="onShowDetails"
-                                        />
-                                    </div>
-                                    <div v-else>
-                                        <div>No files selected</div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="p-6 flex-1 flex flex-col overflow-y-auto lg:order-last"
-                                >
-                                    <div v-if="models" class="flex-1 flex-row">
-                                        <!-- <ModelItems :items="models" /> -->
-                                    </div>
-                                    <div v-else>
-                                        <div>No models selected</div>
-                                    </div>
-                                </div>
+                                    Submit Job
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -44,49 +32,17 @@
 
 <script setup>
 import StudyContent from "@/Pages/Study/Content.vue";
-
+import JobPreview from "@/Pages/Study/SubmitJob/JobPreview.vue";
 import Footer from "@/Pages/Study/Helpers/Footer.vue";
 
-import { selectedFiles } from "@/VueComposable/store";
-import FilesTable from "@/Pages/Study/Files/FilesTable.vue";
+import { selectedFiles, onShowDetails, selectedModel } from "@/VueComposable/store";
+import { currentStudyStep, StudySubmitSteps } from "@/VueComposable/store";
 
-import { ref, computed, onMounted, reactive } from "vue";
+import { computed } from "vue";
 const props = defineProps(["study", "project", "models"]);
 
-const link_url = {
-    files: `/studies/${props?.study?.id}/files`,
-    models: `/studies/${props?.study?.id}/models`,
-    jobs: `/studies/${props?.study?.id}/jobs`,
-};
-
-const steps = computed(() => [
-    {
-        name: "Step 1: select files to process",
-        href: link_url.files,
-        status: "",
-    },
-    {
-        name: "Step 2: select model to process del to process",
-        href: link_url.models,
-        status: "",
-    },
-    {
-        name: "Step 3: view job details & submit",
-        href: link_url.jobs,
-        status: "current",
-    },
-]);
-
-const onShowDetails = (rowId) => {
-    selectedFiles.value = selectedFiles.value.map((item) => {
-        return rowId === item.id
-            ? {
-                  ...item,
-                  detailsOpen: !item?.detailsOpen,
-              }
-            : item;
-    });
-};
+currentStudyStep.value = 3;
+const steps = computed(() => StudySubmitSteps(props?.study));
 
 </script>
 

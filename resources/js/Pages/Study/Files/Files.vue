@@ -64,7 +64,8 @@ import Footer from "@/Pages/Study/Helpers/Footer.vue";
 
 import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue";
 import { useFiles } from "@/VueComposable/useFiles";
-import { selectedFiles } from "@/VueComposable/store";
+import { selectedFiles, onShowDetails } from "@/VueComposable/store";
+import { currentStudyStep, StudySubmitSteps } from "@/VueComposable/store";
 
 import { ref, computed, onMounted, reactive } from "vue";
 
@@ -73,7 +74,6 @@ const { showChildsAPI, vueFiles } = useFiles();
 
 vueFiles.value = computed(() => props.files);
 const checkedFiles = computed(() => selectedFiles.value.map((f) => f.id));
-
 
 const onFilesTreeCheck = (checked) => {
     selectedFiles.value = checked
@@ -94,17 +94,6 @@ const onFilesTreeCheck = (checked) => {
                 details: {},
             };
         });
-};
-
-const onShowDetails = (rowId) => {
-    selectedFiles.value = selectedFiles.value.map((item) => {
-        return rowId === item.id
-            ? {
-                  ...item,
-                  detailsOpen: !item?.detailsOpen,
-              }
-            : item;
-    });
 };
 
 const TreeItemClick = (file, parent) => {
@@ -140,17 +129,8 @@ const displaySelected = (file) => {
     }
 };
 
-const link_url = {
-    files: `/studies/${props?.study?.id}/files`,
-    models: `/studies/${props?.study?.id}/models`,
-    jobs: `/studies/${props?.study?.id}/jobs`,
-}
-
-const steps = computed(() => [
-    { name: "Step 1: select files to process", href: link_url.files, status: "current" },
-    { name: "Step 2: select model to process", href: link_url.models, status: "" },
-    { name: "Step 3: view job details", href: link_url.jobs, status: "" },
-]);
+currentStudyStep.value = 1;
+const steps = computed(() => StudySubmitSteps(props?.study));
 </script>
 
 <style lang="scss" scoped>
