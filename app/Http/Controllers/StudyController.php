@@ -85,7 +85,28 @@ class StudyController extends Controller
 
     public function Jobs(Request $request, Study $study)
     {
-        $jobs = [];
+        $jobs =  [
+            [
+                'id' => 1,
+                'uid' => 'xxxyyyzzz1',
+                'description' => 'Creates negative view of the image',
+                'files' => ['file1path', 'file2path'],
+                'model' => 1,
+                'created_at' => 'CreatedAt',
+                'updated_at' => 'UpdatedAt',
+                'status' => 'completed'
+            ],
+            [
+                'id' => 2,
+                'uid' => 'xxxyyyzzz2',
+                'description' => 'Creates default job',
+                'files' => ['__file1path', '__file2path'],
+                'model' => 2,
+                'created_at' => 'CreatedAt',
+                'updated_at' => 'UpdatedAt',
+                'status' => 'running'
+            ],
+        ];
 
         return Inertia::render('Study/Jobs/Jobs', [
             'study' => $study,

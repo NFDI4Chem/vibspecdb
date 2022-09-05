@@ -15,7 +15,7 @@
 
 <script setup>
 import { UniTable } from "@/packages/serviceappvuecomponents/src";
-import FileTableDetails from "@/Pages/Study/Files/FileTableDetails.vue";
+import JobsTableDetails from "@/Pages/Study/Jobs/JobsTableDetails.vue";
 import { computed, reactive, ref } from "vue";
 
 import {
@@ -25,14 +25,15 @@ import {
     PencilAltIcon,
 } from "@heroicons/vue/outline";
 
-const props = defineProps(["files"]);
+const props = defineProps(["jobs"]);
 const emit = defineEmits(['onShowDetails'])
 
 const title = "Base Table Template";
-const detailSlot = FileTableDetails;
+const detailSlot = JobsTableDetails;
 
 const header = {
-    name: "Name",
+    id: "ID",
+    status: "Status",
     created_at: "CreatedAt",
     updated_at: "UpdatedAt",
 };
@@ -99,11 +100,11 @@ const dataRow = computed(() => {
   const id_end = tableConfig.value.currentPage*tableConfig.value.perPage;
 
   return {
-      rows: props.files.slice(id_start, id_end),
+      rows: props.jobs.slice(id_start, id_end),
       pagination: {
           currentPage: tableConfig.value.currentPage,
           perPage: tableConfig.value.perPage,
-          totalItems: props?.files?.length,
+          totalItems: props?.jobs?.length,
           options: [1, 5, 10, 25, 50, 100],
       },
       actions: [

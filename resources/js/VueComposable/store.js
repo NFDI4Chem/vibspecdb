@@ -4,6 +4,7 @@ export const sidebarOpen = ref(true);
 export const selectedFiles = ref([]);
 export const selectedModel = ref(-1);
 export const currentStudyStep = ref(0);
+export const jobs = ref([]);
 
 const link_url = (study) => {
     return {
@@ -40,6 +41,17 @@ export const onShowDetails = (rowId) => {
             ? {
                   ...item,
                   detailsOpen: !item?.detailsOpen,
+              }
+            : item;
+    });
+}
+export const onShowJobDetails = (rowId) => {
+    jobs.value = jobs.value.map((item) => {
+        return rowId === item.id
+            ? {
+                  ...item,
+                  detailsOpen: !item?.detailsOpen,
+                  details: {} // TODO, bug, needs to be added to not break the table on details; 
               }
             : item;
     });
