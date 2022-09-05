@@ -1,60 +1,115 @@
 <template>
-  <div>
-    <study-layout :project="project" :study="study">
-      <template #scontent>
-        <div class="bg-white shadow-md rounded-lg flex flex-col flex-1">
-          <div class="md:hidden">
-            <label for="tabs" class="sr-only">Select a tab</label>
-            <select class="block w-full focus:ring-sky-500 focus:border-sky-500 border-gray-300 rounded-md">
-              <option v-for="tab in subNavigation" :key="tab.name" :selected="tab.name === current">{{ tab.name }}</option>
-            </select>
-          </div>
-          <div class="hidden md:block">
-            <div class="border-b border-gray-200 pl-4">
-              <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                <Link v-for="tab in subNavigation" :key="tab.name" :href="route(tab.route, [study.id])" :class="[tab.name == current ? 'border-sky-500 text-sky-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm']" :aria-current="tab.name === current ? 'page' : undefined">
-                  <component :is="tab.icon" :class="[tab.name === current ? 'text-sky-600' : 'text-gray-400 group-hover:text-gray-500', '-ml-0.5 mr-2 h-5 w-5']" aria-hidden="true" />
-                  <span>{{ tab.name }}</span>
-                </Link>
-              </nav>
-            </div>
-          </div>
-          <slot name="study-section"></slot>
-        </div>
-      </template>
-    </study-layout>
-  </div>
+    <div>
+        <study-layout :project="project" :study="study">
+            <template #scontent>
+                <div class="bg-white shadow-md rounded-lg flex flex-col flex-1">
+                    <div class="md:hidden">
+                        <label for="tabs" class="sr-only">Select a tab</label>
+                        <select
+                            class="block w-full focus:ring-sky-500 focus:border-sky-500 border-gray-300 rounded-md"
+                        >
+                            <option
+                                v-for="tab in subNavigation"
+                                :key="tab.name"
+                                :selected="tab.name === current"
+                            >
+                                {{ tab.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="border-b border-gray-200 pl-4">
+                            <nav
+                                class="-mb-px flex space-x-8"
+                                aria-label="Tabs"
+                            >
+                                <Link
+                                    v-for="tab in subNavigation"
+                                    :key="tab.name"
+                                    :href="route(tab.route, [study.id])"
+                                    :class="[
+                                        tab.name == current
+                                            ? 'border-sky-500 text-sky-600'
+                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                                        'group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm',
+                                    ]"
+                                    :aria-current="
+                                        tab.name === current
+                                            ? 'page'
+                                            : undefined
+                                    "
+                                >
+                                    <component
+                                        :is="tab.icon"
+                                        :class="[
+                                            tab.name === current
+                                                ? 'text-sky-600'
+                                                : 'text-gray-400 group-hover:text-gray-500',
+                                            '-ml-0.5 mr-2 h-5 w-5',
+                                        ]"
+                                        aria-hidden="true"
+                                    />
+                                    <span>
+                                      {{ tab.name}}
+                                      <sup class="uppercase">{{uppercase_id(tab?.route)}}</sup>
+                                    </span
+                                    >
+                                </Link>
+                            </nav>
+                        </div>
+                    </div>
+                    <slot name="study-section"></slot>
+                </div>
+            </template>
+        </study-layout>
+    </div>
 </template>
 
 <script>
 import StudyLayout from "@/Pages/Study/Layout.vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import {
-  InformationCircleIcon,
-  FolderOpenIcon,
-  BriefcaseIcon,
-  TemplateIcon,
-  BeakerIcon,
+    InformationCircleIcon,
+    FolderOpenIcon,
+    BriefcaseIcon,
+    TemplateIcon,
+    BeakerIcon,
+    ClipboardListIcon
 } from "@heroicons/vue/outline";
 const subNavigation = [
-  { name: "About", route: "study", icon: InformationCircleIcon },
-  { name: "Upload Files", route: "study.file-upload", icon: FolderOpenIcon },
-  { name: "Files", route: "study.files", icon: FolderOpenIcon },
-  { name: "Select Model", route: "study.models", icon: BeakerIcon },
-  { name: "Submit Job", route: "study.submit-job", icon: TemplateIcon },
-  { name: "Jobs", route: "study.jobs", icon: BriefcaseIcon },
+    { name: "About", route: "study", icon: InformationCircleIcon },
+    { name: "Upload Files", route: "study.file-upload", icon: FolderOpenIcon },
+    { name: "Files", route: "study.files", icon: ClipboardListIcon },
+    { name: "Select Model", route: "study.models", icon: BeakerIcon },
+    { name: "Submit Job", route: "study.submit-job", icon: TemplateIcon },
+    { name: "Jobs", route: "study.jobs", icon: BriefcaseIcon },
 ];
 
 export default {
-  components: {
-    StudyLayout,
-    Link
-  },
-  props: ["study", "project", "current"],
-  setup() {
-    return {
-      subNavigation,
-    };
-  },
+    components: {
+        StudyLayout,
+        Link,
+    },
+    props: ["study", "project", "current"],
+    setup() {
+        return {
+            subNavigation,
+        };
+    },
+};
+</script>
+
+<script setup>
+const uppercase_id = (route) => {
+    switch (route) {
+        case "study.files":
+            return 1;
+        case "study.models":
+            return 2;
+        case "study.submit-job":
+            return 3;
+        default:
+            return "";
+    }
 };
 </script>

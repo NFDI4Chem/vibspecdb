@@ -14,12 +14,12 @@
                                 :model="selectedModel"
                             />
                             <div class="grow flex flex-1 flex-row justify-end my-3">
-                                <button
+                                <JetButton
                                     :disabled="!selectedFiles.length || !selectedModel"
-                                    class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-5 rounded disabled:opacity-25"
+                                    class="bg-teal-600 hover:bg-teal-700 text-white font-bold rounded disabled:opacity-25"
                                 >
                                     Submit Job
-                                </button>
+                                </JetButton>
                             </div>
                         </div>
                     </div>
@@ -31,6 +31,7 @@
 </template>
 
 <script setup>
+import JetButton from "@/Jetstream/Button.vue";
 import StudyContent from "@/Pages/Study/Content.vue";
 import JobPreview from "@/Pages/Study/SubmitJob/JobPreview.vue";
 import Footer from "@/Pages/Study/Helpers/Footer.vue";
