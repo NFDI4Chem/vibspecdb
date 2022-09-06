@@ -136,7 +136,7 @@
         </div>
       </div>
       <div class="flex flex-col flex-1">
-        <div class="sticky top-0 z-9 flex-shrink-0 flex h-16 bg-white shadow border-b" v-if="sidebarOpen">
+        <div class="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow border-b" v-if="sidebarOpen">
           <button
             type="button"
             class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none"
@@ -230,7 +230,7 @@
                   leave-to-class="transform opacity-0 scale-95"
                 >
                   <MenuItems
-                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    class="z-100 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                   >
                     <span v-if="hasAnyPermission(['manage platform'])">
                       <div class="block px-4 py-2 text-xs text-gray-400">Admin</div>
