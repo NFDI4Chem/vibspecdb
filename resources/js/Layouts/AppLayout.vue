@@ -112,9 +112,9 @@
               </div>
               <Link
                 :href="route('dashboard')"
-                class="my-2 text-gray-900 group flex items-center px-2 py-3 text-sm font-medium rounded-md"
+                class="my-2 text-gray-800 group flex items-center px-2 py-3 text-sm font-medium rounded-md"
               >
-                <HomeIcon class="mr-2 h-6 w-6" aria-hidden="true" />
+                <HomeIcon class="mr-0 h-6 w-6" :class="{'sm:mr-2': sidebarOpen}" aria-hidden="true" />
                 <div v-if="sidebarOpen" class="text-lg mt-1">Dashboard</div> 
               </Link>
             </nav>
@@ -252,7 +252,7 @@
 
         <main class="flex flex-1 flex-col relative overflow-y-auto focus:outline-none">
           <div class="bg-white border-b">
-            <div class="px-12">
+            <div class="px-8 sm:px-12">
               <div class="flex justify-between py-5">
                 <slot name="header"></slot>
               </div>

@@ -30,10 +30,10 @@
                         </ol>
                     </nav>
                     <div
-                        class="flex flex-row justify-between items-center my-2"
+                        class="flex flex-row justify-between items-center my-2 mt-4"
                     >
                         <h2
-                            class="mt-2 text-2xl font-bold break-words leading-7 text-gray-900 sm:text-3xl"
+                            class="text-2xl font-bold break-words leading-7 text-gray-900 sm:text-3xl"
                         >
                             {{ study.name }}
                         </h2>
@@ -45,10 +45,10 @@
                                 class="flex flex-row items-center flex-nowrap"
                             >
                                 <Cog6ToothIcon
-                                    class="h-5 w-5 text-gray-400 group-hover:text-teal-500"
+                                    class="h-6 w-6 sm:h-5 sm:w-5 text-gray-800 sm:text-gray-400  group-hover:text-teal-500"
                                     aria-hidden="true"
                                 />
-                                <div class="ml-2 mt-0.5 group-hover:text-teal-500">Study Settings</div>
+                                <div class="ml-2 mt-0.5 group-hover:text-teal-500 hidden sm:block">Study Settings</div>
                             </Link>
                         </div>
                     </div>

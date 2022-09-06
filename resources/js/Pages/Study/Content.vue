@@ -126,8 +126,7 @@ const uppercase_id = (route) => {
 const onMobileSelect = (e) => {
     const selected = e?.target?.value
     const tab = subNavigation.find((t) => t?.name === selected)
-    Inertia.visit(route(tab.route, [props?.study?.id]))
-    
+    Inertia.visit(route(tab.route, [props?.study?.id])) 
 }
 
 </script>
