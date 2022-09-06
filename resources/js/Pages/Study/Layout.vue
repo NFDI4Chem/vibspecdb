@@ -85,7 +85,7 @@
                             <a
                                 class="cursor-pointer inline-flex items-center"
                                 @click="toggleDetails"
-                                ><ExclamationCircleIcon
+                                ><IdentificationIcon
                                     class="h-5 w-5 text-gray-400 group-hover:text-gray-500"
                                     aria-hidden="true"
                                 />
@@ -121,21 +121,22 @@ import {
     LinkIcon,
     MapPinIcon,
     PencilIcon,
-    ExclamationCircleIcon,
+    LockClosedIcon
 } from "@heroicons/vue/24/solid";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
     GlobeAltIcon,
-    LockClosedIcon,
     Cog6ToothIcon,
+    IdentificationIcon
 } from "@heroicons/vue/24/outline";
+
+
 
 export default {
     components: {
         Link,
         AppLayout,
         StudyDetails,
-        ExclamationCircleIcon,
         Menu,
         MenuButton,
         MenuItem,
@@ -152,6 +153,7 @@ export default {
         GlobeAltIcon,
         LockClosedIcon,
         Cog6ToothIcon,
+        IdentificationIcon
     },
     props: ["study", "project"],
     setup() {
