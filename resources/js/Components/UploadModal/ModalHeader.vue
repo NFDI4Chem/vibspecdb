@@ -54,7 +54,7 @@
                 class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
             >
                 <span class="sr-only">Show panel</span>
-                <ArrowsExpandIcon class="h-6 w-6" aria-hidden="true" />
+                <ArrowsPointingOutIcon class="h-6 w-6" aria-hidden="true" />
             </button>
             <button
                 @click="closeModal()"
@@ -72,10 +72,10 @@
 import RadialProgressBar from "vue3-radial-progress";
 import {
     MinusCircleIcon,
-    ArrowsExpandIcon,
+    ArrowsPointingOutIcon,
     XCircleIcon,
     CreditCardIcon,
-} from "@heroicons/vue/outline";
+} from "@heroicons/vue/24/outline";
 
 const props = defineProps({
     progress: Number,

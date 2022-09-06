@@ -20,7 +20,7 @@
             @click="sidebarOpen = !sidebarOpen"
           >
             <span class="sr-only">Open sidebar</span>
-            <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
+            <Bars3Icon class="h-6 w-6" aria-hidden="true" />
           </button>
           <div class="flex items-center flex-shrink-0 px-4" v-if="sidebarOpen">
             <Link :href="route('dashboard')">
@@ -143,7 +143,7 @@
             @click="sidebarOpen = !sidebarOpen"
           >
             <span class="sr-only">Open sidebar</span>
-            <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
+            <Bars3Icon class="h-6 w-6" aria-hidden="true" />
           </button>
           <div class="flex-1 px-4 flex justify-between">
             <div class="flex-1 flex">
@@ -153,7 +153,7 @@
                   <div
                     class="absolute inset-y-0 left-0 flex items-center pointer-events-none"
                   >
-                    <SearchIcon class="h-5 w-5" aria-hidden="true" />
+                    <MagnifyingGlassIcon class="h-5 w-5" aria-hidden="true" />
                   </div>
                   <input
                     id="search-field"
@@ -297,10 +297,10 @@ import {
 } from "@headlessui/vue";
 import {
   BellIcon,
-  MenuAlt2Icon,
-  XIcon,
-} from "@heroicons/vue/outline";
-import { SearchIcon } from "@heroicons/vue/solid";
+  Bars3Icon,
+  XMarkIcon,
+} from "@heroicons/vue/24/outline";
+import { MagnifyingGlassIcon } from "@heroicons/vue/24/solid";
 import { sidebarOpen } from "@/VueComposable/store";
 
 export default {
@@ -320,9 +320,9 @@ export default {
     TransitionChild,
     TransitionRoot,
     BellIcon,
-    MenuAlt2Icon,
-    SearchIcon,
-    XIcon,
+    Bars3Icon,
+    MagnifyingGlassIcon,
+    XMarkIcon,
   },
   props: {
     title: String,

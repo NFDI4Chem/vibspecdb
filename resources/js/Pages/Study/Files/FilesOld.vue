@@ -220,11 +220,11 @@ import { Dropzone } from "dropzone";
 import StudyContent from "@/Pages/Study/Content.vue";
 import FileDetails from "@/Shared/FileDetails.vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { FolderIcon, DocumentTextIcon } from "@heroicons/vue/solid";
+import { FolderIcon, DocumentTextIcon } from "@heroicons/vue/24/solid";
 import { Inertia } from '@inertiajs/inertia';
 import axiosRetry from "axios-retry";
 
-import {ChevronRightIcon, HomeIcon} from "@heroicons/vue/solid";
+import {ChevronRightIcon, HomeIcon} from "@heroicons/vue/24/solid";
 
 import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue"; 
 

@@ -143,12 +143,12 @@ import {
   ChevronRightIcon,
   CurrencyDollarIcon,
   LinkIcon,
-  LocationMarkerIcon,
+  MapPinIcon,
   PencilIcon,
   ExclamationCircleIcon,
-} from "@heroicons/vue/solid";
+} from "@heroicons/vue/24/solid";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import {} from "@heroicons/vue/solid";
+import {} from "@heroicons/vue/24/solid";
 
 export default {
   components: {
@@ -167,7 +167,7 @@ export default {
     ChevronRightIcon,
     CurrencyDollarIcon,
     LinkIcon,
-    LocationMarkerIcon,
+    MapPinIcon,
     PencilIcon,
   },
   props: ["study", "project"],

@@ -7,8 +7,7 @@
             <h2 class="text-lg">Studies</h2>
             <div class="mt-2 text-sm text-gray-700">
               <div class="max-w-2xl">
-                Each project may house a variety of studies. Studies can be versioned,
-                command invocations, and metrics.
+                Each project may house a variety of studies.
               </div>
             </div>
           </div>

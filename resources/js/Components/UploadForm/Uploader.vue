@@ -115,7 +115,7 @@ import RadialProgressBar from "vue3-radial-progress";
 import {
     ExternalLinkIcon,
     InformationCircleIcon,
-} from "@heroicons/vue/outline";
+} from "@heroicons/vue/24/outline";
 
 import { useStore } from "vuex";
 

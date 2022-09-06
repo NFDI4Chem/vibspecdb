@@ -36,7 +36,7 @@ import {
     SwitchVerticalIcon,
     XCircleIcon,
     PlusCircleIcon,
-} from "@heroicons/vue/outline";
+} from "@heroicons/vue/24/outline";
 
 export default {
     components: {

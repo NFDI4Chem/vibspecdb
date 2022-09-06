@@ -18,7 +18,7 @@ import {
   TrashIcon,
   PlusCircleIcon,
   PencilAltIcon,
-} from "@heroicons/vue/outline";
+} from "@heroicons/vue/24/outline";
 
 const title = "Base Table Template";
 

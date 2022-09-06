@@ -109,7 +109,7 @@
                     />
                 </div>
                 <div class="flex flex-row">
-                    <PlusSmIcon
+                    <PlusSmallIcon
                         v-if="!node.edit && node.type === 'directory' && options.createable"
                         class="text-gray-500 w-6"
                         @click="addChildren(node)"
@@ -127,7 +127,7 @@
                         "
                         class="text-gray-500 w-4"
                     />
-                    <PlusSmIcon
+                    <PlusSmallIcon
                         v-if="node.edit"
                         class="text-gray-400 w-6 rotate-45 mr-[-2px]"
                         @click="node.edit = false"
@@ -172,7 +172,7 @@ import { Tree, Fold, Draggable, Check } from "he-tree-vue";
 
 import {
     PencilIcon,
-    PlusSmIcon,
+    PlusSmallIcon,
     FolderIcon,
     DocumentTextIcon,
     ChevronDownIcon,
@@ -180,7 +180,7 @@ import {
     CheckIcon,
     TrashIcon,
     InformationCircleIcon,
-} from "@heroicons/vue/solid";
+} from "@heroicons/vue/24/solid";
 
 export default {
     props: {
@@ -231,7 +231,7 @@ export default {
     components: {
         Tree: Tree.mixPlugins([Fold, Draggable, Check]),
         PencilIcon,
-        PlusSmIcon,
+        PlusSmallIcon,
         FolderIcon,
         DocumentTextIcon,
         ChevronDownIcon,

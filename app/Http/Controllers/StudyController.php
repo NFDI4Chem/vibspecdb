@@ -34,13 +34,6 @@ class StudyController extends Controller
         ]);
     }
     
-    public function protocols(Request $request, Study $study)
-    {
-        return Inertia::render('Study/Protocols', [
-            'study' => $study,
-            'project' => $study->project
-        ]);
-    }
 
     public function assays(Request $request, Study $study)
     {
@@ -51,7 +44,6 @@ class StudyController extends Controller
     }
 
     
-
     public function submitJob(Request $request, Study $study)
     {
         return Inertia::render('Study/SubmitJob/SubmitJob', [
@@ -82,7 +74,6 @@ class StudyController extends Controller
     }
 
     
-
     public function Jobs(Request $request, Study $study)
     {
         $jobs =  [
@@ -173,21 +164,6 @@ class StudyController extends Controller
 
     }
 
-    public function MolecularIdentifications(Request $request, Study $study)
-    {
-        return Inertia::render('Study/MolecularIdentifications', [
-            'study' => $study,
-            'project' => $study->project
-        ]);
-    }
-
-    public function Integrations(Request $request, Study $study)
-    {
-        return Inertia::render('Study/Integrations', [
-            'study' => $study,
-            'project' => $study->project
-        ]);
-    }
 
     public function Notifications(Request $request, Study $study)
     {

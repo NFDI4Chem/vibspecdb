@@ -23,7 +23,7 @@ import {
     TrashIcon,
     PlusCircleIcon,
     PencilAltIcon,
-} from "@heroicons/vue/outline";
+} from "@heroicons/vue/24/outline";
 
 const props = defineProps(["jobs"]);
 const emit = defineEmits(['onShowDetails'])

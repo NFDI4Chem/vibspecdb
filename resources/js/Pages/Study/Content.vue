@@ -20,7 +20,7 @@
                         </select>
                     </div>
                     <div class="hidden md:block">
-                        <div class="border-b border-gray-200 pl-4">
+                        <div class="border-b border-gray-200 pl-4 flex flex-1 flex-row items-center">
                             <nav
                                 class="-mb-px flex space-x-8"
                                 aria-label="Tabs"
@@ -58,6 +58,9 @@
                                     >
                                 </Link>
                             </nav>
+                            <Link :href="route('project', [project.id])">
+                                <Cog6ToothIcon class="h-6 w-6" aria-hidden="true" />
+                            </Link>
                         </div>
                     </div>
                     <slot name="study-section"></slot>
@@ -76,16 +79,17 @@ import {
     InformationCircleIcon,
     FolderOpenIcon,
     BriefcaseIcon,
-    TemplateIcon,
+    QueueListIcon,
     BeakerIcon,
-    ClipboardListIcon
-} from "@heroicons/vue/outline";
+    ClipboardDocumentListIcon,
+    Cog6ToothIcon,
+} from "@heroicons/vue/24/outline";
 const subNavigation = [
-    { name: "About", route: "study", icon: InformationCircleIcon },
+    // { name: "About", route: "study", icon: InformationCircleIcon },
     { name: "Upload Files", route: "study.file-upload", icon: FolderOpenIcon },
-    { name: "Files", route: "study.files", icon: ClipboardListIcon },
+    { name: "Files", route: "study.files", icon: ClipboardDocumentListIcon },
     { name: "Select Model", route: "study.models", icon: BeakerIcon },
-    { name: "Submit Job", route: "study.submit-job", icon: TemplateIcon },
+    { name: "Submit Job", route: "study.submit-job", icon: QueueListIcon },
     { name: "Jobs", route: "study.jobs", icon: BriefcaseIcon },
 ];
 
