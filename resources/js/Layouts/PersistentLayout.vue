@@ -1,5 +1,5 @@
 <template>
-  <div class="default-layout-class relative">
+  <div class="default-layout-class relative z-20">
     <slot />
     <FilesModal :title="title" />
   </div>

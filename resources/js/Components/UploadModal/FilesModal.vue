@@ -2,7 +2,7 @@
     <div
         v-if="show"
         as="div"
-        class="z-10000 fixed bottom-0 right-0"
+        class="z-20 fixed bottom-0 right-0"
         @close="show = true"
         :open="show"
         :class="{
