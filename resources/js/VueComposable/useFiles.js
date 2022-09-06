@@ -5,9 +5,6 @@ export const useFiles = () => {
 
   const study = computed(() => usePage().props.value.study)
 
-  const vueFiles = ref([])
-  // const vueSelectedFiles = ref([])
-
   const showChildsAPI = (file) => {
     file.loading = true;
     axios
@@ -18,8 +15,6 @@ export const useFiles = () => {
         });
   };
   return {
-    showChildsAPI,
-    vueFiles,
-    // vueSelectedFiles
+    showChildsAPI
   }
 }
