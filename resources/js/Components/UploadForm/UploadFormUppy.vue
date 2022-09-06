@@ -90,15 +90,8 @@ export default {
             user: null,
         };
     },
-    // watch: {
-    //     // whenever question changes, this function will run
-    //     state(newState, oldState) {
-    //         console.log('watcher!', newState);
-    //         this.setUppyState(this.newState);
-    //     },
-    // },
     mounted() {
-        console.log("Date.now()", Date.now());
+        // console.log("Date.now()", Date.now());
         this.setupUppy();
         this.setupDashboard();
         this.setupEvents();

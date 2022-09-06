@@ -4,7 +4,7 @@
             <template #study-section>
                 <div class="flex flex-1 flex-col justify-between">
                     <div class="divide-y divide-gray-200 sm:col-span-9 h-full">
-                        <div v-if="vueFiles" class="h-full">
+                        <div v-if="vueFiles?.length" class="h-full">
                             <div
                                 class="min-w-0 flex-1 min-h-fit border-t border-gray-200 lg:flex h-full"
                             >
@@ -43,10 +43,13 @@
                                         />
                                     </div>
                                     <div v-else>
-                                        <div>No files were selected</div>
+                                        <div class="text-red-300">No files selected</div>
                                     </div>
                                 </section>
                             </div>
+                        </div>
+                        <div v-else>
+                            <div class="text-red-300 p-5">No files uploaded</div>
                         </div>
                     </div>
                     <Footer :steps="steps" />
@@ -70,9 +73,9 @@ import { currentStudyStep, StudySubmitSteps } from "@/VueComposable/store";
 import { ref, computed, onMounted, reactive } from "vue";
 
 const props = defineProps(["study", "project", "files"]);
-const { showChildsAPI, vueFiles } = useFiles();
+const { showChildsAPI } = useFiles();
 
-vueFiles.value = computed(() => props.files);
+const vueFiles = computed(() => props.files);
 const checkedFiles = computed(() => selectedFiles.value.map((f) => f.id));
 
 const onFilesTreeCheck = (checked) => {

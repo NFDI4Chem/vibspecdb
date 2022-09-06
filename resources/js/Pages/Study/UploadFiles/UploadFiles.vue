@@ -3,7 +3,7 @@
         <study-content :project="project" :study="study" current="Upload Files">
             <template #study-section>
                 <div class="divide-y divide-gray-200 sm:col-span-9 h-full">
-                    <div v-if="files" class="h-full">
+                    <div v-if="files?.length" class="h-full">
                         <nav
                             v-if="selectTreeFolder"
                             class="flex p-3 w-full overflow-hidden cursor-pointer select-none"
