@@ -1,13 +1,29 @@
 <template>
     <app-layout :title="project.name">
         <template #header>
-            <div class="">
-                <div
-                    class="flex pr-20 items-center text-sm text-gray-700 uppercase font-bold tracking-widest"
-                >
-                    {{ project.name }}
+            <div class="w-full">
+                <div class="flex flex-row justify-between w-full">
+                    <div
+                        class="flex pr-20 items-center text-sm text-gray-700 uppercase font-bold tracking-widest"
+                    >
+                        {{ project.name }}
+                    </div>
+                    <div class="group text-sm text-gray-500 ml-0 sm:ml-auto">
+                        <Link
+                            :href="route('project.settings', project.id)"
+                            class="flex flex-row items-center flex-nowrap"
+                        >
+                            <Cog6ToothIcon
+                                class="h-5 w-5 text-gray-400 group-hover:text-teal-500"
+                                aria-hidden="true"
+                            />
+                            <div class="ml-2 mt-0.5 group-hover:text-teal-500">
+                                Project&nbsp;Settings
+                            </div>
+                        </Link>
+                    </div>
                 </div>
-                <div class="cursor-pointer inline-flex items-center mt-3 text-gray-500">
+                <div class="cursor-pointer flex w-full justify-start items-center mt-3 text-gray-500">
                     <span
                         v-if="project.is_public"
                         class="inline-flex items-center"
@@ -35,20 +51,7 @@
                     />
                 </div>
             </div>
-            <div class="group text-sm text-gray-500 ml-0 sm:ml-auto">
-                <Link
-                    :href="route('project.settings', project.id)"
-                    class="flex flex-row items-center flex-nowrap"
-                >
-                    <Cog6ToothIcon
-                        class="h-5 w-5 text-gray-400 group-hover:text-teal-500"
-                        aria-hidden="true"
-                    />
-                    <div class="ml-2 mt-0.5 group-hover:text-teal-500">
-                        Project&nbsp;Settings
-                    </div>
-                </Link>
-            </div>
+
         </template>
         <div class="py-12 px-10">
             <div>

@@ -219,7 +219,7 @@ import { ref, computed, onMounted, reactive} from "vue";
 import { Dropzone } from "dropzone";
 import StudyContent from "@/Pages/Study/Content.vue";
 import FileDetails from "@/Shared/FileDetails.vue";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+import { Disclosure, DisclosurePanel } from "@headlessui/vue";
 import { FolderIcon, DocumentTextIcon } from "@heroicons/vue/24/solid";
 import { Inertia } from '@inertiajs/inertia';
 import axiosRetry from "axios-retry";
@@ -232,7 +232,6 @@ export default {
   components: {
     StudyContent,
     Disclosure,
-    DisclosureButton,
     DisclosurePanel,
     FolderIcon,
     DocumentTextIcon,
