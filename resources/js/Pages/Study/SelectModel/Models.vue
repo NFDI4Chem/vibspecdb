@@ -45,7 +45,6 @@
 </template>
 
 <script setup>
-// import { ChevronRightIcon, HomeIcon } from "@heroicons/vue/solid";
 import StudyContent from "@/Pages/Study/Content.vue";
 import ModelItems from "@/Pages/Study/SelectModel/ModelItems.vue";
 import ModelInfo from "@/Pages/Study/SelectModel/ModelInfo.vue";

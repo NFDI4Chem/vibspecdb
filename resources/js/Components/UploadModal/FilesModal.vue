@@ -64,7 +64,7 @@
 <script setup>
 import { ref, onMounted, computed, watch } from "vue";
 import { Dialog, DialogPanel } from "@headlessui/vue";
-import { MinusIcon } from "@heroicons/vue/outline";
+import { MinusIcon } from "@heroicons/vue/24/outline";
 
 import UploadFormUppy from "@/Components/UploadForm/UploadFormUppy.vue";
 import ModalHeader from "./ModalHeader.vue";

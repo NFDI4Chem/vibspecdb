@@ -82,8 +82,6 @@
 
 <script setup>
 const props = defineProps(["steps"]);
-
-import { CheckIcon } from "@heroicons/vue/outline";
 </script>
 
 <style lang="scss" scoped></style>

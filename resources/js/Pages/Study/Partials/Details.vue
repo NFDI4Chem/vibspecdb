@@ -31,7 +31,7 @@
                           @click="open = false"
                         >
                           <span class="sr-only">Close panel</span>
-                          <XIcon class="h-6 w-6" aria-hidden="true" />
+                          <XMarkIcon class="h-6 w-6" aria-hidden="true" />
                         </button>
                       </div>
                     </div>
@@ -243,7 +243,7 @@
                               <input id="studyPublicURLCopy"  v-model="study.public_url" type="text" class="rounded-l-md focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300" @focus="$event.target.select()" />
                             </div>
                             <button type="button" class="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" @click="copyToClipboard(study.public_url, 'studyPublicURLCopy')">
-                              <span><ClipboardCopyIcon class="h-5 w-5" aria-hidden="true" /></span>
+                              <span><ClipboardDocumentIcon class="h-5 w-5" aria-hidden="true" /></span>
                             </button>
                           </div>
                         </div>
@@ -263,7 +263,7 @@
                                   <input id="studyPrivateURLCopy" readonly type="text" :value="study.private_url" class="rounded-l-md focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300" @focus="$event.target.select()" />
                                 </div>
                                 <button type="button" class="-ml-px relative inline-flex items-center space-x-2 px-2 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" @click="copyToClipboard(study.private_url, 'studyPrivateURLCopy')">
-                                  <span><ClipboardCopyIcon class="h-5 w-5" aria-hidden="true" /></span>
+                                  <span><ClipboardDocumentIcon class="h-5 w-5" aria-hidden="true" /></span>
                                 </button>
                               </div>
                               <div class="mt-3">
@@ -375,15 +375,15 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { XIcon } from "@heroicons/vue/outline";
-import { LinkIcon, PlusSmIcon, QuestionMarkCircleIcon, ExclamationCircleIcon } from "@heroicons/vue/solid";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
+import { LinkIcon, PlusSmallIcon, QuestionMarkCircleIcon, ExclamationCircleIcon } from "@heroicons/vue/24/solid";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 import JetInputError from "@/Jetstream/InputError.vue";
 import StudyActivity from "@/Pages/Study/Partials/Activity.vue";
 import { ColorPicker } from "vue3-colorpicker";
 import "vue3-colorpicker/style.css";
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
-import { ClipboardCopyIcon, CheckIcon, ChevronDownIcon } from '@heroicons/vue/solid'
+import { ClipboardDocumentIcon, CheckIcon, ChevronDownIcon } from '@heroicons/vue/24/solid'
 import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from "@headlessui/vue";
 
 const publishingOptions = [
@@ -413,15 +413,15 @@ export default {
     TabPanel,
     TabPanels,
     LinkIcon,
-    PlusSmIcon,
+    PlusSmallIcon,
     QuestionMarkCircleIcon,
     ExclamationCircleIcon,
-    XIcon,
+    XMarkIcon,
     ColorPicker,
     Switch,
     SwitchGroup,
     SwitchLabel,
-    ClipboardCopyIcon,
+    ClipboardDocumentIcon,
     CheckIcon,
     ChevronDownIcon,
   },
