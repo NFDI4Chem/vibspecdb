@@ -6,7 +6,7 @@
             <h2 class="sr-only">Projects</h2>
 
             <div
-                class="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8 2xl:grid-cols-4 3xl:grid-cols-5"
+                class="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8 4xl:grid-cols-5"
             >
                 <ProjectItem
                     v-for="item in items"

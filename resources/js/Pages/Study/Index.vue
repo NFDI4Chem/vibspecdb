@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="px-2 sm:px-12 py-8 mx-auto max-w-8xl">
+    <div class="px-2 sm:px-12 py-2 mx-auto max-w-8xl">
       <div>
-        <div class="flex items-baseline justify-between">
+        <div class="flex items-baseline justify-between mb-8">
           <div>
             <h2 class="text-lg">Studies</h2>
             <div class="mt-2 text-sm text-gray-700">
