@@ -20,7 +20,7 @@
                         </select>
                     </div>
                     <div class="hidden md:block">
-                        <div class="border-b border-gray-200 pl-4 flex flex-1 flex-row items-center">
+                        <div class="border-b border-gray-200 flex flex-1 flex-row items-center justify-between px-4">
                             <nav
                                 class="-mb-px flex space-x-8"
                                 aria-label="Tabs"
@@ -58,8 +58,8 @@
                                     >
                                 </Link>
                             </nav>
-                            <Link :href="route('project', [project.id])">
-                                <Cog6ToothIcon class="h-6 w-6" aria-hidden="true" />
+                            <Link :href="route('study', [project.id, 'settings'])" v-if="false">
+                                <Cog6ToothIcon class="h-6 w-6 text-gray-400 hover:text-teal-500" aria-hidden="true"/>
                             </Link>
                         </div>
                     </div>
