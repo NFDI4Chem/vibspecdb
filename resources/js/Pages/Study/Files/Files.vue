@@ -60,7 +60,6 @@
 </template>
 
 <script setup>
-import { ChevronRightIcon, HomeIcon } from "@heroicons/vue/24/solid";
 import StudyContent from "@/Pages/Study/Content.vue";
 import FilesTable from "@/Pages/Study/Files/FilesTable.vue";
 import Footer from "@/Pages/Study/Helpers/Footer.vue";

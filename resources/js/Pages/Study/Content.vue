@@ -58,9 +58,6 @@
                                     >
                                 </Link>
                             </nav>
-                            <Link :href="route('study', [project.id, 'settings'])" v-if="false">
-                                <Cog6ToothIcon class="h-6 w-6 text-gray-400 hover:text-teal-500" aria-hidden="true"/>
-                            </Link>
                         </div>
                     </div>
                     <slot name="study-section"></slot>

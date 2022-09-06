@@ -15,7 +15,7 @@
             @uploadProgress="uploadProgress"
             v-model:UppyState="UppyState"
             :stopUpload="true"
-            dashboardLimitText="Images only, 2–3 files, up to 5 Gb (TODO: change limits here)"
+            dashboardLimitText="Images only, up to 5 Gb (TODO: change limits here)"
             :baseFolder="baseFolder"
         />
         <div

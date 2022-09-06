@@ -50,7 +50,7 @@
                             @mounted="onUppyMounted"
                             :state="uppyState"
                             :stopUpload="false"
-                            dashboardLimitText="Images only, 2–3 files, up to 5 Gb (TODO: change limits here)"
+                            dashboardLimitText="Images only, up to 5 Gb (TODO: change limits here)"
                             :baseFolder="activeItem"
                         />
                     </div>
