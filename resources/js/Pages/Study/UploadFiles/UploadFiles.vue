@@ -115,7 +115,7 @@
                                                             <strong
                                                                 class="flex flex-row justify-center items-center gap-2 bg-gray-100 mt-2"
                                                             >
-                                                                <CollectionIcon
+                                                                <CircleStackIcon
                                                                     class="h-5 w-5 text-gray-500"
                                                                 />/</strong
                                                             >
@@ -127,7 +127,7 @@
                                         <div
                                             class="flex flex-row gap-3 items-center"
                                         >
-                                            <CollectionIcon
+                                            <CircleStackIcon
                                                 class="h-4 w-4 text-gray-500"
                                             />
                                             <strong
@@ -156,8 +156,8 @@ import {
     ChevronRightIcon,
     HomeIcon,
     InformationCircleIcon,
-    CollectionIcon,
-} from "@heroicons/vue/solid";
+    CircleStackIcon,
+} from "@heroicons/vue/24/solid";
 import StudyContent from "@/Pages/Study/Content.vue";
 import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue";
 import Uploader from "@/Components/UploadForm/Uploader.vue";

@@ -261,7 +261,7 @@ import JetButton from "@/Jetstream/Button.vue";
 import { CheckCircleIcon, ChevronRightIcon } from "@heroicons/vue/24/solid";
 import { Link } from "@inertiajs/inertia-vue3";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
-import { AtSymbolIcon, CodeIcon, LinkIcon } from "@heroicons/vue/24/solid";
+import { AtSymbolIcon, CodeBracketIcon, LinkIcon } from "@heroicons/vue/24/solid";
 import JetInputError from "@/Jetstream/InputError.vue";
 import { ref } from "vue";
 import { Switch, SwitchDescription, SwitchGroup, SwitchLabel } from "@headlessui/vue";
@@ -278,7 +278,7 @@ export default {
     SwitchGroup,
     SwitchLabel,
     AtSymbolIcon,
-    CodeIcon,
+    CodeBracketIcon,
     LinkIcon,
     JetDialogModal,
     JetSecondaryButton,
