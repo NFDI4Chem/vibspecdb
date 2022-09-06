@@ -3,9 +3,9 @@
     <template #header>
       <div>
         <div
-          class="flex items-center text-sm text-gray-700 uppercase font-bold tracking-widest"
+          class="flex items-center text-sm text-gray-700 uppercase font-bold tracking-widest "
         >
-          <Link :href="route('study', study.id)">{{ study.name }}</Link>&nbsp;/&nbsp;Settings
+          <Link :href="route('study', study.id)" class="hover:text-teal-600">{{ study.name }}</Link>&nbsp;/&nbsp;Settings
         </div>
       </div>
     </template>

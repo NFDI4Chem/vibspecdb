@@ -5,7 +5,7 @@
         <div
           class="flex items-center text-sm text-gray-700 uppercase font-bold tracking-widest"
         >
-          <Link :href="route('project', project.id)">{{ project.name }}</Link>&nbsp;/&nbsp;Settings
+          <Link :href="route('project', project.id)" class="hover:text-teal-600">{{ project.name }}</Link>&nbsp;/&nbsp;Settings
         </div>
       </div>
     </template>
