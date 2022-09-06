@@ -45,9 +45,9 @@
                             </ol>
                         </nav>
                         <div
-                            class="h-full  border-t border-gray-200 xl:flex px-1 py-3 pb-12 height-limited"
+                            class="h-full  border-t border-gray-200 xl:flex px-0 sm:px-1 py-3 pb-12 height-limited"
                         >
-                            <aside class="py-1 px-4" v-if="treeFilled">
+                            <aside class="py-1 px-0 sm:px-4" v-if="treeFilled">
                                 <div
                                     class="aside-menu relative flex flex-col overflow-y-auto"
                                 >

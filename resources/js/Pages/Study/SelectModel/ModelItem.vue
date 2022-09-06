@@ -1,6 +1,6 @@
 <template>
     <div
-        class="group relative flex flex-col overflow-hidden rounded-md border border-gray-200 bg-white"
+        class="max-w-sm group relative flex flex-col overflow-hidden rounded-md border border-gray-200 bg-white"
         :class="{
             'pointer-events-none bg-gray-200': model?.disabled,
         }"

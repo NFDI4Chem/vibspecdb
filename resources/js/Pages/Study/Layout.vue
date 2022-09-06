@@ -124,7 +124,7 @@
         </div>
       </div>
     </template>
-    <div class="pb-12 pt-6 px-10 grow flex flex-1 flex-col">
+    <div class="px-0 sm:px-10 pb-12 pt-6  grow flex flex-1 flex-col">
       <slot name="scontent"></slot>
     </div>
   </app-layout>

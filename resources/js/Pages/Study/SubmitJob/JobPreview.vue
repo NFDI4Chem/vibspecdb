@@ -19,16 +19,16 @@
                         {{ model?.name }}
                     </div>
                 </div>
-                <div class="flex flex-row gap-10">
+                <div class="flex flex-col sm:flex-row gap-10">
                     <ModelItem
                         :model="model"
                         :active="{}"
                         @onSelect="() => {}"
-                        class="w-1/2 mt-5"
+                        class="mt-5"
                     />
                     <ModelInfo
                         :model="model"
-                        class="grow mx-auto max-w-2xl py-2 px-4 sm:py-4 sm:px-6 lg:max-w-7xl lg:px-8"
+                        class="grow mx-auto  py-2 px-4 sm:py-4 sm:px-6 lg:max-w-7xl lg:px-8"
                     />
                 </div>
             </div>

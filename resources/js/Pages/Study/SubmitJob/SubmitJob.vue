@@ -5,7 +5,7 @@
                 <div class="flex flex-1 flex-col justify-between">
                     <div class="divide-y divide-gray-200 sm:col-span-9 h-full">
                                             <div class="flex justify-start p-2 px-6 flex-row">
-                        <div class="font-bold">Check Job overview and submit Job</div>
+                        <div class="font-bold">Check Job overview and submit</div>
                     </div>
                         <div class="py-3 px-6">
                             <JobPreview

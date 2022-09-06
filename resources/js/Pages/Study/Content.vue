@@ -3,15 +3,17 @@
         <study-layout :project="project" :study="study">
             <template #scontent>
                 <div class="bg-white shadow-md rounded-lg flex flex-col flex-1">
-                    <div class="md:hidden">
+                    <div class="md:hidden mb-2">
                         <label for="tabs" class="sr-only">Select a tab</label>
                         <select
-                            class="block w-full focus:ring-sky-500 focus:border-sky-500 border-gray-300 rounded-md"
+                            @change="onMobileSelect"
+                            class="block w-full focus:ring-sky-500 focus:border-sky-500 border-teal-500  rounded-0"
                         >
                             <option
                                 v-for="tab in subNavigation"
                                 :key="tab.name"
                                 :selected="tab.name === current"
+                                
                             >
                                 {{ tab.name }}
                             </option>
@@ -68,6 +70,8 @@
 <script>
 import StudyLayout from "@/Pages/Study/Layout.vue";
 import { Link } from "@inertiajs/inertia-vue3";
+import { Inertia } from '@inertiajs/inertia';
+
 import {
     InformationCircleIcon,
     FolderOpenIcon,
@@ -90,7 +94,7 @@ export default {
         StudyLayout,
         Link,
     },
-    props: ["study", "project", "current"],
+    // props: ["study", "project", "current"],
     setup() {
         return {
             subNavigation,
@@ -100,6 +104,11 @@ export default {
 </script>
 
 <script setup>
+import { ref } from 'vue'
+const selectedMobile = ref('')
+
+const props = defineProps(["study", "project", "current"])
+
 const uppercase_id = (route) => {
     switch (route) {
         case "study.files":
@@ -112,4 +121,12 @@ const uppercase_id = (route) => {
             return "";
     }
 };
+
+const onMobileSelect = (e) => {
+    const selected = e?.target?.value
+    const tab = subNavigation.find((t) => t?.name === selected)
+    Inertia.visit(route(tab.route, [props?.study?.id]))
+    
+}
+
 </script>
