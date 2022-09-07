@@ -1,6 +1,6 @@
 import { ref, computed } from "vue";
 
-export const sidebarOpen = ref(true);
+export const sidebarOpen = ref(false);
 export const selectedFiles = ref([]);
 export const selectedModel = ref(-1);
 export const currentStudyStep = ref(0);

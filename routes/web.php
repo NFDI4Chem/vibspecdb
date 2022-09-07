@@ -79,7 +79,10 @@ Route::get('/jobs/create', [JobsController::class, 'create']);
 Route::get('/micro/check', [MicroserviceController::class, 'check']);
 
 
-
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('jobs', [JobsController::class, 'show'])
+    ->name('jobs');
+});
 /// project and study routes ///
 
 Route::group(['middleware' => ['auth']], function () {
