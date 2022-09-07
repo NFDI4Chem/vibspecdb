@@ -6,6 +6,22 @@ export const selectedModel = ref(-1);
 export const currentStudyStep = ref(0);
 export const jobs = ref([]);
 
+import { HomeIcon, BriefcaseIcon } from "@heroicons/vue/24/outline";
+export const leftMenu = [
+    {
+        name: "Dashboard",
+        shortname: "Board",
+        icon: HomeIcon,
+        href: route('dashboard'),
+    },
+    {
+        name: "Jobs",
+        shortname: "Jobs",
+        icon: BriefcaseIcon,
+        href: route('jobs')
+    },
+];
+
 const link_url = (study) => {
     return {
         files: `/studies/${study?.id}/files`,
@@ -20,17 +36,17 @@ export const StudySubmitSteps = (study) => {
         {
             name: "Step 1: select files to process",
             href: links?.files,
-            status: currentStudyStep.value === 1 ? 'current' : '',
+            status: currentStudyStep.value === 1 ? "current" : "",
         },
         {
             name: "Step 2: select model to process",
             href: links?.models,
-            status: currentStudyStep.value === 2 ? 'current' : '',
+            status: currentStudyStep.value === 2 ? "current" : "",
         },
         {
             name: "Step 3: view job details & submit",
             href: links?.jobs,
-            status: currentStudyStep.value === 3 ? 'current' : '',
+            status: currentStudyStep.value === 3 ? "current" : "",
         },
     ];
 };
@@ -44,14 +60,14 @@ export const onShowDetails = (rowId) => {
               }
             : item;
     });
-}
+};
 export const onShowJobDetails = (rowId) => {
     jobs.value = jobs.value.map((item) => {
         return rowId === item.id
             ? {
                   ...item,
                   detailsOpen: !item?.detailsOpen,
-                  details: {} // TODO, bug, needs to be added to not break the table on details; 
+                  details: {}, // TODO, bug, needs to be added to not break the table on details;
               }
             : item;
     });

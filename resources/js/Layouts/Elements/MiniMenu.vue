@@ -22,21 +22,17 @@
             <div class="mt-0 flex-grow flex flex-col">
                 <nav class="flex-1 px-2 bg-white space-y-1">
                     <Link
-                        :href="route('dashboard')"
-                        class="my-1 group flex items-center px-2 py-3 text-sm font-medium rounded-md flex-col"
+                      v-for="item in leftMenu"
+                      :key="item.name"
+                      :href="item.href"
+                      class="my-1 group flex items-center px-2 py-3 text-sm font-medium rounded-md flex-col"
                     >
-                        <HomeIcon class="h-6 w-6 mr-1" aria-hidden="true" />
-                        <div class="mt-1 extra-small">Board</div>
-                    </Link>
-                    <Link
-                        :href="route('jobs')"
-                        class="my-1 group flex items-center px-2 py-3 text-sm font-medium rounded-md flex-col"
-                    >
-                        <BriefcaseIcon
-                            class="h-6 w-6 mr-1"
-                            aria-hidden="true"
-                        />
-                        <div class="mt-1 extra-small">Jobs</div>
+                      <component
+                        :is="item.icon"
+                        class="h-6 w-6 mr-1"
+                        aria-hidden="true"
+                      />
+                      <div class="mt-1 extra-small">{{item.shortname}}</div>
                     </Link>
                 </nav>
             </div>
@@ -52,6 +48,8 @@ import {
     BriefcaseIcon,
 } from "@heroicons/vue/24/outline";
 import { MagnifyingGlassIcon, ChevronDownIcon } from "@heroicons/vue/24/solid";
+
+import { leftMenu } from "@/VueComposable/store";
 
 import JetApplicationLogo from "@/Jetstream/ApplicationLogo.vue";
 import { Link } from "@inertiajs/inertia-vue3";

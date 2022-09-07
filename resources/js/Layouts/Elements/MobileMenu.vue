@@ -69,7 +69,7 @@
                         >
                           {{ $page.props.user.current_team.name }}
                           <svg
-                            class="ml-2 -mr-0.5 h-4 w-4"
+                            class="ml-auto h-4 w-4"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20"
                             fill="currentColor"
@@ -138,14 +138,22 @@
                     </template>
                   </jet-dropdown>
                 </div>
-                <Link
-                  ref="completeButtonRef"
-                  :href="route('dashboard')"
-                  class="my-2 text-gray-800 group flex items-center px-2 py-3 text-sm font-medium rounded-md"
-                >
-                  <HomeIcon class="mr-2 h-6 w-6" aria-hidden="true" />
-                  <div class="text-lg mt-1">Dashboard</div> 
-                </Link>
+
+                <div ref="completeButtonRef">
+                  <Link
+                      v-for="item in leftMenu"
+                      :key="item.name"
+                      :href="item.href"
+                      class=" text-gray-700 group flex items-center px-2 py-3 text-sm font-medium rounded-md hover:text-teal-800"
+                    >
+                      <component
+                        :is="item.icon"
+                        class="mr-2 h-6 w-6"
+                        aria-hidden="true"
+                      />
+                      <div class="text-lg mt-1">{{item.name}}</div>
+                  </Link>
+                </div>
               </nav>
             </div>
           </div>
@@ -176,13 +184,9 @@ import JetDropdownLink from "@/Jetstream/DropdownLink.vue";
 import JetApplicationLogo from "@/Jetstream/ApplicationLogo.vue";
 import { Link } from "@inertiajs/inertia-vue3";
 
-import {
-  XMarkIcon,
-  HomeIcon
-} from "@heroicons/vue/24/outline";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 
-
-import { sidebarOpen } from "@/VueComposable/store";
+import { sidebarOpen, leftMenu } from "@/VueComposable/store";
 
 const completeButtonRef = ref(null)
 

@@ -7,7 +7,7 @@
               <div class="max-w-2xl">Each team can have many Projects.</div>
               </div>
           </div>
-          <div class="flex-shrink-0 ml-4" v-if="projects.length">
+          <div class="flex-shrink-0 ml-4" v-if="projects?.length">
               <button
               type="button"
               class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -17,7 +17,7 @@
               </button>
           </div>
         </div>
-        <span v-if="!projects.length">
+        <span v-if="!projects?.length">
             <div class="mt-4">
                 <div class="px-6 py-4 bg-white shadow-md rounded-lg">
                 <div class="flex items-center">
