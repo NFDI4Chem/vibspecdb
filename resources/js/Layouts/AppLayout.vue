@@ -27,6 +27,9 @@ import MobileMenu from "@/Layouts/Elements/MobileMenu.vue";
 import MiniMenu from "@/Layouts/Elements/MiniMenu.vue";
 import HeaderMenu from "@/Layouts/Elements/HeaderMenu.vue";
 
+import JetBanner from "@/Jetstream/Banner.vue"
+import { Head, Link } from "@inertiajs/inertia-vue3";
+
 import { sidebarOpen } from "@/VueComposable/store";
 import { Inertia } from "@inertiajs/inertia";
 
