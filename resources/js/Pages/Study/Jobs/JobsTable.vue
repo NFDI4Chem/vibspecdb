@@ -22,7 +22,7 @@ import {
     ChevronDownIcon,
     TrashIcon,
     PlusCircleIcon,
-    PencilAltIcon,
+    PencilSquareIcon,
 } from "@heroicons/vue/24/outline";
 
 const props = defineProps(["jobs"]);

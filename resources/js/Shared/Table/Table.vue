@@ -17,7 +17,7 @@ import {
   ChevronDownIcon,
   TrashIcon,
   PlusCircleIcon,
-  PencilAltIcon,
+  PencilSquareIcon,
 } from "@heroicons/vue/24/outline";
 
 const title = "Base Table Template";
@@ -112,7 +112,7 @@ const data = {
         {
             key: "edit",
             title: "Edit",
-            icon: PencilAltIcon,
+            icon: PencilSquareIcon,
             visible: true,
             action: (rowId, actionKey) => {
                 alert(`Edit action rowId: ${rowId}, actionKey: ${actionKey}`);

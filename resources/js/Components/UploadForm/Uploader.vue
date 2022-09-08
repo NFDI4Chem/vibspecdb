@@ -80,7 +80,7 @@
                     <div
                         class="flex flex-row gap-3 h-full items-center hover:cursor-pointer"
                     >
-                        <ExternalLinkIcon
+                        <ArrowTopRightOnSquareIcon
                             class="h-6 w-6 rotate-90"
                             aria-hidden="true"
                         />
@@ -113,7 +113,7 @@ import Button from "@/Jetstream/Button.vue";
 import RadialProgressBar from "vue3-radial-progress";
 
 import {
-    ExternalLinkIcon,
+    ArrowTopRightOnSquareIcon,
     InformationCircleIcon,
 } from "@heroicons/vue/24/outline";
 

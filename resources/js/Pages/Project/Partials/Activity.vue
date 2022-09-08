@@ -75,7 +75,7 @@
 
 <script>
 import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { HeartIcon, XMarkIcon } from '@heroicons/vue/24/outlineoutline'
+import { HeartIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { PencilIcon, PlusSmallIcon } from '@heroicons/vue/24/solid'
 
 export default {
