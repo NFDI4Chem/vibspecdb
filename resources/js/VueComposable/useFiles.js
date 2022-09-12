@@ -14,7 +14,15 @@ export const useFiles = () => {
             file.loading = false;
         });
   };
+  const create = (file) => {
+    axios
+        .post("/api/v1/files/create", {id: file.id})
+        .then((response) => {
+            console.log('response', response?.data)
+        });
+  };
   return {
-    showChildsAPI
+    showChildsAPI,
+    create
   }
 }

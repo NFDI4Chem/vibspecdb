@@ -38,7 +38,10 @@ class FileSystemObject extends Model
         'settings',
         'info',
         'level',
-        'has_children'
+        'has_children',
+        'uppyid',
+        'size',
+        'ftype',
     ];
 
     public function children()

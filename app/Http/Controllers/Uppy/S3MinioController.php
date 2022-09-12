@@ -53,20 +53,15 @@ class S3MinioController extends Controller
         return mb_convert_encoding($str, 'UTF-8', 'UTF-8');
     }
 
-    protected function storeCustomFileObject(Request $request) {
-
+    protected function getFileAtributes(Request $request) {
         try {
             $type = $request->input('type') ?? '';
             $name = $this->filterString($request->input('filename') ?? '');
-            $FileMetadata = $request->get('metadata');
+            $relativePath = $FileMetadata['path'] ?? '/';
 
+            $FileMetadata = $request->get('metadata');
             $project = Project::find($FileMetadata['project_id'] ?? -1);
             $study = Study::find($FileMetadata['study_id'] ?? -1);
-
-            $level = (int)($FileMetadata['level'] ?? 1);
-            $baseId = (int)($FileMetadata['base_id'] ?? 0);
-            $relativePath = $FileMetadata['path'] ?? '/';
-            $micro = $FileMetadata['micro'] ?? '';
 
             $environment = env('APP_ENV', 'local');
             $filePath = str_replace('//', '/', implode('/', [
@@ -76,31 +71,8 @@ class S3MinioController extends Controller
                 ""
             ]));
 
-            // create item
-            $newFileObject = FileSystemObject::firstOrCreate([
-                'name' => $name,
-                'slug' => Str::slug($name, '-'),
-                'description' => $name,
-                'path' => $relativePath,
-                'relative_url' =>  str_replace('//', '/', $filePath),
-                'type' => 'file', # directory
-                'key' => $name,
-                'is_root' => false,
-                'project_id' => (int) ($FileMetadata['project_id'] ?? -1),
-                'study_id' => (int) ($FileMetadata['study_id'] ?? -1),
-                'level' => $level + 1,
-                'parent_id' => $baseId,
-                'owner_id' => auth()->user()->id,
-                'is_processed' => FALSE,
-            ]);
-
-            // return $newFileObject;
-
-            FileSystemObject::where('id', $newFileObject->parent_id ?? 0)->update(['has_children' => TRUE]);
-
             return [
                 'path' => $filePath,
-                'micro' => $micro,
                 'type' => $type,
                 'name' => $name,
             ];
@@ -159,7 +131,7 @@ class S3MinioController extends Controller
     public function createMultipartUpload(Request $request)
     {
 
-        $fileObject = $this->storeCustomFileObject($request);
+        $fileObject = $this->getFileAtributes($request);
         // return $fileObject;
 
         $folder = $fileObject['path'];

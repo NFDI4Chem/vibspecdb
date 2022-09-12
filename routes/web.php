@@ -88,6 +88,13 @@ Route::group(['middleware' => ['auth']], function () {
 Route::group(['middleware' => ['auth']], function () {
     Route::post('/storage/signed-storage-url', [FileSystemController::class, 'signedStorageURL']);
 
+    Route::post('/files/create', [FileSystemController::class, 'create'])
+        ->name('files.create');
+    Route::delete('/files/{file}', [FileSystemController::class, 'destroy'])
+        ->name('files.destroy');
+    Route::put('files/{file}/update', [FileSystemController::class, 'update'])
+        ->name('files.update');
+
     Route::get('projects/{project}', [ProjectController::class, 'show'])
         ->name('project');
     Route::get('projects/{project}/settings', [ProjectController::class, 'settings'])
