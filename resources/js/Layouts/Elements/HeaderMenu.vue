@@ -176,10 +176,14 @@ import {
 import { MagnifyingGlassIcon, ChevronDownIcon } from "@heroicons/vue/24/solid";
 
 const props = defineProps(['sidebarOpen'])
-const emit = defineEmits(['sidebarOpenChange'])
+const emit = defineEmits(['sidebarOpenChange', 'logout'])
 
 const sidebarOpenChange = (state) => {
   emit('sidebarOpenChange', state)
+}
+
+const logout = () => {
+  emit('logout')
 }
 
 </script>

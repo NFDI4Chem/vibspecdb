@@ -188,10 +188,15 @@ import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 import { sidebarOpen, leftMenu } from "@/VueComposable/store";
 
+const emit = defineEmits(['switchToTeam'])
 const completeButtonRef = ref(null)
 
 const sidebarOpenChange = (status) => {
   sidebarOpen.value = status
+}
+
+const switchToTeam = (team) => {
+  emit("switchToTeam", team)
 }
 
 </script>

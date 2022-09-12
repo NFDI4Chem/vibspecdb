@@ -3,7 +3,10 @@
     <jet-banner />
     <div>
         <div class="flex flex-1">
-            <MobileMenu :sidebarOpen="sidebarOpen" />
+            <MobileMenu
+                :sidebarOpen="sidebarOpen"
+                @switchToTeam="switchToTeam"
+            />
             <MiniMenu
                 :sidebarOpen="sidebarOpen"
                 @sidebarOpenChange="sidebarOpenChange"
@@ -11,23 +14,23 @@
             <HeaderMenu
                 :sidebarOpen="sidebarOpen"
                 @sidebarOpenChange="sidebarOpenChange"
+                @logout="logout"
             >
-              <template #header>
-                <slot name="header"></slot>
-              </template>
-              <slot></slot>
+                <template #header>
+                    <slot name="header"></slot>
+                </template>
+                <slot></slot>
             </HeaderMenu>
         </div>
     </div>
 </template>
 
 <script setup>
-
 import MobileMenu from "@/Layouts/Elements/MobileMenu.vue";
 import MiniMenu from "@/Layouts/Elements/MiniMenu.vue";
 import HeaderMenu from "@/Layouts/Elements/HeaderMenu.vue";
 
-import JetBanner from "@/Jetstream/Banner.vue"
+import JetBanner from "@/Jetstream/Banner.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 
 import { sidebarOpen } from "@/VueComposable/store";
