@@ -59,6 +59,7 @@
                                             :onRemoveItem="onRemoveItem"
                                             :onAddChildren="onAddChildren"
                                             :activeItem="activeItem"
+                                            @change="onTreeChange"
                                         />
                                     </div>
                                 </div>
@@ -242,23 +243,52 @@ onMounted(() => {
 
 const onRemoveItem = (tree, node, path) => {
     node.loading = true;
-    axios.delete("/api/v1/files/delete/" + node.id).then((response) => {
-        node.loading = false;
-        tree.removeNodeByPath(path);
-    });
+    const form = useForm(node)
+    form.delete(route('files.destroy', node.id), {
+        preserveScroll: true,
+        onSuccess: () => {},
+        onError: () => {},
+        onFinish: () => {},
+    })
+};
+
+const onTreeChange = (node) => {
+    node.loading = true;
+    const form = useForm(node)
+    form.put(route('files.update', node.id), {
+        preserveScroll: true,
+        onSuccess: () => {},
+        onError: () => {},
+        onFinish: () => {},
+    })
 };
 
 const onAddChildren = (node) => {
     node.loading = true;
-    axios.post("/api/v1/files/create", node).then((response) => {
-        if (node.children) {
-            node.children.push(response?.data);
-        } else {
-            node.children = [response?.data];
-        }
-        node.loading = false;
-        node.$folded = false;
-    });
+    const form = useForm(node)
+        form.transform((data) => {
+            const name = 'NewFolder'
+            const parent_id = data?.id ?? 0
+            const type = 'directory'
+            const [ ftype, size, uppyid ] = [ 'folder', 0, '']
+            const { project_id, study_id, level } = data
+            return {
+                name, parent_id, type,
+                ftype, size, uppyid,
+                project_id: parseInt(project_id),
+                study_id: parseInt(study_id),
+                level: parseInt(level) + 1
+            }
+        })
+        .post(route("files.create"), {
+        preserveScroll: true,
+        onSuccess: (file) => {
+            node.loading = false;
+        },
+        onError: (p) => {
+            console.log('onAddChildren', p)
+        },
+    })
 };
 
 const TreeItemClick = (file, parent) => {
@@ -271,8 +301,8 @@ const storeSelected = (file) => {
     activeItem.value = file;
 };
 
-const onUploaded = () => {
-    console.log("files uploaded (UploadFiles.vue)");
+const onUploaded = (file, data) => {
+    console.log("files uploaded (UploadFiles.vue)", file, data);
 };
 
 
@@ -284,15 +314,12 @@ const displaySelected = (file) => {
         sFolder = "/";
     } else {
         if (selectTreeItem.value.type != "file") {
-            sFolder = selectTreeItem.value.relative_url;
+            sFolder = selectTreeItem.value.name;
         } else {
             sFolder =
                 selectTreeItem.value.parent_id == null
                     ? "/"
-                    : selectTreeItem.value.relative_url.replace(
-                          "/" + selectTreeItem.value.name,
-                          ""
-                      );
+                    : selectTreeItem.value.name;
         }
     }
 

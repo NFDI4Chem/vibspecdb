@@ -106,6 +106,7 @@
                         class="focus-visible:outline-none active-field w-full"
                         :class="{ ['text-teal-500']: node.edit}"
                         :readonly="node.edit ? false : 'readonly'"
+                        v-on:keydown="renameItemKeyBoard($event, node)"
                     />
                 </div>
                 <div class="flex flex-row">
@@ -266,7 +267,13 @@ export default {
             console.log("onBeforeDrop", tree);
         },
         renameItem(node) {
-            console.log(node);
+            // console.log(node);
+            this.$emit("change", node)
+        },
+        renameItemKeyBoard(event, node) {
+            if (event.code === 'Enter') {
+                this.$emit("change", node)
+            }
         },
         removeItem(tree, node, path) {
             this.onRemoveItem(tree, node, path);

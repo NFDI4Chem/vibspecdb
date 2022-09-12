@@ -66,10 +66,16 @@ import { ref, onMounted, computed, watch } from "vue";
 import { Dialog, DialogPanel } from "@headlessui/vue";
 import { MinusIcon } from "@heroicons/vue/24/outline";
 
+import { useForm, usePage } from "@inertiajs/inertia-vue3";
+
 import UploadFormUppy from "@/Components/UploadForm/UploadFormUppy.vue";
 import ModalHeader from "./ModalHeader.vue";
 
 import { useStore } from "vuex";
+import { useFiles } from "@/VueComposable/useFiles";
+
+
+const { create } = useFiles();
 
 const store = useStore();
 
@@ -191,11 +197,34 @@ const closeViewModal = () => {
     UploadFormUppyRef.value.cancelAll();
 };
 
-const onUploaded = (data) => {
-    console.log("onUploaded", data);
-    // store.dispatch("updateFilesData", { uploaded: true });
-    uploaded.value = true;
+const onAddFile = (file) => {
+    const form = useForm(file)
+        form.transform((data) => {
+            const { name, type: ftype, size, id: uppyid} = data
+            const type = 'file'
+            const { project_id, study_id, level, base_id } = data?.meta || {}
+
+            return {
+                name, type,
+                ftype, size, uppyid,
+                project_id: parseInt(project_id),
+                study_id: parseInt(study_id),
+                level: parseInt(level) + 1,
+                parent_id: parseInt(base_id)
+            }
+        })
+        .post(route("files.create"), {
+        preserveScroll: true,
+        onSuccess: (file) => {
+            node.loading = false;
+        },
+    })
 };
+
+const onUploaded = (file, data) => {
+    onAddFile(file)
+    uploaded.value = true
+}
 
 const onBeforeRetry = () => {
     // store.dispatch("updateFilesData", { uploaded: false });

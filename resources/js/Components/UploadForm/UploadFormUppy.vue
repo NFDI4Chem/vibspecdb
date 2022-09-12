@@ -186,73 +186,46 @@ export default {
             // window.removeEventListener("resize", this.onWindowResize);
         },
         handleUploadSuccess(file, data) {
-            console.log("upload-success fired", file, data);
-            const params = {
-                defined: false,
-            };
             this.$emit("uploaded", file, data);
         },
         handleFileAdded(file) {
-            /*
+            const { id, name, level } = this.baseFolder;
             this.uppy.setFileMeta(file.id, {
-                user_id: this.user._id ? this.user._id : "general",
-                store_name: [uuidv4(), file.name.split(".").pop()].join("."),
+                uppyid: file.id,
+                base_id: id,
+                level: level ? level : 1,
+                project_id: this.$page.props.project.id,
+                study_id: this.$page.props.study.id,
+                size: file.size,
+                ftype: file.type
             });
-            */
         },
         handleFileEditComplete(file) {},
         handleComplete(result) {
-            console.log("successful files:", result.successful);
-            console.log("failed files:", result.failed);
+            this.$emit('completed', {
+                successful: result.successful,
+                failed: result.failed
+            });
         },
         onBeforeFileAdded(currentFile, files) {
             return currentFile;
         },
-
-        setMetaGeneral(timestamp) {
-            const { id, relative_url, name, level } = this.baseFolder;
-            console.log('relative_url', relative_url)
-            this.uppy.setMeta({
-                base_id: id,
-                path: relative_url,
-                level: level ? level : 1,
-                project_id: this.$page.props.project.id,
-                study_id: this.$page.props.study.id,
-                micro: timestamp,
-            });
-        },
-
-        cleanString(input) {
-            let output = "";
-            for (let i=0; i<input.length; i++) {
-                if (input.charCodeAt(i) <= 127) {
-                    output += input.charAt(i);
-                }
-            }
-            return output;
-        },
-
         onBeforeRetry() {
-            const timestamp = Date.now();
-            this.setMetaGeneral(timestamp);
             this.$emit("onBeforeRetry");
         },
-
         onBeforeUpload(files) {
-            const timestamp = Date.now();
-            this.setMetaGeneral(timestamp);
+            // console.log('files', files)
             this.$emit("update:UppyState", this.uppy.getState());
             this.$emit("onBeforeUpload", {
                 files,
                 state: this.uppy.getState(),
-                timestamp,
             });
             if (this.stopUpload) {
                 return {};
             }
         },
         upload() {
-            console.log("start upload", this.baseFolder);
+            // console.log("start upload", this.baseFolder);
             this.uppy.upload();
         },
         cancelAll() {

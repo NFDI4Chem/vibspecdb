@@ -92,7 +92,6 @@ const onFilesTreeCheck = (checked) => {
                 created_at: new Date(
                     Date.parse(f.created_at)
                 ).toLocaleDateString("de-DE", { timeZone: "Europe/Berlin" }),
-                relative_url: f.relative_url,
                 details: {},
             };
         });
