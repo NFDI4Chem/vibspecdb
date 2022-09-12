@@ -247,7 +247,6 @@ class StudyController extends Controller
           "type" => "directory",
           "project_id" => $study->project->id,
           "study_id" => $study->id,
-          "owner_id" => Auth::user()->id,
           "relative_url" =>  "/",
           "level" => 0,
           "children" => []
