@@ -126,10 +126,10 @@
                             node.edit = false;
                             renameItem(node);
                         "
-                        class="text-gray-500 w-4"
+                        class="text-gray-500 w-4 font-bold"
                     />
                     <PlusSmallIcon
-                        v-if="node.edit"
+                        v-if="node.edit && false"
                         class="text-gray-400 w-6 rotate-45 mr-[-2px]"
                         @click="node.edit = false"
                     />
