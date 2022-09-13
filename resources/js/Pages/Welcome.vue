@@ -48,6 +48,7 @@
                   Login
                 </a>
                 <a
+                  v-if="$page?.props?.canRegister"
                   href="/register"
                   class="
                     rounded-md

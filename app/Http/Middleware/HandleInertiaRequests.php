@@ -43,6 +43,9 @@ class HandleInertiaRequests extends Middleware
             'user.roles' => fn () => $request->user() ?
                 $request->user()->getRoleNames()
                 : null,
+            'app.name' => config('app.name'),
+            'app.canEmailLogin' => config('app.can_email_login'),
+            'app.confirmWithPassword' => config('app.confirm_with_password'),
         ]);
     }
 }
