@@ -2,6 +2,9 @@
 
 return [
 
+    'confirm_with_password' => env('APP_CONFIRM_WITH_PASS', 'no') == 'no' ? false : true,
+    'can_email_login' => env('APP_CAN_EMAIL_LOGIN', 'no') == 'no' ? false : true,
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
