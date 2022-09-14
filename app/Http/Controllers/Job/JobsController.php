@@ -9,28 +9,9 @@ use Inertia\Inertia;
 
 class JobsController extends Controller
 {
-    public function create(Request $request)
-    {
-        $production = env('APP_ENV') !== 'local';
 
-        if (!$production) {
-            return [
-                'status' => false,
-                'production' => $production
-            ];
-        }
-
-        $cluster = KubernetesCluster::inClusterConfiguration();
-
-        // foreach ($cluster->getAllServices() as $svc) {
-
-        // }
-        
-        return [
-            'status' => true,
-            'production' => $production,
-            'svcs' => $cluster->getAllServices()
-        ];
+    public function submit(Request $request) {
+        return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'job-submitted');
     }
 
     public function show(Request $request) {

@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\FileSystemController;
+use App\Http\Controllers\API\JobsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +22,11 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [FileSystemController::class, 'create']);
         Route::delete('/delete/{id}', [FileSystemController::class, 'delete']);
     });
+
+    Route::prefix('jobs')->group(function () {
+        Route::get('/check/{type}', [JobsController::class, 'check']);
+    });
+
 
 });
 
