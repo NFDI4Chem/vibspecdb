@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Notifications\JobCompleted;
 
-use App\Http\Controllers\MicroserviceController;
+// use App\Http\Controllers\MicroserviceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,8 +75,8 @@ Route::middleware(['auth:sanctum'])->get('/explorer', function (Request $request
 Route::get('/upload', [UploadController::class, 'store']);
 Route::get('/jobs', [PodcastController::class, 'store']);
 Route::get('/logging', [PodcastController::class, 'logging']);
-Route::get('/jobs/create', [JobsController::class, 'create']);
-Route::get('/micro/check', [MicroserviceController::class, 'check']);
+// Route::get('/jobs/create', [JobsController::class, 'create']);
+// Route::get('/micro/check', [MicroserviceController::class, 'check']);
 
 
 Route::group(['middleware' => ['auth']], function () {
@@ -94,6 +94,9 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('files.destroy');
     Route::put('files/{file}/update', [FileSystemController::class, 'update'])
         ->name('files.update');
+
+    Route::post('/jobs/submit', [JobsController::class, 'submit'])
+        ->name('jobs.submit');
 
     Route::get('projects/{project}', [ProjectController::class, 'show'])
         ->name('project');
