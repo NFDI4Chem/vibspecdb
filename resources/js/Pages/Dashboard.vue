@@ -49,4 +49,16 @@ const props = defineProps(["user", "team", "projects"]);
 
 sidebarOpen.value = false;
 
+let  channel = Echo.channel('user-channel');
+channel
+    .listen('.UserEvent',function (data){
+        console.log(data);
+        console.log('listended');
+    })
+
+Echo.private(`App.Models.User.${props.user.id}`)
+    .listen('.server.created', (e) => {
+        console.log('private channel works');
+});
+
 </script>
