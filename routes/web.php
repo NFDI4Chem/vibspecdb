@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ConsoleController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\FileSystemController;
+use App\Http\Controllers\JobModelsController;
 use App\Http\Controllers\Job\JobsController;
 use App\Http\Controllers\Job\PodcastController;
 use App\Http\Controllers\ProjectController;
@@ -94,6 +95,22 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('files.destroy');
     Route::put('files/{file}/update', [FileSystemController::class, 'update'])
         ->name('files.update');
+
+    Route::get('job_models', [JobModelsController::class, 'index'])
+        ->name('job_models');
+    Route::get('job_models/{job_model}', [JobModelsController::class, 'show'])
+        ->name('job_model');
+    Route::post('/job_models/create', [JobModelsController::class, 'create'])
+        ->name('job_model.create');
+    Route::delete('/job_models/{job_model}', [JobModelsController::class, 'destroy'])
+        ->name('job_model.destroy');
+    Route::put('job_models/{job_model}/update', [JobModelsController::class, 'update'])
+        ->name('job_model.update');
+    Route::get('job_models/{job_model}/settings', [JobModelsController::class, 'settings'])
+        ->name('job_model.settings');
+    Route::get('job_models/{job_model}/activity', [JobModelsController::class, 'activity'])
+        ->name('job_model.activity');            
+
 
     Route::post('/jobs/submit', [JobsController::class, 'submit'])
         ->name('jobs.submit');

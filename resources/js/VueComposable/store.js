@@ -6,7 +6,7 @@ export const selectedModel = ref(-1);
 export const currentStudyStep = ref(0);
 export const jobs = ref([]);
 
-import { HomeIcon, BriefcaseIcon } from "@heroicons/vue/24/outline";
+import { HomeIcon, BriefcaseIcon, RectangleGroupIcon } from "@heroicons/vue/24/outline";
 export const leftMenu = [
     {
         name: "Dashboard",
@@ -19,6 +19,12 @@ export const leftMenu = [
         shortname: "Jobs",
         icon: BriefcaseIcon,
         href: route('jobs')
+    },
+    {
+        name: "Models",
+        shortname: "Models",
+        icon: RectangleGroupIcon,
+        href: route('job_models')
     },
 ];
 
