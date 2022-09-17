@@ -15,7 +15,9 @@ class CreateArgoJobsTable extends Migration
     {
         Schema::create('argo_jobs', function (Blueprint $table) {
             $table->id();
-            $table->uid('submit_uid')->unique();
+            $table->string('status')->nullable();
+            $table->json('errors')->nullable('{}');
+            $table->uuid('submit_uid')->unique()->nullable();
             $table->string('argo_uid')->nullable();
             $table->string('type')->nullable('process_data_job');
             $table->string('name')->nullable();
@@ -24,7 +26,7 @@ class CreateArgoJobsTable extends Migration
             $table->foreignId('owner_id')->nullable();
             $table->foreignId('project_id')->nullable();
             $table->foreignId('study_id')->nullable();
-            $table->date('finishedAt')->nullable();
+            $table->timestamp('finishedAt')->nullable();
             $table->timestamps();
         });
     }
