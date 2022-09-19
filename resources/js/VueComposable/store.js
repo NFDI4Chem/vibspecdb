@@ -5,6 +5,7 @@ export const selectedFiles = ref([]);
 export const selectedModel = ref(-1);
 export const currentStudyStep = ref(0);
 export const jobs = ref([]);
+export const notifications = ref([]);
 
 import { HomeIcon, BriefcaseIcon, RectangleGroupIcon } from "@heroicons/vue/24/outline";
 export const leftMenu = [

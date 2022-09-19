@@ -10,18 +10,19 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
  
-class ServerCreated implements ShouldBroadcast
+class JobSubmitted implements ShouldBroadcast
 {
-    use SerializesModels;
+    use InteractsWithSockets, SerializesModels;
  
     /**
      * The user that created the server.
      *
      * @var \App\Models\User
      */
-    public $user;
+    private $message;
+    private $user;
     // public $connection = 'redis';
-    // public $queue = 'default';
+    public $queue = 'jobs';
  
     /**
      * Create a new event instance.
@@ -29,8 +30,9 @@ class ServerCreated implements ShouldBroadcast
      * @param  \App\Models\User  $user
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(User $user, array $message = null)
     {
+        $this->message = $message;
         $this->user = $user;
     }
  
@@ -41,7 +43,7 @@ class ServerCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('App.Models.User.'.$this->user->id);
+        return new PrivateChannel('App.Models.User.'. $this->user->id);
     }
 
     /**
@@ -51,8 +53,18 @@ class ServerCreated implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return 'server.created';
+        return 'UserJobs.submitted';
     }
     
-
+    /**
+     * The event's broadcast name.
+     *
+     * @return string
+     */
+    public function broadcastWith()
+    {
+        return [
+            'message'=> $this->message
+        ];
+    }
 }
