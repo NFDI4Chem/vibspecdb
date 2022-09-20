@@ -10,7 +10,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
  
-class JobSubmitted implements ShouldBroadcast
+class SendUserMessage implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
  

@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
-use App\Events\JobSubmitted;
+use App\Events\SendUserMessage;
 // use App\Events\JobCompletedEvent;
 
 use App\Actions\ArgoJob\SubmitArgoJob;
@@ -63,7 +63,7 @@ class JobSubmitArgo implements ShouldQueue
             'study_id' => $this->data['study_id'] ?? null,
         ]);
 
-        event(new JobSubmitted($this->user, [
+        event(new SendUserMessage($this->user, [
             'type' => $JOB_STATUS ? 'Success' : 'Error',
             'title' => $JOB_STATUS ? 'Success' : 'Error',
             "id" => (string) Str::uuid(),

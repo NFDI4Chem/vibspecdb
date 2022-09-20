@@ -34,10 +34,10 @@
                             >
                                 <JetButton
                                     type="button"
-                                    @click="CheckConnection"
+                                    @click="CheckEvent"
                                     class="bg-teal-600 hover:bg-teal-700 text-white font-bold rounded disabled:opacity-25"
                                 >
-                                    {{'Check Argo Connection'}}
+                                    {{'Check Event Broadcasting'}}
                                 </JetButton>
                             </div>
                             <div
@@ -48,7 +48,7 @@
                                     @click="SubmitJob"
                                     class="bg-teal-600 hover:bg-teal-700 text-white font-bold rounded disabled:opacity-25"
                                 >
-                                    Create Job
+                                    Submit Job
                                 </JetButton>
                             </div>
                         </div>
@@ -92,8 +92,14 @@ const CheckConnection = (e) => {
         });
 };
 
-// console.log('usePage()?.props?.value?', usePage()?.props?.value);
-
+const CheckEvent = () => {
+    const form = useForm();
+    form.transform((data) => {
+        return data;
+    }).get(route("jobs.check", ['argo']), {
+        preserveScroll: true
+    });
+};
 const SubmitJob = (data) => {
     const form = useForm({
         type: 'argo',
