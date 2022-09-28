@@ -13,6 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'support-bubble',
+        'service',
         // other entries
         // '/s3/multipart'
     ];

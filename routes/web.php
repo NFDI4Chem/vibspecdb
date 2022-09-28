@@ -10,6 +10,7 @@ use App\Http\Controllers\Job\PodcastController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\StudyController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\Uppy\S3MinioController;
 use App\Models\Project;
 use Illuminate\Foundation\Application;
@@ -18,7 +19,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Notifications\JobCompleted;
 
-// use App\Http\Controllers\MicroserviceController;
+use App\Http\Middleware\WebHook;
+
+use App\Events\JobCompletedEvent;
+use App\Events\OrderEvent;
+use App\Events\ServerCreated;
 
 /*
 |--------------------------------------------------------------------------
@@ -211,6 +216,10 @@ Route::get('test/email', function(){
     dispatch(new App\Jobs\SendEmailJob($send_mail));
   
     dd('send mail successfully !!');
+});
+
+Route::middleware(['auth.webhook'])->group(function () {
+    Route::post('service', [WebhookController::class, 'webhook']);
 });
 
 Route::get('test/notify', function(){
