@@ -119,7 +119,7 @@ import { python } from "@codemirror/lang-python";
 import { oneDark } from "@codemirror/theme-one-dark";
 
 
-import UniFilesTree from "@/Pages/UniFilesTree.vue"; // base style
+import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue"; // base style
 
 export default {
     components: {

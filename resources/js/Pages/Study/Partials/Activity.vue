@@ -12,7 +12,7 @@
                 <div class="absolute top-0 left-0 -ml-8 pt-4 pr-2 flex sm:-ml-10 sm:pr-4">
                   <button type="button" class="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white" @click="open = false">
                     <span class="sr-only">Close panel</span>
-                    <XIcon class="h-6 w-6" aria-hidden="true" />
+                    <XMarkIcon class="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
               </TransitionChild>
@@ -75,8 +75,8 @@
 
 <script>
 import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { HeartIcon, XIcon } from '@heroicons/vue/outline'
-import { PencilIcon, PlusSmIcon } from '@heroicons/vue/solid'
+import { HeartIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { PencilIcon, PlusSmallIcon } from '@heroicons/vue/24/solid'
 
 export default {
   components: {
@@ -86,8 +86,8 @@ export default {
     TransitionRoot,
     HeartIcon,
     PencilIcon,
-    PlusSmIcon,
-    XIcon,
+    PlusSmallIcon,
+    XMarkIcon,
   },
   props: ['study'],
   data() {

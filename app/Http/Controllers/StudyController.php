@@ -10,6 +10,7 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Laravel\Fortify\Actions\ConfirmPassword;
+use Auth;
 
 class StudyController extends Controller
 {
@@ -27,19 +28,12 @@ class StudyController extends Controller
 
     public function show(Request $request, Study $study)
     {
-        return Inertia::render('Study/About', [
+        return Inertia::render('Study/Files/Files', [
             'study' => $study,
             'project' => $study->project
         ]);
     }
     
-    public function protocols(Request $request, Study $study)
-    {
-        return Inertia::render('Study/Protocols', [
-            'study' => $study,
-            'project' => $study->project
-        ]);
-    }
 
     public function assays(Request $request, Study $study)
     {
@@ -50,12 +44,21 @@ class StudyController extends Controller
     }
 
     
-
     public function submitJob(Request $request, Study $study)
     {
-        $files = [];
+        return Inertia::render('Study/SubmitJob/SubmitJob', [
+            'study' => $study,
+            'project' => $study->project,
+            // 'files' => $files
+        ]);
 
-        return Inertia::render('Study/SubmitJob', [
+    }
+
+    public function fileUpload(Request $request, Study $study)
+    {
+        $files = $this->getStudyFiles($study);
+
+        return Inertia::render('Study/UploadFiles/UploadFiles', [
             'study' => $study,
             'project' => $study->project,
             'files' => $files
@@ -63,11 +66,40 @@ class StudyController extends Controller
 
     }
 
+
+    public function fileUploadForm(Request $request, Study $study)
+    {
+        return redirect(url()->previous())->with('success', 'Your Data has been updated successfully');
+
+    }
+
+    
     public function Jobs(Request $request, Study $study)
     {
-        $jobs = [];
+        $jobs =  [
+            [
+                'id' => 1,
+                'uid' => 'xxxyyyzzz1',
+                'description' => 'Creates negative view of the image',
+                'files' => ['file1path', 'file2path'],
+                'model' => 1,
+                'created_at' => 'CreatedAt',
+                'updated_at' => 'UpdatedAt',
+                'status' => 'completed'
+            ],
+            [
+                'id' => 2,
+                'uid' => 'xxxyyyzzz2',
+                'description' => 'Creates default job',
+                'files' => ['__file1path', '__file2path'],
+                'model' => 2,
+                'created_at' => 'CreatedAt',
+                'updated_at' => 'UpdatedAt',
+                'status' => 'running'
+            ],
+        ];
 
-        return Inertia::render('Study/Jobs', [
+        return Inertia::render('Study/Jobs/Jobs', [
             'study' => $study,
             'project' => $study->project,
             'jobs' => $jobs
@@ -76,60 +108,55 @@ class StudyController extends Controller
     }
 
 
+    public function Models(Request $request, Study $study)
+    {
+        $models = [
+            [
+                'id' => 1,
+                'name' => 'Image Negative',
+                'description' => 'Creates negative view of the image',
+                'href' => '#',
+                'price' => '$256',
+                'options' => '8 colors',
+                'imageSrc' => '/imgs/models/negative.jpg',
+                'disabled' => FALSE,
+                'imageAlt' => 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
+                'input' => 'JOBID/InputData',
+                'output' => 'JOBID/OutputData',
+                'startscript' => 'print_r(\'test here\')',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Sample model',
+                'description' => 'Some sample model',
+                'href' => '#',
+                'price' => '$256',
+                'options' => '8 colors',
+                'imageSrc' => '/imgs/models/gears.jpg',
+                'disabled' => TRUE,
+                'imageAlt' => 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
+                'input' => 'JOBID/InputData',
+                'output' => 'JOBID/OutputData',
+                'startscript' => 'print_r(\'test here\')',
+            ]
+        ];
+
+        return Inertia::render('Study/SelectModel/Models', [
+            'study' => $study,
+            'project' => $study->project,
+            'models' => $models
+        ]);
+
+    }
+
+
     public function Files(Request $request, Study $study)
     {
 
-        // return [
-        //     'files' => FileSystemObject::with('children')->where([
-        //         ['level', 0],
-        //         ['project_id', $study->project->id],
-        //         ['study_id', $study->id]
-        //     ])->orderBy('type')->get(),
-        // ];
+        $tree = $this->getStudyFiles($study);
 
- 
-        $files = FileSystemObject::with('children')->where([
-            // ['level', 0],
-            ['project_id', $study->project->id],
-            ['study_id', $study->id]
-        ])->orderBy('type')->get();
 
-        $new = array();
-        foreach ($files as $a) {
-          $id = $a['parent_id'] ? $a['parent_id'] : 0;
-
-          # activate dropable:
-          $a['$droppable'] = false;
-          foreach ($a['children'] as $child) {
-            $child['$droppable'] = ($child['type'] == 'directory' ? true : false);
-          }
-          $new[$id][] = $a;
-          # # #
-        }
-        
-        
-        function createTree(&$list, $parent){
-          $tree = array();
-          foreach ($parent as $k=>$l){
-              if(isset($list[$l['id']])){
-                  $l['children'] = createTree($list, $list[$l['id']]);
-                  $l['$droppable'] = ($l['type'] == 'directory' ? true : false);
-              }
-              $tree[] = $l;
-          } 
-          return $tree;
-        }
-        
-        $root = [
-          "id" => 0,
-          "parent_id" => "",
-          "name" => "/",
-          "type" => "directory"
-        ];
-        
-        $tree = createTree($new, array($root));
-
-        return Inertia::render('Study/Files', [
+        return Inertia::render('Study/Files/Files', [
             'study' => $study,
             'project' => $study->project,
             'files' => $tree
@@ -137,21 +164,6 @@ class StudyController extends Controller
 
     }
 
-    public function MolecularIdentifications(Request $request, Study $study)
-    {
-        return Inertia::render('Study/MolecularIdentifications', [
-            'study' => $study,
-            'project' => $study->project
-        ]);
-    }
-
-    public function Integrations(Request $request, Study $study)
-    {
-        return Inertia::render('Study/Integrations', [
-            'study' => $study,
-            'project' => $study->project
-        ]);
-    }
 
     public function Notifications(Request $request, Study $study)
     {
@@ -191,5 +203,55 @@ class StudyController extends Controller
     public function activity(Request $request, Study $study)
     {
         return response()->json(['audit' => $study->audits()->with('user')->orderBy('created_at', 'desc')->get()]);
+    }
+
+
+    private function getStudyFiles($study) {
+        $files = FileSystemObject::where([
+            ['project_id', $study->project->id],
+            ['study_id', $study->id],
+            ['is_processed', TRUE]
+        ])
+        ->orderBy('type')->get();
+
+        $new = array();
+        foreach ($files as $a) {
+          $id = $a['parent_id'] ? $a['parent_id'] : 0;
+
+          # activate dropable:
+          $a['$droppable'] = false;
+          foreach ($a['children'] as $child) {
+            $child['$droppable'] = ($child['type'] == 'directory' ? true : false);
+          }
+          $new[$id][] = $a;
+          # # #
+        }
+        
+        
+        function createTree(&$list, $parent){
+          $tree = array();
+          foreach ($parent as $k=>$l){
+              if(isset($list[$l['id']])){
+                  $l['children'] = createTree($list, $list[$l['id']]);
+                  $l['$droppable'] = ($l['type'] == 'directory' ? true : false);
+              }
+              $tree[] = $l;
+          } 
+          return $tree;
+        }
+        
+        $root = [
+          "id" => 0,
+          "parent_id" => "",
+          "name" => "/",
+          "type" => "directory",
+          "project_id" => $study->project->id,
+          "study_id" => $study->id,
+          "relative_url" =>  "/",
+          "level" => 0,
+          "children" => []
+        ];
+        
+        return createTree($new, array($root));
     }
 }

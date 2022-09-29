@@ -4,12 +4,14 @@ use App\Http\Controllers\Admin\ConsoleController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\FileSystemController;
+use App\Http\Controllers\JobModelsController;
 use App\Http\Controllers\Job\JobsController;
 use App\Http\Controllers\Job\PodcastController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\StudyController;
 use App\Http\Controllers\UploadController;
-use App\Http\Controllers\Uppy\AwsS3MultipartController;
+use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\Uppy\S3MinioController;
 use App\Models\Project;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -17,7 +19,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Notifications\JobCompleted;
 
-use App\Http\Controllers\MicroserviceController;
+use App\Http\Middleware\WebHook;
+
+use App\Events\JobCompletedEvent;
+use App\Events\OrderEvent;
+use App\Events\ServerCreated;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,28 +76,49 @@ Route::middleware(['auth:sanctum'])->get('/explorer', function (Request $request
     ]);
 })->name('explorer');
 
-// // AWS S3 Multipart Upload Routes
-// Route::name('s3.multipart.')->prefix('s3/multipart')
-//     ->group(function () {
-//         Route::post('/', ['as' => 'createMultipartUpload', 'uses' => 'AwsS3MultipartController@createMultipartUpload']);
-//         Route::get('{uploadId}', ['as' => 'getUploadedParts', 'uses' => 'AwsS3MultipartController@getUploadedParts']);
-//         Route::get('{uploadId}/{partNumber}', ['as' => 'signPartUpload', 'uses' => 'AwsS3MultipartController@signPartUpload']);
-//         Route::post('{uploadId}/complete', ['as' => 'completeMultipartUpload', 'uses' => 'AwsS3MultipartController@completeMultipartUpload']);
-//         Route::delete('{uploadId}', ['as' => 'abortMultipartUpload', 'uses' => 'AwsS3MultipartController@abortMultipartUpload']);
-//     });
+// // AWS S3 Multipart Upload Route
 
 Route::get('/upload', [UploadController::class, 'store']);
 Route::get('/jobs', [PodcastController::class, 'store']);
 Route::get('/logging', [PodcastController::class, 'logging']);
-Route::get('/jobs/create', [JobsController::class, 'create']);
-Route::get('/micro/check', [MicroserviceController::class, 'check']);
+// Route::get('/jobs/create', [JobsController::class, 'create']);
+// Route::get('/micro/check', [MicroserviceController::class, 'check']);
 
 
-
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('jobs', [JobsController::class, 'show'])
+    ->name('jobs');
+});
 /// project and study routes ///
 
 Route::group(['middleware' => ['auth']], function () {
     Route::post('/storage/signed-storage-url', [FileSystemController::class, 'signedStorageURL']);
+
+    Route::post('/files/create', [FileSystemController::class, 'create'])
+        ->name('files.create');
+    Route::delete('/files/{file}', [FileSystemController::class, 'destroy'])
+        ->name('files.destroy');
+    Route::put('files/{file}/update', [FileSystemController::class, 'update'])
+        ->name('files.update');
+
+    Route::get('job_models', [JobModelsController::class, 'index'])
+        ->name('job_models');
+    Route::get('job_models/{job_model}', [JobModelsController::class, 'show'])
+        ->name('job_model');
+    Route::post('/job_models/create', [JobModelsController::class, 'create'])
+        ->name('job_model.create');
+    Route::delete('/job_models/{job_model}', [JobModelsController::class, 'destroy'])
+        ->name('job_model.destroy');
+    Route::put('job_models/{job_model}/update', [JobModelsController::class, 'update'])
+        ->name('job_model.update');
+    Route::get('job_models/{job_model}/settings', [JobModelsController::class, 'settings'])
+        ->name('job_model.settings');
+    Route::get('job_models/{job_model}/activity', [JobModelsController::class, 'activity'])
+        ->name('job_model.activity');            
+
+
+    Route::post('/jobs/submit', [JobsController::class, 'submit'])
+        ->name('jobs.submit');
 
     Route::get('projects/{project}', [ProjectController::class, 'show'])
         ->name('project');
@@ -124,6 +151,12 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('study.jobs');
     Route::get('studies/{study}/submit-job', [StudyController::class, 'submitJob'])
         ->name('study.submit-job');
+    Route::get('studies/{study}/models', [StudyController::class, 'models'])
+        ->name('study.models');
+    Route::get('studies/{study}/file-upload', [StudyController::class, 'fileUpload'])
+        ->name('study.file-upload');
+    Route::post('studies/{study}/file-upload/update', [StudyController::class, 'fileUploadForm'])
+        ->name('study.file-upload.update');
 });
 
 
@@ -134,6 +167,7 @@ Route::middleware(['auth:sanctum'])->get('/explorer', function (Request $request
         'team' => $team
     ]);
 })->name('explorer');
+
 
 
 // admin routes
@@ -184,9 +218,22 @@ Route::get('test/email', function(){
     dd('send mail successfully !!');
 });
 
+Route::middleware(['auth.webhook'])->group(function () {
+    Route::post('service', [WebhookController::class, 'webhook']);
+});
+
 Route::get('test/notify', function(){
   
     $user = auth()->user();
     $user->notify(new JobCompleted());
     dd('send mail successfully !!', $user);
 });
+
+
+
+Route::post('/s3/multipart', [S3MinioController::class, 'createMultipartUpload']);
+Route::options('/s3/multipart', [S3MinioController::class, 'createMultipartUploadOptions']);
+Route::get('/s3/multipart/{uploadId}', [S3MinioController::class, 'getUploadedParts']);
+Route::get('/s3/multipart/{uploadId}/batch', [S3MinioController::class, 'prepareUploadParts']);
+Route::post('/s3/multipart/{uploadId}/complete', [S3MinioController::class, 'completeMultipartUpload']);
+Route::delete('/s3/multipart/{uploadId}', [S3MinioController::class, 'abortMultipartUpload']);

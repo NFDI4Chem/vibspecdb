@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { PaperClipIcon } from "@heroicons/vue/solid";
+import { PaperClipIcon } from "@heroicons/vue/24/solid";
 
 export default {
   props: ["file", "study"],
