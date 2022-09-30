@@ -35,7 +35,7 @@ build-assets:
     paths: 
       - public/*
     expire_in: 3 hrs
-.build-app: 
+build-app: 
   stage: build_images
   before_script:
     - TAG=$(sed -n 2p version.txt)
