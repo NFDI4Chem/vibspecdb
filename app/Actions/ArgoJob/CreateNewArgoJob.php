@@ -38,16 +38,19 @@ class CreateNewArgoJob
 
         return DB::transaction(function () use ($input) {
             return tap(ArgoJob::create([
+                'status' => array_key_exists('status', $input) ? $input['status'] : null,
+                'errors' => array_key_exists('errors', $input) ? $input['errors'] : null,
                 'name' => array_key_exists('name', $input) ? $input['name'] : null,
+                'type' => array_key_exists('type', $input) ? $input['type'] : null,
                 'description' => array_key_exists('description', $input) ? $input['description'] : null,
                 'argo_uid' => array_key_exists('argo_uid', $input) ? $input['argo_uid'] : null,
                 'finishedAt' => array_key_exists('finishedAt', $input) ? $input['finishedAt'] : null,
                 'team_id'  => array_key_exists('team_id', $input) ? $input['team_id'] : null,
                 'study_id'  => $input['study_id'],
                 'project_id'  => $input['project_id'],
-                'owner_id'  => auth()->id(),
-                'finishedAt'  => Carbon::now(),
-                'submit_uid'  => Str::uuid(),
+                'owner_id'  => array_key_exists('owner_id', $input) ? $input['owner_id'] : auth()->id(),
+                // 'finishedAt'  => Carbon::now(),
+                'submit_uid'  => array_key_exists('submit_uid', $input) ? $input['submit_uid'] : Str::uuid(),
             ]), function (ArgoJob $project) {
             });
         });

@@ -17,7 +17,7 @@ class CreateArgoJobsTable extends Migration
             $table->id();
             $table->string('status')->nullable();
             $table->json('errors')->nullable('{}');
-            $table->uuid('submit_uid')->unique()->nullable();
+            $table->string('submit_uid')->unique()->nullable();
             $table->string('argo_uid')->nullable();
             $table->string('type')->nullable('process_data_job');
             $table->string('name')->nullable();

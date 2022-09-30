@@ -3,7 +3,7 @@
         <div class="w-full h-15 border-gray-200 border-2 p-2">
             <div class="flex flex-row justify-between items-center">
                 <div class="">
-                    <SwitchVerticalIcon class="h-6 default-icon" />
+                    <ArrowsUpDownIcon class="h-6 default-icon" />
                 </div>
                 <div class="w-full mx-6 overflow-hidden text-left">
                     <div
@@ -33,14 +33,14 @@ v-model="item.label" placeholder="Item Name"
 
 <script>
 import {
-    SwitchVerticalIcon,
+    ArrowsUpDownIcon,
     XCircleIcon,
     PlusCircleIcon,
 } from "@heroicons/vue/24/outline";
 
 export default {
     components: {
-        SwitchVerticalIcon,
+        ArrowsUpDownIcon,
         XCircleIcon,
         PlusCircleIcon,
     },

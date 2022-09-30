@@ -29,6 +29,17 @@ services:
             test: ["CMD", "redis-cli", "ping"]
             retries: 3
             timeout: 5s
+    argo.fastapi:
+        container_name: argo_fastapi
+        build:
+            context: ../fastapi-argo
+            dockerfile: Dockerfile
+        ports:
+            - '5001:5001'
+        volumes:
+            - '../fastapi-argo:/code'
+        networks:
+            - laravel-php-nginx           
     laravel.dev:
         container_name: laravel_sail
         build:
