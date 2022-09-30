@@ -31,13 +31,12 @@ build-assets:
     - npm config set proxy ${CI_PROXY} && npm config set https-proxy ${CIS_PROXY}
     - npm ci
     - npm run build
-    - sleep 300
   artifacts:
     name: "compiled-public"
     paths: 
       - public/*
     expire_in: 3 hrs
-.build-app: 
+build-app: 
   stage: build_images
   before_script:
     - TAG=$(sed -n 2p version.txt)
@@ -47,8 +46,6 @@ build-assets:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
     - mkdir -p /kaniko/.docker
-    # - sleep 600
-    # - cp compiled-public/public/build /var/www/html/public/build
     - |-
        KANIKOPROXYBUILDARGS=""
        KANIKOCFG="\"auths\":{\"${DOCKER_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${DOCKER_USER}" "${DOCKER_PASS}" | base64 | tr -d '\n')\"}}"
@@ -99,7 +96,7 @@ build-nginx:
       "${KANIKOPROXYBUILDARGS}"
       --build-arg="PPROXY=${CI_PROXY}"
       --build-arg="PSPROXY=${CIS_PROXY}"
-.rancher-redeploy:
+rancher-redeploy:
   image: debian:latest
   only:
     - deployment
