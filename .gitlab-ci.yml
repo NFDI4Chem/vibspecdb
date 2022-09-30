@@ -32,7 +32,8 @@ build-assets:
     - npm run build
   artifacts:
     name: "compiled-public"
-    paths: public/*
+    paths: 
+      - public/*
     expire_in: 3 hrs
 .build-app: 
   stage: build_images
