@@ -45,8 +45,8 @@ build-app:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
     - mkdir -p /kaniko/.docker
-    - sleep 600
-    - cp compiled-public/public/build /var/www/html/public/build
+    # - sleep 600
+    # - cp compiled-public/public/build /var/www/html/public/build
     - |-
        KANIKOPROXYBUILDARGS=""
        KANIKOCFG="\"auths\":{\"${DOCKER_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${DOCKER_USER}" "${DOCKER_PASS}" | base64 | tr -d '\n')\"}}"
@@ -67,7 +67,7 @@ build-app:
       "${KANIKOPROXYBUILDARGS}"
       --build-arg="PPROXY=${CI_PROXY}"
       --build-arg="PSPROXY=${CIS_PROXY}"
-.build-nginx:  
+build-nginx:  
   stage: build_images
   before_script:
     - NGINX_TAG=$(sed -n 4p version.txt)
@@ -97,7 +97,7 @@ build-app:
       "${KANIKOPROXYBUILDARGS}"
       --build-arg="PPROXY=${CI_PROXY}"
       --build-arg="PSPROXY=${CIS_PROXY}"
-.rancher-redeploy:
+rancher-redeploy:
   image: debian:latest
   only:
     - deployment
