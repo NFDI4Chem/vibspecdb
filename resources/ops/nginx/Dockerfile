@@ -22,4 +22,4 @@ WORKDIR /var/www/html
 
 COPY ./resources/ops/nginx/default.conf /etc/nginx/conf.d/default.conf
 # COPY --from=assets-build /var/www/html/public /var/www/html/
-COPY /var/www/html/public /var/www/html/
+COPY public ./
