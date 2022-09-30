@@ -45,7 +45,7 @@ build-app:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
     - mkdir -p /kaniko/.docker
-    - sleep 10 m
+    - sleep 600
     - cp compiled-public/public/build /var/www/html/public/build
     - |-
        KANIKOPROXYBUILDARGS=""
