@@ -2,8 +2,8 @@
 FROM node:16.13.1-alpine3.13 AS assets-build
 
 
-ARG PPROXY=""
-ARG PSPROXY=""
+# ARG PPROXY=""
+# ARG PSPROXY=""
 
 
 # ENV VERSION=v16.13.0 NPM_VERSION=8.1.0
@@ -11,10 +11,10 @@ ARG PSPROXY=""
 WORKDIR /var/www/html
 COPY . /var/www/html/
 
-RUN npm config set proxy ${PPROXY} && npm config set https-proxy ${PSPROXY}
+# RUN npm config set proxy ${PPROXY} && npm config set https-proxy ${PSPROXY}
 
-RUN npm ci
-RUN npm run build
+# RUN npm ci
+# RUN npm run build
 
 #################################
 
@@ -71,7 +71,7 @@ RUN composer dump-autoload -o
 FROM build-fpm AS fpm
 
 COPY --from=build-fpm /var/www/html /var/www/html
-COPY --from=assets-build /var/www/html/public/build /var/www/html/public/build
+# COPY --from=assets-build /var/www/html/public/build /var/www/html/public/build
 
 RUN chown -R www-data:www-data storage
 # RUN chmod -R 755 /var/www/html/storage

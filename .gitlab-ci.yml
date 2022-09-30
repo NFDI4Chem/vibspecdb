@@ -45,6 +45,8 @@ build-assets:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
     - mkdir -p /kaniko/.docker
+    - sleep 10 m
+    - cp compiled-public/public/build /var/www/html/public/build
     - |-
        KANIKOPROXYBUILDARGS=""
        KANIKOCFG="\"auths\":{\"${DOCKER_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${DOCKER_USER}" "${DOCKER_PASS}" | base64 | tr -d '\n')\"}}"
