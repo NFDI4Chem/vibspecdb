@@ -33,14 +33,14 @@ v-model="item.label" placeholder="Item Name"
 
 <script>
 import {
-    SwitchVerticalIcon,
+    ArrowsUpDownIcon,
     XCircleIcon,
     PlusCircleIcon,
 } from "@heroicons/vue/24/outline";
 
 export default {
     components: {
-        SwitchVerticalIcon,
+        ArrowsUpDownIcon,
         XCircleIcon,
         PlusCircleIcon,
     },
