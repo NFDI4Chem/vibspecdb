@@ -84,13 +84,11 @@ rancher-redeploy:
   image: debian:latest
   only:
     - deployment
-  variables:
-    RUNMODE: "other"
   stage: redeploy
   script:
     - apt update
     - apt install curl -y
     - curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
     - chmod +x /usr/local/bin/argocd
-    - argocd app set vibspecdb-laravel -p image.app.tag=${TAG} --server ${ARGOCD_SERVER} --auth-token ${ARGOCD_TOKEN}
-    - argocd app set vibspecdb-laravel -p image.nginx.tag=${NGINX_TAG} --server ${ARGOCD_SERVER} --auth-token ${ARGOCD_TOKEN}
+    - argocd app set serviceapp-laravel -p image.app.tag=${TAG} --server ${ARGOCD_SERVER} --auth-token ${ARGOCD_TOKEN}
+    - argocd app set serviceapp-laravel -p image.nginx.tag=${NGINX_TAG} --server ${ARGOCD_SERVER} --auth-token ${ARGOCD_TOKEN}
