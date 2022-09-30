@@ -15,8 +15,3 @@ RUN npm config set proxy ${PPROXY} && npm config set https-proxy ${PSPROXY}
 
 RUN npm ci
 RUN npm run build
-
-FROM nginx:1.19-alpine AS nginx
-
-COPY ./resources/ops/nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=assets-build /var/www/html/public /var/www/html/
