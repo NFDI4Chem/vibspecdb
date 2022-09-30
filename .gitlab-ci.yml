@@ -1,15 +1,15 @@
 
 variables:
-    APP_NAME: "serviceapp_laravel_fpm"
-    APP_DOCKER_PATH: "${CI_PROJECT_DIR}/resources/ops/app"
-    TAG: "v0.1.0"
-    DOCKER_REGISTRY: docker.photonicdata.science
-    http_proxy: ${CI_PROXY}
-    https_proxy: ${CIS_PROXY}
-    no_proxy: ${DOCKER_REGISTRY}
-    NGINX_TAG: "v0.1.2"
-    NGINX_IMAGE_NAME: "serviceapp_nginx"
-    NGINX_DOCKER_PATH: "${CI_PROJECT_DIR}/resources/ops/nginx"
+  APP_NAME: "serviceapp_laravel_fpm"
+  APP_DOCKER_PATH: "${CI_PROJECT_DIR}/resources/ops/app"
+  TAG: "v0.1.0"
+  DOCKER_REGISTRY: docker.photonicdata.science
+  http_proxy: ${CI_PROXY}
+  https_proxy: ${CIS_PROXY}
+  no_proxy: ${DOCKER_REGISTRY}
+  NGINX_TAG: "v0.1.2"
+  NGINX_IMAGE_NAME: "serviceapp_nginx"
+  NGINX_DOCKER_PATH: "${CI_PROJECT_DIR}/resources/ops/nginx"
 
 image:
   name: gcr.io/kaniko-project/executor:v1.7.0-debug
@@ -27,6 +27,7 @@ build-assets:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
+    - echo -e "VITE_PUSHER_APP_KEY=${PUSHER_APP_KEY}\nVITE_PUSHER_HOST=${PUSHER_HOST}\nVITE_PUSHER_PORT=${PUSHER_PORT}" > .env
     - npm config set proxy ${CI_PROXY} && npm config set https-proxy ${CIS_PROXY}
     - npm ci
     - npm run build
