@@ -31,12 +31,13 @@ build-assets:
     - npm config set proxy ${CI_PROXY} && npm config set https-proxy ${CIS_PROXY}
     - npm ci
     - npm run build
+    - sleep 300
   artifacts:
     name: "compiled-public"
     paths: 
       - public/*
     expire_in: 3 hrs
-build-app: 
+.build-app: 
   stage: build_images
   before_script:
     - TAG=$(sed -n 2p version.txt)
@@ -98,7 +99,7 @@ build-nginx:
       "${KANIKOPROXYBUILDARGS}"
       --build-arg="PPROXY=${CI_PROXY}"
       --build-arg="PSPROXY=${CIS_PROXY}"
-rancher-redeploy:
+.rancher-redeploy:
   image: debian:latest
   only:
     - deployment
