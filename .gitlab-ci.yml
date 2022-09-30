@@ -75,7 +75,6 @@ build-nginx:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
-    - sleep 1200
     - mkdir -p /kaniko/.docker
     - |-
        KANIKOPROXYBUILDARGS=""
