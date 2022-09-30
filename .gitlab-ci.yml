@@ -33,7 +33,7 @@ build-assets:
   artifacts:
     name: "compiled-public"
     paths: public/*
-  expire_in: 3 hrs
+    expire_in: 3 hrs
 .build-app: 
   stage: build_images
   before_script:
