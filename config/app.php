@@ -239,6 +239,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         Spatie\Permission\PermissionServiceProvider::class,
         'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
+        'Pusher' => Pusher\Pusher::class,
     ],
 
 ];
