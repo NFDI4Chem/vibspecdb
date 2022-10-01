@@ -87,7 +87,11 @@ Route::get('/logging', [PodcastController::class, 'logging']);
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('jobs', [JobsController::class, 'show'])
-    ->name('jobs');
+        ->name('jobs');
+    Route::get('/jobs/check/{type}', [JobsController::class, 'check'])
+        ->name('jobs.check');
+    Route::post('/jobs/submit', [JobsController::class, 'submit'])
+        ->name('jobs.submit');
 });
 /// project and study routes ///
 
@@ -115,10 +119,6 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('job_model.settings');
     Route::get('job_models/{job_model}/activity', [JobModelsController::class, 'activity'])
         ->name('job_model.activity');            
-
-
-    Route::post('/jobs/submit', [JobsController::class, 'submit'])
-        ->name('jobs.submit');
 
     Route::get('projects/{project}', [ProjectController::class, 'show'])
         ->name('project');

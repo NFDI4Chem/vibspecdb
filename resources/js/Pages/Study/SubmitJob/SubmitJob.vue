@@ -34,10 +34,21 @@
                             >
                                 <JetButton
                                     type="button"
-                                    @click="CheckConnection"
+                                    @click="CheckEvent"
                                     class="bg-teal-600 hover:bg-teal-700 text-white font-bold rounded disabled:opacity-25"
                                 >
-                                    Check Argo Connection
+                                    {{'Check Event Broadcasting'}}
+                                </JetButton>
+                            </div>
+                            <div
+                                class="grow flex flex-1 flex-row justify-end my-3"
+                            >
+                                <JetButton
+                                    type="button"
+                                    @click="SubmitJob"
+                                    class="bg-teal-600 hover:bg-teal-700 text-white font-bold rounded disabled:opacity-25"
+                                >
+                                    Submit Job
                                 </JetButton>
                             </div>
                         </div>
@@ -74,30 +85,46 @@ const CheckConnection = (e) => {
     axios
         .get("/api/v1/jobs/check/argo")
         .then(function (res) {
-            console.log(res);
+            console.log(res.data);
         })
         .catch(function (err) {
             console.log(err);
         });
 };
 
+const CheckEvent = () => {
+    const form = useForm();
+    form.transform((data) => {
+        return data;
+    }).get(route("jobs.check", ['argo']), {
+        preserveScroll: true
+    });
+};
 const SubmitJob = (data) => {
     const form = useForm({
-      files: selectedFiles.value,
-      model: selectedModel.value,
+        type: 'argo',
+        input_data: selectedFiles.value.map((f) => f.path),
+        // model_id: selectedModel.value,
+        out_data: {
+            prefix: 'tr_'
+        },
+        team_id: usePage()?.props?.value?.user?.current_team?.id,
+        study_id: usePage()?.props?.value?.study?.id,
+        project_id: usePage()?.props?.value?.project?.id,
     });
     form.transform((data) => {
         return data;
     }).post(route("jobs.submit"), {
         preserveScroll: true,
         onSuccess: (job) => {
-            console.log("job onSuccess", job);
+            // console.log("job onSuccess", job);
         },
         onError: (p) => {
-            console.log("job onError", p);
+            // console.log("job onError", p);
         },
     });
 };
+
 </script>
 
 <style lang="scss" scoped></style>

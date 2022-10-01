@@ -88,6 +88,7 @@ const onFilesTreeCheck = (checked) => {
                     "de-DE",
                     { timeZone: "Europe/Berlin" }
                 ),
+                path: f.path,
                 type: f.type,
                 created_at: new Date(
                     Date.parse(f.created_at)
