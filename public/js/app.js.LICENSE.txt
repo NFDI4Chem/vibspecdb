@@ -9,6 +9,13 @@
    */
 
 /*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <http://feross.org>
+ * @license  MIT
+ */
+
+/*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *
  * Copyright (c) 2014-2017, Jon Schlinkert.
@@ -24,6 +31,10 @@
 /*! exports provided: default */
 
 /*! exports provided: optionsUpdateState, dataMatch */
+
+/*! https://mths.be/utf8js v2.1.2 by @mathias */
+
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
 /*! no static exports found */
 
