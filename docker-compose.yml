@@ -77,6 +77,37 @@ services:
             - "9000:9000"
         networks: 
             - laravel-php-nginx
+    soketi:
+        image: 'quay.io/soketi/soketi:latest-16-alpine'
+        container_name: soketi
+        environment:
+            DEBUG: '1'
+            METRICS_SERVER_PORT: '9601'
+        ports:
+            - '${SOKETI_PORT:-6001}:6001'
+            - '${SOKETI_METRICS_SERVER_PORT:-9601}:9601'
+        networks: 
+            - laravel-php-nginx
+    laravel-echo-server:
+        profiles:
+            - donotstart
+        image: oanhnn/laravel-echo-server
+        container_name: laravel-echo-server
+        depends_on:
+            - redis
+        environment:
+            LARAVEL_ECHO_SERVER_AUTH_HOST: http://localhost:8000
+            LARAVEL_ECHO_SERVER_DEBUG: 'true'
+            LARAVEL_ECHO_SERVER_DB: redis
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
+            REDIS_PREFIX: laravel_database_
+            REDIS_DB: 0
+        ports:
+            - 6001:6001
+        restart: unless-stopped
+        networks:
+            - laravel-php-nginx
     nginx:
         profiles:
             - donotstart
