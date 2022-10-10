@@ -42,13 +42,12 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TeamProjects from '@/Pages/Project/Index.vue'
-import { sidebarOpen } from "@/VueComposable/store";
-
+import { sidebarOpen, updateLeftMenu } from "@/VueComposable/store";
 
 const props = defineProps(["user", "team", "projects"]);
 
 sidebarOpen.value = false;
 
-
+updateLeftMenu('Dashboard');
 
 </script>

@@ -25,6 +25,7 @@ class SubmitArgoJob
         $user_config = [
           'input_data' => array_key_exists('input_data', $input) ? $input['input_data'] : [],
           'out_data' => array_key_exists('out_data', $input) ? $input['out_data'] : ['prefix' => ''],
+          'hook_token' => array_key_exists('token', $input) ? $input['token'] : '',
         ];
 
         $SUBMIT_URL = Str::finish(config('jobs.argo_fastapi_service_url'), '/v1/submit');

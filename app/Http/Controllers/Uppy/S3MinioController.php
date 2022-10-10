@@ -63,9 +63,10 @@ class S3MinioController extends Controller
             $project = Project::find($FileMetadata['project_id'] ?? -1);
             $study = Study::find($FileMetadata['study_id'] ?? -1);
 
-            $environment = env('APP_ENV', 'local');
+            // $environment = env('APP_ENV', 'local');
+            $baseDataFolder = "UserData";
             $filePath = str_replace('//', '/', implode('/', [
-                $environment, 
+                $baseDataFolder, 
                 ($project->uuid ?? 'common'),
                 ($study->uuid ?? 'common') . $relativePath,
                 ""

@@ -51,7 +51,8 @@ class CreateNewArgoJob
                 'owner_id'  => array_key_exists('owner_id', $input) ? $input['owner_id'] : auth()->id(),
                 // 'finishedAt'  => Carbon::now(),
                 'submit_uid'  => array_key_exists('submit_uid', $input) ? $input['submit_uid'] : Str::uuid(),
-            ]), function (ArgoJob $project) {
+            ]), function (ArgoJob $argojob ) use ($input) {
+                $argojob->files()->sync($input['input_files']);
             });
         });
     }

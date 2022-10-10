@@ -6,7 +6,7 @@
         :actions="actions"
         :title="title"
         :style="style"
-        class="m-3"
+        class="m-3 select-none"
         :mobileHide="[2,3]"
         @onPaginationChange="onPaginationChange"
         :detailSlot="detailSlot"
@@ -17,6 +17,8 @@
 import { UniTable } from "@/packages/serviceappvuecomponents/src";
 import JobsTableDetails from "@/Pages/Study/Jobs/JobsTableDetails.vue";
 import { computed, reactive, ref } from "vue";
+
+import mixin from "@/Mixins/Global.js"
 
 import {
     ChevronDownIcon,
@@ -100,7 +102,14 @@ const dataRow = computed(() => {
   const id_end = tableConfig.value.currentPage*tableConfig.value.perPage;
 
   return {
-      rows: props.jobs.slice(id_start, id_end),
+      rows: props.jobs.slice(id_start, id_end).map((j) => ({
+        ...j,
+        created_at: mixin.methods.formatDateTime(j.created_at),
+        updated_at: mixin.methods.formatDateTime(j.updated_at),
+        details: {
+            job: j,
+        },
+      })),
       pagination: {
           currentPage: tableConfig.value.currentPage,
           perPage: tableConfig.value.perPage,

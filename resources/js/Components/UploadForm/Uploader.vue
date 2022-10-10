@@ -177,7 +177,7 @@ const onBeforeUploadUppy = async ({ files, state }) => {
     store.dispatch("updateFilesData", {
         show: true,
         uppy: state,
-        viewMode: "min",
+        viewMode: "med",
     });
     uppyShow.value = false;
     await delay(100);

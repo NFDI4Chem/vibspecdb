@@ -16,36 +16,23 @@
                                 :model="selectedModel"
                             />
                             <div
-                                class="grow flex flex-1 flex-row justify-end my-3"
-                            >
-                                <JetButton
-                                    @click="SubmitJob()"
-                                    type="button"
-                                    :disabled="
-                                        !selectedFiles.length || !selectedModel
-                                    "
-                                    class="bg-teal-600 hover:bg-teal-700 text-white font-bold rounded disabled:opacity-25"
-                                >
-                                    Submit Job
-                                </JetButton>
-                            </div>
-                            <div
-                                class="grow flex flex-1 flex-row justify-end my-3"
+                                class="grow flex flex-1 flex-row justify-between my-3"
                             >
                                 <JetButton
                                     type="button"
                                     @click="CheckEvent"
+                                    :loading="false"
                                     class="bg-teal-600 hover:bg-teal-700 text-white font-bold rounded disabled:opacity-25"
                                 >
                                     {{'Check Event Broadcasting'}}
                                 </JetButton>
-                            </div>
-                            <div
-                                class="grow flex flex-1 flex-row justify-end my-3"
-                            >
                                 <JetButton
+                                    @click="SubmitJob()"
                                     type="button"
-                                    @click="SubmitJob"
+                                    :loading="formSubmit.processing"
+                                    :disabled="
+                                        !selectedFiles.length || !selectedModel
+                                    "
                                     class="bg-teal-600 hover:bg-teal-700 text-white font-bold rounded disabled:opacity-25"
                                 >
                                     Submit Job
@@ -92,16 +79,17 @@ const CheckConnection = (e) => {
         });
 };
 
+const formCheck = useForm();
 const CheckEvent = () => {
-    const form = useForm();
-    form.transform((data) => {
+    formCheck.transform((data) => {
         return data;
     }).get(route("jobs.check", ['argo']), {
         preserveScroll: true
     });
 };
-const SubmitJob = (data) => {
-    const form = useForm({
+
+
+const formSubmit = useForm({
         type: 'argo',
         input_data: selectedFiles.value.map((f) => f.path),
         // model_id: selectedModel.value,
@@ -111,8 +99,11 @@ const SubmitJob = (data) => {
         team_id: usePage()?.props?.value?.user?.current_team?.id,
         study_id: usePage()?.props?.value?.study?.id,
         project_id: usePage()?.props?.value?.project?.id,
+        input_files: selectedFiles.value.map((f) => f.id)
     });
-    form.transform((data) => {
+
+const SubmitJob = () => {
+    formSubmit.transform((data) => {
         return data;
     }).post(route("jobs.submit"), {
         preserveScroll: true,

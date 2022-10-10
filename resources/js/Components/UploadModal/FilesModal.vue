@@ -72,10 +72,6 @@ import UploadFormUppy from "@/Components/UploadForm/UploadFormUppy.vue";
 import ModalHeader from "./ModalHeader.vue";
 
 import { useStore } from "vuex";
-import { useFiles } from "@/VueComposable/useFiles";
-
-
-const { create } = useFiles();
 
 const store = useStore();
 
@@ -197,7 +193,8 @@ const closeViewModal = () => {
     UploadFormUppyRef.value.cancelAll();
 };
 
-const onAddFile = (file) => {
+const onAddFile = async (file) => {
+    await delay(500);
     const form = useForm(file)
         form.transform((data) => {
             const { name, type: ftype, size, id: uppyid} = data
@@ -216,9 +213,13 @@ const onAddFile = (file) => {
         .post(route("files.create"), {
         preserveScroll: true,
         onSuccess: (file) => {
-            node.loading = false;
+            // node.loading = false;
         },
     })
+};
+
+const delay = (time) => {
+    return new Promise((resolve) => setTimeout(resolve, time));
 };
 
 const onUploaded = (file, data) => {

@@ -102,6 +102,10 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('files.create');
     Route::delete('/files/{file}', [FileSystemController::class, 'destroy'])
         ->name('files.destroy');
+    Route::get('/files/{file}', [FileSystemController::class, 'download'])
+        ->name('files.downloadbyid');
+    Route::get('/files/download/{jobid}/{key}', [FileSystemController::class, 'downloadByPath'])
+        ->name('files.downloadbypath');
     Route::put('files/{file}/update', [FileSystemController::class, 'update'])
         ->name('files.update');
 

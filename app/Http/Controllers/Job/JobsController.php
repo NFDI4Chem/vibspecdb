@@ -11,6 +11,11 @@ use Illuminate\Support\Str;
 use App\Jobs\JobSubmitArgo;
 use App\Events\SendUserMessage;
 
+use App\Actions\Webhook\WebhookAuth;
+
+use App\Models\ArgoJob;
+use App\Models\FileSystemObject;
+
 class JobsController extends Controller
 {
 
@@ -19,7 +24,17 @@ class JobsController extends Controller
         try {
             $input = $request->all();
 
-            JobSubmitArgo::dispatch(auth()->user(), $input)
+            $hookAuth = new WebhookAuth();
+            $authToken = $hookAuth->encrypt([
+                'type' => 'jobstatus',
+                'owner_id' => auth()->id(),
+            ]);
+
+            $data = array_merge(
+                $input, ['token' => $authToken]
+            );
+
+            JobSubmitArgo::dispatch(auth()->user(), $data)
                 ->onQueue('jobs')
                 ->delay(now()->addSeconds(0));
 
@@ -48,6 +63,24 @@ class JobsController extends Controller
     }
 
     public function check(Request $request, string $type) {
+
+        /*
+        $job = ArgoJob::find(26);
+        $job->files()->sync([283,284]);
+        return $job;
+        */
+
+        /*
+        $job = ArgoJob::find(26);
+        $job->files()->sync([283,284]);
+        return $job;
+        */
+
+        /*
+        $file = FileSystemObject::find(283);
+        // $file->jobs()->sync([26]);
+        return $file->jobs;
+        */
 
         event(new SendUserMessage(auth()->user(), [
             'type' => 'Success',
