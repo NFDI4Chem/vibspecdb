@@ -51,7 +51,7 @@ class FileSystemObject extends Model
 
     public function jobs()
     {
-        return $this->belongsToMany(ArgoJob::class, 'argo_jobs_files', 'file_id', 'job_id');
+        return $this->belongsToMany(ArgoJob::class, 'argo_jobs_files', 'file_id', 'job_id')
             ->as('jobs');
     }
 }
