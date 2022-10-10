@@ -18,6 +18,21 @@ export const useFiles = () => {
     const res = await axios.get(`/api/v1/files/list/get/${id}`);
     return res.data;
   };
+
+  const parseFile = async (url) => {
+    try {
+      const fetchResponse = await fetch(url);
+      return fetchResponse?.text();
+    } catch (ex) {
+      console.log("Error in fetch file", url);
+    }
+  };
+
+  const getPresignedURL = async (jobid, path) => {
+    const res = await axios.post("/api/v1/files/content", {jobid, path})
+    return res?.data?.url;
+  };
+
   const create = (file) => {
     axios
         .post("/api/v1/files/create", {id: file.id})
@@ -28,6 +43,8 @@ export const useFiles = () => {
   return {
     showChildsAPI,
     getFilesListAPI,
+    parseFile,
+    getPresignedURL,
     create
   }
 }

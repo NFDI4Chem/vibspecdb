@@ -15,6 +15,7 @@
                         <div class="font-bold">Log/Error Files:</div>
                     </div>
                     <Button
+                        disabled
                         :loading="!job_files?.logs"
                         class="p-1 px-2 rounded border hover:cursor-pointer"
                     >
@@ -37,6 +38,7 @@
                                 <EyeIcon
                                     class="w-5 h-5 text-gray-700 hover:cursor-pointer hover:text-sky-700"
                                     aria-hidden="true"
+                                    @click="showContent('text',  converter(log?.key))"
                                 />
                                 <a
                                     :href="
@@ -63,6 +65,7 @@
                 <div class="font-bold">Input Data:</div>
                 <div class="flex flex-row space-x-2">
                     <Button
+                        disabled
                         class="p-1 px-2 rounded bg-gray-100 border hover:cursor-pointer"
                     >
                         <div>Download ALL</div>
@@ -85,6 +88,7 @@
                             <EyeIcon
                                 class="w-5 h-5 text-gray-700 hover:text-sky-700"
                                 aria-hidden="true"
+                                @click="showContent('image',  converter(file?.path))"
                             />
                             <a
                                 :href="route('files.downloadbyid', file?.id)"
@@ -118,6 +122,7 @@
                     <div class="flex flex-row space-x-2">
                         <Button
                             :loading="!job_files?.output"
+                            disabled
                             class="p-1 px-2 rounded bg-gray-100 border hover:cursor-pointer"
                         >
                             <div>Download ALL</div>
@@ -134,7 +139,7 @@
                             class="w-full p-1 px-4 space-x-1 align-middle justify-between items-center bg-gray-100 over:bg-gray-200 flex flex-row rounded border border-gray-200"
                         >
                             <div class="mr-5 ellipsize-left">
-                                {{ file?.name }}
+                                {{ file?.key }}
                             </div>
                             <div
                                 class="flex flex-row items-center align-middle gap-2"
@@ -142,6 +147,7 @@
                                 <EyeIcon
                                     class="w-5 h-5 text-gray-700 hover:text-sky-700"
                                     aria-hidden="true"
+                                    @click="showContent('image',  converter(file?.key))"
                                 />
                                 <a
                                     :href="
@@ -163,27 +169,51 @@
                 </div>
             </div>
         </section>
+        <jet-dialog-modal :show="dialog.show" @close="dialog.show = false">
+            <template #title> 
+                <div class="flex flex-row justify-between">
+                    <div>Content Preview </div>
+                    <XMarkIcon class="w-8 h-8 text-gray-500" aria-hidden="true" @click="dialog.show = false"/>
+                </div>
+            </template>
+
+            <template #content>
+                <div v-if="dialog.data">{{dialog.data}}</div>
+                <img  class="object-fill w-full" v-else :src="dialog.url" alt="">
+            </template>
+            <template #footer v-if="false">
+                <div>Footer here</div>
+            </template>
+        </jet-dialog-modal>
     </div>
 </template>
 
 <script setup>
-import Button from "@/Jetstream/Button.vue";
 import { reactive, ref } from "vue";
-import { CloudArrowDownIcon, EyeIcon } from "@heroicons/vue/24/outline";
 import { useForm, usePage } from "@inertiajs/inertia-vue3";
 import { Link } from "@inertiajs/inertia-vue3";
+
 import { useFiles } from "@/VueComposable/useFiles";
 
-// import buffer from "buffer"
-// import btoa from "btoa"
+import Button from "@/Jetstream/Button.vue";
+import JetDialogModal from "@/Jetstream/DialogModal.vue";
+
+import { CloudArrowDownIcon, EyeIcon, XMarkIcon } from "@heroicons/vue/24/outline";
+
+const dialog = ref({
+    show: false,
+    data: '',
+    url: ''
+});
 
 const props = defineProps(["details"]);
 
-const { getFilesListAPI } = useFiles();
+const { getFilesListAPI, getPresignedURL, parseFile } = useFiles();
 
 const job_files = ref({});
 
 const files = props?.details?.job?.files;
+console.log('files', files)
 const logs = [
     {
         id: 1,
@@ -196,6 +226,7 @@ const logs = [
 ];
 
 const converter = (string) => {
+    if (!string) { return 'undefined' }
     return Buffer.from(string).toString("base64");
 };
 
@@ -210,33 +241,17 @@ const DownloadClick = (id) => {
         });
 };
 
-const formDownloadByPath = useForm();
-const DownloadByPath = (key) => {
-    console.log("data", key, props?.details?.job?.submit_uid);
-    /*
-    formDownloadByPath
-        .transform((form) => {
-            return {
-                key,
-                jobid: props?.details?.job?.submit_uid,
-            };
-        })
-        .post(route("files.downloadbypath"), {
-            preserveScroll: true,
-        });
-        */
-};
 
-const formList = useForm();
-const GetListClick = (id = 0) => {
-    formList
-        .transform((id) => {
-            return id;
-        })
-        .get(route("files.list"), {
-            preserveScroll: true,
-        });
-};
+
+const showContent = async (type, path) => {
+    const url = await getPresignedURL(props?.details?.job?.submit_uid, path);
+    const text = (type === 'text' && url) ? await parseFile(url) : '';
+    dialog.value = {
+        show: true,
+        data: text,
+        url
+    };
+}
 
 (async () => {
     job_files.value = await getFilesListAPI(props?.details?.job?.submit_uid);
