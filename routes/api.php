@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\JobsController;
+use App\Http\Controllers\API\FileSystemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +20,9 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('files')->group(function () {
         Route::get('/children/{study}/{file}', [FileSystemController::class, 'children']);
+        Route::get('/list/get/{jobid}', [FileSystemController::class, 'list']);
+        Route::get('/list/get/{jobid}/{path}', [FileSystemController::class, 'content']);
         Route::post('/create', [FileSystemController::class, 'create']);
-        Route::delete('/delete/{id}', [FileSystemController::class, 'delete']);
     });
 
     Route::prefix('jobs')->group(function () {

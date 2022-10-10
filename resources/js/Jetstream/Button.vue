@@ -2,7 +2,7 @@
     <button
         @click="onClick"
         :type="type"
-        class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent select-none rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition"
+        class="inline-flex items-center px-4 py-2 bg-sky-700 border border-transparent select-none rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-sky-800  disabled:opacity-25 transition"
         :class="{ ['pointer-events-none opacity-25']: loading }"
     >
         <div
@@ -11,7 +11,7 @@
             <div class="absolute"  v-if="loading">
                 <svg
                     role="status"
-                    class="inline w-6 h-6 text-gray-200 animate-spin dark:text-gray-600"
+                    class="inline w-6 h-6 text-gray-200 animate-spin dark:text-teal-600"
                     viewBox="0 0 100 101"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"

@@ -72,10 +72,6 @@ import UploadFormUppy from "@/Components/UploadForm/UploadFormUppy.vue";
 import ModalHeader from "./ModalHeader.vue";
 
 import { useStore } from "vuex";
-import { useFiles } from "@/VueComposable/useFiles";
-
-
-const { create } = useFiles();
 
 const store = useStore();
 

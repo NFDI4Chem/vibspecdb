@@ -14,6 +14,10 @@ export const useFiles = () => {
             file.loading = false;
         });
   };
+  const getFilesListAPI = async (id) => {
+    const res = await axios.get(`/api/v1/files/list/get/${id}`);
+    return res.data;
+  };
   const create = (file) => {
     axios
         .post("/api/v1/files/create", {id: file.id})
@@ -23,6 +27,7 @@ export const useFiles = () => {
   };
   return {
     showChildsAPI,
+    getFilesListAPI,
     create
   }
 }
