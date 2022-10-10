@@ -82,9 +82,9 @@ class StudyController extends Controller
             'study_id' => $study->id,
             'owner_id' => auth()->id() 
         ])
+            ->with('files')
             ->orderBy('updated_at', 'desc')
             ->get();
-
 
         return Inertia::render('Study/Jobs/Jobs', [
             'study' => $study,
