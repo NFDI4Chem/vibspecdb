@@ -8,26 +8,36 @@ export const jobs = ref([]);
 export const notifications = ref([]);
 
 import { HomeIcon, BriefcaseIcon, RectangleGroupIcon } from "@heroicons/vue/24/outline";
-export const leftMenu = [
+export const leftMenu = ref([
     {
         name: "Dashboard",
         shortname: "Board",
         icon: HomeIcon,
         href: route('dashboard'),
+        active: false
     },
     {
         name: "Jobs",
         shortname: "Jobs",
         icon: BriefcaseIcon,
-        href: route('jobs')
+        href: route('jobs'),
+        active: false
     },
     {
         name: "Models",
         shortname: "Models",
         icon: RectangleGroupIcon,
-        href: route('job_models')
+        href: route('job_models'),
+        active: false
     },
-];
+]);
+
+export const updateLeftMenu = (page) => {
+    leftMenu.value = leftMenu.value.map((item) => {
+        item.active = (item.name === page) ? true : false;
+        return item;
+    })
+}
 
 const link_url = (study) => {
     return {

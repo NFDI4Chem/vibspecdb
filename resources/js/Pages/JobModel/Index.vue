@@ -73,6 +73,8 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import { Inertia } from "@inertiajs/inertia";
 
+import { updateLeftMenu } from "@/VueComposable/store";
+
 import JobModelCreate from "@/Pages/JobModel/Partials/Create.vue";
 // import ProjectItems from "@/Pages/Project/Index/ProjectItems.vue";
 
@@ -84,6 +86,8 @@ const jobmodelCreateElement = ref(null);
 const openJobModelCreateDialog = () => {
     jobmodelCreateElement.value.toggleCreateJobModelDialog();
 };
+
+updateLeftMenu('Models');
 
 // const onSelect = (project) => {
 //     Inertia.visit(route("project", [project?.id]));
