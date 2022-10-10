@@ -74,7 +74,7 @@ export const onShowJobDetails = (rowId) => {
             ? {
                   ...item,
                   detailsOpen: !item?.detailsOpen,
-                  details: {}, // TODO, bug, needs to be added to not break the table on details;
+                  details: {}, // TODO, bug, thie key needs to be added to not break the table on detailsOpen;
               }
             : item;
     });

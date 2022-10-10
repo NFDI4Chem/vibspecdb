@@ -58,10 +58,11 @@ class CreateNewObject
                 // extract path:
                 $project = Project::findOrFail($input['project_id'] ?? -1);
                 $study = Study::findOrFail($input['study_id'] ?? -1);
-                $environment = env('APP_ENV', 'local');
+                // $environment = env('APP_ENV', 'local');
+                $baseDataFolder = "UserData";
                 $path = $input["type"] == 'file' ? 
                     str_replace('//', '/', implode('/', [
-                        $environment, 
+                        $baseDataFolder, 
                         ($project->uuid ?? 'common'),
                         ($study->uuid ?? 'common'),
                         $name

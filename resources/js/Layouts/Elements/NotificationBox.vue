@@ -91,6 +91,16 @@ const props = defineProps(['notifications'])
 const emit = defineEmits(['onDelete'])
 
 
+// const notifications = [
+//     {
+//         title: 'Error',
+//         type: 'Error',
+//         message: 'asdfasdfasdf afdsasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf',
+//         id: 'xxs1'
+//     }
+// ]
+
+
 const leave_message = (id) => {
     emit('onDelete', id)
 };
