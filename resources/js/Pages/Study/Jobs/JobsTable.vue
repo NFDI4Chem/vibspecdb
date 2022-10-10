@@ -6,7 +6,7 @@
         :actions="actions"
         :title="title"
         :style="style"
-        class="m-3"
+        class="m-3 select-none"
         :mobileHide="[2,3]"
         @onPaginationChange="onPaginationChange"
         :detailSlot="detailSlot"
@@ -105,7 +105,10 @@ const dataRow = computed(() => {
       rows: props.jobs.slice(id_start, id_end).map((j) => ({
         ...j,
         created_at: mixin.methods.formatDateTime(j.created_at),
-        updated_at: mixin.methods.formatDateTime(j.updated_at)
+        updated_at: mixin.methods.formatDateTime(j.updated_at),
+        details: {
+            job: j,
+        },
       })),
       pagination: {
           currentPage: tableConfig.value.currentPage,

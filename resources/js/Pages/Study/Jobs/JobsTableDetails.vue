@@ -6,6 +6,8 @@
 
 <script setup>
 
+const props = defineProps(['details']);
+
 </script>
 
 <style lang="scss" scoped>
