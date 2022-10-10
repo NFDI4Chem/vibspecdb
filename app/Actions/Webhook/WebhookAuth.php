@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Actions\Webhook;
-
+use Carbon\Carbon;
 
 class WebhookAuth
 {
@@ -24,7 +24,8 @@ class WebhookAuth
           $data,
           [
             'key' => config('webhooks.argo_key') ,
-            'secret' => config('webhooks.argo_secret')
+            'secret' => config('webhooks.argo_secret'),
+            'datetime' => Carbon::now(),
           ]
         )
       );

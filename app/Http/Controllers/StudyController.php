@@ -81,7 +81,9 @@ class StudyController extends Controller
         $jobs = ArgoJob::where([
             'study_id' => $study->id,
             'owner_id' => auth()->id() 
-        ])->get();
+        ])
+            ->orderBy('updated_at', 'desc')
+            ->get();
 
 
         return Inertia::render('Study/Jobs/Jobs', [
