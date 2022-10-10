@@ -48,4 +48,10 @@ class FileSystemObject extends Model
     {
         return $this->hasMany(FileSystemObject::class, 'parent_id', 'id');
     }
+
+    public function jobs()
+    {
+        return $this->belongsToMany(ArgoJob::class, 'argo_jobs_files', 'file_id', 'job_id');
+            ->as('jobs');
+    }
 }

@@ -61,6 +61,7 @@ class JobSubmitArgo implements ShouldQueue
             'owner_id' => $this->user->id,
             'project_id' => $this->data['project_id'] ?? null,
             'study_id' => $this->data['study_id'] ?? null,
+            'input_files' => $this->data['input_files'] ?? null,
         ]);
 
         event(new SendUserMessage($this->user, [

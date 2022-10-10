@@ -23,4 +23,11 @@ class ArgoJob extends Model
         'study_id',
         'finishedAt'
     ];
+
+    public function files()
+    {
+        return $this->belongsToMany(FileSystemObject::class, 'argo_jobs_files', 'job_id', 'file_id')
+            ->as('files');
+    }
+
 }

@@ -99,6 +99,7 @@ const formSubmit = useForm({
         team_id: usePage()?.props?.value?.user?.current_team?.id,
         study_id: usePage()?.props?.value?.study?.id,
         project_id: usePage()?.props?.value?.project?.id,
+        input_files: selectedFiles.value.map((f) => f.id)
     });
 
 const SubmitJob = () => {
