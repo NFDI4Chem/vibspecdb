@@ -1,6 +1,8 @@
 <?php
  
 namespace App\Http\Middleware;
+
+use App\Actions\Webhook\WebhookAuth;
  
 use Closure;
  
@@ -28,60 +30,27 @@ class WebHook
     public function handle($request, Closure $next)
     {
 
+        $hookAuth = new WebhookAuth();
+
         $input = $request->all();
-        $auth = $this->decrypt($request->input('token'));
+        $auth = $hookAuth->decrypt($request->input('token'));
 
         if (!$auth) {
           abort(403);
         }
 
         $input['type'] = $auth->type ?? '';
+        $input['owner_id'] = $auth->owner_id ?? -1;
         $request->replace($input);
         
 
         if ($auth->key !== config('webhooks.argo_key') 
           || $auth->secret !== config('webhooks.argo_secret')) 
         {
-
           abort(403);
         }
  
         return $next($request);
     }
 
-    private function decrypt($encrypted) { 
-      $decrypted = openssl_decrypt(
-        $encrypted,
-        $this->CONFIG['method'], 
-        $this->CONFIG['pass'], 
-        false, 
-        $this->CONFIG['initVector']
-      );
-      return json_decode($decrypted);
-    }
-
-    /*
-
-    $in = [
-      'type' => 'jobstatus',
-      'key' => 'data',
-      'secret' => 'data',
-    ];
-
-    $encrypted = $this->encrypt($in);
-
-    */
-
-    private function encrypt($data) {
-
-      $userDataJSON   = json_encode($data);
-
-      return openssl_encrypt(
-        $userDataJSON,
-        $this->CONFIG['method'], 
-        $this->CONFIG['pass'], 
-        false, 
-        $this->CONFIG['initVector']
-      );
-    }
 }

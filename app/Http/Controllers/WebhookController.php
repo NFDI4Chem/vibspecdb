@@ -25,11 +25,27 @@ class WebhookController extends Controller
             switch ($input['type']) {
                 case 'jobstatus':
 
-                    $job = ArgoJob::where('argo_uid', $input['uuid'])->first();
+                    $job = ArgoJob::where([
+                        'argo_uid' => $input['uuid'],
+                        'owner_id' => $input['owner_id'],
+                    ])->first();
+
+                    if (!$job) {
+                        return response()
+                            ->json([
+                                'error' => 'JOB_NOT_FOUND',
+                            ]);
+                    }
+
+                    $updates = [
+                        'status' => array_key_exists('status', $input) ? $input['status'] : 'Undefined',
+                        'errors' => array_key_exists('errors', $input) ? $input['errors'] : null,
+                        'finishedAt' => Carbon::now()
+                    ];
                         
                     $updater->update(
                         $job,
-                        array_merge($input, ['finishedAt'  => Carbon::now()]) 
+                        $updates
                     );
                     break;
                 default:

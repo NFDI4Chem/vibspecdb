@@ -27,10 +27,10 @@ class UpdateArgoJob
 
         return DB::transaction(function () use ($input, $argo_job) {
             $argo_job->forceFill([
-                'name' => array_key_exists('name', $input) ? $input['name'] : null,
-                'description' => array_key_exists('description', $input) ? $input['description'] : null,
+                'name' => array_key_exists('name', $input) ? $input['name'] : $argo_job['name'],
+                'description' => array_key_exists('description', $input) ? $input['description'] : $argo_job['description'],
                 'finishedAt' => array_key_exists('finishedAt', $input) ? $input['finishedAt'] : null,
-                'status' => array_key_exists('status', $input) ? $input['status'] : null,
+                'status' => array_key_exists('status', $input) ? $input['status'] : $argo_job['status'],
                 'errors' => array_key_exists('errors', $input) ? $input['errors'] : null,
             ])->save();
         });

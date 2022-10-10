@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 use App\Jobs\JobSubmitArgo;
 use App\Events\SendUserMessage;
 
+use App\Actions\Webhook\WebhookAuth;
+
 class JobsController extends Controller
 {
 
@@ -19,7 +21,17 @@ class JobsController extends Controller
         try {
             $input = $request->all();
 
-            JobSubmitArgo::dispatch(auth()->user(), $input)
+            $hookAuth = new WebhookAuth();
+            $authToken = $hookAuth->encrypt([
+                'type' => 'jobstatus',
+                'owner_id' => auth()->id(),
+            ]);
+
+            $data = array_merge(
+                $input, ['token' => $authToken]
+            );
+
+            JobSubmitArgo::dispatch(auth()->user(), $data)
                 ->onQueue('jobs')
                 ->delay(now()->addSeconds(0));
 
