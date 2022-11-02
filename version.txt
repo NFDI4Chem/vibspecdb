@@ -1,4 +1,4 @@
 # Laravel docker image version/tag
-v1.0.35
+v1.0.36
 # Nginx docker image version/tag
-v1.0.35
+v1.0.36

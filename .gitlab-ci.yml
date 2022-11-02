@@ -23,6 +23,8 @@ before_script:
   - NGINX_TAG=$(sed -n 4p version.txt)
 build-assets:  
   stage: build_assets
+  only:
+    - deployment
   image: node:16.13.1-alpine3.13
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
