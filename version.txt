@@ -1,4 +1,7 @@
 # Laravel docker image version/tag
-v1.0.36
+v1.0.37
 # Nginx docker image version/tag
-v1.0.36
+v1.0.37
+
+#1.0.36: wss port changed to 80
+#1.0.37: changes in laravel-echo bootstrap.js, removed port
