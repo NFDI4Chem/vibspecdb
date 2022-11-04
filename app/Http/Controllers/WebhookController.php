@@ -11,6 +11,7 @@ use Carbon\Carbon;
 
 // use App\Actions\ArgoJob\CreateNewArgoJob;
 use App\Actions\ArgoJob\UpdateArgoJob;
+use App\Actions\UserAlert\CreateNewUserAlert;
 
 use App\Models\ArgoJob;
 use App\Models\User;
@@ -20,7 +21,7 @@ use App\Events\SendUserMessage;
 
 class WebhookController extends Controller
 {
-    public function webhook(Request $request, UpdateArgoJob $updater) {
+    public function webhook(Request $request, UpdateArgoJob $updater, CreateNewUserAlert $alertCreater) {
 
         $input = $request->all();
 
@@ -50,6 +51,13 @@ class WebhookController extends Controller
                         $job,
                         $updates
                     );
+
+                    $alertCreater->create([
+                        'status' => strtolower($updates['status'] ?? ''),
+                        'user_id' => $input['owner_id'],
+                        'argo_job_id' => $job->id,
+                        'study_id' => $job->study_id ?? null
+                    ]);
 
                     event(new SendUserMessage(User::find($input['owner_id']), [
                         'action' => 'update_alerts',
