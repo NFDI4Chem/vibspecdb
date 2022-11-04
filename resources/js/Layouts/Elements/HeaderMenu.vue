@@ -37,6 +37,68 @@
                     </form>
                 </div>
                 <div class="ml-4 flex items-center md:ml-6">
+
+                    <BellIcon v-if="nalerts === 0" class="h-6 w-6 hover:cursor-pointer text-gray-500" aria-hidden="true" />
+                    <BellAlertIcon 
+                        v-else
+                        class="h-6 w-6 hover:cursor-pointer text-sky-700"
+                        aria-hidden="true"
+                        @click="show_alerts = !show_alerts"
+                    />
+                    <div v-if="nalerts > 0" class="notification_number text-red-700">{{nalerts}}</div>
+
+                    <div class="notifications-list" v-if="show_alerts">
+
+                        <div class="mt-6 flow-root mx-2">
+                            <ul role="list" class="-my-5 divide-y divide-gray-200">
+                                <li v-for="alert in alerts" :key="alert" class="py-2">
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <CheckCircleIcon 
+                                            v-if="alert.status === 'done'"
+                                            class="h-6 w-6 text-green-700"
+                                            aria-hidden="true"
+                                        />
+                                        <ExclamationCircleIcon
+                                            v-if="alert.status === 'error'"
+                                            class="h-6 w-6 text-red-600"
+                                            aria-hidden="true"
+                                        />
+                                        <BriefcaseIcon
+                                            v-if="alert.status === 'running'"
+                                            class="h-6 w-6 text-sky-700"
+                                            aria-hidden="true"
+                                        />
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                    <p class="truncate text-sm font-medium text-gray-900">
+                                        {{`${alert?.study?.name}: Job ID ${alert.jobid}`}}
+                                    </p>
+                                    <small><time>
+                                       {{formatDateTimeShort(alert.timestamp)}}
+                                    </time></small>
+                                    </div>
+                                    <div>
+                                    <inertia-link 
+                                        class="hover:cursor-pointer inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50" 
+                                        :href="route('study.jobs', alert?.study?.id)"
+                                    >
+                                        <ArrowRightIcon class="ml-2 h-3 w-3 text-gray-500" aria-hidden="true" />
+                                    </inertia-link>
+                                    </div>
+                                </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-6">
+                            <div @click="clear_notifications" class="flex w-full items-center justify-center border-l-0 border-r-0 border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 hover:cursor-pointer">
+                                Clear all
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="ml-4 flex items-center md:ml-4">
                     <a href="#" target="_blank"
                         ><svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -160,6 +222,7 @@
 
 <script setup>
 
+import { ref, computed } from "vue"; 
 import { Link } from "@inertiajs/inertia-vue3";
 import JetDropdownLink from "@/Jetstream/DropdownLink.vue";
 
@@ -171,16 +234,86 @@ import {
 } from "@headlessui/vue";
 
 import {
-    Bars3Icon
+    Bars3Icon,
+    BellIcon,
+    BellAlertIcon,
+    CheckCircleIcon,
+    ExclamationCircleIcon,
+    BriefcaseIcon,
+    ArrowRightIcon
 } from "@heroicons/vue/24/outline";
 import { MagnifyingGlassIcon, ChevronDownIcon } from "@heroicons/vue/24/solid";
 
 const props = defineProps(['sidebarOpen'])
-const emit = defineEmits(['sidebarOpenChange', 'logout'])
+const emit = defineEmits([
+    'sidebarOpenChange',
+    'logout',
+    'clearJobAlerts',
+])
 
 const sidebarOpenChange = (state) => {
   emit('sidebarOpenChange', state)
 }
+
+const nalerts = computed(() => {
+    return alerts.value.length;
+});
+const show_alerts = ref(false)
+
+const clear_notifications = () => {
+    alerts.value = []
+    show_alerts.value = false
+    emit('clearJobAlerts')
+}
+
+const alerts = ref([
+    {
+        jobid: '47',
+        status: 'done',
+        study: {
+            id: 12,
+            name: 'Study 43'
+        },
+        timestamp: 1667565991000,
+    },
+    {
+        jobid: '46',
+        status: 'running',
+        study: {
+            id: 12,
+            name: 'Study 43'
+        },
+        timestamp: 1667225921000,
+    },
+    {
+        jobid: '45',
+        status: 'error',
+        study: {
+            id: 12,
+            name: 'Study 43'
+        },
+        timestamp: 1667565555000,
+    },
+    {
+        jobid: '44',
+        status: 'error',
+        study: {
+            id: 12,
+            name: 'Study 43'
+        },
+        timestamp: 1667563391000,
+    },
+    {
+        jobid: '43',
+        status: 'error',
+        study: {
+            id: 12,
+            name: 'Study 43'
+        },
+        timestamp: 1667445991000,
+    },
+])
+
 
 const logout = () => {
   emit('logout')
@@ -188,4 +321,27 @@ const logout = () => {
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+.notification_number {
+    position: relative;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    margin-left: 0px;
+}
+
+.notifications-list {
+    position: absolute;
+    top: 63px;
+    right: 38px;
+    width: 320px;
+    height: 250px;
+    background: white;
+    border: 1px solid lightgray;
+    // border-top: none;
+    color: gray;
+    overflow-y: auto;
+}
+
+</style>

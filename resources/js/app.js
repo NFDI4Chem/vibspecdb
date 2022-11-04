@@ -7,7 +7,8 @@ import "uplot/dist/uPlot.min.css";
 import helpers from "./Mixins/Global.js";
 
 import { createApp, h } from "vue";
-import { createInertiaApp } from "@inertiajs/inertia-vue3";
+import { createInertiaApp, Link } from "@inertiajs/inertia-vue3";
+
 import { InertiaProgress } from "@inertiajs/progress";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 
@@ -40,6 +41,7 @@ createInertiaApp({
             .mixin(helpers)
             .component("UplotVue", UplotVue)
             .component("Popper", Popper)
+            .component("inertia-link", Link)
             .mount(el);
     },
 });

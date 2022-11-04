@@ -22,6 +22,10 @@ export default {
       const date = new Date(timestamp);
       return new Intl.DateTimeFormat('en', { dateStyle: 'full', timeStyle: 'short' }).format(date);
     },
+    formatDateTimeShort(timestamp) {
+      const date = new Date(timestamp);
+      return new Intl.DateTimeFormat('de', { dateStyle: 'short', timeStyle: 'short' }).format(date);
+    },
     md(data) {
       return data ? marked.parse(data) : "";
     },

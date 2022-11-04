@@ -35,7 +35,7 @@ services:
             context: ../fastapi-argo
             dockerfile: Dockerfile
         ports:
-            - '5001:5001'
+            - '5000:5000'
         volumes:
             - '../fastapi-argo:/code'
         networks:
