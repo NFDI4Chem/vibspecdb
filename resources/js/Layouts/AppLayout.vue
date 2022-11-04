@@ -15,6 +15,8 @@
                 :sidebarOpen="sidebarOpen"
                 @sidebarOpenChange="sidebarOpenChange"
                 @logout="logout"
+                :alertItems="alerts"
+                @clearJobAlerts="clearJobAlerts"
             >
                 <template #header>
                     <slot name="header"></slot>
@@ -35,6 +37,10 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 
 import { sidebarOpen } from "@/VueComposable/store";
 import { Inertia } from "@inertiajs/inertia";
+import { useStore } from "vuex";
+import { computed } from "vue";
+
+const store = useStore();
 
 const props = defineProps(["title"]);
 
@@ -57,6 +63,21 @@ const switchToTeam = (team) => {
 const logout = () => {
     Inertia.post(route("logout"));
 };
+
+
+const alerts = computed(() => {
+    return store.state.UserAlerts.alerts;
+});
+
+const clearJobAlerts = async () => {
+    axios.get(route('users.clear_alerts')).then(res => {
+        if (res.status === 200) {
+            store.dispatch("update_alerts", []);
+        }
+    })
+}
+
+
 </script>
 
 <style lang="scss" scoped>

@@ -13,6 +13,9 @@ use Carbon\Carbon;
 use App\Actions\ArgoJob\UpdateArgoJob;
 
 use App\Models\ArgoJob;
+use App\Models\User;
+
+use App\Events\SendUserMessage;
 
 
 class WebhookController extends Controller
@@ -47,6 +50,11 @@ class WebhookController extends Controller
                         $job,
                         $updates
                     );
+
+                    event(new SendUserMessage(User::find($input['owner_id']), [
+                        'action' => 'update_alerts',
+                    ]));
+
                     break;
                 default:
                     break;

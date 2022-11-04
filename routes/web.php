@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ConsoleController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\FileSystemController;
 use App\Http\Controllers\JobModelsController;
@@ -97,6 +98,11 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::group(['middleware' => ['auth']], function () {
     Route::post('/storage/signed-storage-url', [FileSystemController::class, 'signedStorageURL']);
+
+    Route::get('user/alerts', [UserController::class, 'alerts'])
+    ->name('users.alerts');
+    Route::get('user/clear_alerts', [UserController::class, 'clear_alerts'])
+    ->name('users.clear_alerts');
 
     Route::post('/files/create', [FileSystemController::class, 'create'])
         ->name('files.create');

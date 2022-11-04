@@ -71,6 +71,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(LinkedSocialAccount::class);
     }
 
+    /**
+     * User model and UserAlerts relationship - one to many
+     *
+     * @var array
+     */
+    public function alerts()
+    {
+        return $this->hasMany(UserAlert::class)->where('shown','=', false);
+    }
+
     public function scopeOrderByName($query)
     {
         return $query->orderBy('last_name')->orderBy('first_name');

@@ -16,11 +16,22 @@ import { useNotifications } from "@/VueComposable/useNotifications";
 import NotificationBox from '@/Layouts/Elements/NotificationBox.vue'
 import { notifications } from "@/VueComposable/store";
 
+import { useStore } from "vuex";
+const store = useStore();
+
 
 const {  addNotify, deleteNotify } = useNotifications();
 const user = computed(() => usePage().props.value.user);
 
-onMounted(() => {
+const fetchAlerts = async () => {
+    axios.get(route('users.alerts')).then(res => {
+      store.dispatch("update_alerts", res?.data ?? []);
+    })
+  }
+
+onMounted( async () => {
+  await fetchAlerts();
+  
   let  channel = Echo.channel('user-channel');
   channel
       .listen('.UserEvent',function (data){
@@ -30,6 +41,9 @@ onMounted(() => {
   Echo.private(`App.Models.User.${user.value.id}`)
     .listen('.UserJobs.submitted', async (data) => {
       console.log('data private', data)
+      if (data?.message?.action === 'update_alerts') {
+        await fetchAlerts();
+      }
       await addNotify(data?.message);
     });
 });

@@ -60,7 +60,7 @@
                                             aria-hidden="true"
                                         />
                                         <ExclamationCircleIcon
-                                            v-if="alert.status === 'error'"
+                                            v-if="alert.status === 'failed'"
                                             class="h-6 w-6 text-red-600"
                                             aria-hidden="true"
                                         />
@@ -69,13 +69,18 @@
                                             class="h-6 w-6 text-sky-700"
                                             aria-hidden="true"
                                         />
+                                        <BriefcaseIcon
+                                            v-if="!alert.status === 'undefined'"
+                                            class="h-6 w-6 text-sky-700"
+                                            aria-hidden="true"
+                                        />
                                     </div>
                                     <div class="min-w-0 flex-1">
                                     <p class="truncate text-sm font-medium text-gray-900">
-                                        {{`${alert?.study?.name}: Job ID ${alert.jobid}`}}
+                                        {{`${alert?.study?.name}: Job ID ${alert.argo_job_id}`}}
                                     </p>
                                     <small><time>
-                                       {{formatDateTimeShort(alert.timestamp)}}
+                                       {{formatDateTimeShort(alert.created_at)}}
                                     </time></small>
                                     </div>
                                     <div>
@@ -244,7 +249,7 @@ import {
 } from "@heroicons/vue/24/outline";
 import { MagnifyingGlassIcon, ChevronDownIcon } from "@heroicons/vue/24/solid";
 
-const props = defineProps(['sidebarOpen'])
+const props = defineProps(['sidebarOpen', 'alertItems'])
 const emit = defineEmits([
     'sidebarOpenChange',
     'logout',
@@ -256,63 +261,18 @@ const sidebarOpenChange = (state) => {
 }
 
 const nalerts = computed(() => {
-    return alerts.value.length;
+    return props.alertItems.length;
 });
 const show_alerts = ref(false)
 
 const clear_notifications = () => {
-    alerts.value = []
     show_alerts.value = false
     emit('clearJobAlerts')
 }
 
-const alerts = ref([
-    {
-        jobid: '47',
-        status: 'done',
-        study: {
-            id: 12,
-            name: 'Study 43'
-        },
-        timestamp: 1667565991000,
-    },
-    {
-        jobid: '46',
-        status: 'running',
-        study: {
-            id: 12,
-            name: 'Study 43'
-        },
-        timestamp: 1667225921000,
-    },
-    {
-        jobid: '45',
-        status: 'error',
-        study: {
-            id: 12,
-            name: 'Study 43'
-        },
-        timestamp: 1667565555000,
-    },
-    {
-        jobid: '44',
-        status: 'error',
-        study: {
-            id: 12,
-            name: 'Study 43'
-        },
-        timestamp: 1667563391000,
-    },
-    {
-        jobid: '43',
-        status: 'error',
-        study: {
-            id: 12,
-            name: 'Study 43'
-        },
-        timestamp: 1667445991000,
-    },
-])
+const alerts = computed(() => {
+    return props.alertItems
+})
 
 
 const logout = () => {
@@ -336,7 +296,7 @@ const logout = () => {
     top: 63px;
     right: 38px;
     width: 320px;
-    height: 250px;
+    max-height: 250px;
     background: white;
     border: 1px solid lightgray;
     // border-top: none;

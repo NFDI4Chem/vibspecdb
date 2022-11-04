@@ -15,6 +15,7 @@ use App\Events\SendUserMessage;
 
 use App\Actions\ArgoJob\SubmitArgoJob;
 use App\Actions\ArgoJob\CreateNewArgoJob;
+use App\Actions\UserAlert\CreateNewUserAlert;
 
 
 class JobSubmitArgo implements ShouldQueue
@@ -40,7 +41,7 @@ class JobSubmitArgo implements ShouldQueue
      *
      * @return void
      */
-    public function handle(SubmitArgoJob $submitter, CreateNewArgoJob $creater)
+    public function handle(SubmitArgoJob $submitter, CreateNewArgoJob $creater, CreateNewUserAlert $alertCreater)
     {
         $JOB_ID = (string) strtolower(Str::random(32));
         $result = $submitter->submit($JOB_ID, $this->data);
@@ -50,7 +51,7 @@ class JobSubmitArgo implements ShouldQueue
         $JOB_STATUS = ($result['response']->status ?? '') == 'submitted';
         $JOB_ERRORS = ($result['response']->errors ?? null);
 
-        $creater->create([
+        $job = $creater->create([
             'status' => $JOB_STATUS ? 'Running' : 'Failed',
             'errors' => $JOB_ERRORS,
             'submit_uid' => $JOB_ID,
@@ -64,7 +65,15 @@ class JobSubmitArgo implements ShouldQueue
             'input_files' => $this->data['input_files'] ?? null,
         ]);
 
+        $alertCreater->create([
+            'status' => $JOB_STATUS ? 'running' : 'failed',
+            'user_id' => $this->user->id,
+            'argo_job_id' => $job->id,
+            'study_id' => $this->data['study_id'] ?? null
+        ]);
+
         event(new SendUserMessage($this->user, [
+            'action' => 'update_alerts',
             'type' => $JOB_STATUS ? 'Success' : 'Error',
             'title' => $JOB_STATUS ? 'Success' : 'Error',
             "id" => (string) Str::uuid(),
