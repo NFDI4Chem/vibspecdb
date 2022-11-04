@@ -78,7 +78,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function alerts()
     {
-        return $this->hasMany(UserAlert::class)->where('shown','=', false);
+        return $this->hasMany(UserAlert::class)->where('shown','=', false)->orderBy('created_at', 'desc');
     }
 
     public function scopeOrderByName($query)
