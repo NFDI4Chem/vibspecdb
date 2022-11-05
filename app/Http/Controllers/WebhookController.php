@@ -53,10 +53,10 @@ class WebhookController extends Controller
                     );
 
                     $alertCreater->create([
-                        'status' => strtolower($updates['status'] ?? ''),
+                        'status' => strtolower($updates['status']),
                         'user_id' => $input['owner_id'],
                         'argo_job_id' => $job->id,
-                        'study_id' => $job->study_id ?? null
+                        'study_id' => $job->study_id
                     ]);
 
                     event(new SendUserMessage(User::find($input['owner_id']), [

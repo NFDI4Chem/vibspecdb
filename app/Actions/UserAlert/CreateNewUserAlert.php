@@ -20,7 +20,7 @@ class CreateNewUserAlert
     {
         Validator::make($input, [
             'status' => ['required', 'string', 'max:255'],
-            'status' => Rule::in(['done', 'failed', 'running']),
+            // 'status' => Rule::in(['done', 'failed', 'running']),
             'user_id' => ['required'],
             'argo_job_id' => ['required'],
             'study_id' => ['required']

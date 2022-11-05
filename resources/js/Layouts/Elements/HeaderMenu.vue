@@ -55,12 +55,12 @@
                                 <div class="flex items-center space-x-4">
                                     <div class="flex-shrink-0">
                                         <CheckCircleIcon 
-                                            v-if="alert.status === 'done'"
+                                            v-if="['done', 'succeeded'].includes(alert.status)"
                                             class="h-6 w-6 text-green-700"
                                             aria-hidden="true"
                                         />
                                         <ExclamationCircleIcon
-                                            v-if="alert.status === 'failed'"
+                                            v-if="['failed', 'error'].includes(alert.status)"
                                             class="h-6 w-6 text-red-600"
                                             aria-hidden="true"
                                         />
