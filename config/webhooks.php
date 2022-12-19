@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'argo_type' => env('ARGO_WEBHOOK_TYPE', 'jobstatus'),
-    'argo_key' => env('ARGO_WEBHOOK_KEY'),
-    'argo_secret' => env('ARGO_WEBHOOK_SECRET')
+    'type' => env('WEBHOOK_TYPE', 'jobstatus'),
+    'key' => env('WEBHOOK_KEY'),
+    'secret' => env('WEBHOOK_SECRET')
 ];
