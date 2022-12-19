@@ -1,13 +1,13 @@
 <template>
   <div class="default-layout-class relative z-20">
     <slot />
-    <FilesModal :title="title" />
+    <FilesModal v-if="withAuth" :title="title" />
     <NotificationBox :notifications="notifications" @onDelete="deleteNotify"/>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, watch } from "vue";
 import FilesModal from '@/Components/UploadModal/FilesModal.vue';
 import { useForm, usePage } from "@inertiajs/inertia-vue3";
 
@@ -22,21 +22,25 @@ const store = useStore();
 
 const {  addNotify, deleteNotify } = useNotifications();
 const user = computed(() => usePage().props.value.user);
+const withAuth = computed(() => { return usePage().props.value?.user?.id ? true : false });
 
 const fetchAlerts = async () => {
-    axios.get(route('users.alerts')).then(res => {
-      store.dispatch("update_alerts", res?.data ?? []);
-    })
-  }
+  axios.get(route('users.alerts')).then(res => {
+    store.dispatch("update_alerts", res?.data ?? []);
+  })
+}
 
-onMounted( async () => {
+watch(withAuth, async (authDone, loggedOut) => {
+  if (authDone) {
+    await fetchAlerts();
+  }
+});
+
+const onAuth = async () => {
+
+  if (!withAuth.value) { return false; }
+
   await fetchAlerts();
-  
-  let  channel = Echo.channel('user-channel');
-  channel
-      .listen('.UserEvent',function (data){
-          console.log('listended', data);
-      })
 
   Echo.private(`App.Models.User.${user.value.id}`)
     .listen('.UserJobs.submitted', async (data) => {
@@ -46,6 +50,18 @@ onMounted( async () => {
       }
       await addNotify(data?.message);
     });
+}
+
+onMounted( async () => {
+
+  await onAuth();
+  
+  let  channel = Echo.channel('user-channel');
+  channel
+    .listen('.UserEvent',function (data){
+        console.log('listended', data);
+    })
+
 });
 
 
