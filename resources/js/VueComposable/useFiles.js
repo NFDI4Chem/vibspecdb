@@ -19,6 +19,15 @@ export const useFiles = () => {
     return res.data;
   };
 
+  const getTestzip = async () => {
+    const res = await axios.get(`/api/v1/files/testzip`);
+    return res.data;
+  };
+  const extractzip = async (file) => {
+    const res = await axios.get(`/api/v1/files/extractzip/${study.value.id}/${file.id}`);
+    return res.data;
+  };
+
   const parseFile = async (url) => {
     try {
       const fetchResponse = await fetch(url);
@@ -45,6 +54,8 @@ export const useFiles = () => {
     getFilesListAPI,
     parseFile,
     getPresignedURL,
-    create
+    create,
+    getTestzip,
+    extractzip
   }
 }

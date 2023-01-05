@@ -2,6 +2,22 @@
     <div>
         <study-content :project="project" :study="study" current="Upload Files">
             <template #study-section>
+                <div class="flex flex-1 flex-row">
+                    <JetButton
+                        @click="getTestzip"
+                        type="button"
+                        class="m-2 my-4 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded disabled:opacity-25"
+                    >
+                        TestZip
+                    </JetButton>
+                    <JetButton
+                        @click="onExtractZip"
+                        type="button"
+                        class="m-2 my-4 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded disabled:opacity-25"
+                    >
+                        Unzip Struct
+                    </JetButton>
+                </div>
                 <div class="divide-y divide-gray-200 sm:col-span-9 h-full">
                     <div v-if="files?.length" class="h-full">
                         <nav
@@ -118,8 +134,8 @@
                                                             >
                                                                 <CircleStackIcon
                                                                     class="h-5 w-5 text-gray-500"
-                                                                />/</strong
-                                                            >
+                                                                />/
+                                                            </strong>
                                                         </div>
                                                     </div>
                                                 </template>
@@ -132,9 +148,10 @@
                                                 class="h-4 w-4 text-gray-500"
                                             />
                                             <strong
-                                                class="flex items-center text-sm text-gray-600 force-wrap"
-                                                >{{ selectTreeFolder }}</strong
+                                              class="flex items-center text-sm text-gray-600 force-wrap"
                                             >
+                                              {{ selectTreeFolder }}
+                                            </strong>
                                         </div>
                                     </div>
                                     <Uploader
@@ -159,6 +176,8 @@ import {
     InformationCircleIcon,
     CircleStackIcon,
 } from "@heroicons/vue/24/solid";
+
+import JetButton from "@/Jetstream/Button.vue";
 import StudyContent from "@/Pages/Study/Content.vue";
 import UniFilesTree from "@/Components/UniFilesTree/UniFilesTree.vue";
 import Uploader from "@/Components/UploadForm/Uploader.vue";
@@ -170,17 +189,20 @@ import { ref, computed, onMounted, reactive, watch } from "vue";
 import { useStore } from "vuex";
 
 const props = defineProps(["study", "project", "files"]);
-const { showChildsAPI } = useFiles();
+const { showChildsAPI, getTestzip, extractzip } = useFiles();
 
 const selectTreeItem = ref();
 const selectTreeFolder = ref("/");
 const store = useStore();
 
+const { getFilesListAPI, getPresignedURL, parseFile } = useFiles();
+
+const job_files = ref({});
+
 const treeFilled = computed(() => {
     return props?.files?.length > 0 && props?.files[0].children?.length > 0;
 });
 
-// console.log('files', props?.files)
 
 const treeOptions = {
     checkable: false,
@@ -329,6 +351,14 @@ const displaySelected = (file) => {
         showChildsAPI(file);
     }
 };
+
+const onExtractZip = () => {
+    const file = {
+        id: 15,
+    }
+    extractzip(file)
+}
+
 </script>
 
 <style lang="scss" scoped>

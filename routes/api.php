@@ -21,6 +21,10 @@ Route::prefix('v1')->group(function () {
     Route::prefix('files')->group(function () {
         Route::get('/children/{study}/{file}', [FileSystemController::class, 'children']);
         Route::get('/list/get/{jobid}', [FileSystemController::class, 'list']);
+
+        Route::get('/testzip', [FileSystemController::class, 'listZipArchive']);
+        Route::get('/extractzip/{study}/{file}', [FileSystemController::class, 'extractzip']);
+
         Route::post('/content', [FileSystemController::class, 'content']);
         Route::post('/create', [FileSystemController::class, 'create']);
     });

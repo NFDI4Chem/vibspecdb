@@ -53,7 +53,7 @@ class CreateNewObject
             return DB::transaction(function () use ($input) {
 
                 // extract name;
-                $name = $input["type"] == 'directory' ? "NewFolder" : $input["name"];
+                $name = $input["type"] == 'directory' ? ($input["name"] ?? "NewFolder") : $input["name"];
 
                 // extract path:
                 $project = Project::findOrFail($input['project_id'] ?? -1);
@@ -74,12 +74,12 @@ class CreateNewObject
                     "\$droppable" => TRUE,
                     "\$draggable" => TRUE,
                     'is_processed' => TRUE,
+                    'is_archived' => $input["is_archived"] ?? FALSE,
                     "compressionInfo" => NULL,
                     "owner_id" => auth()->user()->id ?? 0,
                     "children" => [],
                     "key" =>  $name,
                     "description" => $name,
-                    "path" => $path,
                     "slug" => strtolower($name),
                     "parent_id" => $input["parent_id"] ?? 0,
                     "name" => $name,
@@ -87,10 +87,11 @@ class CreateNewObject
                     "study_id" => $input["study_id"] ?? -1,
                     "type" => $input["type"] ?? 'directory',
                     "level" => (int)$input["level"],
-                    "ftype" => $input["ftype"],
-                    "size" => (int)$input["size"],
-                    "uppyid" => $input["uppyid"],
+                    "ftype" => $input["ftype"] ?? '',
+                    "size" => (int)($input["size"] ?? 0),
+                    "uppyid" => $input["uppyid"] ?? '',
                     "path" => $path,
+                    "relative_url" => $input["relative_url"] ?? '',
                 ]), function (FileSystemObject $file) {
                     FileSystemObject::where('id', $file->parent_id ?? 0)
                         ->update(['has_children' => TRUE]);
