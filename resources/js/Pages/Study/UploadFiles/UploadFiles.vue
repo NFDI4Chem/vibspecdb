@@ -4,13 +4,7 @@
             <template #study-section>
                 <div class="flex flex-1 flex-row">
                     <JetButton
-                        @click="getTestzip"
-                        type="button"
-                        class="m-2 my-4 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded disabled:opacity-25"
-                    >
-                        TestZip
-                    </JetButton>
-                    <JetButton
+                        v-if="false"
                         @click="onExtractZip"
                         type="button"
                         class="m-2 my-4 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded disabled:opacity-25"
@@ -189,7 +183,7 @@ import { ref, computed, onMounted, reactive, watch } from "vue";
 import { useStore } from "vuex";
 
 const props = defineProps(["study", "project", "files"]);
-const { showChildsAPI, getTestzip, extractzip } = useFiles();
+const { showChildsAPI, extractzip } = useFiles();
 
 const selectTreeItem = ref();
 const selectTreeFolder = ref("/");
