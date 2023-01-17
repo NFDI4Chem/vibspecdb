@@ -20,8 +20,8 @@ class UpdateFileObject
 
         return DB::transaction(function () use ($input, $file) {
             $file->forceFill([
-                'type'  => array_key_exists('type', $input) ? $input['type'] : null,
-                'name'  => array_key_exists('name', $input) ? $input['name'] : null,
+                'type'  => $input["type"] ?? $file['type'],
+                'name'  => $input["name"] ?? $file['name'],
             ])->save();
         });
     }

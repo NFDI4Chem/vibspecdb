@@ -71,8 +71,11 @@ import { useForm, usePage } from "@inertiajs/inertia-vue3";
 import UploadFormUppy from "@/Components/UploadForm/UploadFormUppy.vue";
 import ModalHeader from "./ModalHeader.vue";
 
+import { useFiles } from "@/VueComposable/useFiles";
+
 import { useStore } from "vuex";
 
+const { extractzip, saveFile } = useFiles();
 const store = useStore();
 
 // const show = ref(true);
@@ -193,38 +196,46 @@ const closeViewModal = () => {
     UploadFormUppyRef.value.cancelAll();
 };
 
+
+/// reload Inertia
+const study = computed(() => usePage().props.value.study);
+const MakeReload = () => {
+    const form = useForm({
+        email: null,
+    });
+    form.post(route("study.file-upload.update", study.value.id), {
+        preserveScroll: true,
+        onSuccess: () => form.reset(),
+    });
+};
+
 const onAddFile = async (file) => {
     await delay(500);
-    const form = useForm(file)
-        form.transform((data) => {
-            const { name, type: ftype, size, id: uppyid} = data
-            const type = 'file'
-            const { project_id, study_id, level, base_id } = data?.meta || {}
+    
+    const { name, type: ftype, size, id: uppyid} = file
+    const type = 'file'
+    const { project_id, study_id, level, base_id } = file?.meta || {}
+    const saved = await saveFile({
+        name, type,
+        ftype, size, uppyid,
+        project_id: parseInt(project_id),
+        study_id: parseInt(study_id),
+        level: parseInt(level) + 1,
+        parent_id: parseInt(base_id)
+    });
+    await extractzip(saved);
+    MakeReload();
 
-            return {
-                name, type,
-                ftype, size, uppyid,
-                project_id: parseInt(project_id),
-                study_id: parseInt(study_id),
-                level: parseInt(level) + 1,
-                parent_id: parseInt(base_id)
-            }
-        })
-        .post(route("files.create"), {
-        preserveScroll: true,
-        onSuccess: (file) => {
-            // node.loading = false;
-        },
-    })
 };
+
 
 const delay = (time) => {
     return new Promise((resolve) => setTimeout(resolve, time));
 };
 
 const onUploaded = (file, data) => {
-    onAddFile(file)
-    uploaded.value = true
+    onAddFile(file);
+    uploaded.value = true;
 }
 
 const onBeforeRetry = () => {

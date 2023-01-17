@@ -9,12 +9,35 @@ use Illuminate\Http\JsonResponse;
 
 use App\Actions\FileSystem\CreateNewObject;
 use App\Actions\FileSystem\UpdateFileObject;
+use App\Actions\FileSystem\ZipPreprocessing;
 
 class FileSystemController extends Controller
 {
     public function create(Request $request, CreateNewObject $creator) {
         $fileObject = $creator->create($request->all());
         return $request->wantsJson() ? new JsonResponse($fileObject, 200) : back()->with('status', 'object-created');
+    }
+
+    public function extractzip(Request $request, FileSystemObject $file) {
+
+        $zipextractor = new ZipPreprocessing();
+        $updater = new UpdateFileObject();
+
+        if ($file->ftype !== 'application/zip') {
+            return [
+                'status' => false,
+                'error' => 'extract error, file is not application/zip type.'
+            ];
+        }
+        
+        $updater->update($file, ['type' => 'directory']);
+        $zipextractor->extractzip($file->id);
+
+        return [
+            'status' => true,
+            'error' => ''
+        ];
+
     }
 
     public function destroy(Request $request, FileSystemObject $file)
