@@ -94,7 +94,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/jobs/submit', [JobsController::class, 'submit'])
         ->name('jobs.submit');
 });
-/// project and study routes ///
+/// project and study, assay routes ///
 
 Route::group(['middleware' => ['auth']], function () {
     Route::post('/storage/signed-storage-url', [FileSystemController::class, 'signedStorageURL']);
@@ -169,6 +169,20 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('study.file-upload');
     Route::post('studies/{study}/file-upload/update', [StudyController::class, 'fileUploadForm'])
         ->name('study.file-upload.update');
+
+
+    Route::get('assays/{assay}', [AssayController::class, 'show'])
+        ->name('assay');
+    Route::get('assays/{assay}/settings', [AssayController::class, 'settings'])
+        ->name('assay.settings');
+    Route::delete('assays/{assay}', [AssayController::class, 'destroy'])
+        ->name('assay.destroy');
+    Route::post('assays/create', [AssayController::class, 'store'])
+        ->name('assays.create');
+    Route::put('assays/{assay}/update', [AssayController::class, 'update'])
+        ->name('assays.update');
+    Route::get('assays/{assay}/activity', [AssayController::class, 'activity'])
+        ->name('assays.activity');
 });
 
 
