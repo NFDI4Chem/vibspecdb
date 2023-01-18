@@ -7,13 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\JsonResponse;
 
-use App\Actions\FileSystem\CreateNewObject;
+use App\Actions\FileSystem\CreateFileObject;
 use App\Actions\FileSystem\UpdateFileObject;
 use App\Actions\FileSystem\ZipPreprocessing;
 
 class FileSystemController extends Controller
 {
-    public function create(Request $request, CreateNewObject $creator) {
+    public function create(Request $request, CreateFileObject $creator) {
         $fileObject = $creator->create($request->all());
         return $request->wantsJson() ? new JsonResponse($fileObject, 200) : back()->with('status', 'object-created');
     }

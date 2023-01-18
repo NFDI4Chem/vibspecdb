@@ -13,7 +13,7 @@ use Psr\Http\Message\RequestInterface;
 
 use App\Models\Study;
 
-use App\Actions\FileSystem\CreateNewObject;
+use App\Actions\FileSystem\CreateFileObject;
 use App\Actions\FileSystem\UpdateFileObject;
 
 class ZipPreprocessing
@@ -71,7 +71,7 @@ class ZipPreprocessing
         $tree = [];
         $id = 0;
 
-        $creator = new CreateNewObject();
+        $creator = new CreateFileObject();
 
 
         foreach ($files as $file) {

@@ -45,13 +45,18 @@ class Study extends Model implements Auditable
         return $this->belongsTo(Project::class, 'project_id');
     }
 
+    public function assays()
+    {
+        return $this->hasMany(Assay::class, 'study_id');
+    }
+
     protected function getPublicUrlAttribute()
     {
-        return  env('APP_URL', null)."/projects/".urlencode($this->slug);
+        return  env('APP_URL', null)."/studies/".urlencode($this->slug);
     }
 
     protected function getPrivateUrlAttribute()
     {
-        return  env('APP_URL', null)."/projects/".urlencode($this->url);
+        return  env('APP_URL', null)."/studies/".urlencode($this->url);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Project\CreateNewProject;
+use App\Actions\Project\CreateProject;
 use App\Actions\Project\UpdateProject;
 use App\Models\Project;
 use Illuminate\Contracts\Auth\StatefulGuard;
@@ -12,7 +12,7 @@ use Laravel\Fortify\Actions\ConfirmPassword;
 
 class ProjectController extends Controller
 {
-    public function store(Request $request, CreateNewProject $creator)
+    public function store(Request $request, CreateProject $creator)
     {
         $project = $creator->create($request->all());
         return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'project-created');

@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 
 
-class CreateNewObject
+class CreateFileObject
 {
     /**
      * Create a study.

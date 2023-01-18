@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use App\Models\Study;
 use App\Models\UserAlert;
 
-// use App\Actions\FileSystem\CreateNewObject;
+// use App\Actions\FileSystem\CreateFileObject;
 // use App\Actions\FileSystem\UpdateFileObject;
 
 class UserController extends Controller

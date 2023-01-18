@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Study\CreateNewStudy;
+use App\Actions\Study\CreateStudy;
 use App\Actions\Study\UpdateStudy;
 use App\Models\FileSystemObject;
 use App\Models\ArgoJob;
@@ -15,7 +15,7 @@ use Auth;
 
 class StudyController extends Controller
 {
-    public function store(Request $request, CreateNewStudy $creator)
+    public function store(Request $request, CreateStudy $creator)
     {
         $study = $creator->create($request->all());
         return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'study-created');

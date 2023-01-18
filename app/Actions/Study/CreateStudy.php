@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-class CreateNewStudy
+class CreateStudy
 {
     /**
      * Create a study.
