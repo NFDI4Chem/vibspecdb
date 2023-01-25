@@ -29,7 +29,7 @@ class StudyController extends Controller
 
     public function show(Request $request, Study $study)
     {
-        return Inertia::render('Study/Files/Files', [
+        return Inertia::render('Study/Content', [
             'study' => $study,
             'project' => $study->project
         ]);

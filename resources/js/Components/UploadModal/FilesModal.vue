@@ -257,12 +257,14 @@ const onUploadProgress = (file, { uploader, bytesUploaded, bytesTotal }) => {
     //   console.log('onUploadProgress', uploader, bytesUploaded, bytesTotal)
 };
 
+/*
 const getUppyStatus = () => {
     console.log("test", store.state.Uppy.files.uppy);
     UploadFormUppyRef.value.setUppyState(store.state.Uppy.uppy);
     view.value = "max";
     updateUppySize("max");
 };
+*/
 
 // defineExpose({ UploadFormUppyRef })
 </script>

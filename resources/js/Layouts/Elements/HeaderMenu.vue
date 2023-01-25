@@ -103,8 +103,9 @@
 
                     </div>
                 </div>
+                
                 <div class="ml-4 flex items-center md:ml-4">
-                    <a href="#" target="_blank"
+                    <a :href="docs_page" target="_blank"
                         ><svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
@@ -272,6 +273,10 @@ const clear_notifications = () => {
 
 const alerts = computed(() => {
     return props.alertItems
+})
+
+const docs_page = computed(() => {
+    return import.meta.env.VITE_DOCS_PAGE
 })
 
 
