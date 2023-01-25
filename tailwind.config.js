@@ -3,6 +3,10 @@ const colors = require("tailwindcss/colors");
 
 module.exports = {
     mode: "jit",
+    content: [
+      "./resources/**/*.blade.php",
+      "./resources/**/*.js",
+    ],
     purge: [
         "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
         "./vendor/laravel/jetstream/**/*.blade.php",
@@ -11,40 +15,6 @@ module.exports = {
         "./resources/js/**/*.vue",
         "./vendor/spatie/laravel-support-bubble/config/**/*.php",
         "./vendor/spatie/laravel-support-bubble/resources/views/**/*.blade.php",
-    ],
-    safelist: [
-        {
-            pattern: /grid-cols-/,
-            variants: ["md", "lg", "hover", "focus"],
-        },
-        {
-            pattern: /box-/,
-            variants: ["lg", "hover", "focus"],
-        },
-        {
-            pattern: /h-/,
-            variants: ["lg", "hover", "focus"],
-        },
-        {
-            pattern: /w-/,
-            variants: ["lg", "hover", "focus"],
-        },
-        {
-            pattern: /border-/,
-            variants: ["lg", "hover", "focus"],
-        },
-        {
-            pattern: /bg-/,
-            variants: ["lg", "hover", "focus"],
-        },
-        {
-            pattern: /text-/,
-            variants: ["lg", "hover", "focus"],
-        },
-        {
-            pattern: /^ring-/,
-            variants: ["lg", "hover", "focus"],
-        },
     ],
     theme: {
         extend: {
@@ -68,9 +38,8 @@ module.exports = {
             },
         },
     },
-
     plugins: [
         require("@tailwindcss/forms"),
         require("@tailwindcss/typography"),
     ],
-};
+  }

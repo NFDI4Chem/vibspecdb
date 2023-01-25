@@ -1,49 +1,15 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
 @import 'custom/icons';
 
 @import '../js/packages/serviceappvuecomponents/src/assets/tailwind.css';
-
 
 @import "@uppy/core/dist/style.css";
 @import "@uppy/dashboard/dist/style.css";
 @import "@uppy/image-editor/dist/style.css";
 @import '@uppy/progress-bar/dist/style.css';
 
-.uppy-Dashboard-inner {
-  border-radius: 0px;
-}
+@import 'custom/styles';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-
-.input {
-  @apply cursor-auto;
-}
-
-.dark-popper {
-  --popper-theme-background-color: #333333;
-  --popper-theme-background-color-hover: #333333;
-  --popper-theme-text-color: white;
-  --popper-theme-border-width: 0px;
-  --popper-theme-border-radius: 6px;
-  --popper-theme-padding: 12px;
-  --popper-theme-box-shadow: 0 6px 30px -6px rgba(0, 0, 0, 0.25);
-}
-
-.light-popper {
-  --popper-theme-background-color: #ffffff;
-  --popper-theme-background-color-hover: #ffffff;
-  --popper-theme-text-color: #333333;
-  --popper-theme-border-width: 1px;
-  --popper-theme-border-style: solid;
-  --popper-theme-border-color: #eeeeee;
-  --popper-theme-border-radius: 6px;
-  --popper-theme-padding: 12px;
-  --popper-theme-box-shadow: 0 6px 30px -6px rgba(0, 0, 0, 0.25);
-}
-
-.popper {
-  max-width: 420px;
-}
