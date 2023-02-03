@@ -14,8 +14,14 @@ class ProjectController extends Controller
 {
     public function store(Request $request, CreateProject $creator)
     {
-        $project = $creator->create($request->all());
-        return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'project-created');
+        try {
+            $project = $creator->create($request->all());
+            return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'project-created');
+        } catch(Throwable $e) {
+            return redirect()->back()->withErrors([
+                'create' => 'Failed to create new project.'
+            ]);
+        }
     }
 
     public function update(Request $request, UpdateProject $updater, Project $project)
@@ -40,23 +46,23 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function destroy(Request $request, StatefulGuard $guard, Project $project)
+    public function destroy(Request $request, Project $project)
     {
-        $confirmed = app(ConfirmPassword::class)(
-            $guard,
-            $request->user(),
-            $request->password
-        );
 
-        if (! $confirmed) {
-            throw ValidationException::withMessages([
-                'password' => __('The password is incorrect.'),
+        try {
+            if ( $project->owner_id !== auth()->user()->id) {
+                throw ValidationException::withMessages([
+                    'password' => __('You are not the project owner.'),
+                ]);
+            }
+    
+            $project->delete();
+            return redirect()->route('dashboard');
+        } catch(Throwable $e) {
+            return redirect()->back()->withErrors([
+                'create' => 'Failed to delete the project'
             ]);
         }
-
-        $project->delete();
-
-        return redirect()->route('dashboard');
     }
 
     public function activity(Request $request, Project $project)

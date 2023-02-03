@@ -2,7 +2,7 @@
     <app-layout :title="study.name">
         <template #header>
             <div class="lg:flex lg:items-center lg:justify-between w-full">
-                <div class="flex-1 min-w-0">
+                <div class="flex-1 min-w-0 flex-col space-y-2">
                     <nav class="flex" aria-label="Breadcrumb">
                         <ol role="list" class="flex items-center space-x-4">
                             <li>
@@ -16,15 +16,17 @@
                             </li>
                             <li>
                                 <div class="flex items-center">
-                                    <ChevronRightIcon
-                                        class="flex-shrink-0 h-5 w-5 text-gray-400"
-                                        aria-hidden="true"
-                                    />
-                                    <Link
-                                        :href="route('project', [project.id])"
-                                        class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
-                                        >{{ project.name }}</Link
-                                    >
+                                    <div class="flex flex-row gap-3">
+                                        <ChevronRightIcon
+                                            class="flex-shrink-0 h-5 w-5 text-gray-400"
+                                            aria-hidden="true"
+                                        />
+                                        <Link
+                                            :href="route('project', [project.id])"
+                                            class="text-sm font-medium text-gray-500 hover:text-gray-700"
+                                            >{{ project.name }}</Link
+                                        >
+                                    </div>
                                 </div>
                             </li>
                         </ol>
@@ -42,33 +44,33 @@
                         >
                             <Link
                                 :href="route('study.settings', study.id)"
-                                class="flex flex-row items-center flex-nowrap"
+                                class="flex flex-row items-center flex-nowrap space-x-2"
                             >
                                 <Cog6ToothIcon
                                     class="h-6 w-6 sm:h-5 sm:w-5 text-gray-800 sm:text-gray-400  group-hover:text-teal-500"
                                     aria-hidden="true"
                                 />
-                                <div class="ml-2 mt-0.5 group-hover:text-teal-500 hidden sm:block">Study Settings</div>
+                                <div class="mt-0.5 group-hover:text-teal-500 hidden sm:block">Study Settings</div>
                             </Link>
                         </div>
                     </div>
                     <div
-                        class="flex flex-col sm:flex-row sm:flex-wrap mt-4 sm:mt-3 gap-2 sm:gap-4 w-full"
+                        class="flex flex-col sm:flex-row sm:flex-wrap mt-4 sm:mt-3 gap-2 sm:gap-5 w-full"
                     >
                         <div class="flex items-center text-sm text-gray-500">
-                            <div v-if="study.is_public" class="flex flex-row">
+                            <div v-if="study.is_public" class="flex flex-row space-x-2 items-center">
                                 <GlobeAltIcon
                                     class="h-5 w-5"
                                     aria-hidden="true"
                                 />
-                                <div class="ml-2 pt-0.5">Public</div>
+                                <div class="pt-0.5">Public</div>
                             </div>
-                            <span v-else class="flex-row flex">
+                            <span v-else class="flex-row flex space-x-1 items-center">
                                 <LockClosedIcon
-                                    class="h-5 w-5"
+                                    class="h-5 w-5 pb-0.5"
                                     aria-hidden="true"
                                 />
-                                <span class="ml-2 pt-0.5">Private</span>
+                                <span class="pt-0.5">Private</span>
                             </span>
                         </div>
                         <div class="flex flex-row text-sm text-gray-500">
@@ -85,12 +87,16 @@
                             <a
                                 class="cursor-pointer inline-flex items-center"
                                 @click="toggleDetails"
-                                ><IdentificationIcon
-                                    class="h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                    aria-hidden="true"
-                                />
-                                <div class="ml-2 mt-0.5">View details</div></a
                             >
+                                <div class="flex flex-row space-x-1 items-center">
+                                    <IdentificationIcon
+                                        class="h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                        aria-hidden="true"
+                                    />
+                                    <div class="mt-0.5">View details</div>
+                                </div>
+                            </a>
+                                
                         </div>
                         <study-details
                             ref="studyDetailsElement"

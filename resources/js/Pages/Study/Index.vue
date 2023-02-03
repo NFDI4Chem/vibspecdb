@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <div class="px-2 sm:px-12 py-2 mx-auto max-w-8xl">
-      <div>
-        <div class="flex items-baseline justify-between mb-8">
-          <div>
+    <div>
+      <div class="flex flex-col gap-5">
+        <div class="flex justify-between items-center">
+          <div class="flex flex-col gap-2">
             <h2 class="text-lg">Studies</h2>
             <div class="mt-2 text-sm text-gray-700">
               <div class="max-w-2xl">
@@ -23,7 +22,7 @@
         </div>
         
         <span v-if="!studies.length">
-          <div class="mt-4">
+          <div class="mt4">
             <div class="px-6 py-4 bg-white shadow-md rounded-lg">
               <div class="flex items-center">
                 <svg
@@ -41,22 +40,25 @@
                   ></polygon>
                 </svg>
                 <div
-                  class="ml-3 font-semibold text-sm text-gray-600 uppercase tracking-wider"
+                  class="ml3 font-semibold text-sm text-gray-600 uppercase tracking-wider"
                 >
                   Create Your First Study
                 </div>
               </div>
-              <div class="mt-3 max-w-2xl text-sm text-gray-700">
+              <div class="mt3 max-w-2xl text-sm text-gray-700">
                 A project can contain as many studies as you wish and each study receives its own URL.
                 Within each study you may upload files, select Model to process and submit your jobs. 
               </div>
-              <button
-                type="button"
-                class="flex align-middle text-white justify-center text-sm font-medium px-3 py-2 uppercase w-full rounded-lg bg-sky-800 hover:bg-sky-800 focus:outline-none focus:ring-2 mt-6 focus:ring-offset-2 focus:ring-teal-500"
-                @click="openStudyCreateDialog()"
-              >
-                Create a new study
-              </button>
+              <w-flex class="mt2">
+                  <w-button
+                      class="ma1 grow"
+                      bg-color="primary"
+                      xl
+                      @click="openStudyCreateDialog()"
+                  >
+                      <div class="text-sm font-medium uppercase my3">Create a new study</div>
+                  </w-button>
+              </w-flex>
             </div>
           </div>
         </span>
@@ -66,7 +68,6 @@
         <study-create ref="studyCreateElement" :project="project"></study-create>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>

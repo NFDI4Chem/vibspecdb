@@ -1,5 +1,8 @@
+
+
 import "./bootstrap";
 import "../css/app.css";
+
 
 // import uPlot from 'uplot';
 import UplotVue from "uplot-vue";
@@ -14,12 +17,16 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 
 import Popper from "vue3-popper";
 
+import WaveUI from 'wave-ui'
+import { Splitpanes, Pane } from "splitpanes";
+
 import PersistentLayout from "@/Layouts/PersistentLayout.vue";
 
 import { store } from "./store";
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
+
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -34,15 +41,25 @@ createInertiaApp({
         return page;
     },
     setup({ el, app, props, plugin }) {
-        return createApp({ render: () => h(app, props), store })
+        const application = createApp({ render: () => h(app, props), store })
             .use(plugin)
             .use(store)
             .mixin({ methods: { route } })
             .mixin(helpers)
             .component("UplotVue", UplotVue)
             .component("Popper", Popper)
-            .component("inertia-link", Link)
-            .mount(el);
+            .component("splitpanes", Splitpanes)
+            .component("pane", Pane)
+            .component("inertia-link", Link);
+
+        new WaveUI(application, {
+            notificationManager: {
+                align: 'left', // Or 'left'.
+                transition: 'default' // Sliding from the side by default.
+              }
+        })
+        application.mount(el)
+        return application
     },
 });
 

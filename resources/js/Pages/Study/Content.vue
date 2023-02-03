@@ -2,7 +2,7 @@
     <div>
         <study-layout :project="project" :study="study">
             <template #scontent>
-                <div class="bg-white shadow-md rounded-lg flex flex-col flex-1">
+                <div class="bg-white shadow-md rounded-lg flex flex-col flex-1 mb-5">
                     <div class="md:hidden mb-2">
                         <label for="tabs" class="sr-only">Select a tab</label>
                         <select
@@ -22,7 +22,7 @@
                     <div class="hidden md:block">
                         <div class="border-b border-gray-200 flex flex-1 flex-row items-center justify-between px-4">
                             <nav
-                                class="-mb-px flex space-x-8"
+                                class="-mb-px flex space-x-5"
                                 aria-label="Tabs"
                             >
                                 <Link
@@ -41,21 +41,23 @@
                                             : undefined
                                     "
                                 >
-                                    <component
-                                        :is="tab.icon"
-                                        :class="[
-                                            tab.name === current
-                                                ? 'text-sky-600'
-                                                : 'text-gray-400 group-hover:text-gray-500',
-                                            '-ml-0.5 mr-2 h-5 w-5',
-                                        ]"
-                                        aria-hidden="true"
-                                    />
-                                    <span>
-                                      {{ tab.name}}
-                                      <sup class="uppercase">{{uppercase_id(tab?.route)}}</sup>
-                                    </span
-                                    >
+                                    <div class="flex flex-row space-x-1 items-center">
+                                        <component
+                                            :is="tab.icon"
+                                            :class="[
+                                                tab.name === current
+                                                    ? 'text-sky-600'
+                                                    : 'text-gray-400 group-hover:text-gray-500',
+                                                'h-5 w-5',
+                                            ]"
+                                            aria-hidden="true"
+                                        />
+                                        <span>
+                                        {{ tab.name}}
+                                        <sup class="uppercase">{{uppercase_id(tab?.route)}}</sup>
+                                        </span
+                                        >
+                                    </div>
                                 </Link>
                             </nav>
                         </div>

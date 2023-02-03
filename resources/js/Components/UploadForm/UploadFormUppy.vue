@@ -91,6 +91,9 @@ export default {
         };
     },
     mounted() {
+        console.log('token', document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute("content"))
         // console.log("Date.now()", Date.now());
         this.setupUppy();
         this.setupDashboard();

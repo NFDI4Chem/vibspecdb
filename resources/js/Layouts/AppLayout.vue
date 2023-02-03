@@ -1,30 +1,32 @@
 <template>
-    <Head :title="title" />
-    <jet-banner />
-    <div>
-        <div class="flex flex-1">
-            <MobileMenu
-                :sidebarOpen="sidebarOpen"
-                @switchToTeam="switchToTeam"
-            />
-            <MiniMenu
-                :sidebarOpen="sidebarOpen"
-                @sidebarOpenChange="sidebarOpenChange"
-            />
-            <HeaderMenu
-                :sidebarOpen="sidebarOpen"
-                @sidebarOpenChange="sidebarOpenChange"
-                @logout="logout"
-                :alertItems="alerts"
-                @clearJobAlerts="clearJobAlerts"
-            >
-                <template #header>
-                    <slot name="header"></slot>
-                </template>
-                <slot></slot>
-            </HeaderMenu>
+    <w-app>
+        <Head :title="title" />
+        <jet-banner />
+        <div>
+            <div class="flex flex-1">
+                <MobileMenu
+                    :sidebarOpen="sidebarOpen"
+                    @switchToTeam="switchToTeam"
+                />
+                <MiniMenu
+                    :sidebarOpen="sidebarOpen"
+                    @sidebarOpenChange="sidebarOpenChange"
+                />
+                <HeaderMenu
+                    :sidebarOpen="sidebarOpen"
+                    @sidebarOpenChange="sidebarOpenChange"
+                    @logout="logout"
+                    :alertItems="alerts"
+                    @clearJobAlerts="clearJobAlerts"
+                >
+                    <template #header>
+                        <slot name="header"></slot>
+                    </template>
+                    <slot></slot>
+                </HeaderMenu>
+            </div>
         </div>
-    </div>
+    </w-app>
 </template>
 
 <script setup>

@@ -1,3 +1,7 @@
+
+@import 'wave-ui/dist/wave-ui.css';
+@import 'splitpanes/dist/splitpanes.css';
+
 @import 'custom/icons';
 
 @import '../js/packages/serviceappvuecomponents/src/assets/tailwind.css';

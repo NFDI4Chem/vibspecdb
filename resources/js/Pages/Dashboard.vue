@@ -33,7 +33,7 @@
                 </a>
             </div>
         </template>
-        <div class="px-4 sm:px-6 py-8 mx-auto max-w-6xl">
+        <div class="py-8 p-12">
             <team-projects :projects="projects" />
         </div>
     </app-layout>

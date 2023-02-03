@@ -20,7 +20,7 @@
             </div>
 
             <div class="mt-0 flex-grow flex flex-col">
-                <nav class="flex-1 pr-2 pl-1 bg-white space-y-3 my-3">
+                <nav class="flex-1 pr-2 pl-1 bg-white space-y-3 py-3">
                     <Link
                       v-for="item in leftMenu"
                       :key="item.name"

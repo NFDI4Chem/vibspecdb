@@ -1,20 +1,22 @@
 <template>
     <div
-        class="max-w-sm bg-white text-center shadow-lg rounded-lg overflow-hidden my-4 hover:opacity-75 hover:cursor-pointer"
+        class="max-w-sm w-3/4 mx-auto bg-white text-center shadow-lg rounded-0 overflow-hidden my-4 hover:opacity-75 hover:cursor-pointer"
         @click="onSelect(item)"
     >
-        <img
-            class="w-32 h-32 object-center m-auto my-6"
-            src="/imgs/project/project.svg"
-            alt="avatar"
-        />
-        <div class="flex items-center px-6 py-1 text-white bg-gray-500">
-            <BriefcaseIcon class="w-5 h-5" />
-            <h1 class="mx-3 text-white font-semibold text-md">
-                #0 Studies / #0 Active Jobs
+        <div class="p-5 w-40 mx-auto">
+            <w-image
+                src="/imgs/project/project.svg"
+                :ratio="3/4"
+                transition="scale-fade"
+            />
+        </div>
+        <div class="flex items-center px-6 py-0.5 text-white bg-gray-500 ">
+            <BriefcaseIcon class="w-5 h-5 pb-0.5" />
+            <h1 class=" text-white font-semibold text-md">
+                #0 Studies
             </h1>
         </div>
-        <div class="py-4 px-5 text-gray-500">
+        <div class="py-4 px-5 text-gray-500 flex flex-col gap-1">
             <h1 class="text-2xl font-semibold text-gray-800 text-left">
                 {{ item.name }}
             </h1>
@@ -24,24 +26,24 @@
             >
                 {{ item.description }}
             </p>
-            <div class="flex items-center mt-4">
+            <div class="flex items-center">
                 <span v-if="item.is_public" class="inline-flex items-center">
-                    <GlobeAltIcon class="h-5 w-5" aria-hidden="true" />
+                    <GlobeAltIcon class="h-5 w-5 pr-1" aria-hidden="true" />
                     <h1 class="px-2 text-sm pt-1">Public</h1>
                 </span>
                 <span v-else class="inline-flex items-center">
-                    <LockClosedIcon class="h-5 w-5" aria-hidden="true" />
-                    <h1 class="ml-2 pt-1">Private</h1>
+                    <LockClosedIcon class="h-5 w-5 pr-1" aria-hidden="true" />
+                    <h1 class="px-2 pt-1">Private</h1>
                 </span>
             </div>
             <div class="flex items-center mt-1">
-                <CalendarIcon class="h-5 w-5" aria-hidden="true" />
+                <CalendarIcon class="h-5 w-5 pr-1" aria-hidden="true" />
                 <h1 class="px-2 text-sm pt-1">
                     {{ formatDate(item?.created_at) }}
                 </h1>
             </div>
             <div class="flex items-center mt-1">
-                <UserIcon class="h-5 w-5" aria-hidden="true" />
+                <UserIcon class="h-5 w-5 pr-1" aria-hidden="true" />
                 <h1 class="px-2 text-sm pt-1">Owner / Shared</h1>
             </div>
         </div>
