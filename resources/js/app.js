@@ -51,6 +51,7 @@ createInertiaApp({
             .component("splitpanes", Splitpanes)
             .component("pane", Pane)
             .component("inertia-link", Link);
+            
 
         new WaveUI(application, {
             notificationManager: {
@@ -58,6 +59,7 @@ createInertiaApp({
                 transition: 'default' // Sliding from the side by default.
               }
         })
+        application.provide('WaveUI', WaveUI)
         application.mount(el)
         return application
     },

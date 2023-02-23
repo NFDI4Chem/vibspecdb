@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <div class="flex flex-col gap-5">
+    <div class="projects">
+
+        <div class="flex flex-col gap-8">
             <div class="flex items-center justify-between">
             <div class="flex flex-col gap-2">
                 <h2 class="text-lg">Projects</h2>
@@ -8,6 +9,19 @@
                     <div class="max-w-2xl">Each team can have many Projects.</div>
                 </div>
             </div>
+
+            <div class="bg-blue w-5/12 search-items">
+                <w-input
+                    tile
+                    class="mb2 title5"
+                    label="Search (by Name & Desc.)"
+                    label-position="inside"
+                    type="search"
+                    :outline="false"
+                    inner-icon-left="wi-search">
+                </w-input>
+            </div>
+
             <div class="flex-shrink-0 ml4" v-if="projects?.length">
                 <button
                 type="button"
@@ -88,6 +102,20 @@ const onSelect = (project) => {
 }
 
 </script>
+
+<style lang="scss">
+.search-items {
+    .w-input {
+        .w-input__icon {
+            margin: 8px 10px 10px 0px;
+        }
+        .w-input__input {
+            height: 2rem;
+        }
+    }
+}
+
+</style>
 
 
 <!-- <script>

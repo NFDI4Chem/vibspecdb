@@ -17,19 +17,11 @@
                     download any data or information that you wish to retain.
                 </div>
 
-                <w-confirm 
-                    id="project-delete"
-                    question="Are you sure you want to delete your project? Once your
-                        project is deleted, all of its resources and data will be
-                        permanently deleted."
-                    bg-color="error"
-                    md
-                    @confirm="deleteProject"
-                    :disabled="form.processing"
-                    transition="scale"
+                <delete-btn
+                    :pid="project.id"
                 >
-                    Delete Project
-                </w-confirm>
+                    <div>Delete Project</div>
+                </delete-btn>
            
             </div>
         </div>
@@ -38,33 +30,14 @@
 
 <script>
 
-import useWave from "@/VueComposable/mixins/useWave";
+import DeleteBtn from "@/Pages/Project/Partials/DeleteBtn.vue";
 
 export default {
-    mixins: [useWave],
 
     props: ["project"],
 
-    data() {
-        return {
-            form: this.$inertia.form({}),
-        };
-    },
-
-    methods: {
-        deleteProject() {
-            this.form.delete(route("project.destroy", this.project.id), {
-                preserveScroll: true,
-                onSuccess: () => {
-                    this.form.reset();
-                    this.info_notify('Project deleted successfully');
-                },
-                onError: () => {
-                    this.info_error('Failed to Delete the Project');
-                },
-                onFinish: () => this.form.reset(),
-            });
-        },
-    },
+    components: {
+        DeleteBtn
+    },  
 };
 </script>

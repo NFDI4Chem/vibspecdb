@@ -2,9 +2,31 @@
   border-radius: 0px;
 }
 
+
+/* wave fixes: */
 .w-card__content {
   max-width: 600px;
 }
+
+.w-input__input:focus, .w-textarea__textarea:focus{
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.w-button {
+  border-radius: 0;
+}
+
+.w-card {
+  border-radius: 0;
+}
+
+.w-textarea {
+  border-width: 0 !important;
+  padding: 0 !important;
+}
+
+/* end of wave-ui fixes */
 
 
 .input {

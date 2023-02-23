@@ -1,15 +1,13 @@
 <template>
-    <w-app>
-        <study-content :project="project" :study="study" current="Upload Files" class="files-uploader-area">
+    <!-- <w-app> -->
+        <study-content :project="project" :study="study" current="Upload Files">
             <template #study-section>
 
-                <div class="h-100 px-5 py-3">
+                <div class="h-100 px-5 py-3 files-uploader-area">
 
                     <div class="w-100 h-20 bg-gray-500">Metadata here</div>
 
-                    <w-button>My Button</w-button>
-
-                    <splitpanes class="bg-gray-50" v-if="files?.length">
+                    <splitpanes class="bg-gray-50" v-if="files?.length || true">
                         <pane min-size="20" class="flex flex-col items-start justify-start px-5 py-3">
                             <div class="w-10 h-2 bg-blue-300"></div>
                             <div
@@ -269,7 +267,7 @@
                 </div>
             </template>
         </study-content>
-    </w-app>
+    <!-- </w-app> -->
 </template>
 
 <script setup>

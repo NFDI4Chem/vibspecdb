@@ -31,6 +31,7 @@
         "@codemirror/theme-one-dark": "^6.0.0",
         "@headlessui/vue": "^1.6.2",
         "@heroicons/vue": "^2.0.10",
+        "@mdi/font": "^7.1.96",
         "@uppy/aws-s3-multipart": "^2.4.1",
         "@uppy/core": "^2.3.2",
         "@uppy/dashboard": "^2.4.1",

@@ -1,3 +1,35 @@
+import WaveUI from 'wave-ui'
+
+const common_set = {
+  timeout: 4000,
+  dismiss: true,
+  shadow: true,
+  round: false,
+  md: true,
+  bottom: true,
+  right: true,
+  tile: true,
+  "no-border": true,
+}
+
+export const setup_info_notify = (text = '') => {
+  const wave = new WaveUI()
+  wave.notify({
+    ...common_set,
+    message: text,
+    info: true,
+  })
+}
+
+export const setup_error_notify = (text = '') => {
+  const wave = new WaveUI()
+  wave.notify({
+    ...common_set,
+    message: text,
+    error: true,
+  })
+}
+
 const useWave = {
   data() {
     return {
@@ -22,7 +54,7 @@ const useWave = {
           info: true,
       })
     },
-    info_error(text = '') {
+    error_notify(text = '') {
       this.$waveui.notify({
           ...this.common,
           message: text,
