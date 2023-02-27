@@ -51,7 +51,11 @@ createInertiaApp({
             .component("splitpanes", Splitpanes)
             .component("pane", Pane)
             .component("inertia-link", Link);
-            
+           
+        application.provide('csrf_token', document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content")
+        )
 
         new WaveUI(application, {
             notificationManager: {

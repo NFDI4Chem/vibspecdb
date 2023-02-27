@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export default {
     name: "UppyUploader",
+    inject: ['csrf_token'],
     props: {
         id: {
             type: String,
@@ -91,10 +92,7 @@ export default {
         };
     },
     mounted() {
-        console.log('token', document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"))
-        // console.log("Date.now()", Date.now());
+
         this.setupUppy();
         this.setupDashboard();
         this.setupEvents();
@@ -239,9 +237,7 @@ export default {
                 limit: 4,
                 companionUrl: "/",
                 companionHeaders: {
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
+                    "X-CSRF-TOKEN": this.csrf_token
                 },
             });
         },

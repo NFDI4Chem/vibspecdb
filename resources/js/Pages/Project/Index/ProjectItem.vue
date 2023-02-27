@@ -24,7 +24,7 @@
             @click="onSelect(item)"
         >
             
-            <div class="p-5 w-40 mx-auto">
+            <div class="p-5 w-40 mx-auto min-h-20">
                 <w-image
                     src="/imgs/project/project.svg"
                     :ratio="3/4"
