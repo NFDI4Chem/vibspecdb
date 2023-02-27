@@ -67,6 +67,7 @@ import { Dialog, DialogPanel } from "@headlessui/vue";
 import { MinusIcon } from "@heroicons/vue/24/outline";
 
 import { useForm, usePage } from "@inertiajs/inertia-vue3";
+import { Inertia } from "@inertiajs/inertia";
 
 import UploadFormUppy from "@/Components/UploadForm/UploadFormUppy.vue";
 import ModalHeader from "./ModalHeader.vue";
@@ -196,17 +197,10 @@ const closeViewModal = () => {
     UploadFormUppyRef.value.cancelAll();
 };
 
-
 /// reload Inertia
 const study = computed(() => usePage().props.value.study);
 const MakeReload = () => {
-    const form = useForm({
-        email: null,
-    });
-    form.post(route("study.file-upload.update", study.value.id), {
-        preserveScroll: true,
-        onSuccess: () => form.reset(),
-    });
+    Inertia.reload({ only: ['files'] })
 };
 
 const onAddFile = async (file) => {
