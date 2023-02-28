@@ -1,6 +1,7 @@
 
 @import 'wave-ui/dist/wave-ui.css';
 @import 'splitpanes/dist/splitpanes.css';
+@import "he-tree-vue/dist/he-tree-vue.css";
 
 @import 'custom/icons';
 @import '@mdi/font/css/materialdesignicons.min.css';

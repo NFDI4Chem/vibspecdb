@@ -6,7 +6,7 @@
             <template #content>
                 <div>
                     <div
-                        class="h-6 bg-gray-500 text-white font-bold px-2 rounded mb-4 text-center"
+                        class="h-6 bg-gray-500 text-white font-bold px2 rounded mb4 text-center"
                     >
                         Files Tree Info
                     </div>
@@ -15,7 +15,7 @@
                             class="flex flex-row items-center justify-left gap-0"
                             v-if="options.editable"
                         >
-                            <div class="mr-2">
+                            <div class="mr2">
                                 <strong>To rename</strong> item use:
                             </div>
                             <PencilIcon class="text-gray-500 w-4 h-4" />
@@ -23,7 +23,7 @@
                         <div
                             class="flex flex-row items-center justify-left gap-0"
                         >
-                            <div class="mr-2">
+                            <div class="mr2">
                                 <strong>To move</strong> item hold and move
                                 icons:
                             </div>
@@ -34,13 +34,13 @@
                             class="flex flex-row items-center justify-left gap-3"
                             v-if="options.deleteable"
                         >
-                            <div class="mr-2">
+                            <div class="mr2">
                                 <strong>To delete</strong> item use:
                             </div>
                             <TrashIcon class="text-red-400 w-4 h-4" />
                         </div>
                     </div>
-                    <div class="italic mt-2">
+                    <div class="italic mt2">
                         For quick workflow folder files are loaded when the
                         parent folder is opened.
                     </div>
@@ -67,7 +67,7 @@
             :class="{ ['active-node']: node.id === activeItem.id }"
         >
             <div
-                class="flex justify-between gap-2 items-center whitespace-nowrap ml-2"
+                class="flex justify-between gap-2 items-center whitespace-nowrap ml2"
             >
                 <div
                     @click="onItemClick(node, path, tree)"
@@ -130,12 +130,12 @@
                     />
                     <PlusSmallIcon
                         v-if="node.edit && false"
-                        class="text-gray-400 w-6 rotate-45 mr-[-2px]"
+                        class="text-gray-400 w-6 rotate-45"
                         @click="node.edit = false"
                     />
                     <TrashIcon
                         v-if="!node.edit && node.name !== '/' && options.deleteable"
-                        class="text-red-400 w-4 ml-2"
+                        class="text-red-400 w-4 ml2"
                         @click="removeItem(tree, node, path)"
                     />
                 </div>
@@ -166,10 +166,8 @@
 </template>
 
 <script>
-import "he-tree-vue/dist/he-tree-vue.css";
-import { Tree, Fold, Draggable, Check } from "he-tree-vue";
 
-// const emit = defineEmits(["itemClick"]);
+import { Tree, Fold, Draggable, Check } from "he-tree-vue";
 
 import {
     PencilIcon,
