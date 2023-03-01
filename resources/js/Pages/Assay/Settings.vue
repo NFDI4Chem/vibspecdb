@@ -5,7 +5,10 @@
         <div
           class="flex items-center text-sm text-gray-700 uppercase font-bold tracking-widest"
         >
-          <Link :href="route('assay', assay.id)" class="hover:text-teal-600">{{ assay.name }}</Link>&nbsp;/&nbsp;Settings
+          <Link :href="route('assay', assay.id)" class="hover:text-teal-600">{{
+            assay.name
+          }}</Link
+          >&nbsp;/&nbsp;Settings
         </div>
       </div>
     </template>
@@ -18,16 +21,16 @@
 </template>
 
 <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
-import { Link } from "@inertiajs/inertia-vue3";
-import AssayDelete from "@/Pages/Assay/Partials/Delete.vue";
+import AppLayout from '@/Layouts/AppLayout.vue'
+import { Link } from '@inertiajs/inertia-vue3'
+import AssayDelete from '@/Pages/Assay/Partials/Delete.vue'
 
 export default {
   components: {
     Link,
     AppLayout,
-    AssayDelete
+    AssayDelete,
   },
-  props: ["assay", "studies"],
-};
+  props: ['assay', 'studies'],
+}
 </script>

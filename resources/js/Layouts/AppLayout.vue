@@ -1,92 +1,86 @@
 <template>
-    <w-app>
-        <Head :title="title" />
-        <jet-banner />
-        <div>
-            <div class="flex flex-1">
-                <MobileMenu
-                    :sidebarOpen="sidebarOpen"
-                    @switchToTeam="switchToTeam"
-                />
-                <MiniMenu
-                    :sidebarOpen="sidebarOpen"
-                    @sidebarOpenChange="sidebarOpenChange"
-                />
-                <HeaderMenu
-                    :sidebarOpen="sidebarOpen"
-                    @sidebarOpenChange="sidebarOpenChange"
-                    @logout="logout"
-                    :alertItems="alerts"
-                    @clearJobAlerts="clearJobAlerts"
-                >
-                    <template #header>
-                        <slot name="header"></slot>
-                    </template>
-                    <slot></slot>
-                </HeaderMenu>
-            </div>
-        </div>
-    </w-app>
+  <w-app>
+    <Head :title="title" />
+    <jet-banner />
+    <div>
+      <div class="flex flex-1">
+        <MobileMenu :sidebarOpen="sidebarOpen" @switchToTeam="switchToTeam" />
+        <MiniMenu
+          :sidebarOpen="sidebarOpen"
+          @sidebarOpenChange="sidebarOpenChange"
+        />
+        <HeaderMenu
+          :sidebarOpen="sidebarOpen"
+          @sidebarOpenChange="sidebarOpenChange"
+          @logout="logout"
+          :alertItems="alerts"
+          @clearJobAlerts="clearJobAlerts"
+        >
+          <template #header>
+            <slot name="header"></slot>
+          </template>
+          <slot></slot>
+        </HeaderMenu>
+      </div>
+    </div>
+  </w-app>
 </template>
 
 <script setup>
-import MobileMenu from "@/Layouts/Elements/MobileMenu.vue";
-import MiniMenu from "@/Layouts/Elements/MiniMenu.vue";
-import HeaderMenu from "@/Layouts/Elements/HeaderMenu.vue";
+import MobileMenu from '@/Layouts/Elements/MobileMenu.vue'
+import MiniMenu from '@/Layouts/Elements/MiniMenu.vue'
+import HeaderMenu from '@/Layouts/Elements/HeaderMenu.vue'
 
-import JetBanner from "@/Jetstream/Banner.vue";
-import { Head, Link } from "@inertiajs/inertia-vue3";
+import JetBanner from '@/Jetstream/Banner.vue'
+import { Head, Link } from '@inertiajs/inertia-vue3'
 
-import { sidebarOpen } from "@/VueComposable/store";
-import { Inertia } from "@inertiajs/inertia";
-import { useStore } from "vuex";
-import { computed } from "vue";
+import { sidebarOpen } from '@/VueComposable/store'
+import { Inertia } from '@inertiajs/inertia'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 
-const store = useStore();
+const store = useStore()
 
-const props = defineProps(["title"]);
+const props = defineProps(['title'])
 
-const sidebarOpenChange = (status) => {
-    sidebarOpen.value = status;
-};
-
-const switchToTeam = (team) => {
-    Inertia.put(
-        route("current-team.update"),
-        {
-            team_id: team.id,
-        },
-        {
-            preserveState: false,
-        }
-    );
-};
-
-const logout = () => {
-    Inertia.post(route("logout"));
-};
-
-
-const alerts = computed(() => {
-    return store.state.UserAlerts.alerts;
-});
-
-const clearJobAlerts = async () => {
-    axios.get(route('users.clear_alerts')).then(res => {
-        if (res.status === 200) {
-            store.dispatch("update_alerts", []);
-        }
-    })
+const sidebarOpenChange = status => {
+  sidebarOpen.value = status
 }
 
+const switchToTeam = team => {
+  Inertia.put(
+    route('current-team.update'),
+    {
+      team_id: team.id,
+    },
+    {
+      preserveState: false,
+    },
+  )
+}
 
+const logout = () => {
+  Inertia.post(route('logout'))
+}
+
+const alerts = computed(() => {
+  return store.state.UserAlerts.alerts
+})
+
+const clearJobAlerts = async () => {
+  axios.get(route('users.clear_alerts')).then(res => {
+    if (res.status === 200) {
+      store.dispatch('update_alerts', [])
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>
 .min-width {
-    min-width: 16rem;
+  min-width: 16rem;
 }
 .extra-small {
-    font-size: 10px;
+  font-size: 10px;
 }
 </style>

@@ -1,5 +1,8 @@
 <template>
-  <jet-dialog-modal :show="createAssayDialog" @close="createAssayDialog = false">
+  <jet-dialog-modal
+    :show="createAssayDialog"
+    @close="createAssayDialog = false"
+  >
     <template #title> New Assay </template>
 
     <template #content>
@@ -117,7 +120,9 @@
               >
                 <span
                   :class="[
-                    createAssayForm.is_public ? 'translate-x-5' : 'translate-x-0',
+                    createAssayForm.is_public
+                      ? 'translate-x-5'
+                      : 'translate-x-0',
                     'pointer-events-none relative inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200',
                   ]"
                 >
@@ -220,7 +225,10 @@
                   >
                 </span>
                 <span v-else>
-                  <SwitchLabel as="span" class="text-sm font-medium text-gray-900" passive
+                  <SwitchLabel
+                    as="span"
+                    class="text-sm font-medium text-gray-900"
+                    passive
                     >Public</SwitchLabel
                   ><br />
                   <SwitchDescription
@@ -255,16 +263,25 @@
 </template>
 
 <script>
-import JetDialogModal from "@/Jetstream/DialogModal.vue";
-import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
-import JetButton from "@/Jetstream/Button.vue";
-import { CheckCircleIcon, ChevronRightIcon } from "@heroicons/vue/24/solid";
-import { Link } from "@inertiajs/inertia-vue3";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
-import { AtSymbolIcon, CodeBracketIcon, LinkIcon } from "@heroicons/vue/24/solid";
-import JetInputError from "@/Jetstream/InputError.vue";
-import { ref } from "vue";
-import { Switch, SwitchDescription, SwitchGroup, SwitchLabel } from "@headlessui/vue";
+import JetDialogModal from '@/Jetstream/DialogModal.vue'
+import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
+import JetButton from '@/Jetstream/Button.vue'
+import { CheckCircleIcon, ChevronRightIcon } from '@heroicons/vue/24/solid'
+import { Link } from '@inertiajs/inertia-vue3'
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/vue'
+import {
+  AtSymbolIcon,
+  CodeBracketIcon,
+  LinkIcon,
+} from '@heroicons/vue/24/solid'
+import JetInputError from '@/Jetstream/InputError.vue'
+import { ref } from 'vue'
+import {
+  Switch,
+  SwitchDescription,
+  SwitchGroup,
+  SwitchLabel,
+} from '@headlessui/vue'
 
 export default {
   components: {
@@ -294,9 +311,9 @@ export default {
   data() {
     return {
       createAssayForm: this.$inertia.form({
-        _method: "POST",
-        name: "",
-        description: "",
+        _method: 'POST',
+        name: '',
+        description: '',
         error_message: null,
         team_id: null,
         owner_id: null,
@@ -305,25 +322,25 @@ export default {
         is_public: ref(false),
       }),
       createAssayDialog: false,
-    };
+    }
   },
 
   methods: {
     createAssay() {
-      this.createAssayForm.owner_id = this.$page.props.user.id;
-      this.createAssayForm.team_id = this.$page.props.user.current_team.id;
-      this.createAssayForm.post(route("assays.create"), {
+      this.createAssayForm.owner_id = this.$page.props.user.id
+      this.createAssayForm.team_id = this.$page.props.user.current_team.id
+      this.createAssayForm.post(route('assays.create'), {
         preserveScroll: true,
         onSuccess: () => {
-          this.createAssayDialog = false;
-          this.createAssayForm.reset();
+          this.createAssayDialog = false
+          this.createAssayForm.reset()
         },
-        onError: (err) => console.error(err),
-      });
+        onError: err => console.error(err),
+      })
     },
-    toggleCreateAssayDialog(){
-        this.createAssayDialog = !this.createAssayDialog;
-    }
+    toggleCreateAssayDialog() {
+      this.createAssayDialog = !this.createAssayDialog
+    },
   },
-};
+}
 </script>

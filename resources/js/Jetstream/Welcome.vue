@@ -7,14 +7,16 @@
             <h2 class="text-lg">Projects</h2>
             <div class="mt-2 text-sm text-gray-700">
               <div class="max-w-2xl">
-                Each team may house a variety of projects. 
-                Projects can be versioned, command invocations, and
-                metrics.
+                Each team may house a variety of projects. Projects can be
+                versioned, command invocations, and metrics.
               </div>
             </div>
           </div>
           <div class="flex-shrink-0 ml-4">
-            <button type="button" class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <button
+              type="button"
+              class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
               New Project
             </button>
             <!---->
@@ -39,20 +41,15 @@
                 ></polygon>
               </svg>
               <div
-                class="
-                  ml-3
-                  font-semibold
-                  text-sm text-gray-600
-                  uppercase
-                  tracking-wider
-                "
+                class="ml-3 font-semibold text-sm text-gray-600 uppercase tracking-wider"
               >
                 Create Your First Project
               </div>
             </div>
             <div class="mt-3 max-w-2xl text-sm text-gray-700">
-              Projects can contain as many studies as you wish and each study receives its very own URL. To
-              learn more, check out our documentation.
+              Projects can contain as many studies as you wish and each study
+              receives its very own URL. To learn more, check out our
+              documentation.
             </div>
           </div>
         </div>
@@ -63,11 +60,11 @@
 </template>
 
 <script>
-import JetApplicationLogo from "@/Jetstream/ApplicationLogo.vue";
+import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
 
 export default {
   components: {
     JetApplicationLogo,
   },
-};
+}
 </script>

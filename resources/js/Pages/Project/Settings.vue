@@ -5,7 +5,11 @@
         <div
           class="flex items-center text-sm text-gray-700 uppercase font-bold tracking-widest"
         >
-          <Link :href="route('project', project.id)" class="hover:text-teal-600">{{ project.name }}</Link>&nbsp;/&nbsp;Settings
+          <Link
+            :href="route('project', project.id)"
+            class="hover:text-teal-600"
+            >{{ project.name }}</Link
+          >&nbsp;/&nbsp;Settings
         </div>
       </div>
     </template>
@@ -18,16 +22,16 @@
 </template>
 
 <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
-import { Link } from "@inertiajs/inertia-vue3";
-import ProjectDelete from "@/Pages/Project/Partials/Delete.vue";
+import AppLayout from '@/Layouts/AppLayout.vue'
+import { Link } from '@inertiajs/inertia-vue3'
+import ProjectDelete from '@/Pages/Project/Partials/Delete.vue'
 
 export default {
   components: {
     Link,
     AppLayout,
-    ProjectDelete
+    ProjectDelete,
   },
-  props: ["project", "studies"],
-};
+  props: ['project', 'studies'],
+}
 </script>

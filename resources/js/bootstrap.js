@@ -1,7 +1,7 @@
-import _ from 'lodash';
-import Pusher from 'pusher-js';
+import _ from 'lodash'
+import Pusher from 'pusher-js'
 
-window._ = _;
+window._ = _
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -9,10 +9,10 @@ window._ = _;
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-import axios from 'axios';
-window.axios = axios;
+import axios from 'axios'
+window.axios = axios
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -23,30 +23,29 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 import { Buffer } from 'buffer'
 window.Buffer = Buffer
 
-import Echo from 'laravel-echo';
+import Echo from 'laravel-echo'
 
-window.Pusher = Pusher;
+window.Pusher = Pusher
 
 let config = {
-    broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
-    wsHost: import.meta.env.VITE_PUSHER_HOST,
-    forceTLS: false,
-    encrypted: true,
-    disableStats: true,
-    enabledTransports: ['ws', 'wss'],   
+  broadcaster: 'pusher',
+  key: import.meta.env.VITE_PUSHER_APP_KEY,
+  wsHost: import.meta.env.VITE_PUSHER_HOST,
+  forceTLS: false,
+  encrypted: true,
+  disableStats: true,
+  enabledTransports: ['ws', 'wss'],
 }
 
 if (import.meta.env.VITE_PROD !== 'true') {
-    config = {
-        ...config,
-        wsPort: import.meta.env.VITE_PUSHER_PORT,
-        wssPort: import.meta.env.VITE_PUSHER_PORT,
-    }
+  config = {
+    ...config,
+    wsPort: import.meta.env.VITE_PUSHER_PORT,
+    wssPort: import.meta.env.VITE_PUSHER_PORT,
+  }
 }
 
-window.Echo  = new Echo(config);
-
+window.Echo = new Echo(config)
 
 /* // via Pusher SDK:
 import PusherJS from 'pusher-js';
@@ -63,7 +62,3 @@ window.client = new PusherJS(
     }
 );
 */
-
-
-
-

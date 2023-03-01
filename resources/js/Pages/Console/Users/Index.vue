@@ -16,7 +16,11 @@
     </template>
     <div class="py-12 px-10">
       <div class="mb-6 flex justify-between items-center">
-        <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset">
+        <search-filter
+          v-model="form.search"
+          class="w-full max-w-md mr-4"
+          @reset="reset"
+        >
           <label class="block text-sm font-medium text-gray-700">Role:</label>
           <select
             v-model="form.role"
@@ -108,11 +112,13 @@
                     <span
                       class="px-2 inline-flex text-xs leading-5 font-semibold capitalize rounded-full bg-indigo-100 text-green-800"
                     >
-                      {{ user.role[0] ? user.role[0] : "User" }}
+                      {{ user.role[0] ? user.role[0] : 'User' }}
                     </span>
                   </button>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                >
                   <Link
                     :href="route('users.edit', user.id)"
                     class="text-indigo-600 hover:text-indigo-900"
@@ -157,7 +163,9 @@
                   <div class="flex items-center">
                     <div
                       class="text-sm text-gray-600 capitalize"
-                      :class="{ 'font-semibold': updateRoleForm.role === role.key }"
+                      :class="{
+                        'font-semibold': updateRoleForm.role === role.key,
+                      }"
                     >
                       {{ role.name }}
                     </div>
@@ -172,7 +180,9 @@
                       stroke="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      <path
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
                     </svg>
                   </div>
 
@@ -209,16 +219,16 @@
 </template>
 
 <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
-import throttle from "lodash/throttle";
-import mapValues from "lodash/mapValues";
-import pickBy from "lodash/pickBy";
-import SearchFilter from "@/Shared/SearchFilter.vue";
-import JetDialogModal from "@/Jetstream/DialogModal.vue";
-import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
-import JetButton from "@/Jetstream/Button.vue";
-import BreadCrumbs from "../../../Jetstream/BreadCrumbs.vue";
-import { Link } from "@inertiajs/inertia-vue3";
+import AppLayout from '@/Layouts/AppLayout.vue'
+import throttle from 'lodash/throttle'
+import mapValues from 'lodash/mapValues'
+import pickBy from 'lodash/pickBy'
+import SearchFilter from '@/Shared/SearchFilter.vue'
+import JetDialogModal from '@/Jetstream/DialogModal.vue'
+import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
+import JetButton from '@/Jetstream/Button.vue'
+import BreadCrumbs from '../../../Jetstream/BreadCrumbs.vue'
+import { Link } from '@inertiajs/inertia-vue3'
 
 export default {
   components: {
@@ -253,45 +263,51 @@ export default {
       }),
 
       pages: [
-        { name: "Console", route: "console", current: false },
-        { name: "Users", route: "users", current: true },
+        { name: 'Console', route: 'console', current: false },
+        { name: 'Users', route: 'users', current: true },
       ],
-    };
+    }
   },
   watch: {
     form: {
       handler: throttle(function () {
-        let query = pickBy(this.form);
+        let query = pickBy(this.form)
         this.$inertia.replace(
-          this.route("users", Object.keys(query).length ? query : { remember: "forget" })
-        );
+          this.route(
+            'users',
+            Object.keys(query).length ? query : { remember: 'forget' },
+          ),
+        )
       }, 150),
       deep: true,
     },
   },
   methods: {
     reset() {
-      this.form = mapValues(this.form, () => null);
+      this.form = mapValues(this.form, () => null)
     },
     manageRole(user) {
-      this.updateRoleForm.error_message = null;
+      this.updateRoleForm.error_message = null
       if (user.role[0]) {
-        this.updateRoleForm.role = user.role[0];
+        this.updateRoleForm.role = user.role[0]
       } else {
-        this.updateRoleForm.role = null;
+        this.updateRoleForm.role = null
       }
-      this.managingRoleFor = user;
-      this.currentlyManagingRole = true;
+      this.managingRoleFor = user
+      this.currentlyManagingRole = true
     },
     updateRole() {
-      this.updateRoleForm.put(route("users.update-role", [this.managingRoleFor]), {
-        preserveScroll: true,
-        onSuccess: () => (this.currentlyManagingRole = false),
-        onError: (data) => {
-          this.updateRoleForm.error_message = data.error_message;
+      this.updateRoleForm.put(
+        route('users.update-role', [this.managingRoleFor]),
+        {
+          preserveScroll: true,
+          onSuccess: () => (this.currentlyManagingRole = false),
+          onError: data => {
+            this.updateRoleForm.error_message = data.error_message
+          },
         },
-      });
+      )
     },
   },
-};
+}
 </script>

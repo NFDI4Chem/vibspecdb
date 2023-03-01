@@ -1,23 +1,22 @@
 <template>
-
-<w-dialog
-  v-model="dialog.show"
-  :fullscreen="dialog.fullscreen"
-  :width="dialog.width"
-  :persistent="dialog.persistent"
-  :persistent-no-animation="dialog.persistentNoAnimation"
-  title-class="primary-light1--bg white"
-  dialog-class="create_item_dialog"
-  content-class="mx3"
->
-  <template #title>
-    <w-icon class="mr2">mdi mdi-newspaper</w-icon>
-    <div class="title3">Create New PROJECT</div>
-    <div class="spacer" />
-    <w-icon class="mr2 cursor-pointer" @click="dialog.show = false">
-      mdi mdi-close
-    </w-icon>
-  </template>
+  <w-dialog
+    v-model="dialog.show"
+    :fullscreen="dialog.fullscreen"
+    :width="dialog.width"
+    :persistent="dialog.persistent"
+    :persistent-no-animation="dialog.persistentNoAnimation"
+    title-class="primary-light1--bg white"
+    dialog-class="create_item_dialog"
+    content-class="mx3"
+  >
+    <template #title>
+      <w-icon class="mr2">mdi mdi-newspaper</w-icon>
+      <div class="title3">Create New PROJECT</div>
+      <div class="spacer" />
+      <w-icon class="mr2 cursor-pointer" @click="dialog.show = false">
+        mdi mdi-close
+      </w-icon>
+    </template>
 
     <w-form v-model="valid">
       <w-input
@@ -41,7 +40,7 @@
         class="h-[83px]"
         v-html="md(createProjectForm.description)"
       ></div>
-      
+
       <div class="inline-flex items-center justify-between w-full">
         <div class="inline-flex align-middle items-center">
           <div class="body">Preview</div>
@@ -53,12 +52,11 @@
           />
         </div>
         <div class="spacer" />
-        <div class="caption"> Styling with Markdown is supported</div>
+        <div class="caption">Styling with Markdown is supported</div>
       </div>
-
     </w-form>
 
-  <template #actions>
+    <template #actions>
       <div class="spacer" />
       <w-button
         @click="dialog.show = false"
@@ -75,15 +73,14 @@
         :loading="createProjectForm.processing"
         :disabled="!valid || !createProjectForm.name"
       >
-          Save
+        Save
       </w-button>
-  </template>
-</w-dialog>
-
+    </template>
+  </w-dialog>
 </template>
 
 <script>
-import useWave from "@/VueComposable/mixins/useWave";
+import useWave from '@/VueComposable/mixins/useWave'
 
 export default {
   mixins: [useWave],
@@ -100,12 +97,12 @@ export default {
       },
       valid: null,
       validators: {
-        required: value => !!value || 'This field is required'
+        required: value => !!value || 'This field is required',
       },
       createProjectForm: this.$inertia.form({
-        _method: "POST",
-        name: "",
-        description: "",
+        _method: 'POST',
+        name: '',
+        description: '',
         error_message: null,
         team_id: null,
         owner_id: null,
@@ -114,31 +111,31 @@ export default {
         is_public: false,
       }),
       createProjectDialog: false,
-    };
+    }
   },
 
   methods: {
     createProject() {
-      this.createProjectForm.owner_id = this.$page.props.user.id;
-      this.createProjectForm.team_id = this.$page.props.user.current_team.id;
-      this.createProjectForm.post(route("projects.create"), {
+      this.createProjectForm.owner_id = this.$page.props.user.id
+      this.createProjectForm.team_id = this.$page.props.user.current_team.id
+      this.createProjectForm.post(route('projects.create'), {
         preserveScroll: true,
         onSuccess: () => {
           this.info_notify('Project Created')
-          this.createProjectForm.reset();
+          this.createProjectForm.reset()
         },
-        onError: (err) => {
+        onError: err => {
           this.error_notify('Failed to Create Project')
           console.error(err)
         },
         onFinish: () => {
-          this.dialog.show = false;
+          this.dialog.show = false
         },
-      });
+      })
     },
-    toggleCreateProjectDialog(){
-        this.dialog.show = !this.dialog.show;
-    }
+    toggleCreateProjectDialog() {
+      this.dialog.show = !this.dialog.show
+    },
   },
-};
+}
 </script>

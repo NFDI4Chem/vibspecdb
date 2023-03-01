@@ -20,8 +20,8 @@ const initFolders = [
 ]
 
 const getters = {
-  folders: (state) => state.folders,
-  showTreeSelect: (state) => state.showTreeSelect,
+  folders: state => state.folders,
+  showTreeSelect: state => state.showTreeSelect,
 }
 
 const mutations = {

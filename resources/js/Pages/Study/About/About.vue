@@ -8,11 +8,16 @@
             <div class="mt-0">
               <div>
                 <div class="relative">
-                  <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                  <div
+                    class="absolute inset-0 flex items-center"
+                    aria-hidden="true"
+                  >
                     <div class="w-full border-t border-gray-300" />
                   </div>
                   <div class="relative flex items-center justify-between">
-                    <span class="pr-3 bg-white text-lg font-medium text-gray-900">
+                    <span
+                      class="pr-3 bg-white text-lg font-medium text-gray-900"
+                    >
                       <b>Description</b>
                     </span>
                     <button
@@ -41,15 +46,15 @@
 </template>
 
 <script>
-import { PlusSmallIcon } from "@heroicons/vue/24/solid";
-import StudyContent from "@/Pages/Study/Content.vue";
+import { PlusSmallIcon } from '@heroicons/vue/24/solid'
+import StudyContent from '@/Pages/Study/Content.vue'
 export default {
   components: {
     StudyContent,
     PlusSmallIcon,
   },
-  props: ["study", "project"],
+  props: ['study', 'project'],
   setup() {},
   mounted() {},
-};
+}
 </script>

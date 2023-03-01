@@ -1,32 +1,32 @@
 <template>
-    <!-- Usage: <rawDisplayer class="col-3" :value="myArray" title="List" /> -->
-    <div>
-        <h3>{{ title }}</h3>
-        <pre>{{ valueString }}</pre>
-    </div>
+  <!-- Usage: <rawDisplayer class="col-3" :value="myArray" title="List" /> -->
+  <div>
+    <h3>{{ title }}</h3>
+    <pre>{{ valueString }}</pre>
+  </div>
 </template>
 <script>
 const props = {
-    title: {
-        required: true,
-        type: String,
-    },
-    value: {
-        required: true,
-    },
-};
+  title: {
+    required: true,
+    type: String,
+  },
+  value: {
+    required: true,
+  },
+}
 export default {
-    name: "RawDisplayer",
-    props,
-    computed: {
-        valueString() {
-            return JSON.stringify(this.value, null, 2);
-        },
+  name: 'RawDisplayer',
+  props,
+  computed: {
+    valueString() {
+      return JSON.stringify(this.value, null, 2)
     },
-};
+  },
+}
 </script>
 <style scoped>
 pre {
-    text-align: start;
+  text-align: start;
 }
 </style>

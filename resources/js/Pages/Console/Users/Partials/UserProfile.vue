@@ -13,7 +13,12 @@
         class="col-span-6 sm:col-span-4"
       >
         <!-- Profile Photo File Input -->
-        <input ref="photo" type="file" class="hidden" @change="updatePhotoPreview" />
+        <input
+          ref="photo"
+          type="file"
+          class="hidden"
+          @change="updatePhotoPreview"
+        />
 
         <jet-label for="photo" value="Photo" />
 
@@ -119,7 +124,10 @@
           class="mt-1 block w-full"
           autocomplete="new-password"
         />
-        <jet-input-error :message="form.errors.password_confirmation" class="mt-2" />
+        <jet-input-error
+          :message="form.errors.password_confirmation"
+          class="mt-2"
+        />
       </div>
     </template>
 
@@ -128,7 +136,10 @@
         Saved.
       </jet-action-message>
 
-      <jet-button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+      <jet-button
+        :class="{ 'opacity-25': form.processing }"
+        :disabled="form.processing"
+      >
         Save
       </jet-button>
     </template>
@@ -136,13 +147,13 @@
 </template>
 
 <script>
-import JetButton from "@/Jetstream/Button.vue";
-import JetFormSection from "@/Jetstream/FormSection.vue";
-import JetInput from "@/Jetstream/Input.vue";
-import JetInputError from "@/Jetstream/InputError.vue";
-import JetLabel from "@/Jetstream/Label.vue";
-import JetActionMessage from "@/Jetstream/ActionMessage.vue";
-import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
+import JetButton from '@/Jetstream/Button.vue'
+import JetFormSection from '@/Jetstream/FormSection.vue'
+import JetInput from '@/Jetstream/Input.vue'
+import JetInputError from '@/Jetstream/InputError.vue'
+import JetLabel from '@/Jetstream/Label.vue'
+import JetActionMessage from '@/Jetstream/ActionMessage.vue'
+import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
 
 export default {
   components: {
@@ -155,15 +166,15 @@ export default {
     JetSecondaryButton,
   },
 
-  props: ["user"],
+  props: ['user'],
 
   data() {
     return {
       form: this.$inertia.form({
-        _method: this.user ? "PUT" : "POST",
-        first_name: this.user ? this.user.first_name : "",
-        last_name: this.user ? this.user.last_name : "",
-        email: this.user ? this.user.email : "",
+        _method: this.user ? 'PUT' : 'POST',
+        first_name: this.user ? this.user.first_name : '',
+        last_name: this.user ? this.user.last_name : '',
+        email: this.user ? this.user.email : '',
         password: null,
         password_confirmation: null,
         terms: true,
@@ -171,70 +182,64 @@ export default {
       }),
 
       photoPreview: null,
-    };
+    }
   },
 
   methods: {
     updateProfileInformation() {
       if (this.$refs.photo) {
-        this.form.photo = this.$refs.photo.files[0];
+        this.form.photo = this.$refs.photo.files[0]
       }
 
       if (this.user) {
-        this.form.post(route("users.update", this.user.id), {
-          errorBag: "updateProfileInformation",
+        this.form.post(route('users.update', this.user.id), {
+          errorBag: 'updateProfileInformation',
           preserveScroll: true,
           onSuccess: () => this.clearPhotoFileInput(),
-        });
+        })
       } else {
-        this.form.post(route("users.store"), {
-          errorBag: "updateProfileInformation",
+        this.form.post(route('users.store'), {
+          errorBag: 'updateProfileInformation',
           preserveScroll: true,
           onSuccess: () => this.clearPhotoFileInput(),
-        });
+        })
       }
     },
 
     selectNewPhoto() {
-      this.$refs.photo.click();
+      this.$refs.photo.click()
     },
 
     updatePhotoPreview() {
-      const photo = this.$refs.photo.files[0];
+      const photo = this.$refs.photo.files[0]
 
-      if (!photo) return;
+      if (!photo) return
 
-      const reader = new FileReader();
+      const reader = new FileReader()
 
-      reader.onload = (e) => {
-        this.photoPreview = e.target.result;
-      };
+      reader.onload = e => {
+        this.photoPreview = e.target.result
+      }
 
-      reader.readAsDataURL(photo);
+      reader.readAsDataURL(photo)
     },
 
     deletePhoto() {
-      
-      this.$inertia.delete(route("users.destroy-photo", this.user.id), {
-        
+      this.$inertia.delete(route('users.destroy-photo', this.user.id), {
         preserveScroll: true,
-        
+
         onSuccess: () => {
-          this.photoPreview = null;
-          this.clearPhotoFileInput();
+          this.photoPreview = null
+          this.clearPhotoFileInput()
         },
-
-      });
-
+      })
     },
 
     clearPhotoFileInput() {
-
       if (this.$refs.photo?.value) {
-        this.$refs.photo.value = null;
+        this.$refs.photo.value = null
       }
-      
     },
   },
-};
+}
 </script>

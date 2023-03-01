@@ -9,7 +9,7 @@ const common_set = {
   bottom: true,
   right: true,
   tile: true,
-  "no-border": true,
+  'no-border': true,
 }
 
 export const setup_info_notify = (text = '') => {
@@ -42,25 +42,25 @@ const useWave = {
         bottom: true,
         right: true,
         tile: true,
-        "no-border": true,
-      }
+        'no-border': true,
+      },
     }
   },
   methods: {
     info_notify(text = '') {
       this.$waveui.notify({
-          ...this.common,
-          message: text,
-          info: true,
+        ...this.common,
+        message: text,
+        info: true,
       })
     },
     error_notify(text = '') {
       this.$waveui.notify({
-          ...this.common,
-          message: text,
-          error: true,
+        ...this.common,
+        message: text,
+        error: true,
       })
-    }
+    },
   },
 }
 

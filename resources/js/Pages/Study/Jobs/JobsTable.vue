@@ -1,145 +1,141 @@
 <template>
-    <UniTable
-        :data="dataRow"
-        :header="header"
-        :visible="visible"
-        :actions="actions"
-        :title="title"
-        :style="style"
-        class="m-3 select-none"
-        :mobileHide="[2,3]"
-        @onPaginationChange="onPaginationChange"
-        :detailSlot="detailSlot"
-    />
+  <UniTable
+    :data="dataRow"
+    :header="header"
+    :visible="visible"
+    :actions="actions"
+    :title="title"
+    :style="style"
+    class="m-3 select-none"
+    :mobileHide="[2, 3]"
+    @onPaginationChange="onPaginationChange"
+    :detailSlot="detailSlot"
+  />
 </template>
 
 <script setup>
-import { UniTable } from "@/packages/serviceappvuecomponents/src";
-import JobsTableDetails from "@/Pages/Study/Jobs/JobsTableDetails.vue";
-import { computed, reactive, ref } from "vue";
+import { UniTable } from '@/packages/serviceappvuecomponents/src'
+import JobsTableDetails from '@/Pages/Study/Jobs/JobsTableDetails.vue'
+import { computed, reactive, ref } from 'vue'
 
-import mixin from "@/Mixins/Global.js"
+import mixin from '@/Mixins/Global.js'
 
 import {
-    ChevronDownIcon,
-    TrashIcon,
-    PlusCircleIcon,
-    PencilSquareIcon,
-} from "@heroicons/vue/24/outline";
+  ChevronDownIcon,
+  TrashIcon,
+  PlusCircleIcon,
+  PencilSquareIcon,
+} from '@heroicons/vue/24/outline'
 
-const props = defineProps(["jobs"]);
+const props = defineProps(['jobs'])
 const emit = defineEmits(['onShowDetails'])
 
-const title = "Base Table Template";
-const detailSlot = JobsTableDetails;
+const title = 'Base Table Template'
+const detailSlot = JobsTableDetails
 
 const header = {
-    id: "ID",
-    status: "Status",
-    created_at: "CreatedAt",
-    updated_at: "UpdatedAt",
-};
+  id: 'ID',
+  status: 'Status',
+  created_at: 'CreatedAt',
+  updated_at: 'UpdatedAt',
+}
 
 const style = {
-    greyRows: true,
-    divideX: true,
-    themeColor: "cyan",
-    rowActions: "icons",
-};
+  greyRows: true,
+  divideX: true,
+  themeColor: 'cyan',
+  rowActions: 'icons',
+}
 
 const visible = {
-    all: true,
-    theader: true,
-    tbody: true,
-    commonActions: false,
-    search: false,
-    rowActions: true,
-    checkBoxes: false,
-    pagination: true,
-    filters: true,
-    sort: true,
-};
+  all: true,
+  theader: true,
+  tbody: true,
+  commonActions: false,
+  search: false,
+  rowActions: true,
+  checkBoxes: false,
+  pagination: true,
+  filters: true,
+  sort: true,
+}
 
-const GlobalRowAction = (key) => {
-    console.log(`Action "${key}" here`);
-    switch (key) {
-        case "add":
-            alert(`Action type: ${key}`);
-            break;
-        case "delete":
-            alert(
-                `Rows to be deleted (ids): ` + JSON.stringify(checkedRows.value)
-            );
-            break;
-        default:
-            alert("Global RowAction");
-    }
-};
+const GlobalRowAction = key => {
+  console.log(`Action "${key}" here`)
+  switch (key) {
+    case 'add':
+      alert(`Action type: ${key}`)
+      break
+    case 'delete':
+      alert(`Rows to be deleted (ids): ` + JSON.stringify(checkedRows.value))
+      break
+    default:
+      alert('Global RowAction')
+  }
+}
 
 const actions = [
-    {
-        key: "add",
-        icon: PlusCircleIcon,
-        action: GlobalRowAction,
-        visible: true,
-    },
-    {
-        key: "delete",
-        icon: TrashIcon,
-        action: GlobalRowAction,
-        visible: true,
-    },
-];
+  {
+    key: 'add',
+    icon: PlusCircleIcon,
+    action: GlobalRowAction,
+    visible: true,
+  },
+  {
+    key: 'delete',
+    icon: TrashIcon,
+    action: GlobalRowAction,
+    visible: true,
+  },
+]
 
 const tableConfig = ref({
-    perPage: 5,
-    currentPage: 1,
-});
-
+  perPage: 5,
+  currentPage: 1,
+})
 
 const dataRow = computed(() => {
-  const id_start = (tableConfig.value.currentPage-1)*tableConfig.value.perPage;
-  const id_end = tableConfig.value.currentPage*tableConfig.value.perPage;
+  const id_start =
+    (tableConfig.value.currentPage - 1) * tableConfig.value.perPage
+  const id_end = tableConfig.value.currentPage * tableConfig.value.perPage
 
   return {
-      rows: props.jobs.slice(id_start, id_end).map((j) => ({
-        ...j,
-        created_at: mixin.methods.formatDateTime(j.created_at),
-        updated_at: mixin.methods.formatDateTime(j.updated_at),
-        details: {
-            job: j,
-        },
-      })),
-      pagination: {
-          currentPage: tableConfig.value.currentPage,
-          perPage: tableConfig.value.perPage,
-          totalItems: props?.jobs?.length,
-          options: [1, 5, 10, 25, 50, 100],
+    rows: props.jobs.slice(id_start, id_end).map(j => ({
+      ...j,
+      created_at: mixin.methods.formatDateTime(j.created_at),
+      updated_at: mixin.methods.formatDateTime(j.updated_at),
+      details: {
+        job: j,
       },
-      actions: [
-          {
-              key: "details",
-              title: "Details",
-              icon: ChevronDownIcon,
-              visible: true,
-              action: (rowId, actionKey) =>
-                  DetailsAction(rowId, actionKey),
-          },
-      ],
+    })),
+    pagination: {
+      currentPage: tableConfig.value.currentPage,
+      perPage: tableConfig.value.perPage,
+      totalItems: props?.jobs?.length,
+      options: [1, 5, 10, 25, 50, 100],
+    },
+    actions: [
+      {
+        key: 'details',
+        title: 'Details',
+        icon: ChevronDownIcon,
+        visible: true,
+        action: (rowId, actionKey) => DetailsAction(rowId, actionKey),
+      },
+    ],
   }
-});
+})
 
-
-const onPaginationChange = (changes) => {
-    tableConfig.value = {
-        ...tableConfig.value,
-        ...changes,
-    };
-};
+const onPaginationChange = changes => {
+  tableConfig.value = {
+    ...tableConfig.value,
+    ...changes,
+  }
+}
 
 const DetailsAction = (rowId, actionKey) => {
   emit('onShowDetails', rowId)
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

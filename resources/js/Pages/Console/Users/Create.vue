@@ -23,32 +23,31 @@
 </template>
 
 <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
-import BreadCrumbs from "@/Jetstream/BreadCrumbs.vue";
+import AppLayout from '@/Layouts/AppLayout.vue'
+import BreadCrumbs from '@/Jetstream/BreadCrumbs.vue'
 import UserProfile from '@/Pages/Console/Users/Partials/UserProfile.vue'
 
 export default {
   metaInfo() {
     return {
       title: `${this.form.first_name} ${this.form.last_name}`,
-    };
+    }
   },
   components: {
     AppLayout,
     BreadCrumbs,
-    UserProfile
+    UserProfile,
   },
-  remember: "form",
+  remember: 'form',
   data() {
     return {
       pages: [
-        { name: "Console", route: "console", current: false },
-        { name: "Users", route: "users", current: false },
-        { name: "Create User", route: "users.create", current: true }
+        { name: 'Console', route: 'console', current: false },
+        { name: 'Users', route: 'users', current: false },
+        { name: 'Create User', route: 'users.create', current: true },
       ],
-    };
+    }
   },
-  methods: {
-  },
-};
+  methods: {},
+}
 </script>

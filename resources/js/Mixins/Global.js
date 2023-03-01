@@ -1,6 +1,6 @@
-import * as marked from 'marked';
-import { copyText } from 'vue3-clipboard';
-import { ref } from 'vue';
+import * as marked from 'marked'
+import { copyText } from 'vue3-clipboard'
+import { ref } from 'vue'
 
 export default {
   methods: {
@@ -10,27 +10,35 @@ export default {
     hasAnyPermission: function (permissions) {
       return this.checkIfValueExists(permissions, 'permissions')
     },
-    checkIfValueExists(queryArray, type){
+    checkIfValueExists(queryArray, type) {
       let allValues = Array.from(this.$page.props.user[type])
-      return queryArray.some(r=> allValues.indexOf(r) >= 0);
+      return queryArray.some(r => allValues.indexOf(r) >= 0)
     },
     formatDate(timestamp) {
-        const date = new Date(timestamp);
-        return new Intl.DateTimeFormat('default', {dateStyle: 'long'}).format(date);
+      const date = new Date(timestamp)
+      return new Intl.DateTimeFormat('default', { dateStyle: 'long' }).format(
+        date,
+      )
     },
     formatDateTime(timestamp) {
-      const date = new Date(timestamp);
-      return new Intl.DateTimeFormat('en', { dateStyle: 'full', timeStyle: 'short' }).format(date);
+      const date = new Date(timestamp)
+      return new Intl.DateTimeFormat('en', {
+        dateStyle: 'full',
+        timeStyle: 'short',
+      }).format(date)
     },
     formatDateTimeShort(timestamp) {
-      const date = new Date(timestamp);
-      return new Intl.DateTimeFormat('de', { dateStyle: 'short', timeStyle: 'short' }).format(date);
+      const date = new Date(timestamp)
+      return new Intl.DateTimeFormat('de', {
+        dateStyle: 'short',
+        timeStyle: 'short',
+      }).format(date)
     },
     md(data) {
-      return data ? marked.parse(data) : "";
+      return data ? marked.parse(data) : ''
     },
-    copyToClipboard(text, id){
-      document.getElementById(id).select();
+    copyToClipboard(text, id) {
+      document.getElementById(id).select()
       copyText(text, undefined, (error, event) => {
         if (error) {
           console.log(error)
@@ -38,6 +46,6 @@ export default {
           // console.log(event)
         }
       })
-    }
+    },
   },
 }

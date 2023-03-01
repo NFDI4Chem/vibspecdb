@@ -1,34 +1,34 @@
 const getters = {
-    Treefiles: (state) => state.files,
-};
+  Treefiles: state => state.files,
+}
 
 const mutations = {
-    updateFilesTreeData: (state, payload) => {
-        state.files = {
-            ...state.files,
-            ...payload,
-        };
-    },
-};
+  updateFilesTreeData: (state, payload) => {
+    state.files = {
+      ...state.files,
+      ...payload,
+    }
+  },
+}
 
 const actions = {
-    updateFilesTreeData: ({ commit }, payload) => {
-        commit("updateFilesTreeData", payload);
-    },
-};
+  updateFilesTreeData: ({ commit }, payload) => {
+    commit('updateFilesTreeData', payload)
+  },
+}
 
 const state = {
-    files: {
-        activeItem: {
-            id: 0,
-            path: '/'
-        },
+  files: {
+    activeItem: {
+      id: 0,
+      path: '/',
     },
-};
+  },
+}
 
 export default {
-    state,
-    getters,
-    mutations,
-    actions,
-};
+  state,
+  getters,
+  mutations,
+  actions,
+}

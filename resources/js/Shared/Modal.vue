@@ -32,8 +32,15 @@
 <template>
   <teleport to="body">
     <transition :name="!firstPage ? 'modal' : null" appear>
-      <div ref="mask" class="modal-mask px-2 sm:px-4 md-full:px-6 fixed inset-0 w-full h-full flex justify-between items-center" @mousedown="clickToClose">
-        <div class="modal-container mx-auto flex flex-col rounded-md bg-white w-full shadow-lg overflow-hidden" :style="{ 'max-width': maxWidth + 'px' }">
+      <div
+        ref="mask"
+        class="modal-mask px-2 sm:px-4 md-full:px-6 fixed inset-0 w-full h-full flex justify-between items-center"
+        @mousedown="clickToClose"
+      >
+        <div
+          class="modal-container mx-auto flex flex-col rounded-md bg-white w-full shadow-lg overflow-hidden"
+          :style="{ 'max-width': maxWidth + 'px' }"
+        >
           <slot />
         </div>
       </div>
@@ -87,7 +94,7 @@ export default {
       mask,
       firstPage,
       clickToClose,
-    };
+    }
   },
 }
 </script>

@@ -25,12 +25,12 @@ const props = defineProps({
       return {
         greyRows: true,
         divideX: true,
-        themeColor: "cyan",
-        rowActions: "default",
-      };
+        themeColor: 'cyan',
+        rowActions: 'default',
+      }
     },
   },
-});
+})
 </script>
 
 <style lang="scss" scoped></style>

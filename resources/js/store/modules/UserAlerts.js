@@ -1,26 +1,26 @@
 const getters = {
-    alerts: (state) => state.alerts,
-};
+  alerts: state => state.alerts,
+}
 
 const mutations = {
-    update_alerts: (state, payload) => {
-        state.alerts = payload;
-    },
-};
+  update_alerts: (state, payload) => {
+    state.alerts = payload
+  },
+}
 
 const actions = {
-    update_alerts: ({ commit }, payload) => {
-        commit("update_alerts", payload);
-    },
-};
+  update_alerts: ({ commit }, payload) => {
+    commit('update_alerts', payload)
+  },
+}
 
 const state = {
-    alerts: [],
-};
+  alerts: [],
+}
 
 export default {
-    state,
-    getters,
-    mutations,
-    actions,
-};
+  state,
+  getters,
+  mutations,
+  actions,
+}

@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="relative flex justify-center items-center ointer-events-none"
-  >
+  <div class="relative flex justify-center items-center ointer-events-none">
     <div class="absolute bg-gray-100 opacity-100 min-w-full min-h-full"></div>
     <div
       :class="`animate-spin rounded-full h-${cradius} w-${cradius} border-b-2 border-teal-500 z-12`"
@@ -16,8 +14,8 @@ const props = defineProps({
     required: false,
     default: () => {
       return {
-        themeColor: "cyan",
-      };
+        themeColor: 'cyan',
+      }
     },
   },
   cradius: {
@@ -25,7 +23,7 @@ const props = defineProps({
     required: false,
     default: 32,
   },
-});
+})
 </script>
 
 <style lang="scss" scoped></style>

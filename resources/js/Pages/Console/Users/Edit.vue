@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
-import BreadCrumbs from "../../../Jetstream/BreadCrumbs.vue";
+import AppLayout from '@/Layouts/AppLayout.vue'
+import BreadCrumbs from '../../../Jetstream/BreadCrumbs.vue'
 import UserProfile from '@/Pages/Console/Users/Partials/UserProfile.vue'
 import UserPassword from '@/Pages/Console/Users/Partials/UserPassword.vue'
 
@@ -36,7 +36,7 @@ export default {
   metaInfo() {
     return {
       title: `${this.form.first_name} ${this.form.last_name}`,
-    };
+    }
   },
   components: {
     UserProfile,
@@ -47,22 +47,27 @@ export default {
   props: {
     edituser: Object,
   },
-  remember: "form",
+  remember: 'form',
   data() {
     return {
       pages: [
-        { name: "Console", route: "console", current: false },
-        { name: "Users", route: "users", current: false },
-        { name: this.edituser.first_name + " " + this.edituser.last_name, route: "users.update", current: true, id: this.edituser.id }
+        { name: 'Console', route: 'console', current: false },
+        { name: 'Users', route: 'users', current: false },
+        {
+          name: this.edituser.first_name + ' ' + this.edituser.last_name,
+          route: 'users.update',
+          current: true,
+          id: this.edituser.id,
+        },
       ],
-    };
+    }
   },
   methods: {
     update() {
-      this.form.post(this.route("users.update", this.edituser.id), {
-        onSuccess: () => this.form.reset("password", "photo"),
-      });
-    }
+      this.form.post(this.route('users.update', this.edituser.id), {
+        onSuccess: () => this.form.reset('password', 'photo'),
+      })
+    },
   },
-};
+}
 </script>

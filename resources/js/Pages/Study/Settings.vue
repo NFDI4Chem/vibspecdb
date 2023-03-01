@@ -3,9 +3,12 @@
     <template #header>
       <div>
         <div
-          class="flex items-center text-sm text-gray-700 uppercase font-bold tracking-widest "
+          class="flex items-center text-sm text-gray-700 uppercase font-bold tracking-widest"
         >
-          <Link :href="route('study', study.id)" class="hover:text-teal-600">{{ study.name }}</Link>&nbsp;/&nbsp;Settings
+          <Link :href="route('study', study.id)" class="hover:text-teal-600">{{
+            study.name
+          }}</Link
+          >&nbsp;/&nbsp;Settings
         </div>
       </div>
     </template>
@@ -18,16 +21,16 @@
 </template>
 
 <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
-import { Link } from "@inertiajs/inertia-vue3";
-import StudyDelete from "@/Pages/Study/Partials/Delete.vue";
+import AppLayout from '@/Layouts/AppLayout.vue'
+import { Link } from '@inertiajs/inertia-vue3'
+import StudyDelete from '@/Pages/Study/Partials/Delete.vue'
 
 export default {
   components: {
     Link,
     AppLayout,
-    StudyDelete
+    StudyDelete,
   },
-  props: ["study"],
-};
+  props: ['study'],
+}
 </script>

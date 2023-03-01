@@ -73,13 +73,13 @@
 </template>
 
 <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
-import { Link } from "@inertiajs/inertia-vue3";
+import AppLayout from '@/Layouts/AppLayout.vue'
+import { Link } from '@inertiajs/inertia-vue3'
 
 export default {
   components: {
     Link,
     AppLayout,
-  }
-};
+  },
+}
 </script>

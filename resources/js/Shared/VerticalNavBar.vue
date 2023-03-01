@@ -13,7 +13,10 @@
             @click="displaySelected(file)"
           >
             <span v-if="file.type == 'directory'">
-              <FolderIcon class="-ml-1.5 mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+              <FolderIcon
+                class="-ml-1.5 mr-1 h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
             </span>
             <span v-else>
               <DocumentTextIcon
@@ -94,8 +97,8 @@
 </template>
 
 <script>
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { FolderIcon, DocumentTextIcon } from "@heroicons/vue/24/solid";
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
+import { FolderIcon, DocumentTextIcon } from '@heroicons/vue/24/solid'
 
 export default {
   components: {
@@ -105,7 +108,7 @@ export default {
     DisclosureButton,
     DisclosurePanel,
   },
-  props: ["files"],
+  props: ['files'],
   methods: {},
-};
+}
 </script>

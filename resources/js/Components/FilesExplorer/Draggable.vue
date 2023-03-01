@@ -1,16 +1,16 @@
 <template>
-    <div>
-        <nested :list="list" />
-    </div>
+  <div>
+    <nested :list="list" />
+  </div>
 </template>
 
 <script>
-import nested from "@/Components/FilesExplorer/Nested.vue";
+import nested from '@/Components/FilesExplorer/Nested.vue'
 export default {
-    name: "Draggable",
-    components: {
-        nested,
-    },
-    props: ["list"],
-};
+  name: 'Draggable',
+  components: {
+    nested,
+  },
+  props: ['list'],
+}
 </script>
