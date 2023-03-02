@@ -27,7 +27,7 @@ const withAuth = computed(() => {
 
 const fetchAlerts = async () => {
   axios.get(route('users.alerts')).then(res => {
-    store.dispatch('update_alerts', res?.data ?? [])
+    // store.dispatch('update_alerts', res?.data ?? [])
   })
 }
 

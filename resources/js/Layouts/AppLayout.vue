@@ -3,7 +3,7 @@
     <Head :title="title" />
     <jet-banner />
     <div>
-      <div class="flex flex-1">
+      <div class="flex flex-1 max-h-screen overflow-hidden">
         <MobileMenu :sidebarOpen="sidebarOpen" @switchToTeam="switchToTeam" />
         <MiniMenu
           :sidebarOpen="sidebarOpen"

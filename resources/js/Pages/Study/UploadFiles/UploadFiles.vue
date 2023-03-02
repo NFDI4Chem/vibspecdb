@@ -2,211 +2,77 @@
   <!-- <w-app> -->
   <study-content :project="project" :study="study" current="Upload Files">
     <template #study-section>
-      <div class="h-100 px-5 py-3 files-uploader-area">
-        <div class="w-100 h-20 bg-gray-500">Metadata here</div>
-
+      <div class="h-full px-5 py-3 files-uploader-area flex">
         <splitpanes class="bg-gray-50" v-if="files?.length || true">
           <pane
             min-size="20"
             class="flex flex-col items-start justify-start px-5 py-3"
           >
-            <!-- <div class="w-10 h-2 bg-blue-300"></div> -->
-            <div class="my2">
-              <div class="" v-if="treeFilled">
-                <div class="aside-menu relative flex flex-col overflow-y-auto">
-                  <div class="mr5 min-w-fit">
-                    <UniFilesTree
-                      @itemClick="TreeItemClick"
-                      :tree="files"
-                      :options="treeOptions"
-                      :onRemoveItem="onRemoveItem"
-                      :onAddChildren="onAddChildren"
-                      :activeItem="activeItem"
-                      @change="onTreeChange"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </pane>
-          <pane min-size="20">
-            <section
-              class="min-w-0 px-5 py-5 flex-1 flex flex-col overflow-y-auto lg:order-last"
-              ref="sectionRef"
-            >
-              <div
-                class="flex flex-col gap-2 text-gray-500h-full items-left pt-1"
-              >
-                <div class="text-lg flex flex-col gap-1">
-                  <div
-                    class="flex flex-row flex-wrap gap-1 justify-between items-center"
-                  >
-                    <div>Uploading files to the folder:</div>
-                    <Popper
-                      placement="bottom"
-                      openDelay="50"
-                      arrow
-                      class="light-popper"
+            <splitpanes horizontal>
+              <pane min-size="20">
+                <div class="my2">
+                  <div class="" v-if="treeFilled">
+                    <div
+                      class="aside-menu relative flex flex-col overflow-y-auto"
                     >
-                      <InformationCircleIcon class="h-6 w-6 text-gray-500" />
-                      <template #content>
-                        <div>
-                          <div
-                            class="flex justify-center items-center h-6 bg-gray-500 text-white font-bold py-0 px-2 rounded mb-4"
-                          >
-                            File Uploader Info
+                      <div class="mr5 min-w-fit">
+                        <div
+                          class="flex flex-row justify-between items-center pb7 gap-2"
+                        >
+                          <div class="font-bold1">
+                            <div v-if="treeOptions.showTitle">
+                              {{ treeOptions.title }}
+                            </div>
                           </div>
-                          <div>
-                            File Uploader will upload files to the
-                            <strong>selected folder</strong>
-                            from the
-                            <em>Files Tree</em>.
-                          </div>
-                          <div class="mt-2">
-                            In case where no folder is selected, a root folder
-                            of the Study will be used with the Sign:
-                            <strong
-                              class="flex flex-row justify-center items-center gap-2 bg-gray-100 mt-2"
-                            >
-                              <CircleStackIcon class="h-5 w-5 text-gray-500" />/
-                            </strong>
-                          </div>
+                          <TreeInfoPopper :options="treeOptions" />
                         </div>
-                      </template>
-                    </Popper>
-                  </div>
-                  <div class="flex flex-row gap-3 items-center">
-                    <CircleStackIcon class="h-4 w-4 text-gray-500" />
-                    <strong
-                      class="flex items-center text-sm text-gray-600 force-wrap"
-                    >
-                      {{ selectTreeFolder }}
-                    </strong>
+                        <UniFilesTree
+                          @itemClick="TreeItemClick"
+                          :tree="files"
+                          :options="treeOptions"
+                          :onRemoveItem="onRemoveItem"
+                          :onAddChildren="onAddChildren"
+                          :activeItem="activeItem"
+                          @change="onTreeChange"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <Uploader
-                  :width="sectionWidth"
-                  :baseFolder="activeItem"
-                  @uploaded="onUploaded"
-                />
-              </div>
-            </section>
+              </pane>
+              <pane>
+                <div
+                  class="flex flex-col gap-2 text-gray-500h-full items-left p-4 py3"
+                >
+                  <div class="text-lg flex flex-col gap-1">
+                    <div
+                      class="flex flex-row flex-wrap gap-1 justify-between items-center"
+                    >
+                      <div>Uploading files to the folder:</div>
+                      <UploaderInfoPopper
+                        :selectTreeFolder="selectTreeFolder"
+                      />
+                    </div>
+                    <div class="flex flex-row gap-3 items-center">
+                      <CircleStackIcon class="h-4 w-4 text-gray-500" />
+                      <strong
+                        class="flex items-center text-sm text-gray-600 force-wrap"
+                      >
+                        {{ selectTreeFolder }}
+                      </strong>
+                    </div>
+                  </div>
+                  <Uploader
+                    :width="sectionWidth"
+                    :baseFolder="activeItem"
+                    @uploaded="onUploaded"
+                  />
+                </div>
+              </pane>
+            </splitpanes>
           </pane>
+          <pane min-size="20"> </pane>
         </splitpanes>
-      </div>
-
-      <div class="divide-y divide-gray-200 sm:col-span-9 h-full" v-if="false">
-        <div v-if="files?.length" class="h-full">
-          <nav
-            v-if="selectTreeFolder"
-            class="flex p-3 w-full overflow-hidden cursor-pointer select-none"
-            aria-label="Breadcrumb"
-          >
-            <ol role="list" class="flex items-center space-x-2">
-              <li>
-                <div>
-                  <a class="text-gray-400 hover:text-gray-900">
-                    <HomeIcon class="flex-shrink-0 h-5 w-5" />
-                    <span class="sr-only">Home</span>
-                  </a>
-                </div>
-              </li>
-              <li v-for="page in selectTreeFolder.split('/')" :key="page.name">
-                <div v-if="page != ''" class="flex items-center">
-                  <ChevronRightIcon
-                    class="flex-shrink-0 h-5 w-5 text-gray-400"
-                  />
-                  <a
-                    class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
-                    :aria-current="page ? 'page' : undefined"
-                    >{{ page }}</a
-                  >
-                </div>
-              </li>
-            </ol>
-          </nav>
-          <div
-            class="h-full border-t border-gray-200 xl:flex px-0 sm:px-1 py-3 pb-12 height-limited"
-          >
-            <div class="py-1 px-0 sm:px-4" v-if="treeFilled">
-              <div class="aside-menu relative flex flex-col overflow-y-auto">
-                <div class="mr-5 min-w-fit">
-                  <UniFilesTree
-                    @itemClick="TreeItemClick"
-                    :tree="files"
-                    :options="treeOptions"
-                    :onRemoveItem="onRemoveItem"
-                    :onAddChildren="onAddChildren"
-                    :activeItem="activeItem"
-                    @change="onTreeChange"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="border-r border-gray-200 min-h-fit my-3"></div>
-            <section
-              class="min-w-0 px-5 py-5 flex-1 flex flex-col overflow-y-auto lg:order-last"
-              ref="sectionRef"
-            >
-              <div
-                class="flex flex-col gap-2 text-gray-500h-full items-left pt-1"
-              >
-                <div class="text-lg flex flex-col gap-1">
-                  <div
-                    class="flex flex-row flex-wrap gap-1 justify-between items-center"
-                  >
-                    <div>Uploading files to the folder:</div>
-                    <Popper
-                      placement="bottom"
-                      openDelay="50"
-                      arrow
-                      class="light-popper"
-                    >
-                      <InformationCircleIcon class="h-6 w-6 text-gray-500" />
-                      <template #content>
-                        <div>
-                          <div
-                            class="flex justify-center items-center h-6 bg-gray-500 text-white font-bold py-0 px-2 rounded mb-4"
-                          >
-                            File Uploader Info
-                          </div>
-                          <div>
-                            File Uploader will upload files to the
-                            <strong>selected folder</strong>
-                            from the
-                            <em>Files Tree</em>.
-                          </div>
-                          <div class="mt-2">
-                            In case where no folder is selected, a root folder
-                            of the Study will be used with the Sign:
-                            <strong
-                              class="flex flex-row justify-center items-center gap-2 bg-gray-100 mt-2"
-                            >
-                              <CircleStackIcon class="h-5 w-5 text-gray-500" />/
-                            </strong>
-                          </div>
-                        </div>
-                      </template>
-                    </Popper>
-                  </div>
-                  <div class="flex flex-row gap-3 items-center">
-                    <CircleStackIcon class="h-4 w-4 text-gray-500" />
-                    <strong
-                      class="flex items-center text-sm text-gray-600 force-wrap"
-                    >
-                      {{ selectTreeFolder }}
-                    </strong>
-                  </div>
-                </div>
-                <Uploader
-                  :width="sectionWidth"
-                  :baseFolder="activeItem"
-                  @uploaded="onUploaded"
-                />
-              </div>
-            </section>
-          </div>
-        </div>
       </div>
     </template>
   </study-content>
@@ -225,6 +91,8 @@ import JetButton from '@/Jetstream/Button.vue'
 import StudyContent from '@/Pages/Study/Content.vue'
 import UniFilesTree from '@/Components/UniFilesTree/UniFilesTree.vue'
 import Uploader from '@/Components/UploadForm/Uploader.vue'
+import UploaderInfoPopper from '@/Components/Popper/UploaderInfoPopper.vue'
+import TreeInfoPopper from '@/Components/Popper/TreeInfoPopper.vue'
 import { useForm, usePage } from '@inertiajs/inertia-vue3'
 
 import { useFiles } from '@/VueComposable/useFiles'
@@ -376,6 +244,7 @@ const onUploaded = (file, data) => {
 
 const displaySelected = file => {
   selectTreeItem.value = file
+  console.log('file', file)
 
   let sFolder = '/'
   if (selectTreeItem.value.name == '/') {
@@ -407,10 +276,13 @@ const onExtractZip = () => {
 <style lang="scss">
 .files-uploader-area {
   .splitpanes__pane {
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2) inset;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1) inset;
     // justify-content: center;
     // align-items: center;
     // display: flex;
+    .splitpanes__pane {
+      box-shadow: none;
+    }
   }
 
   em.specs {

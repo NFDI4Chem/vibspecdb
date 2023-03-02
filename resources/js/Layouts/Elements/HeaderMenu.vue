@@ -11,7 +11,7 @@
         <span class="sr-only">Open sidebar</span>
         <Bars3Icon class="h-6 w-6" aria-hidden="true" />
       </button>
-      <div class="flex-1 px-4 flex justify-between">
+      <div class="flex-1 px4 flex justify-between">
         <div class="flex-1 flex">
           <form class="w-full flex md:ml-0" action="#" method="GET">
             <label for="search-field" class="sr-only">Search</label>
@@ -25,7 +25,7 @@
               </div>
               <input
                 id="search-field"
-                class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm"
+                class="block w-full h-full pl8 pr3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm"
                 placeholder="Search"
                 type="search"
                 name="search"
@@ -33,103 +33,95 @@
             </div>
           </form>
         </div>
-        <div class="ml-4 flex items-center md:ml-6">
-          <BellIcon
-            v-if="nalerts === 0"
-            class="h-6 w-6 hover:cursor-pointer text-gray-500"
-            aria-hidden="true"
-          />
-          <BellAlertIcon
-            v-else
-            class="h-6 w-6 hover:cursor-pointer text-sky-700"
-            aria-hidden="true"
-            @click="show_alerts = !show_alerts"
-          />
-          <div v-if="nalerts > 0" class="notification_number text-red-700">
-            {{ nalerts }}
-          </div>
 
-          <div class="notifications-list" v-if="show_alerts">
-            <div class="mt-6 flow-root mx-2">
-              <ul role="list" class="-my-5 divide-y divide-gray-200">
-                <li v-for="alert in alerts" :key="alert" class="py-2">
-                  <div class="flex items-center space-x-4">
-                    <div class="flex-shrink-0">
-                      <CheckCircleIcon
-                        v-if="['done', 'succeeded'].includes(alert.status)"
-                        class="h-6 w-6 text-green-700"
-                        aria-hidden="true"
-                      />
-                      <ExclamationCircleIcon
-                        v-if="['failed', 'error'].includes(alert.status)"
-                        class="h-6 w-6 text-red-600"
-                        aria-hidden="true"
-                      />
-                      <BriefcaseIcon
-                        v-if="alert.status === 'running'"
-                        class="h-6 w-6 text-sky-700"
-                        aria-hidden="true"
-                      />
-                      <BriefcaseIcon
-                        v-if="!alert.status === 'undefined'"
-                        class="h-6 w-6 text-sky-700"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div class="min-w-0 flex-1">
-                      <p class="truncate text-sm font-medium text-gray-900">
-                        {{
-                          `${alert?.study?.name}: Job ID ${alert.argo_job_id}`
-                        }}
-                      </p>
-                      <small
-                        ><time>
-                          {{ formatDateTimeShort(alert.created_at) }}
-                        </time></small
-                      >
-                    </div>
-                    <div>
-                      <inertia-link
-                        class="hover:cursor-pointer inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50"
-                        :href="route('study.jobs', alert?.study?.id)"
-                      >
-                        <ArrowRightIcon
-                          class="ml-2 h-3 w-3 text-gray-500"
+        <div class="ml4 flex items-center">
+          <div class="ml-4 flex items-center md:ml-6">
+            <BellIcon
+              v-if="nalerts === 0"
+              class="h-6 w-6 hover:cursor-pointer text-gray-500"
+              aria-hidden="true"
+            />
+            <BellAlertIcon
+              v-else
+              class="h-6 w-6 hover:cursor-pointer text-sky-700"
+              aria-hidden="true"
+              @click="show_alerts = !show_alerts"
+            />
+            <div v-if="nalerts > 0" class="notification_number text-red-700">
+              {{ nalerts }}
+            </div>
+
+            <div class="notifications-list" v-if="show_alerts">
+              <div class="flow-root mx2">
+                <ul role="list" class="my5 divide-y divide-gray-200">
+                  <li v-for="alert in alerts" :key="alert" class="py2">
+                    <div class="flex items-center space-x-4">
+                      <div class="flex-shrink-0">
+                        <CheckCircleIcon
+                          v-if="['done', 'succeeded'].includes(alert.status)"
+                          class="h-6 w-6 text-green-700"
                           aria-hidden="true"
                         />
-                      </inertia-link>
+                        <ExclamationCircleIcon
+                          v-if="['failed', 'error'].includes(alert.status)"
+                          class="h-6 w-6 text-red-600"
+                          aria-hidden="true"
+                        />
+                        <BriefcaseIcon
+                          v-if="alert.status === 'running'"
+                          class="h-6 w-6 text-sky-700"
+                          aria-hidden="true"
+                        />
+                        <BriefcaseIcon
+                          v-if="!alert.status === 'undefined'"
+                          class="h-6 w-6 text-sky-700"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <p class="truncate text-sm font-medium text-gray-900">
+                          {{
+                            `${alert?.study?.name}: Job ID ${alert.argo_job_id}`
+                          }}
+                        </p>
+                        <small
+                          ><time>
+                            {{ formatDateTimeShort(alert.created_at) }}
+                          </time></small
+                        >
+                      </div>
+                      <div>
+                        <inertia-link
+                          class="hover:cursor-pointer inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50"
+                          :href="route('study.jobs', alert?.study?.id)"
+                        >
+                          <ArrowRightIcon
+                            class="ml2 h-3 w-3 text-gray-500"
+                            aria-hidden="true"
+                          />
+                        </inertia-link>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="mt-6">
-              <div
-                @click="clear_notifications"
-                class="flex w-full items-center justify-center border-l-0 border-r-0 border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 hover:cursor-pointer"
-              >
-                Clear all
+                  </li>
+                </ul>
+              </div>
+              <div class="mt-6">
+                <div
+                  @click="clear_notifications"
+                  class="flex w-full items-center justify-center border-l-0 border-r-0 border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 hover:cursor-pointer"
+                >
+                  Clear all
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="ml-4 flex items-center md:ml-4">
-          <a :href="docs_page" target="_blank"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              class="h-6 w-6"
-            >
-              <path
-                d="M12 21a2 2 0 0 1-1.41-.59l-.83-.82A2 2 0 0 0 8.34 19H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4a5 5 0 0 1 4 2v16z"
-                class="fill-current text-gray-400"
-              ></path>
-              <path
-                d="M12 21V5a5 5 0 0 1 4-2h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4.34a2 2 0 0 0-1.42.59l-.83.82A2 2 0 0 1 12 21z"
-                class="fill-current text-gray-600"
-              ></path></svg
-          ></a>
+          <a :href="docs_page" target="_blank">
+            <w-icon class="w-12" xl color="grey-light1">
+              mdi mdi-book-open-page-variant-outline
+            </w-icon>
+          </a>
+
           <Menu as="div" class="ml-3 relative">
             <div>
               <MenuButton
@@ -145,17 +137,17 @@
               <span v-else class="inline-flex rounded-md">
                 <MenuButton
                   type="button"
-                  class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
+                  class="inline-flex items-center px-5 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
                 >
                   <img
-                    class="h-8 w-8 rounded-full object-cover mr-2"
+                    class="h-8 w-8 rounded-full object-cover mr3"
                     :src="$page.props.user.profile_photo_url"
                     :alt="$page.props.user.first_name"
                   />
                   <span class="md:block hidden">{{
                     $page.props.user.first_name
                   }}</span>
-                  <ChevronDownIcon class="ml-2 -mr-0.5 h-3 w-3" />
+                  <ChevronDownIcon class="ml2 mr2 h-3 w-3" />
                 </MenuButton>
               </span>
             </div>
