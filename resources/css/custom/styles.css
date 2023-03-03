@@ -1,14 +1,22 @@
-.uppy-Dashboard-inner {
-  border-radius: 0px;
+.uploader-class .uppy-Root {
+  height: 100%;
+}
+.uploader-class .uppy-Dashboard {
+  height: 100%;
 }
 
+.uploader-class .uppy-Dashboard-inner {
+  border-radius: 0px;
+  height: 100%;
+}
 
 /* wave fixes: */
 .w-card__content {
   max-width: 600px;
 }
 
-.w-input__input:focus, .w-textarea__textarea:focus{
+.w-input__input:focus,
+.w-textarea__textarea:focus {
   outline: none !important;
   box-shadow: none !important;
 }
@@ -27,7 +35,6 @@
 }
 
 /* end of wave-ui fixes */
-
 
 .input {
   @apply cursor-auto;

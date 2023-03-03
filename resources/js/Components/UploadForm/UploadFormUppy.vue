@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div ref="uppy-dashboard-drag-drop-area" class="uploader-class"></div>
+    <div
+      ref="uppy-dashboard-drag-drop-area"
+      class="uploader-class h-full"
+    ></div>
   </div>
 </template>
 

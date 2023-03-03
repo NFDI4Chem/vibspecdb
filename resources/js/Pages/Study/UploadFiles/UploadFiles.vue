@@ -5,55 +5,53 @@
       <div class="h-full px-5 py-3 files-uploader-area flex">
         <splitpanes class="bg-gray-50" v-if="files?.length || true">
           <pane
-            min-size="20"
+            min-size="30"
             class="flex flex-col items-start justify-start px-5 py-3"
           >
-            <splitpanes horizontal>
-              <pane min-size="20">
-                <div class="my2">
-                  <div class="" v-if="treeFilled">
+            <div class="w-full">
+              <div class="" v-if="treeFilled">
+                <div class="relative flex flex-col overflow-y-auto w-full">
+                  <div class="mr5 min-w-fit">
                     <div
-                      class="aside-menu relative flex flex-col overflow-y-auto"
+                      class="flex flex-row justify-between items-center pb7 gap-2"
                     >
-                      <div class="mr5 min-w-fit">
-                        <div
-                          class="flex flex-row justify-between items-center pb7 gap-2"
-                        >
-                          <div class="font-bold1">
-                            <div v-if="treeOptions.showTitle">
-                              {{ treeOptions.title }}
-                            </div>
-                          </div>
-                          <TreeInfoPopper :options="treeOptions" />
+                      <div class="font-bold text-md">
+                        <div v-if="treeOptions.showTitle">
+                          {{ treeOptions.title }}
                         </div>
-                        <UniFilesTree
-                          @itemClick="TreeItemClick"
-                          :tree="files"
-                          :options="treeOptions"
-                          :onRemoveItem="onRemoveItem"
-                          :onAddChildren="onAddChildren"
-                          :activeItem="activeItem"
-                          @change="onTreeChange"
-                        />
                       </div>
+                      <TreeInfoPopper :options="treeOptions" />
                     </div>
+                    <UniFilesTree
+                      @itemClick="TreeItemClick"
+                      :tree="files"
+                      :options="treeOptions"
+                      :onRemoveItem="onRemoveItem"
+                      :onAddChildren="onAddChildren"
+                      :activeItem="activeItem"
+                      @change="onTreeChange"
+                    />
                   </div>
                 </div>
-              </pane>
-              <pane>
-                <div
-                  class="flex flex-col gap-2 text-gray-500h-full items-left p-4 py3"
-                >
+              </div>
+            </div>
+          </pane>
+          <pane min-size="25" size="55">
+            <splitpanes horizontal>
+              <pane min-size="35" size="35">
+                <div class="flex flex-col gap-2 h-full items-left p-4 py4">
                   <div class="text-lg flex flex-col gap-1">
                     <div
                       class="flex flex-row flex-wrap gap-1 justify-between items-center"
                     >
-                      <div>Uploading files to the folder:</div>
+                      <div class="text-bold text-md">
+                        Uploading files to the folder:
+                      </div>
                       <UploaderInfoPopper
                         :selectTreeFolder="selectTreeFolder"
                       />
                     </div>
-                    <div class="flex flex-row gap-3 items-center">
+                    <div class="flex flex-row gap-2 items-center align-middle">
                       <CircleStackIcon class="h-4 w-4 text-gray-500" />
                       <strong
                         class="flex items-center text-sm text-gray-600 force-wrap"
@@ -69,9 +67,9 @@
                   />
                 </div>
               </pane>
+              <pane min-size="0"></pane>
             </splitpanes>
           </pane>
-          <pane min-size="20"> </pane>
         </splitpanes>
       </div>
     </template>

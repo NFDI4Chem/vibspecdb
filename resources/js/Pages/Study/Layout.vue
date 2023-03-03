@@ -31,7 +31,7 @@
               </li>
             </ol>
           </nav>
-          <div class="flex flex-row justify-between items-center my-2 mt-4">
+          <div class="flex flex-row justify-between items-center">
             <h2
               class="text-2xl font-bold break-words leading-7 text-gray-900 sm:text-3xl"
             >
@@ -97,7 +97,7 @@
         </div>
       </div>
     </template>
-    <div class="px-0 sm:px-10 pb-12 pt-6 grow flex flex-1 flex-col">
+    <div class="px-0 sm:px-0 flex flex-1 flex-col">
       <slot name="scontent"></slot>
     </div>
   </app-layout>

@@ -197,11 +197,11 @@
     </div>
 
     <main
-      class="flex flex-1 flex-col relative overflow-y-auto focus:outline-none"
+      class="h-full flex flex-col relative overflow-y-auto focus:outline-none"
     >
       <div class="bg-white border-b">
         <div class="px-5 sm:px-12">
-          <div class="flex justify-between py-5">
+          <div class="flex justify-between py5">
             <slot name="header"></slot>
           </div>
         </div>
