@@ -13,6 +13,9 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+    'fastapi-ramanmetrix' => [
+        'url' => env('RAMAN_FASTAPI_SERVICE_URL', NULL)
+    ],
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
