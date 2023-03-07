@@ -5,7 +5,8 @@
       <div class="h-full px-5 py-3 files-uploader-area flex">
         <splitpanes class="bg-gray-50" v-if="files?.length || true">
           <pane
-            min-size="30"
+            :min-size="treeFilled ? 30 : 0"
+            :size="treeFilled ? 45 : 1"
             class="flex flex-col items-start justify-start px-5 py-3"
           >
             <div class="w-full">
@@ -36,9 +37,9 @@
               </div>
             </div>
           </pane>
-          <pane min-size="25" size="55">
+          <pane min-size="25">
             <splitpanes horizontal>
-              <pane min-size="35" size="35">
+              <pane min-size="40" size="40">
                 <div class="flex flex-col gap-2 h-full items-left p-4 py4">
                   <div class="text-lg flex flex-col gap-1">
                     <div
