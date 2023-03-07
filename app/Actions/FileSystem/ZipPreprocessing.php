@@ -85,9 +85,11 @@ class ZipPreprocessing
                 $level++;
                 $parent = $this->find_object($tree, $relative_url);
                 $relative_url = implode('/', [$relative_url, $tok]);
-                $file = $this->find_object($tree, $relative_url);
 
-                if (empty($file)) {
+                $found_object = $this->find_object($tree, $relative_url);
+
+                if (empty($found_object)) {
+                    $folder = $this->is_folder(ltrim($relative_url, '/'), $files);
                     $filedata = [
                         'id' => $id++,
                         'name' => $tok,
@@ -96,7 +98,8 @@ class ZipPreprocessing
                         'relative_url' => $relative_url,
                         'path' => $basepath . $relative_url,
                         'parent_id' => $parent['id'] ?? $zipfileId,
-                        'type' => !pathinfo($relative_url, PATHINFO_EXTENSION) ? 'directory' : 'file',
+                        'type' => $folder ? 'directory' : 'file',
+                        'has_children' => $folder,
                         'level' => $level,
                         'is_processed' => true,
                         'is_archived' => true,
@@ -152,6 +155,24 @@ class ZipPreprocessing
         } catch ( \Aws\S3\Exception\S3Exception $e ) {
             return [];
         }
+    }
+
+    /**
+     * A version of in_array() that does a sub string match on $needle
+     *
+     * @param  mixed   $needle    The searched value
+     * @param  array   $haystack  The array to search in
+     * @return boolean
+     */
+    private function substr_in_array($needle, array $haystack)
+    {
+        return array_reduce($haystack, function ($inArray, $item) use ($needle) {
+            return $inArray || false !== strpos($item, $needle);
+        }, false);
+    }
+
+    private function is_folder($path = '', $objects = []) {
+        return $this->substr_in_array($path . "/", array_diff($objects, [$path]));
     }
 
     protected function storageClient() {
