@@ -96,7 +96,7 @@ class ZipPreprocessing
                         'slug' => strtolower($tok),
                         'description' => $tok,
                         'relative_url' => $relative_url,
-                        'path' => $basepath . $relative_url,
+                        'path' => $basepath . ltrim($relative_url, "/"),
                         'parent_id' => $parent['id'] ?? $zipfileId,
                         'type' => $folder ? 'directory' : 'file',
                         'has_children' => $folder,
@@ -106,7 +106,7 @@ class ZipPreprocessing
                         'project_id' => $study->project->id ?? -1,
                         'study_id' => $study->id ?? -1,
                     ];
-                    $fileObject = $creator->create($filedata);
+                    $fileObject = $creator->create($filedata, 'zip');
                     $filedata['id'] = $fileObject->id;
                     $tree[] = $filedata;
                 }

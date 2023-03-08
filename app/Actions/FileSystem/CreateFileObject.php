@@ -27,7 +27,7 @@ class CreateFileObject
      * @param  array  $input
      * @return \App\Models\FileSystemObject
      */
-    public function create(array $input)
+    public function create(array $input, string $type = 'file')
     {
 
         $messages = [
@@ -50,7 +50,7 @@ class CreateFileObject
 
         try {
 
-            return DB::transaction(function () use ($input) {
+            return DB::transaction(function () use ($input, $type) {
 
                 // extract name;
                 $name = $input["type"] == 'directory' ? ($input["name"] ?? "NewFolder") : $input["name"];
@@ -60,13 +60,17 @@ class CreateFileObject
                 $study = Study::findOrFail($input['study_id'] ?? -1);
                 // $environment = env('APP_ENV', 'local');
                 $baseDataFolder = "UserData";
-                $path = $input["type"] == 'file' ? 
+                $path_regular = $input["type"] == 'file' ? 
                     str_replace('//', '/', implode('/', [
                         $baseDataFolder, 
                         ($project->uuid ?? 'common'),
                         ($study->uuid ?? 'common'),
                         $name
                     ])) : '/' . $name;
+
+                if ($type === 'zip') {
+                    $path_zip = str_replace('//', '/', $input['path']);
+                }
 
                 return tap(FileSystemObject::create([
                     "has_children" => FALSE,
@@ -90,7 +94,7 @@ class CreateFileObject
                     "ftype" => $input["ftype"] ?? '',
                     "size" => (int)($input["size"] ?? 0),
                     "uppyid" => $input["uppyid"] ?? '',
-                    "path" => $path,
+                    "path" => $type === 'zip' ? $path_zip : $path_regular,
                     "relative_url" => $input["relative_url"] ?? '',
                 ]), function (FileSystemObject $file) {
                     FileSystemObject::where('id', $file->parent_id ?? 0)
