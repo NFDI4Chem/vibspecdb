@@ -53,6 +53,10 @@ createInertiaApp({
       document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     )
 
+    application.config.warnHandler = function (msg, vm, trace) {
+      return null
+    }
+
     new WaveUI(application, {
       notificationManager: {
         align: 'left', // Or 'left'.
