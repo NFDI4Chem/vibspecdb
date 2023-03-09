@@ -13,6 +13,16 @@ export const useFiles = () => {
         file.loading = false
       })
   }
+
+  const getSpectraData = async input => {
+    try {
+      const { data } = await axios.post('/api/v1/spectra/get', input)
+      return data
+    } catch (err) {
+      console.log('error: ', err)
+    }
+  }
+
   const getFilesListAPI = async id => {
     const res = await axios.get(`/api/v1/files/list/get/${id}`)
     return res.data
@@ -55,5 +65,6 @@ export const useFiles = () => {
     create,
     extractzip,
     saveFile,
+    getSpectraData,
   }
 }

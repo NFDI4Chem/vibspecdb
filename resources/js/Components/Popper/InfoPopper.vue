@@ -1,5 +1,6 @@
 <template>
-  <w-tooltip bottom align-right transition="bounce">
+  <!-- bounce -->
+  <w-tooltip bottom align-right transition="twist">
     <template #activator="{ on }">
       <w-button
         xs

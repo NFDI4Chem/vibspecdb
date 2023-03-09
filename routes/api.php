@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\JobsController;
+use App\Http\Controllers\API\SpectraController;
 use App\Http\Controllers\API\FileSystemController;
 
 /*
@@ -28,6 +29,10 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('jobs')->group(function () {
         Route::get('/check/{type}', [JobsController::class, 'check']);
+    });
+
+    Route::prefix('spectra')->group(function () {
+        Route::post('/get', [SpectraController::class, 'getSpectra']);
     });
 
 

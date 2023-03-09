@@ -3,16 +3,16 @@
   <study-content :project="project" :study="study" current="Upload Files">
     <template #study-section>
       <div class="h-full px-5 py-3 files-uploader-area flex">
-        <splitpanes class="bg-gray-50" v-if="files?.length || true">
+        <splitpanes class="bg-gray-50" @resized="e => onPaneResize(e)">
           <pane
-            :min-size="treeFilled ? 30 : 0"
-            :size="treeFilled ? 45 : 1"
-            class="flex flex-col items-start justify-start px-5 py-3"
+            :min-size="treeFilled && files?.length ? 30 : 0"
+            :size="treeFilled && files?.length ? 45 : 0"
+            class="flex flex-col items-start justify-start px-5 py-3 tree-plane"
           >
             <div class="w-full">
               <div class="" v-if="treeFilled">
-                <div class="relative flex flex-col overflow-y-auto w-full">
-                  <div class="mr5 min-w-fit">
+                <div class="relative flex flex-col w-full">
+                  <div class="min-w-fit">
                     <div
                       class="flex flex-row justify-between items-center pb7 gap-2"
                     >
@@ -39,7 +39,7 @@
           </pane>
           <pane min-size="25">
             <splitpanes horizontal>
-              <pane min-size="40" size="40">
+              <pane min-size="0" size="40">
                 <div class="flex flex-col gap-2 h-full items-left p-4 py4">
                   <div class="text-lg flex flex-col gap-1">
                     <div
@@ -68,7 +68,16 @@
                   />
                 </div>
               </pane>
-              <pane min-size="0"></pane>
+              <pane min-size="0">
+                <div class="p-5">
+                  <SpectralPlotter
+                    :key="plotKey"
+                    v-if="spectraData"
+                    :data="spectraData"
+                    ref="spectral_plot"
+                  />
+                </div>
+              </pane>
             </splitpanes>
           </pane>
         </splitpanes>
@@ -94,13 +103,15 @@ import UploaderInfoPopper from '@/Components/Popper/UploaderInfoPopper.vue'
 import TreeInfoPopper from '@/Components/Popper/TreeInfoPopper.vue'
 import { useForm, usePage } from '@inertiajs/inertia-vue3'
 
+import SpectralPlotter from '@/Components/uPlot/SpectralPlotter.vue'
+
 import { useFiles } from '@/VueComposable/useFiles'
 
 import { ref, computed, onMounted, reactive, watch } from 'vue'
 import { useStore } from 'vuex'
 
 const props = defineProps(['study', 'project', 'files'])
-const { showChildsAPI, extractzip } = useFiles()
+const { showChildsAPI, extractzip, getSpectraData } = useFiles()
 
 const selectTreeItem = ref()
 const selectTreeFolder = ref('/')
@@ -227,10 +238,32 @@ const onAddChildren = node => {
     })
 }
 
-const TreeItemClick = (file, parent) => {
+const spectraData = ref()
+
+const TreeItemClick = async (file, parent) => {
   const itemData = file.type === 'directory' ? file : parent
   displaySelected(itemData)
   storeSelected(itemData)
+
+  if (file.type !== 'directory') {
+    const input = {
+      files: [
+        {
+          src: file?.path,
+          path: file?.relative_url,
+        },
+      ],
+    }
+    const parsed = await getSpectraData(/*inputData.value*/ input)
+    spectraData.value = parsed?.x?.map((plotX, idx) => {
+      return {
+        name: file.name,
+        x: plotX,
+        y: parsed?.y[idx],
+        sd: [],
+      }
+    })
+  }
 }
 
 const storeSelected = file => {
@@ -243,7 +276,7 @@ const onUploaded = (file, data) => {
 
 const displaySelected = file => {
   selectTreeItem.value = file
-  console.log('file', file)
+  // console.log('file', file)
 
   let sFolder = '/'
   if (selectTreeItem.value.name == '/') {
@@ -270,10 +303,41 @@ const onExtractZip = () => {
   }
   extractzip(file)
 }
+
+const plotKey = ref(0)
+const onPaneResize = e => {
+  plotKey.value++
+}
+
+const inputData = ref({
+  files: [
+    {
+      src: 'data1/data2/zips/130208_093455_E. coli DSM 10806 Ascites I_sort/SpRaw_130208_093808.txt',
+      path: '/130208_093455_E. coli DSM 10806 Ascites I_sort/SpRaw_130208_093808.txt',
+    },
+    {
+      src: 'data1/data2/zips/paracetamol/SpRaw_130208_093143.txt',
+      path: '/paracetamol/SpRaw_130208_093143.txt',
+    },
+    {
+      src: 'data1/data2/zips/metadata.xlsx',
+      path: '/metadata.xlsx',
+    },
+  ],
+  rootpath: 'data1/data2/zips/ascitic-fluid_bacteria_minimal.zip',
+  local: false,
+})
 </script>
 
 <style lang="scss">
 .files-uploader-area {
+  height: calc(100vh - 255px);
+
+  .tree-plane {
+    height: 100%;
+    overflow-y: auto;
+  }
+
   .splitpanes__pane {
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.1) inset;
     // justify-content: center;

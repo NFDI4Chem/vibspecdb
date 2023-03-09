@@ -39,8 +39,6 @@ services:
       retries: 3
       timeout: 5s
   ramanmetrix.fastapi:
-    # profiles:
-    #     - donotstart
     container_name: vb-ramanmetrix_fastapi
     build:
       context: ../fastapi-ramanmetrix
@@ -54,7 +52,7 @@ services:
     networks:
       - vb-laravel-php
   laravel.dev:
-    container_name: vb-laravel_sail
+    container_name: vb-laravel_dev
     deploy:
       resources:
         limits:
@@ -86,6 +84,7 @@ services:
     depends_on:
       - pgsql
       - redis
+      - minio
   soketi:
     image: 'quay.io/soketi/soketi:latest-16-alpine'
     container_name: vb-soketi
