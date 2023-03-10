@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\FileSystemController;
+use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\JobModelsController;
 use App\Http\Controllers\Job\JobsController;
 use App\Http\Controllers\Job\PodcastController;
@@ -103,6 +104,10 @@ Route::group(['middleware' => ['auth']], function () {
     ->name('users.alerts');
     Route::get('user/clear_alerts', [UserController::class, 'clear_alerts'])
     ->name('users.clear_alerts');
+
+    Route::put('/image/store', [ImageUploadController::class, 'store'])
+        ->name('image.store');
+
 
     Route::post('/files/create', [FileSystemController::class, 'create'])
         ->name('files.create');

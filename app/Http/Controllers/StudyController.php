@@ -9,6 +9,7 @@ use App\Models\ArgoJob;
 use App\Models\Study;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
+
 use Inertia\Inertia;
 use Laravel\Fortify\Actions\ConfirmPassword;
 use Auth;
@@ -29,9 +30,17 @@ class StudyController extends Controller
 
     public function show(Request $request, Study $study)
     {
+
+        $studyDB = Study::with('image')->findOrFail($study->id);
+        $studyDB->with_photo();
+
+        // return $studyDB;
+
+        $tree = $this->getStudyFiles($study);
         return Inertia::render('Study/Content', [
-            'study' => $study,
-            'project' => $study->project
+            'study' => $studyDB,
+            'project' => $study->project,
+            'files' => $tree
         ]);
     }
     

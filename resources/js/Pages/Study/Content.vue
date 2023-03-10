@@ -3,59 +3,18 @@
     <study-layout :project="project" :study="study">
       <template #scontent>
         <div class="bg-white shadow-md flex flex-col flex-1 mb-0">
-          <div class="md:hidden mb-2">
-            <label for="tabs" class="sr-only">Select a tab</label>
-            <select
-              @change="onMobileSelect"
-              class="block w-full focus:ring-sky-500 focus:border-sky-500 border-teal-500 rounded-0"
-            >
-              <option
-                v-for="tab in subNavigation"
-                :key="tab.name"
-                :selected="tab.name === current"
-              >
-                {{ tab.name }}
-              </option>
-            </select>
-          </div>
-          <div class="hidden md:block">
-            <div
-              class="border-b border-gray-200 flex flex-1 flex-row items-center justify-between px-4"
-            >
-              <nav class="-mb-px flex space-x-5" aria-label="Tabs">
-                <Link
-                  v-for="tab in subNavigation"
-                  :key="tab.name"
-                  :href="route(tab.route, [study.id])"
-                  :class="[
-                    tab.name == current
-                      ? 'border-sky-500 text-sky-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                    'group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm',
-                  ]"
-                  :aria-current="tab.name === current ? 'page' : undefined"
-                >
-                  <div class="flex flex-row space-x-1 items-center">
-                    <component
-                      :is="tab.icon"
-                      :class="[
-                        tab.name === current
-                          ? 'text-sky-600'
-                          : 'text-gray-400 group-hover:text-gray-500',
-                        'h-5 w-5',
-                      ]"
-                      aria-hidden="true"
-                    />
-                    <span>
-                      {{ tab.name }}
-                      <sup class="uppercase">{{
-                        uppercase_id(tab?.route)
-                      }}</sup>
-                    </span>
-                  </div>
-                </Link>
-              </nav>
-            </div>
+          <div class="px4 py-4 project-tabs w-full">
+            <w-tabs :items="tabs" class="w-full rounded-none border-0">
+              <template #item-content="{ index }">
+                <Info v-if="index === 1" :item="study" type="study" />
+                <UploadFiles
+                  v-if="index === 2"
+                  :study="study"
+                  :project="project"
+                  :files="files"
+                />
+              </template>
+            </w-tabs>
           </div>
           <slot name="study-section"></slot>
         </div>
@@ -103,26 +62,28 @@ export default {
 
 <script setup>
 import { ref } from 'vue'
-const selectedMobile = ref('')
 
-const props = defineProps(['study', 'project', 'current'])
+import Info from '@/Pages/Study/Partials/Tabs/Info.vue'
+import UploadFiles from '@/Pages/Study/Partials/Tabs/UploadFiles.vue'
 
-const uppercase_id = route => {
-  switch (route) {
-    case 'study.files':
-      return 1
-    case 'study.models':
-      return 2
-    case 'study.submit-job':
-      return 3
-    default:
-      return ''
+const props = defineProps(['study', 'project', 'current', 'files'])
+
+const tabs = [
+  { title: 'Info', content: 'Info and metadata.' },
+  { title: 'Upload', content: 'Files Tree and uploader.' },
+  { title: 'Files', content: 'Files Tree and preview.' },
+]
+</script>
+
+<style lang="scss">
+.project-tabs {
+  .w-tabs__bar-item {
+    margin-right: 10px;
+    width: 80px;
+  }
+  .w-tabs__content {
+    padding-left: 0;
+    padding-right: 0;
   }
 }
-
-const onMobileSelect = e => {
-  const selected = e?.target?.value
-  const tab = subNavigation.find(t => t?.name === selected)
-  Inertia.visit(route(tab.route, [props?.study?.id]))
-}
-</script>
+</style>

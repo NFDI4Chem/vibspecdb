@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
+use Illuminate\Support\Facades\Storage;
+
 class Study extends Model implements Auditable
 {
     use HasFactory;
@@ -49,6 +51,11 @@ class Study extends Model implements Auditable
     {
         return $this->hasMany(Assay::class, 'study_id');
     }
+    
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'study_id');
+    }
 
     protected function getPublicUrlAttribute()
     {
@@ -58,5 +65,11 @@ class Study extends Model implements Auditable
     protected function getPrivateUrlAttribute()
     {
         return  env('APP_URL', null)."/studies/".urlencode($this->url);
+    }
+
+    public function with_photo() {
+        if ($this->image && $this->image->path) {
+            $this->study_photo_path = Storage::disk('public')->url($this->image->path);
+        }        
     }
 }
