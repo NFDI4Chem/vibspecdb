@@ -16,3 +16,7 @@ yarn-error.log
 .php-cs-fixer.cache
 
 /public/build
+
+resources/js/Components/Button
+resources/js/Components/SpectralPlot
+resources/js/Components/uPlot/SpectralPlotter.vue
