@@ -11,7 +11,7 @@
         File
       </w-input>
 
-      <w-button type="submit" :loading="loading" class="d-flex mla mt4">
+      <w-button type="submit" sm :loading="loading" class="d-flex mla mt2">
         Upload
       </w-button>
     </w-form>
@@ -56,7 +56,7 @@ const onFormSuccess = async () => {
     onSuccess: () => {
       loading.value = false
       // TODO check if this is needed and works?
-      Inertia.reload({ only: [props?.type] })
+      // Inertia.reload({ only: [props?.type] })
       setup_info_notify('The image has been successfully uploaded!')
     },
     onError: err => {
@@ -67,18 +67,6 @@ const onFormSuccess = async () => {
     onFinish: () => {
       imgKey.value++
       files.value = false
-    },
-  })
-}
-
-const clearPhotoFileInput = () => {}
-
-const deletePhoto = () => {
-  Inertia.delete(route('current-user-photo.destroy'), {
-    preserveScroll: true,
-    onSuccess: () => {
-      // this.photoPreview = null
-      // this.clearPhotoFileInput()
     },
   })
 }

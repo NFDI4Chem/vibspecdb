@@ -4,8 +4,9 @@
     @click="onSelect(item)"
   >
     <div class="p-5 w-40 m-auto">
+      <!-- src="/imgs/study/study.png" -->
       <w-image
-        src="/imgs/study/study.png"
+        :src="item.study_photo_path"
         :ratio="3 / 4"
         alt="avatar"
         transition="scale-fade"

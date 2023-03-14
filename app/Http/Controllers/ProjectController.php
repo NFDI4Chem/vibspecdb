@@ -32,9 +32,12 @@ class ProjectController extends Controller
 
     public function show(Request $request, Project $project)
     {
+
         return Inertia::render('Project/Show', [
             'project' => $project,
-            'studies' => $project->studies
+            'studies' => collect($project->studies)->map(function ($study) {
+                return $study->with_photo();
+            })
         ]);
     }
 

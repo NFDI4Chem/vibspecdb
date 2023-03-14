@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Tags\HasTags;
+
 use OwenIt\Auditing\Contracts\Auditable;
 
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class Study extends Model implements Auditable
 {
     use HasFactory;
+    use HasTags;
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
@@ -71,5 +74,13 @@ class Study extends Model implements Auditable
         if ($this->image && $this->image->path) {
             $this->study_photo_path = Storage::disk('public')->url($this->image->path);
         }        
+        return $this;
+    }
+
+    public function with_tags_translated() {
+        $this->tags_translated = $this->tags->map(function ($tag) {
+            return $tag->name;
+        });
+        return $this;
     }
 }

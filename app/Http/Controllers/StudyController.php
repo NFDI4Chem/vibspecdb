@@ -7,6 +7,8 @@ use App\Actions\Study\UpdateStudy;
 use App\Models\FileSystemObject;
 use App\Models\ArgoJob;
 use App\Models\Study;
+use Spatie\Tags\Tag;
+
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 
@@ -24,21 +26,24 @@ class StudyController extends Controller
 
     public function update(Request $request, UpdateStudy $updater, Study $study)
     {
-        $updater->update($study, $request->all());
+        $params = $request->all();
+        $updater->update($study, $params);
+
+        if ($params['tags'] && is_array($params['tags'])) {
+            $study->syncTagsWithType($params['tags'], 'Study');
+        }
+
         return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'study-updated');
     }
 
     public function show(Request $request, Study $study)
     {
 
-        $studyDB = Study::with('image')->findOrFail($study->id);
-        $studyDB->with_photo();
-
-        // return $studyDB;
+        $study = $study->with_photo()->with_tags_translated();
 
         $tree = $this->getStudyFiles($study);
         return Inertia::render('Study/Content', [
-            'study' => $studyDB,
+            'study' => $study,
             'project' => $study->project,
             'files' => $tree
         ]);

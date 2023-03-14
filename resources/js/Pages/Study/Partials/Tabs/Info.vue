@@ -24,10 +24,8 @@
           :type="type"
         />
         <w-form
-          v-model="form.valid"
-          v-model:errors-count="form.errorsCount"
-          @validate="onValidate"
-          @success="onSuccess"
+          v-model="form_helpers.valid"
+          v-model:errors-count="form_helpers.errorsCount"
           @submit.prevent="onSubmit"
           class="py12 flex flex-col gap-10"
         >
@@ -44,7 +42,7 @@
           <div class="lex flex-col mt2">
             <div class="">
               <w-textarea
-                v-if="!dialog.md_view"
+                v-if="!md_view"
                 v-model="form.description"
                 class="title4"
                 label="About"
@@ -60,19 +58,14 @@
             <div class="inline-flex items-center justify-between w-full">
               <div class="inline-flex align-middle items-center">
                 <div class="body">Preview</div>
-                <w-switch
-                  class="ma2"
-                  v-model="dialog.md_view"
-                  :thin="true"
-                  label=""
-                />
+                <w-switch class="ma2" v-model="md_view" :thin="true" label="" />
               </div>
               <div class="spacer" />
               <div class="caption">Styling with Markdown is supported</div>
             </div>
           </div>
 
-          <div>
+          <div class="study-keys">
             <div class="title4 primary mb2">Keywords</div>
             <vue3-tags-input
               class="rounded-0 focus:outline-none primary"
@@ -86,9 +79,10 @@
           <w-flex wrap align-center justify-end class="mt4">
             <div class="spacer" />
             <w-button
-              md
+              type="submit"
+              lg
               :disabled="form_helpers.valid === false"
-              :loading="form_helpers.submitted && !form_helpers.sent"
+              :loading="loading"
               class="my1"
             >
               Save
@@ -96,36 +90,29 @@
           </w-flex>
         </w-form>
       </div>
-      <w-notification
-        v-model="form_helpers.sent"
-        success
-        transition="bounce"
-        absolute
-        plain
-        round
-        bottom
-      >
-        The project info has been successfully saved!
-      </w-notification>
     </w-card>
   </div>
-  {{ form }}
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import Vue3TagsInput from 'vue3-tags-input'
+import { Inertia } from '@inertiajs/inertia'
 
 import UploadImage from '@/Pages/Study/Partials/Elements/UploadImage.vue'
 
+import {
+  setup_info_notify,
+  setup_error_notify,
+} from '@/VueComposable/mixins/useWave'
+
 const props = defineProps(['item', 'type'])
 
-const dialog = ref({
-  md_view: false,
-})
+const md_view = ref(false)
+const loading = ref(false)
 
 const form = ref({
-  tags: ['asdf', '1'],
+  tags: props?.item.tags_translated,
   name: props?.item.name,
   description: props?.item.description,
 })
@@ -146,19 +133,25 @@ const onSelectTag = tags => {
   form.value.tags = tags
 }
 
-const onSuccess = () => {
-  console.log('onSuccess')
-  // API call here;
-  // setTimeout(() => (form.value.sent = true), 2000)
-}
-const onValidate = () => {
-  console.log('onValidate')
-  form_helpers.value.sent = false
-  form_helpers.value.submitted = form_helpers.value.errorsCount === 0
-}
-
 const onSubmit = () => {
-  console.log('try submit', form_helpers.value.valid)
+  loading.value = true
+
+  Inertia.put(route('studies.update', props.item?.id), form.value, {
+    errorBag: 'studiesUpdate',
+    preserveScroll: true,
+    onSuccess: () => {
+      loading.value = false
+      setup_info_notify('The study info has been successfully saved!')
+    },
+    onError: err => {
+      loading.value = false
+      const message = Object.values(err).join('<br>')
+      setup_error_notify(`<div>An error occurred.<br>${message}</div>`)
+    },
+    onFinish: () => {
+      loading.value = false
+    },
+  })
 }
 
 const resetForm = () => {
@@ -175,20 +168,22 @@ const resetForm = () => {
   margin-top: 1px;
 }
 
-.v3ti {
-  border-radius: 0;
-  border-color: #e5e7eb;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  .v3ti-tag {
+.study-keys {
+  .v3ti {
     border-radius: 0;
-    padding-left: 0.5rem;
+    border-color: #e5e7eb;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    .v3ti-tag {
+      border-radius: 0;
+      padding-left: 0.5rem;
+    }
   }
-}
 
-.v3ti--focus {
-  border-color: teal;
-  box-shadow: none;
+  .v3ti--focus {
+    border-color: teal;
+    box-shadow: none;
+  }
 }
 </style>

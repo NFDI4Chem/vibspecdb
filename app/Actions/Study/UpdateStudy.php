@@ -18,8 +18,8 @@ class UpdateStudy
     public function update(Study $study, array $input)
     {
         Validator::make($input, [
-            'name' => [],
-            'description' => [],
+            'name' => ['string', 'max:255'],
+            'description' => ['string'],
         ])->validate();
 
         return DB::transaction(function () use ($input, $study) {

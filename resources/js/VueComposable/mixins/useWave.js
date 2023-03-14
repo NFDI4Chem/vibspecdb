@@ -7,6 +7,8 @@ const common_set = {
   round: false,
   md: true,
   bottom: true,
+  absolute: true,
+  plain: false,
   right: true,
   tile: true,
   'no-border': true,
