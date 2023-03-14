@@ -1,17 +1,27 @@
 <template>
   <div class="" :key="imgKey">
-    <w-image class="" :src="imgSrc" :width="100" :height="100"> </w-image>
-    <w-form @success="onFormSuccess">
+    <w-form
+      @success="onFormSuccess"
+      class="flex flex-row gap-6 justify-between"
+    >
+      <w-image
+        class=""
+        :src="imgSrc + 's'"
+        fallback="/imgs/study/study.png"
+        :width="120"
+        :height="120"
+      />
       <w-input
         type="file"
         name="image"
         v-model="files"
+        class="grow"
         :validators="[() => files.length || 'Please add a file']"
       >
         File
       </w-input>
 
-      <w-button type="submit" sm :loading="loading" class="d-flex mla mt2">
+      <w-button type="submit" md :loading="loading" class="d-flex mla mt2">
         Upload
       </w-button>
     </w-form>
