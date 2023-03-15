@@ -39,11 +39,11 @@ class StudyController extends Controller
     public function show(Request $request, Study $study)
     {
 
-        $study = $study->with_photo()->with_tags_translated();
-
         $tree = $this->getStudyFiles($study);
         return Inertia::render('Study/Content', [
-            'study' => $study,
+            'study' => $study
+                ->with_photo()
+                ->with_tags_translated(),
             'project' => $study->project,
             'files' => $tree
         ]);

@@ -6,8 +6,8 @@
     >
       <w-image
         class=""
-        :src="imgSrc + 's'"
-        fallback="/imgs/study/study.png"
+        :src="imgSrc ? imgSrc : defaultImg"
+        :fallback="defaultImg"
         :width="120"
         :height="120"
       />
@@ -38,7 +38,7 @@ import {
 import { Inertia } from '@inertiajs/inertia'
 import { useForm, usePage } from '@inertiajs/inertia-vue3'
 
-const props = defineProps(['item', 'type'])
+const props = defineProps(['item', 'type', 'defaultImg'])
 const imgKey = ref(0)
 const files = ref([])
 const loading = ref(false)
@@ -65,8 +65,6 @@ const onFormSuccess = async () => {
     forceFormData: true,
     onSuccess: () => {
       loading.value = false
-      // TODO check if this is needed and works?
-      // Inertia.reload({ only: [props?.type] })
       setup_info_notify('The image has been successfully uploaded!')
     },
     onError: err => {
@@ -75,8 +73,8 @@ const onFormSuccess = async () => {
       setup_error_notify(`<div>An error occurred.<br>${message}</div>`)
     },
     onFinish: () => {
-      imgKey.value++
       files.value = false
+      imgKey.value++
     },
   })
 }
