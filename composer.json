@@ -31,7 +31,8 @@
         "spatie/laravel-support-bubble": "^1.2",
         "spatie/laravel-tags": "^4.3",
         "symfony/process": "v6.1.0",
-        "tightenco/ziggy": "^1.0"
+        "tightenco/ziggy": "^1.0",
+        "zoha/laravel-meta": "^2.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

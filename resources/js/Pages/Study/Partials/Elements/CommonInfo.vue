@@ -21,12 +21,12 @@
         v-model="form_helpers.valid"
         v-model:errors-count="form_helpers.errorsCount"
         @submit.prevent="onSubmit"
-        class="py6 pt12 flex flex-col gap-10"
+        class="flex flex-col gap-10"
       >
         <w-input
           type="text"
           class="title4"
-          v-model="form.name"
+          v-model="formdata.name"
           required
           :label="`${type} Name *`"
           :validators="[validators.required]"
@@ -37,7 +37,7 @@
           <div class="">
             <w-textarea
               v-if="!md_view"
-              v-model="form.description"
+              v-model="formdata.description"
               class="title4"
               label="About"
             >
@@ -45,7 +45,7 @@
             <div
               v-else
               class="h-auto min-h-[83px] py4 border-b"
-              v-html="md(form.description)"
+              v-html="md(formdata?.description)"
             ></div>
           </div>
 
@@ -63,7 +63,7 @@
           <div class="title4 primary mb2">Tags</div>
           <vue3-tags-input
             class="rounded-0 focus:outline-none primary"
-            :tags="form.tags"
+            :tags="formdata?.tags"
             placeholder="Type a keyword and press enter or space button."
             :limit="10"
             @on-tags-changed="onSelectTag"
@@ -77,6 +77,7 @@
             :disabled="JSON.stringify(form) === JSON.stringify(form_original)"
             class="text-gray-50"
             bg-color="grey"
+            @click="updateForm(form_original)"
           >
             Cancel
           </w-button>
@@ -99,13 +100,13 @@
 import { ref } from 'vue'
 import Vue3TagsInput from 'vue3-tags-input'
 
-const props = defineProps(['form', 'loading', 'type'])
-const emit = defineEmits(['submit'])
+const props = defineProps(['formdata', 'loading', 'type'])
+const emit = defineEmits(['submit', 'update'])
 
 const md_view = ref(false)
 
 const form_original = {
-  ...props.form,
+  ...props.formdata,
 }
 
 const form_helpers = ref({
@@ -120,8 +121,16 @@ const validators = {
   consent: value => !!value || 'You must agree',
 }
 
+const updateForm = changes => {
+  const updated = (props.formdata = {
+    ...props.formdata,
+    ...changes,
+  })
+  emit('update', updated)
+}
+
 const onSelectTag = tags => {
-  form.value.tags = tags
+  updateForm({ tags })
 }
 
 const onSubmit = () => {

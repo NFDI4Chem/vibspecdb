@@ -60,6 +60,8 @@ createInertiaApp({
     new WaveUI(application, {
       notificationManager: {
         align: 'left', // Or 'left'.
+        bottom: true,
+        absolute: true,
         transition: 'default', // Sliding from the side by default.
       },
     })

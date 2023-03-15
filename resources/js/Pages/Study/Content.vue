@@ -4,11 +4,16 @@
       <template #scontent>
         <div class="bg-white shadow-md flex flex-col flex-1 mb-0">
           <div class="px4 py-4 project-tabs w-full">
-            <w-tabs :items="tabs" class="w-full rounded-none border-0">
+            <w-tabs
+              :items="tabs"
+              class="w-full rounded-none border-0"
+              v-model="tab"
+            >
               <template #item-content="{ index }">
                 <Info v-if="index === 1" :item="study" type="study" />
+                <Metadata v-if="index === 2" :item="study" type="study" />
                 <UploadFiles
-                  v-if="index === 2"
+                  v-if="index === 3"
                   :study="study"
                   :project="project"
                   :files="files"
@@ -23,53 +28,25 @@
   </div>
 </template>
 
-<script>
-import StudyLayout from '@/Pages/Study/Layout.vue'
-import { Link } from '@inertiajs/inertia-vue3'
-import { Inertia } from '@inertiajs/inertia'
-
-import {
-  InformationCircleIcon,
-  FolderOpenIcon,
-  BriefcaseIcon,
-  QueueListIcon,
-  BeakerIcon,
-  ClipboardDocumentListIcon,
-  Cog6ToothIcon,
-} from '@heroicons/vue/24/outline'
-const subNavigation = [
-  // { name: "About", route: "study", icon: InformationCircleIcon },
-  { name: 'Upload Files', route: 'study.file-upload', icon: FolderOpenIcon },
-  { name: 'Files', route: 'study.files', icon: ClipboardDocumentListIcon },
-  { name: 'Select Model', route: 'study.models', icon: BeakerIcon },
-  { name: 'Submit Job', route: 'study.submit-job', icon: QueueListIcon },
-  { name: 'Jobs', route: 'study.jobs', icon: BriefcaseIcon },
-]
-
-export default {
-  components: {
-    StudyLayout,
-    Link,
-  },
-  // props: ["study", "project", "current"],
-  setup() {
-    return {
-      subNavigation,
-    }
-  },
-}
-</script>
-
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 
+import StudyLayout from '@/Pages/Study/Layout.vue'
 import Info from '@/Pages/Study/Partials/Tabs/Info.vue'
+import Metadata from '@/Pages/Study/Partials/Tabs/Metadata.vue'
 import UploadFiles from '@/Pages/Study/Partials/Tabs/UploadFiles.vue'
 
-const props = defineProps(['study', 'project', 'current', 'files'])
+const props = defineProps(['study', 'project', 'current', 'files', 'tab'])
+
+const tab = computed(() => {
+  let t = props?.tab
+  if (t < 1 || t > tabs.length) t = 1
+  return t - 1
+})
 
 const tabs = [
-  { title: 'Info', content: 'Info and metadata.' },
+  { title: 'Info', content: 'Study Common Info.' },
+  { title: 'Metadata', content: 'Custom Metadata.' },
   { title: 'Upload', content: 'Files Tree and uploader.' },
   { title: 'Files', content: 'Files Tree and preview.' },
 ]

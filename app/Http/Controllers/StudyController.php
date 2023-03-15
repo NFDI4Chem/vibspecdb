@@ -11,6 +11,9 @@ use Spatie\Tags\Tag;
 
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 use Inertia\Inertia;
 use Laravel\Fortify\Actions\ConfirmPassword;
@@ -29,23 +32,39 @@ class StudyController extends Controller
         $params = $request->all();
         $updater->update($study, $params);
 
-        if ($params['tags'] && is_array($params['tags'])) {
+        if (isset($params['tags']) && is_array($params['tags'])) {
             $study->syncTagsWithType($params['tags'], 'Study');
         }
 
-        return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'study-updated');
+        if (isset($params['metadata']) && is_array($params['metadata'])) {
+            if (!$study->syncMeta($params['metadata'])) {
+                return back()->withErrors(["metadata" => "Can not update metadata for Study."]);
+            }
+        }
+
+        return $request->wantsJson() ? 
+            new JsonResponse('', 200) : 
+            back()->with('status', 'study-updated');
     }
 
     public function show(Request $request, Study $study)
     {
 
+        Validator::make($request->all(), [
+            'tab' => ['numeric'],
+        ])->validate();
+
+        $tab = $request->has('tab') ? $request->query('tab') : 1;
+
         $tree = $this->getStudyFiles($study);
         return Inertia::render('Study/Content', [
             'study' => $study
                 ->with_photo()
-                ->with_tags_translated(),
+                ->with_tags_translated()
+                ->with_metadata(),
             'project' => $study->project,
-            'files' => $tree
+            'files' => $tree,
+            'tab' => $tab,
         ]);
     }
     

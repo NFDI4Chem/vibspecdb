@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Tags\HasTags;
+use Zoha\Metable;
 
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -14,7 +15,10 @@ class Study extends Model implements Auditable
 {
     use HasFactory;
     use HasTags;
+    use Metable;
     use \OwenIt\Auditing\Auditable;
+
+    protected $metaTable = 'studies_meta';
 
     protected $fillable = [
         'name',
@@ -82,5 +86,19 @@ class Study extends Model implements Auditable
             return $tag->name;
         });
         return $this;
+    }
+
+    public function with_metadata() {
+        $this->metadata = $this->getMetas();
+        return $this;
+    }
+
+    public function syncMeta($metas) {
+        foreach ($this->getMetas() as $keydb => $valdb) {
+            if (!isset($metas[$keydb])) {
+                $this->deleteMeta($keydb);
+            }
+        }
+        return $this->setMeta($metas);
     }
 }
