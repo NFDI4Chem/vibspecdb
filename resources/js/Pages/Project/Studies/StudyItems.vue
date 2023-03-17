@@ -3,9 +3,7 @@
     <div class="mx-auto max-w-2xl py-2 sm:py-4 lg:max-w-7xl">
       <h2 class="sr-only">Studies</h2>
 
-      <div
-        class="grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8 2xl:grid-cols-4 3xl:grid-cols-5"
-      >
+      <div class="flex flex-row flex-wrap gap-x-12 gap-y-8">
         <StudyItem
           v-for="item in items"
           :key="`study_${item?.uuid}`"
@@ -18,7 +16,7 @@
 </template>
 
 <script setup>
-import StudyItem from '@/Pages/Study/Index/StudyItem.vue'
+import StudyItem from '@/Pages/Project/Studies/StudyItem.vue'
 
 const props = defineProps(['items'])
 const emit = defineEmits(['onSelect'])

@@ -58,7 +58,7 @@ class StudyController extends Controller
         $study->required_meta = $this->getRequiredStudyMeta($study);
 
         $tree = $this->getStudyFiles($study);
-        return Inertia::render('Study/Content', [
+        return Inertia::render('Study/Index', [
             'study' => $study
                 ->with_photo()
                 ->with_tags_translated()

@@ -1,16 +1,16 @@
 <template>
-  <app-layout :title="project.name">
+  <app-layout :title="project?.name">
     <template #header>
       <div class="w-full flex flex-col gap-2">
         <div class="flex flex-row justify-between w-full">
           <div
             class="flex pr-20 items-center text-sm text-gray-700 uppercase font-bold tracking-widest"
           >
-            {{ project.name }}
+            {{ project?.name }}
           </div>
           <div class="group text-sm text-gray-500 ml-0 sm:ml-auto">
             <Link
-              :href="route('project.settings', project.id)"
+              :href="route('project.settings', project?.id)"
               class="flex flex-row items-center flex-nowrap"
             >
               <div class="flex flex-row items-center gap-2">
@@ -30,7 +30,7 @@
         >
           <div class="flex flex-row gap-5">
             <span
-              v-if="project.is_public"
+              v-if="project?.is_public"
               class="items-center inline-flex gap-0.5"
             >
               <GlobeAltIcon class="h-5 w-5" aria-hidden="true" />
@@ -54,7 +54,7 @@
     </template>
     <div class="py-8 px-12">
       <div>
-        <study-index :project="project" :studies="studies" />
+        <studies :project="project" :studies="studies" />
       </div>
     </div>
   </app-layout>
@@ -63,7 +63,7 @@
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue'
 import { Link } from '@inertiajs/inertia-vue3'
-import StudyIndex from '@/Pages/Study/Index.vue'
+import Studies from '@/Pages/Project/Studies/Index.vue'
 import ProjectDetails from './Partials/Details.vue'
 
 import {
@@ -79,7 +79,7 @@ export default {
   components: {
     Link,
     AppLayout,
-    StudyIndex,
+    Studies,
     ProjectDetails,
     Cog6ToothIcon,
     IdentificationIcon,

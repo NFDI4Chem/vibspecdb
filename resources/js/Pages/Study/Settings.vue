@@ -1,12 +1,12 @@
 <template>
-  <app-layout :title="study.name">
+  <app-layout :title="study?.name">
     <template #header>
       <div>
         <div
           class="flex items-center text-sm text-gray-700 uppercase font-bold tracking-widest"
         >
-          <Link :href="route('study', study.id)" class="hover:text-teal-600">{{
-            study.name
+          <Link :href="route('study', study?.id)" class="hover:text-teal-600">{{
+            study?.name
           }}</Link
           >&nbsp;/&nbsp;Settings
         </div>

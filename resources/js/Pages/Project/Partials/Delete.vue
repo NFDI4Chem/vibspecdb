@@ -15,7 +15,7 @@
           data or information that you wish to retain.
         </div>
 
-        <delete-btn :pid="project.id">
+        <delete-btn :pid="project?.id">
           <div>Delete Project</div>
         </delete-btn>
       </div>
@@ -23,14 +23,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import DeleteBtn from '@/Pages/Project/Partials/DeleteBtn.vue'
 
-export default {
-  props: ['project'],
-
-  components: {
-    DeleteBtn,
-  },
-}
+const props = defineProps(['project'])
 </script>

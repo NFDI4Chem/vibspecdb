@@ -1,6 +1,6 @@
 <template>
   <div>
-    <study-content :project="project" :study="study" current="About">
+    <study-index :project="project" :study="study" current="About">
       <template #study-section>
         <div class="divide-y divide-gray-200 sm:col-span-9">
           <!-- Profile section -->
@@ -41,16 +41,16 @@
           </div>
         </div>
       </template>
-    </study-content>
+    </study-index>
   </div>
 </template>
 
 <script>
 import { PlusSmallIcon } from '@heroicons/vue/24/solid'
-import StudyContent from '@/Pages/Study/Content.vue'
+import StudyIndex from '@/Pages/Study/Index.vue'
 export default {
   components: {
-    StudyContent,
+    StudyIndex,
     PlusSmallIcon,
   },
   props: ['study', 'project'],

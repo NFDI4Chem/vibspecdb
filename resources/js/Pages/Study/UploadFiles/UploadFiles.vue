@@ -1,6 +1,6 @@
 <template>
   <!-- <w-app> -->
-  <study-content :project="project" :study="study" current="Upload Files">
+  <study-index :project="project" :study="study" current="Upload Files">
     <template #study-section>
       <div class="h-full px-5 py-3 files-uploader-area flex">
         <splitpanes class="bg-gray-50" @resized="e => onPaneResize(e)">
@@ -83,7 +83,7 @@
         </splitpanes>
       </div>
     </template>
-  </study-content>
+  </study-index>
   <!-- </w-app> -->
 </template>
 
@@ -96,7 +96,7 @@ import {
 } from '@heroicons/vue/24/solid'
 
 import JetButton from '@/Jetstream/Button.vue'
-import StudyContent from '@/Pages/Study/Content.vue'
+import StudyIndex from '@/Pages/Study/Index.vue'
 import UniFilesTree from '@/Components/UniFilesTree/UniFilesTree.vue'
 import Uploader from '@/Components/UploadForm/Uploader.vue'
 import UploaderInfoPopper from '@/Components/Popper/UploaderInfoPopper.vue'

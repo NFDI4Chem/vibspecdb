@@ -1,6 +1,6 @@
 <template>
   <div>
-    <study-content :project="project" :study="study" current="Notifications">
+    <study-index :project="project" :study="study" current="Notifications">
       <template #study-section>
         <div class="divide-y divide-gray-200 sm:col-span-9">
           <!-- Profile section -->
@@ -17,15 +17,15 @@
           </div>
         </div>
       </template>
-    </study-content>
+    </study-index>
   </div>
 </template>
 
 <script>
-import StudyContent from '@/Pages/Study/Content.vue'
+import StudyIndex from '@/Pages/Study/Index.vue'
 export default {
   components: {
-    StudyContent,
+    StudyIndex,
   },
   props: ['study', 'project'],
   setup() {},

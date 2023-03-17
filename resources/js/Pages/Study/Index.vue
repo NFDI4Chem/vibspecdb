@@ -1,95 +1,66 @@
 <template>
   <div>
-    <div class="flex flex-col gap-5">
-      <div class="flex justify-between items-center">
-        <div class="flex flex-col gap-2">
-          <h2 class="text-lg">Studies</h2>
-          <div class="mt-2 text-sm text-gray-700">
-            <div class="max-w-2xl">
-              Each project may contain as many studies as you need.
-            </div>
+    <study-layout :project="project" :study="study">
+      <template #scontent>
+        <div class="bg-white shadow-md flex flex-col flex-1 mb-0">
+          <div class="px4 py-4 project-tabs w-full">
+            <w-tabs
+              :items="tabs"
+              class="w-full rounded-none border-0"
+              v-model="tab"
+            >
+              <template #item-content="{ index }">
+                <Info v-if="index === 1" :item="study" type="study" />
+                <Metadata v-if="index === 2" :item="study" type="study" />
+                <UploadFiles
+                  v-if="index === 3"
+                  :study="study"
+                  :project="project"
+                  :files="files"
+                />
+              </template>
+            </w-tabs>
           </div>
+          <slot name="study-section"></slot>
         </div>
-        <div class="flex-shrink-0 ml-4" v-if="studies.length">
-          <button
-            type="button"
-            class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            @click="openStudyCreateDialog()"
-          >
-            New Study
-          </button>
-        </div>
-      </div>
-
-      <span v-if="!studies.length">
-        <div class="mt4">
-          <div class="px-6 py-4 bg-white shadow-md rounded-lg">
-            <div class="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                class="h-6 w-6"
-              >
-                <path
-                  d="M3 6l9 4v12l-9-4V6zm14-3v2c0 1.1-2.24 2-5 2s-5-.9-5-2V3c0 1.1 2.24 2 5 2s5-.9 5-2z"
-                  class="fill-current text-gray-400"
-                ></path>
-                <polygon
-                  points="21 6 12 10 12 22 21 18"
-                  class="fill-current text-gray-600"
-                ></polygon>
-              </svg>
-              <div
-                class="ml3 font-semibold text-sm text-gray-600 uppercase tracking-wider"
-              >
-                Create Your First Study
-              </div>
-            </div>
-            <div class="mt3 max-w-2xl text-sm text-gray-700">
-              A project can contain as many studies as you wish and each study
-              receives its own URL. Within each study you may upload files,
-              select Model to process and submit your jobs.
-            </div>
-            <w-flex class="mt2">
-              <w-button
-                class="ma1 grow"
-                bg-color="primary"
-                xl
-                @click="openStudyCreateDialog()"
-              >
-                <div class="text-sm font-medium uppercase my3">
-                  Create a new study
-                </div>
-              </w-button>
-            </w-flex>
-          </div>
-        </div>
-      </span>
-      <span v-else>
-        <StudyItems :items="studies" @onSelect="onSelect" />
-      </span>
-      <study-create ref="studyCreateElement" :project="project"></study-create>
-    </div>
+      </template>
+    </study-layout>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 
-import { Link } from '@inertiajs/inertia-vue3'
-import { Inertia } from '@inertiajs/inertia'
+import StudyLayout from '@/Pages/Study/Layout.vue'
+import Info from '@/Pages/Study/Partials/Tabs/Info.vue'
+import Metadata from '@/Pages/Study/Partials/Tabs/Metadata.vue'
+import UploadFiles from '@/Pages/Study/Partials/Tabs/UploadFiles.vue'
 
-import StudyCreate from '@/Pages/Study/Partials/Create.vue'
-import StudyItems from '@/Pages/Study/Index/StudyItems.vue'
+const props = defineProps(['study', 'project', 'current', 'files', 'tab'])
 
-const props = defineProps(['studies', 'project'])
-const studyCreateElement = ref(null)
+const tab = computed(() => {
+  let t = props?.tab
+  if (t < 1 || t > tabs.length) t = 1
+  return t - 1
+})
 
-const openStudyCreateDialog = () => {
-  studyCreateElement.value.toggleCreateStudyDialog()
-}
-
-const onSelect = study => {
-  Inertia.visit(route('study', [study?.id]))
-}
+const tabs = [
+  { title: 'Info', content: 'Study Common Info.' },
+  { title: 'Metadata', content: 'Custom Metadata.' },
+  { title: 'Upload', content: 'Files Tree and uploader.' },
+  { title: 'Files', content: 'Files Tree and preview.' },
+]
 </script>
+
+<style lang="scss">
+.project-tabs {
+  .w-tabs__bar-item {
+    margin-right: 10px;
+    width: 80px;
+  }
+  .w-tabs__content {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+</style>

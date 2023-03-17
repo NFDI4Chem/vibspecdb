@@ -1,6 +1,6 @@
 <template>
   <div>
-    <study-content :project="project" :study="study" current="Select Model">
+    <study-index :project="project" :study="study" current="Select Model">
       <template #study-section>
         <div class="flex flex-1 flex-col justify-between">
           <div class="flex justify-start p-2 px-5 flex-row">
@@ -40,12 +40,12 @@
           <Footer :steps="steps" />
         </div>
       </template>
-    </study-content>
+    </study-index>
   </div>
 </template>
 
 <script setup>
-import StudyContent from '@/Pages/Study/Content.vue'
+import StudyIndex from '@/Pages/Study/Index.vue'
 import ModelItems from '@/Pages/Study/SelectModel/ModelItems.vue'
 import ModelInfo from '@/Pages/Study/SelectModel/ModelInfo.vue'
 import Footer from '@/Pages/Study/Helpers/Footer.vue'

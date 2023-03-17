@@ -41,7 +41,7 @@
 
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue'
-import TeamProjects from '@/Pages/Project/Index.vue'
+import TeamProjects from '@/Pages/Project/Index/Index.vue'
 import { sidebarOpen, updateLeftMenu } from '@/VueComposable/store'
 
 const props = defineProps(['user', 'team', 'projects'])

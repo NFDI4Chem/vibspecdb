@@ -1,6 +1,6 @@
 <template>
   <div>
-    <study-content :project="project" :study="study" current="Jobs">
+    <study-index :project="project" :study="study" current="Jobs">
       <template #study-section>
         <div class="flex flex-1 flex-col justify-between">
           <div class="flex justify-start p-2 px-5 flex-row">
@@ -24,12 +24,12 @@
           </div>
         </div>
       </template>
-    </study-content>
+    </study-index>
   </div>
 </template>
 
 <script setup>
-import StudyContent from '@/Pages/Study/Content.vue'
+import StudyIndex from '@/Pages/Study/Index.vue'
 import JobsTable from '@/Pages/Study/Jobs/JobsTable.vue'
 
 import { jobs, onShowJobDetails } from '@/VueComposable/store'

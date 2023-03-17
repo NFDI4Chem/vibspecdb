@@ -57,7 +57,7 @@
     >
       <div class="p-5 w-40 mx-auto min-h-20">
         <w-image
-          src="/imgs/project/project.svg"
+          src="/imgs/study/study.png"
           :ratio="3 / 4"
           transition="scale-fade"
         />
@@ -66,7 +66,7 @@
         class="flex flex-row justify-between px-6 align-middle text-white bg-gray-500"
       >
         <w-icon class="pt-1" md>mdi mdi-briefcase</w-icon>
-        <h1 class="text-white font-semibold text-md">#0 Studies</h1>
+        <h1 class="text-white font-semibold text-md">#0 Datasets</h1>
       </div>
 
       <div

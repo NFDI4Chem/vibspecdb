@@ -1,5 +1,5 @@
 <template>
-  <app-layout :title="study.name">
+  <app-layout :title="study?.name">
     <template #header>
       <div class="lg:flex lg:items-center lg:justify-between w-full">
         <div class="flex-1 min-w-0 flex-col space-y-2">
@@ -22,9 +22,9 @@
                       aria-hidden="true"
                     />
                     <Link
-                      :href="route('project', [project.id])"
+                      :href="route('project', [project?.id])"
                       class="text-sm font-medium text-gray-500 hover:text-gray-700"
-                      >{{ project.name }}</Link
+                      >{{ project?.name }}</Link
                     >
                   </div>
                 </div>
@@ -35,11 +35,11 @@
             <h2
               class="text-2xl font-bold break-words leading-7 text-gray-900 sm:text-3xl"
             >
-              {{ study.name }}
+              {{ study?.name }}
             </h2>
             <div class="group text-sm text-gray-500 ml-0 sm:ml-auto">
               <Link
-                :href="route('study.settings', study.id)"
+                :href="route('study.settings', study?.id)"
                 class="flex flex-row items-center flex-nowrap space-x-2"
               >
                 <Cog6ToothIcon
@@ -57,7 +57,7 @@
           >
             <div class="flex items-center text-sm text-gray-500">
               <div
-                v-if="study.is_public"
+                v-if="study?.is_public"
                 class="flex flex-row space-x-2 items-center"
               >
                 <GlobeAltIcon class="h-5 w-5" aria-hidden="true" />
@@ -75,7 +75,7 @@
               />
               <div class="mt-0.5">
                 Updated on
-                {{ formatDateTime(study.updated_at) }}
+                {{ formatDateTime(study?.updated_at) }}
               </div>
             </div>
             <div class="flex items-center text-sm text-gray-500">
