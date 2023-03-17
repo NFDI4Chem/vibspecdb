@@ -55,6 +55,7 @@ class StudyController extends Controller
         ])->validate();
 
         $tab = $request->has('tab') ? $request->query('tab') : 1;
+        $study->required_meta = $this->getRequiredStudyMeta($study);
 
         $tree = $this->getStudyFiles($study);
         return Inertia::render('Study/Content', [
@@ -66,6 +67,19 @@ class StudyController extends Controller
             'files' => $tree,
             'tab' => $tab,
         ]);
+    }
+
+    private function getRequiredStudyMeta($study) {
+        $required_meta = config('meta.study_required');
+        $rmeta = [];
+        foreach ($required_meta as $rmkey) {
+            if (!$study->hasMeta($rmkey)) {
+                $rmeta[$rmkey] = '';
+            } else {
+                $rmeta[$rmkey] = $study->getMeta($rmkey);
+            }
+        }
+        return $rmeta;
     }
     
 

@@ -2,7 +2,7 @@
   <div class="" :key="imgKey">
     <w-form
       @success="onFormSuccess"
-      class="flex flex-row gap-6 justify-between"
+      class="flex flex-row gap-12 justify-between"
     >
       <w-image
         class=""

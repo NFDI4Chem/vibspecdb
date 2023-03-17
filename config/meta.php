@@ -31,5 +31,11 @@ return [
             'studies_meta' , 'projects_meta', 'datasets_meta', 'files_meta'
 
         ],
+    ],
+
+    'study_required' => [
+        'experiment_tools',
+        'time',
+        'date'
     ]
 ];
