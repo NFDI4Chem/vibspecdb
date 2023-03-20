@@ -104,7 +104,7 @@
 <script setup>
 import { ref } from 'vue'
 
-import DeleteBtn from '@/Pages/Project/Partials/DeleteBtn.vue'
+import DeleteBtn from '@/Pages/Study/Partials/DeleteBtn.vue'
 
 const props = defineProps(['item'])
 const emit = defineEmits(['onSelect'])

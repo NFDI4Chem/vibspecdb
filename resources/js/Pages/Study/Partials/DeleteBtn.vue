@@ -14,7 +14,6 @@
 </template>
 
 <script setup>
-import { Inertia } from '@inertiajs/inertia'
 import { useForm } from '@inertiajs/inertia-vue3'
 
 import {
