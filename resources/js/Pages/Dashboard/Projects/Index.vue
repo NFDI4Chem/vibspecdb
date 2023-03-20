@@ -56,7 +56,7 @@
                 class="ma1 grow"
                 bg-color="primary"
                 xl
-                @click="openProjectCreateDialog()"
+                @click="openProjectCreateDialog"
               >
                 <div class="text-sm font-medium uppercase my3">
                   Create a new Project
@@ -70,7 +70,7 @@
         <ProjectItems :items="projects" @onSelect="onSelect" />
       </span>
     </div>
-    <project-create ref="projectCreateElement"></project-create>
+    <project-create ref="projectCreateElement" />
   </div>
 </template>
 <script setup>
@@ -78,12 +78,12 @@ import { Link, usePage } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 
 import ProjectCreate from '@/Pages/Project/Partials/Create.vue'
-import ProjectItems from '@/Pages/Project/Index/ProjectItems.vue'
+import ProjectItems from '@/Pages/Dashboard/Projects/ProjectItems.vue'
 
 import { ref } from 'vue'
 
 const props = defineProps(['projects'])
-const projectCreateElement = ref(null)
+const projectCreateElement = ref()
 
 const openProjectCreateDialog = () => {
   projectCreateElement.value.toggleCreateProjectDialog()

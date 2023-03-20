@@ -79,63 +79,64 @@
   </w-dialog>
 </template>
 
-<script>
-import useWave from '@/VueComposable/mixins/useWave'
+<script setup>
+import { ref } from 'vue'
+// import { Inertia } from '@inertiajs/inertia'
+import { useForm, usePage } from '@inertiajs/inertia-vue3'
+import {
+  setup_info_notify,
+  setup_error_notify,
+} from '@/VueComposable/mixins/useWave'
 
-export default {
-  mixins: [useWave],
+const dialog = ref({
+  show: false,
+  md_view: false,
+  fullscreen: false,
+  persistent: true,
+  persistentNoAnimation: false,
+  width: 600,
+})
 
-  data() {
-    return {
-      dialog: {
-        show: false,
-        md_view: false,
-        fullscreen: false,
-        persistent: true,
-        persistentNoAnimation: false,
-        width: 600,
-      },
-      valid: null,
-      validators: {
-        required: value => !!value || 'This field is required',
-      },
-      createProjectForm: this.$inertia.form({
-        _method: 'POST',
-        name: '',
-        description: '',
-        error_message: null,
-        team_id: null,
-        owner_id: null,
-        color: null,
-        starred: null,
-        is_public: false,
-      }),
-      createProjectDialog: false,
-    }
-  },
+const valid = ref(null)
+const createProjectDialog = ref(false)
 
-  methods: {
-    createProject() {
-      this.createProjectForm.owner_id = this.$page.props.user.id
-      this.createProjectForm.team_id = this.$page.props.user.current_team.id
-      this.createProjectForm.post(route('projects.create'), {
-        preserveScroll: true,
-        onSuccess: () => {
-          this.info_notify('Project Created')
-          this.createProjectForm.reset()
-        },
-        onError: err => {
-          this.error_notify('Failed to Create Project')
-          console.error(err)
-        },
-        onFinish: () => {
-          this.dialog.show = false
-        },
-      })
+const validators = ref({
+  required: value => !!value || 'This field is required',
+})
+
+const createProjectForm = useForm({
+  _method: 'POST',
+  name: '',
+  description: '',
+  error_message: null,
+  team_id: usePage().props.value.user.current_team.id,
+  owner_id: usePage().props.value.user.id, // TODO !! bug, fix it later, owner id should not be var
+  color: null,
+  starred: null,
+  is_public: false,
+})
+
+const createProject = () => {
+  createProjectForm.post(route('projects.create'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      setup_info_notify('The project has been created')
+      createProjectForm.reset()
     },
-    toggleCreateProjectDialog() {
-      this.dialog.show = !this.dialog.show
+    onError: err => {
+      setup_error_notify('Failed to Create Project')
+      console.error(err)
     },
-  },
+    onFinish: () => {
+      dialog.value.show = false
+    },
+  })
 }
+const toggleCreateProjectDialog = () => {
+  dialog.value.show = !dialog.value.show
+}
+
+defineExpose({
+  toggleCreateProjectDialog,
+})
 </script>

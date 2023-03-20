@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <span v-if="studies.length">
+      <span v-if="!studies.length">
         <div class="mt4">
           <div class="px-6 py-4 bg-white shadow-md rounded-lg">
             <div class="flex items-center">

@@ -64,7 +64,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (Req
         $team->users = $team->allUsers();
     }
     $projects = Project::where('owner_id', $user->id)->where('team_id', $team->id)->get();
-    return Inertia::render('Dashboard', [
+    return Inertia::render('Dashboard/Index', [
         'team' => $team,
         'projects' => $projects
     ]);

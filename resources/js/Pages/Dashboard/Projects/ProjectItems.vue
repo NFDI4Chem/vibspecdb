@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import ProjectItem from '@/Pages/Project/Index/ProjectItem.vue'
+import ProjectItem from '@/Pages/Dashboard/Projects/ProjectItem.vue'
 
 const props = defineProps(['items'])
 const emit = defineEmits(['onSelect'])
