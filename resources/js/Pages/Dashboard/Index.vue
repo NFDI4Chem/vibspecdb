@@ -33,7 +33,7 @@
         </a>
       </div>
     </template>
-    <div class="py-8 p-12">
+    <div>
       <team-projects :projects="projects" />
     </div>
   </app-layout>

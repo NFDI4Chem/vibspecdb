@@ -196,9 +196,8 @@
       </div>
     </div>
 
-    <main
-      class="h-full flex flex-col relative overflow-y-auto focus:outline-none"
-    >
+    <!-- h-full flex flex-col relative overflow-y-auto focus:outline-none -->
+    <main class="flex flex-col relative overflow-y-hidden focus:outline-none">
       <div class="bg-white border-b">
         <div class="px-5 sm:px-12">
           <div class="flex justify-between py5">
