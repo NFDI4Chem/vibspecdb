@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
+use App\Http\Resources\StudyResource;
+
 use Inertia\Inertia;
 use Laravel\Fortify\Actions\ConfirmPassword;
 use Auth;
@@ -47,7 +49,7 @@ class StudyController extends Controller
             back()->with('status', 'study-updated');
     }
 
-    public function show(Request $request, Study $study)
+    public function index(Request $request, Study $study)
     {
 
         Validator::make($request->all(), [
@@ -55,32 +57,18 @@ class StudyController extends Controller
         ])->validate();
 
         $tab = $request->has('tab') ? $request->query('tab') : 1;
-        $study->required_meta = $this->getRequiredStudyMeta($study);
-
         $tree = $this->getStudyFiles($study);
+
         return Inertia::render('Study/Index', [
-            'study' => $study
-                ->with_photo()
-                ->with_tags_translated()
-                ->with_metadata(),
+            'study' => (new StudyResource($study))->lite(false, ['tags', 'metadata']),
             'project' => $study->project,
             'files' => $tree,
             'tab' => $tab,
         ]);
+
     }
 
-    private function getRequiredStudyMeta($study) {
-        $required_meta = config('meta.study_required');
-        $rmeta = [];
-        foreach ($required_meta as $rmkey) {
-            if (!$study->hasMeta($rmkey)) {
-                $rmeta[$rmkey] = '';
-            } else {
-                $rmeta[$rmkey] = $study->getMeta($rmkey);
-            }
-        }
-        return $rmeta;
-    }
+
     
 
     public function assays(Request $request, Study $study)

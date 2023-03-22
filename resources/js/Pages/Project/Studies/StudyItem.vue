@@ -58,7 +58,7 @@
       <div class="w-[250px] mx-auto h-[140px] cover-image">
         <w-image
           fallback="/imgs/study/study_bg_big.png"
-          :src="item?.study_photo_path ?? '/'"
+          :src="item?.photo_url ?? '/'"
           transition="scale-fade"
         />
       </div>

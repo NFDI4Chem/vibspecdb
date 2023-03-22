@@ -37,5 +37,10 @@ return [
         'experiment_tools',
         'time',
         'date'
+    ],
+    'project_required' => [
+        'project_experiment_tools',
+        'time',
+        'date'
     ]
 ];

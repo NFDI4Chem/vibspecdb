@@ -31,7 +31,7 @@
                   </div>
                 </div>
               </div>
-              <div class="flex-shrink-0 ml-4" v-if="studies.length">
+              <div class="flex-shrink-0 ml-4" v-if="project?.studies?.length">
                 <w-button
                   class="text-gray-100 p-2"
                   lg
@@ -44,7 +44,7 @@
               </div>
             </div>
 
-            <span v-if="!studies.length">
+            <span v-if="!project?.studies?.length">
               <div class="mt4">
                 <div class="px-6 py-4 bg-white shadow-md rounded-lg">
                   <div class="flex items-center">
@@ -78,7 +78,7 @@
               </div>
             </span>
             <span v-else>
-              <StudyItems :items="studies" @onSelect="onSelect" />
+              <StudyItems :items="project?.studies" @onSelect="onSelect" />
             </span>
           </div>
           <study-create ref="studyCreateElement" :project="project" />
@@ -99,7 +99,7 @@ import { Inertia } from '@inertiajs/inertia'
 import StudyCreate from '@/Pages/Study/Partials/Create.vue'
 import StudyItems from '@/Pages/Project/Studies/StudyItems.vue'
 
-const props = defineProps(['studies', 'project'])
+const props = defineProps(['project'])
 const studyCreateElement = ref(null)
 const openDrawer = ref(false)
 

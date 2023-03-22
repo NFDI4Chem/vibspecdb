@@ -137,7 +137,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('job_models/{job_model}/activity', [JobModelsController::class, 'activity'])
         ->name('job_model.activity');            
 
-    Route::get('projects/{project}', [ProjectController::class, 'show'])
+    Route::get('projects/{project}', [ProjectController::class, 'index'])
         ->name('project');
     Route::get('projects/{project}/settings', [ProjectController::class, 'settings'])
         ->name('project.settings');
@@ -150,7 +150,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('projects/{project}/activity', [ProjectController::class, 'activity'])
         ->name('projects.activity');
     
-    Route::get('studies/{study}', [StudyController::class, 'show'])
+    Route::get('studies/{study}', [StudyController::class, 'index'])
         ->name('study');
     Route::get('studies/{study}/settings', [StudyController::class, 'settings'])
         ->name('study.settings');

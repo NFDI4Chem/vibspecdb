@@ -53,7 +53,7 @@
       </div>
     </template>
     <div>
-      <studies :project="project" :studies="studies" />
+      <studies :project="project" :studies="project?.studies" />
     </div>
   </app-layout>
 </template>
@@ -84,7 +84,7 @@ export default {
     LockClosedIcon,
     GlobeAltIcon,
   },
-  props: ['project', 'studies'],
+  props: ['project'],
   setup() {
     const projectDetailsElement = ref(null)
     return {

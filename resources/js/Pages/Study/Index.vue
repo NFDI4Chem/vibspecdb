@@ -36,7 +36,7 @@ import Info from '@/Pages/Study/Partials/Tabs/Info.vue'
 import Metadata from '@/Pages/Study/Partials/Tabs/Metadata.vue'
 import UploadFiles from '@/Pages/Study/Partials/Tabs/UploadFiles.vue'
 
-const props = defineProps(['study', 'project', 'current', 'files', 'tab'])
+const props = defineProps(['study', 'project', 'files', 'tab'])
 
 const tab = computed(() => {
   let t = props?.tab

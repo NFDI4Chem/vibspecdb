@@ -44,7 +44,7 @@ const files = ref([])
 const loading = ref(false)
 const errors = ref({ image: '' })
 const imgSrc = computed(() => {
-  return props?.item?.study_photo_path
+  return props?.item?.photo_url
 })
 
 const onFormSuccess = async () => {

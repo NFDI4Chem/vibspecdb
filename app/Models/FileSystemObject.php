@@ -49,9 +49,24 @@ class FileSystemObject extends Model
         return $this->hasMany(FileSystemObject::class, 'parent_id', 'id');
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(FileSystemObject::class, 'parent_id');
+    }
+
     public function jobs()
     {
         return $this->belongsToMany(ArgoJob::class, 'argo_jobs_files', 'file_id', 'job_id')
             ->as('jobs');
+    }
+
+    public function study()
+    {
+        return $this->belongsTo(Study::class, 'study_id');
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
     }
 }

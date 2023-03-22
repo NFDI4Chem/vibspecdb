@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Laravel\Fortify\Actions\ConfirmPassword;
 
+use App\Http\Resources\ProjectResource;
+
 class ProjectController extends Controller
 {
     public function store(Request $request, CreateProject $creator)
@@ -30,14 +32,13 @@ class ProjectController extends Controller
         return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'project-updated');
     }
 
-    public function show(Request $request, Project $project)
+    public function index(Request $request, Project $project)
     {
 
+        return (new ProjectResource($project))->lite(false, []);
+
         return Inertia::render('Project/Index', [
-            'project' => $project,
-            'studies' => collect($project->studies)->map(function ($study) {
-                return $study->with_photo();
-            })
+            'project' => (new ProjectResource($project))->lite(false, ['studies'])
         ]);
     }
 
