@@ -55,10 +55,10 @@
       class="w-[250px] h-[340px] mx-auto bg-white text-center shadow-lg rounded-0 overflow-hidden hover:opacity-75 hover:cursor-pointer"
       @click="onSelect(item)"
     >
-      <div class="p-5 w-40 mx-auto min-h-20">
+      <div class="w-[250px] mx-auto h-[140px] cover-image">
         <w-image
-          src="/imgs/study/study.png"
-          :ratio="3 / 4"
+          fallback="/imgs/study/study_bg_big.png"
+          :src="item?.study_photo_path ?? '/'"
           transition="scale-fade"
         />
       </div>
@@ -125,6 +125,17 @@ const listItems = [{ label: 'Item 1' }, { label: 'Item 2' }]
   }
   .w-card .w-card__content {
     width: 300px;
+  }
+}
+
+.cover-image {
+  .w-image-wrap {
+    width: 100% !important;
+    height: 100% !important;
+    .w-image {
+      background-size: cover;
+      background-position: center;
+    }
   }
 }
 </style>
