@@ -66,7 +66,9 @@
         class="flex flex-row justify-between px-6 align-middle text-white bg-gray-500"
       >
         <w-icon class="pt-1" md>mdi mdi-briefcase</w-icon>
-        <h1 class="text-white font-semibold text-md">#0 Studies</h1>
+        <h1 class="text-white font-semibold text-md">
+          #{{ item?.children?.length }} Studies
+        </h1>
       </div>
 
       <div

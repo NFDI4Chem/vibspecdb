@@ -9,6 +9,7 @@ use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\JobModelsController;
 use App\Http\Controllers\Job\JobsController;
 use App\Http\Controllers\Job\PodcastController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\StudyController;
 use App\Http\Controllers\UploadController;
@@ -57,18 +58,9 @@ Route::get('/', function () {
 
 Route::supportBubble();
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (Request $request) {
-    $user = $request->user();
-    $team = $user->currentTeam;
-    if ($team) {
-        $team->users = $team->allUsers();
-    }
-    $projects = Project::where('owner_id', $user->id)->where('team_id', $team->id)->get();
-    return Inertia::render('Dashboard/Index', [
-        'team' => $team,
-        'projects' => $projects
-    ]);
-})->name('dashboard');
+Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 
 Route::middleware(['auth:sanctum'])->get('/explorer', function (Request $request) {
     $team = $request->user()->currentTeam;

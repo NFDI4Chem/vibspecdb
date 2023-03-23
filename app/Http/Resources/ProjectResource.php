@@ -15,9 +15,26 @@ class ProjectResource extends JsonResource
     public function lite(bool $lite, array $properties): self
     {
         $this->lite = $lite;
+
+        $this->tree = false;
+
         $this->properties = $properties;
 
         return $this;
+    }
+
+    /**
+     * Transform the resource into an tree json structure.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+    */
+    public function tree()
+    {
+        $this->tree = true;
+
+        return $this;
+
     }
 
     /**
@@ -28,6 +45,22 @@ class ProjectResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        if ($this->tree) {
+            return [
+                'id' => $this->id,
+                'name' => $this->name,
+                'slug' => $this->slug,
+                'description' => $this->description,
+                'created_at' => $this->created_at,
+                'updated_at' => $this->updated_at,
+                'children' => ($this->studies) ? collect($this->studies)->map(function ($study) {
+                    return (new StudyResource($study));
+                }) : [],
+                        
+            ];
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,

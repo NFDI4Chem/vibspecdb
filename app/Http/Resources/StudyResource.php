@@ -39,7 +39,6 @@ class StudyResource extends JsonResource
             'photo_url' => $this->getPhotoUrl(),
             'identifier' => $this->identifier,
             'doi' => $this->doi,
-            'tags' => $this->tags,
             'created_at' => $this->created_at,
             'is_public' => $this->is_public,
             'public_url' => $this->public_url ? $this->public_url : null,
@@ -76,7 +75,7 @@ class StudyResource extends JsonResource
                         in_array('tags', $this->properties),
                         function () {
                             return [
-                                // 'tags' => $this->tags,
+                                'tags' => $this->tags,
                                 'tags_translated' => $this->getTagsTranslated(),
                             ];
                         }
