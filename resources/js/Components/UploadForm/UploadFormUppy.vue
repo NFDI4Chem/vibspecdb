@@ -52,7 +52,7 @@ export default {
     },
     maxNumberOfFiles: {
       type: Number,
-      default: 16,
+      default: 200,
     },
     minNumberOfFiles: {
       type: Number,

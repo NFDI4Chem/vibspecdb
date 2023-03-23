@@ -35,7 +35,7 @@ class ProjectController extends Controller
     public function index(Request $request, Project $project)
     {
 
-        return (new ProjectResource($project))->lite(false, []);
+        // return (new ProjectResource($project))->lite(false, []);
 
         return Inertia::render('Project/Index', [
             'project' => (new ProjectResource($project))->lite(false, ['studies'])

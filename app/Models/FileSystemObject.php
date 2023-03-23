@@ -44,14 +44,38 @@ class FileSystemObject extends Model
         'ftype',
     ];
 
+    // Recursive children
     public function children()
     {
-        return $this->hasMany(FileSystemObject::class, 'parent_id', 'id');
+        return $this->hasMany(FileSystemObject::class, 'parent_id', 'id')->with('children');
+    }
+
+    // Recursive parents
+    public function parents() {
+        return $this->belongsTo(FileSystemObject::class, 'parent_id')->with('parent');
     }
 
     public function parent()
     {
         return $this->belongsTo(FileSystemObject::class, 'parent_id');
+    }
+
+    // One level child
+    public function child()
+    {
+        return $this->hasMany(FileSystemObject::class, 'parent_id');
+    }
+
+    public function getPathAttribute()
+    {
+        $path = [];
+        if ($this->parent_id) {
+            $parent = $this->parent;
+            $parent_path = $parent->path;
+            $path = array_merge($path, $parent_path);
+        }
+        $path[] = $this->name;
+        return $path;
     }
 
     public function jobs()
