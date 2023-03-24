@@ -108,7 +108,7 @@
                 icon="mdi mdi-exclamation"
               ></w-button>
               <div class="whitespace-nowrap">
-                The file will be deleted permanently.
+                This item and its childs will be deleted permanently.
               </div>
             </div>
           </w-tooltip>

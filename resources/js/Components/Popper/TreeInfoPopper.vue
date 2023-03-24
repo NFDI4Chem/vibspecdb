@@ -6,12 +6,12 @@
       <div
         class="h-6 bg-gray-500 text-white font-bold px2 rounded mb4 text-center"
       >
-        Files Tree Info
+        {{ options?.title }} Info
       </div>
       <div>
         <div
           class="flex flex-row items-center justify-left gap-0"
-          v-if="options.editable"
+          v-if="options?.editable"
         >
           <div class="mr2"><strong>To rename</strong> item use:</div>
           <PencilIcon class="text-gray-500 w-4 h-4" />
@@ -25,7 +25,7 @@
         </div>
         <div
           class="flex flex-row items-center justify-left gap-3"
-          v-if="options.deleteable"
+          v-if="options?.deleteable"
         >
           <div class="mr2"><strong>To delete</strong> item use:</div>
           <TrashIcon class="text-red-400 w-4 h-4" />

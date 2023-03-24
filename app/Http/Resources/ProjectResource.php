@@ -49,13 +49,20 @@ class ProjectResource extends JsonResource
         if ($this->tree) {
             return [
                 'id' => $this->id,
+                
                 'name' => $this->name,
                 'slug' => $this->slug,
+                'parent_id' => '',
                 'description' => $this->description,
+                'has_children' => sizeof($this->studies) > 0,
+                'type' => 'directory',  // TODO : project
+                "\$droppable" => true,
+
                 'created_at' => $this->created_at,
                 'updated_at' => $this->updated_at,
+
                 'children' => ($this->studies) ? collect($this->studies)->map(function ($study) {
-                    return (new StudyResource($study));
+                    return (new StudyResource($study))->tree();
                 }) : [],
                         
             ];

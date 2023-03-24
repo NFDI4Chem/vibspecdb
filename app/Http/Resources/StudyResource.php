@@ -22,6 +22,21 @@ class StudyResource extends JsonResource
         return $this;
     }
 
+
+    /**
+     * Transform the resource into an tree json structure.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+    */
+    public function tree()
+    {
+        $this->tree = true;
+
+        return $this;
+
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -30,6 +45,27 @@ class StudyResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        if ($this->tree) {
+            return [
+                'id' => $this->id,
+
+                'name' => $this->name,
+                'slug' => $this->slug,
+                'parent_id' => $this->project->id,
+                'description' => $this->description,
+                'has_children' => false,  // TODO : add files (datasets)
+                'type' => 'directory',   // TODO : study
+                "\$droppable" => true,
+
+                'created_at' => $this->created_at,
+                'updated_at' => $this->updated_at,
+
+                'children' => [],
+                        
+            ];
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,

@@ -34,19 +34,37 @@
       </div>
     </template>
     <div>
-      <team-projects :projects="projects" />
+      <splitpanes style="height: 100%" @resize="treeWidth = $event[0].size">
+        <pane :size="treeWidth" class="bg-slate-50">
+          <ProjectsTree :items="projects" class="p-2" />
+        </pane>
+        <pane :size="100 - treeWidth"
+          ><team-projects :projects="projects" @showTree="onShowTree"
+        /></pane>
+      </splitpanes>
     </div>
   </app-layout>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import AppLayout from '@/Layouts/AppLayout.vue'
+
 import TeamProjects from '@/Pages/Dashboard/Projects/Index.vue'
+import ProjectsTree from '@/Pages/Dashboard/Tree/ProjectsTree.vue'
+
 import { sidebarOpen, updateLeftMenu } from '@/VueComposable/store'
 
 const props = defineProps(['user', 'team', 'projects'])
 
 sidebarOpen.value = false
+
+const treeWidth = ref(0)
+const showTree = ref(true)
+const onShowTree = open => {
+  showTree.value = open
+  treeWidth.value = open ? 30 : 0
+}
 
 updateLeftMenu('Dashboard')
 </script>
