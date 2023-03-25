@@ -7,8 +7,8 @@
     :edgeScroll="true"
     :foldAllAfterMounted="false"
     @drop="ondrop"
-    @before-drop="onBeforeDrop"
     :rootNode="{ $droppable: false, $draggable: true }"
+    @before-drop="onBeforeDrop"
     @change="handleTreeChange"
     class="files-tree"
   >
@@ -17,7 +17,7 @@
       :class="{ ['active-node']: node.id === activeItem.id }"
     >
       <div
-        class="flex justify-between gap-2 items-center whitespace-nowrap ml2"
+        class="group flex justify-between gap-2 items-center whitespace-nowrap"
       >
         <div
           @click="onItemClick(node, path, tree)"
@@ -30,47 +30,59 @@
               @change="handleCheck(node, path, tree)"
             />
           </div>
-          <b v-if="node.type === 'directory'">
-            <ChevronRightIcon
+
+          <div
+            v-if="!node.$folded && node.has_children"
+            class="flex flex-row align-middle"
+          >
+            <w-icon
+              class="text-gray-500 w-5 active-field"
               @click="toggleFold(tree, node, path)"
-              v-if="node.$folded"
-              class="text-gray-800 w-5"
-            />
-            <ChevronDownIcon
+              >mdi mdi-chevron-down</w-icon
+            >
+            <TButton :type="node?.type" :open="true" />
+          </div>
+          <div v-else class="flex flex-row align-middle">
+            <w-icon
+              v-if="node.has_children"
+              class="text-gray-500 w-5 active-field"
               @click="toggleFold(tree, node, path)"
-              v-if="!node.$folded"
-              class="text-gray-800 w-5"
+              >mdi mdi-chevron-right</w-icon
+            >
+            <TButton
+              :type="node?.type"
+              :open="false"
+              :class="{ 'cursor-move': moveCursor(node) }"
             />
-          </b>
-          <FolderIcon
-            v-if="node.type === 'directory'"
-            class="text-gray-500 w-5 active-field"
-          />
-          <DocumentTextIcon
-            v-if="node.type === 'file'"
-            class="text-gray-500 w-4 active-field"
-          />
+          </div>
+
           <input
             role="button"
             v-model="node.name"
-            class="focus-visible:outline-none active-field w-full"
+            class="focus-visible:outline-none active-field w-full px-1"
             :class="{ ['text-teal-500']: node.edit }"
             :readonly="node.edit ? false : 'readonly'"
             v-on:keydown="renameItemKeyBoard($event, node)"
           />
         </div>
-        <div class="flex flex-row align-middle">
-          <PlusSmallIcon
-            v-if="!node.edit && node.type === 'directory' && options.createable"
-            class="text-gray-500 w-6"
+        <div class="hidden flex-row align-middle group-hover:flex">
+          <w-icon
+            v-if="
+              !node.edit &&
+              ['directory', 'project', 'study'].includes(node.type) &&
+              options.createable
+            "
+            class="text-gray-500 w-5 cursor-pointer"
             @click="addChildren(node)"
-          />
-          <PencilIcon
+            >mdi mdi-folder-plus</w-icon
+          >
+          <w-icon
             v-if="!node.edit && node.name !== '/' && options.editable"
+            class="text-gray-500 w-5 cursor-pointer"
             @click="node.edit = true"
-            class="text-gray-500 w-4"
-          />
-          <CheckIcon
+            >mdi mdi-rename</w-icon
+          >
+          <w-icon
             v-if="node.edit"
             @click="
               () => {
@@ -78,22 +90,20 @@
                 renameItem(node)
               }
             "
-            class="text-gray-500 w-4 font-bold"
-          />
-          <PlusSmallIcon
-            v-if="node.edit && false"
-            class="text-gray-400 w-6 rotate-45"
-            @click="node.edit = false"
-          />
+            class="text-gray-500 w-5 font-bold cursor-pointer"
+            >mdi mdi-check</w-icon
+          >
+
           <w-tooltip
             bottom
             align-left
             v-if="!node.edit && node.name !== '/' && options.deleteable"
+            tooltip-class="t-class"
           >
             <template #activator="{ on }">
               <w-icon
                 v-on="on"
-                class="text-red-400 h-6 w-4 ml1 cursor-pointer"
+                class="text-red-400 w-5 ml1 cursor-pointer"
                 @click="removeItem(tree, node, path)"
                 md
               >
@@ -127,18 +137,7 @@
 
 <script>
 import { Tree, Fold, Draggable, Check } from 'he-tree-vue'
-
-import {
-  PencilIcon,
-  PlusSmallIcon,
-  FolderIcon,
-  DocumentTextIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
-  CheckIcon,
-  TrashIcon,
-  InformationCircleIcon,
-} from '@heroicons/vue/24/solid'
+import TButton from '@/Components/UniFilesTree/TButton.vue'
 
 export default {
   props: {
@@ -188,15 +187,7 @@ export default {
   },
   components: {
     Tree: Tree.mixPlugins([Fold, Draggable, Check]),
-    PencilIcon,
-    PlusSmallIcon,
-    FolderIcon,
-    DocumentTextIcon,
-    ChevronDownIcon,
-    ChevronRightIcon,
-    CheckIcon,
-    TrashIcon,
-    InformationCircleIcon,
+    TButton,
   },
   data() {
     return {}
@@ -204,7 +195,14 @@ export default {
   mounted() {
     this.setChecked()
   },
+
   methods: {
+    moveCursor(node) {
+      return (
+        ['directory', 'project', 'study'].includes(node.type) &&
+        this.options.draggable
+      )
+    },
     onItemClick(node, path, tree) {
       const parent = this.$refs.tree.getNodeParentByPath(path)
       this.$emit('itemClick', node, parent)
@@ -274,12 +272,16 @@ export default {
 
 <style lang="scss">
 .files-tree .tree-node {
-  // padding: 0 !important;
-  min-width: 300px;
+  // min-width: 300px;
+  padding: 0 2px;
 }
 
 .active-node .active-field {
   color: rgb(13, 138, 172);
   font-weight: bold;
+}
+
+.t-class {
+  max-width: none;
 }
 </style>

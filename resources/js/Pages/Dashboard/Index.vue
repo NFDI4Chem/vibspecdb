@@ -35,7 +35,7 @@
     </template>
     <div>
       <splitpanes style="height: 100%" @resize="treeWidth = $event[0].size">
-        <pane :size="treeWidth" class="bg-slate-50">
+        <pane :size="treeWidth" class="bg-slate-50" min-size="25">
           <ProjectsTree :items="projects" class="p-2" />
         </pane>
         <pane :size="100 - treeWidth"
@@ -59,12 +59,16 @@ const props = defineProps(['user', 'team', 'projects'])
 
 sidebarOpen.value = false
 
-const treeWidth = ref(0)
-const showTree = ref(true)
+const treeWidth = ref(30)
 const onShowTree = open => {
-  showTree.value = open
   treeWidth.value = open ? 30 : 0
 }
 
 updateLeftMenu('Dashboard')
 </script>
+
+<style lang="scss" scoped>
+.min-width-250 {
+  min-width: 250px;
+}
+</style>

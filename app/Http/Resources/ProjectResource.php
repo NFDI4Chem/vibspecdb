@@ -55,8 +55,9 @@ class ProjectResource extends JsonResource
                 'parent_id' => '',
                 'description' => $this->description,
                 'has_children' => sizeof($this->studies) > 0,
-                'type' => 'directory',  // TODO : project
+                'type' => 'project',  // TODO : project
                 "\$droppable" => true,
+                "\$draggable" => false,
 
                 'created_at' => $this->created_at,
                 'updated_at' => $this->updated_at,
