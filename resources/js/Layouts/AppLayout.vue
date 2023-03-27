@@ -17,9 +17,22 @@
           @clearJobAlerts="clearJobAlerts"
         >
           <template #header>
+            <w-button
+              lg
+              icon="mdi mdi-file-tree"
+              absolute
+              bg-color="blue-grey"
+              class="top-0 right-0 text-gray-100"
+              @click="openTree"
+            />
             <slot name="header"></slot>
           </template>
-          <slot></slot>
+          <splitpanes style="height: 100%" @resize="treeWidth = $event[0].size">
+            <pane :size="treeWidth" class="bg-slate-50" min-size="25">
+              <ProjectsTree :items="projects" class="p-2" />
+            </pane>
+            <pane :size="100 - treeWidth"><slot></slot></pane>
+          </splitpanes>
         </HeaderMenu>
       </div>
     </div>
@@ -27,6 +40,9 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import ProjectsTree from '@/Pages/Dashboard/Tree/ProjectsTree.vue'
+
 import MobileMenu from '@/Layouts/Elements/MobileMenu.vue'
 import MiniMenu from '@/Layouts/Elements/MiniMenu.vue'
 import HeaderMenu from '@/Layouts/Elements/HeaderMenu.vue'
@@ -41,7 +57,7 @@ import { computed } from 'vue'
 
 const store = useStore()
 
-const props = defineProps(['title'])
+const props = defineProps(['title', 'projects'])
 
 const sidebarOpenChange = status => {
   sidebarOpen.value = status
@@ -73,6 +89,13 @@ const clearJobAlerts = async () => {
       store.dispatch('update_alerts', [])
     }
   })
+}
+
+const openDrawer = ref(false)
+const treeWidth = ref(0)
+const openTree = () => {
+  openDrawer.value = !openDrawer.value
+  treeWidth.value = openDrawer.value ? 30 : 0
 }
 </script>
 

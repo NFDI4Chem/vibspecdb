@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="items?.length">
     <div class="flex flex-row justify-between items-center pb7 gap-2">
       <div class="font-bold text-md">
         <div v-if="treeOptions.showTitle">

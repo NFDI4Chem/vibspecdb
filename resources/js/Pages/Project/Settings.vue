@@ -1,17 +1,11 @@
 <template>
   <app-layout :title="project.name">
     <template #header>
-      <div>
-        <div
-          class="flex items-center text-sm text-gray-700 uppercase font-bold tracking-widest"
-        >
-          <Link
-            :href="route('project', project.id)"
-            class="hover:text-teal-600"
-            >{{ project.name }}</Link
-          >&nbsp;/&nbsp;Settings
-        </div>
-      </div>
+      <w-breadcrumbs
+        icon="mdi mdi-arrow-right"
+        :items="items"
+        color="light-blue-dark3"
+      />
     </template>
     <div class="py-12 px-10">
       <div>
@@ -21,17 +15,19 @@
   </app-layout>
 </template>
 
-<script>
+<script setup>
 import AppLayout from '@/Layouts/AppLayout.vue'
 import { Link } from '@inertiajs/inertia-vue3'
 import ProjectDelete from '@/Pages/Project/Partials/Delete.vue'
 
-export default {
-  components: {
-    Link,
-    AppLayout,
-    ProjectDelete,
+const props = defineProps(['project', 'studies'])
+
+const items = [
+  { label: 'Dashboard', route: route('dashboard') },
+  {
+    label: props.project?.name,
+    route: route('project', [props.project?.id]),
   },
-  props: ['project', 'studies'],
-}
+  { label: 'Settings', route: '#' },
+]
 </script>

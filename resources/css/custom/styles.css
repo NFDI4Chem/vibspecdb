@@ -12,6 +12,10 @@
 }
 
 /* wave fixes: */
+.w-breadcrumbs__separator {
+  margin-top: 0.05rem;
+}
+
 .w-card__content {
   max-width: 600px;
 }

@@ -1,5 +1,5 @@
 <template>
-  <app-layout title="Dashboard">
+  <app-layout title="Dashboard" :projects="projects">
     <template #header>
       <div>
         <div
@@ -34,14 +34,7 @@
       </div>
     </template>
     <div>
-      <splitpanes style="height: 100%" @resize="treeWidth = $event[0].size">
-        <pane :size="treeWidth" class="bg-slate-50" min-size="25">
-          <ProjectsTree :items="projects" class="p-2" />
-        </pane>
-        <pane :size="100 - treeWidth"
-          ><team-projects :projects="projects" @showTree="onShowTree"
-        /></pane>
-      </splitpanes>
+      <team-projects :projects="projects" @showTree="onShowTree" />
     </div>
   </app-layout>
 </template>
@@ -51,18 +44,12 @@ import { ref } from 'vue'
 import AppLayout from '@/Layouts/AppLayout.vue'
 
 import TeamProjects from '@/Pages/Dashboard/Projects/Index.vue'
-import ProjectsTree from '@/Pages/Dashboard/Tree/ProjectsTree.vue'
 
 import { sidebarOpen, updateLeftMenu } from '@/VueComposable/store'
 
 const props = defineProps(['user', 'team', 'projects'])
 
 sidebarOpen.value = false
-
-const treeWidth = ref(30)
-const onShowTree = open => {
-  treeWidth.value = open ? 30 : 0
-}
 
 updateLeftMenu('Dashboard')
 </script>

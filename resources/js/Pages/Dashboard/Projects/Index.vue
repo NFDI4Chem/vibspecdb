@@ -1,13 +1,5 @@
 <template>
   <div class="projects-index p-12 py-8 overflow-y-auto">
-    <w-button
-      lg
-      icon="mdi mdi-file-tree"
-      absolute
-      bg-color="cyan-dark3"
-      class="top-0 left-2 text-gray-100"
-      @click="openTree"
-    />
     <div class="flex flex-col gap-8">
       <div class="flex items-center justify-between">
         <div class="flex flex-col gap-2">
@@ -90,10 +82,8 @@ import { Inertia } from '@inertiajs/inertia'
 import ProjectCreate from '@/Pages/Project/Partials/Create.vue'
 import ProjectItems from '@/Pages/Dashboard/Projects/ProjectItems.vue'
 
-const emit = defineEmits(['showTree'])
 const props = defineProps(['projects'])
 const projectCreateElement = ref()
-const openDrawer = ref(false)
 
 const openProjectCreateDialog = () => {
   projectCreateElement.value.toggleCreateProjectDialog()
@@ -101,11 +91,6 @@ const openProjectCreateDialog = () => {
 
 const onSelect = project => {
   Inertia.visit(route('project', [project?.id]))
-}
-
-const openTree = () => {
-  openDrawer.value = !openDrawer.value
-  emit('showTree', openDrawer.value)
 }
 </script>
 

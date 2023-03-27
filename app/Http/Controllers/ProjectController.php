@@ -36,9 +36,15 @@ class ProjectController extends Controller
     {
 
         // return (new ProjectResource($project))->tree();
+        $user = $request->user();
+        $projects = Project::where('owner_id', $user->id)->get();
+        $projects = collect($projects)->map(function ($project) {
+            return (new ProjectResource($project))->tree();
+        });
 
         return Inertia::render('Project/Index', [
-            'project' => (new ProjectResource($project))->lite(false, ['studies'])
+            'project' => (new ProjectResource($project))->lite(false, ['studies']),
+            'projects' => $projects
         ]);
     }
 

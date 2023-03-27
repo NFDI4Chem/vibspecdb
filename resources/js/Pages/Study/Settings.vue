@@ -1,16 +1,11 @@
 <template>
   <app-layout :title="study?.name">
     <template #header>
-      <div>
-        <div
-          class="flex items-center text-sm text-gray-700 uppercase font-bold tracking-widest"
-        >
-          <Link :href="route('study', study?.id)" class="hover:text-teal-600">{{
-            study?.name
-          }}</Link
-          >&nbsp;/&nbsp;Settings
-        </div>
-      </div>
+      <w-breadcrumbs
+        icon="mdi mdi-arrow-right"
+        :items="items"
+        color="light-blue-dark3"
+      />
     </template>
     <div class="py-12 px-10">
       <div>
@@ -20,17 +15,20 @@
   </app-layout>
 </template>
 
-<script>
+<script setup>
 import AppLayout from '@/Layouts/AppLayout.vue'
 import { Link } from '@inertiajs/inertia-vue3'
 import StudyDelete from '@/Pages/Study/Partials/Delete.vue'
 
-export default {
-  components: {
-    Link,
-    AppLayout,
-    StudyDelete,
+const props = defineProps(['study', 'project'])
+
+const items = [
+  { label: 'Dashboard', route: route('dashboard') },
+  {
+    label: props.project?.name,
+    route: route('project', [props.project?.id]),
   },
-  props: ['study'],
-}
+  { label: props.study?.name, route: route('study', [props.study?.id]) },
+  { label: 'Settings', route: '#' },
+]
 </script>
