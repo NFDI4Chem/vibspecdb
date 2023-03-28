@@ -56,7 +56,7 @@ class StudyResource extends JsonResource
                 'description' => $this->description,
                 'has_children' => false,  // TODO : add files (datasets)
                 'type' => 'study',   // TODO : study
-                "\$droppable" => false,
+                "\$droppable" => true,
                 "\$draggable" => true,
 
                 'created_at' => $this->created_at,

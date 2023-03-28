@@ -32,7 +32,7 @@ const treeOptions = {
   deleteable: true,
   editable: true,
   createable: true,
-  draggable: false,
+  draggable: true,
   showInfo: true,
   showTitle: true,
   title: 'Projects Tree',

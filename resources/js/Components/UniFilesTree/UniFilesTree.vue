@@ -9,6 +9,7 @@
     @drop="ondrop"
     :rootNode="{ $droppable: false, $draggable: true }"
     @before-drop="onBeforeDrop"
+    :ondragend="ondragend"
     @change="handleTreeChange"
     class="files-tree"
   >
@@ -221,6 +222,11 @@ export default {
     onBeforeDrop(tree) {
       console.log('onBeforeDrop', tree)
     },
+    ondragend(tree, store) {
+      const targetNode = tree.getNodeParentByPath(store.targetPath)
+      const same_type = store?.dragNode?.type === targetNode?.type
+      return !same_type
+    },
     renameItem(node) {
       // console.log(node);
       this.$emit('change', node)
@@ -242,8 +248,8 @@ export default {
       const targetNode = this.$refs.tree.getNodeParentByPath(store.targetPath)
       // get the parent of dragNode
       // this.$refs.tree.getNodeParentByPath(store.startPath)
-      console.log('drag', dragNode)
-      console.log('target', targetNode)
+      // console.log('drag', dragNode)
+      // console.log('target', targetNode)
     },
     getAllChecked(tree) {
       const checked = []
