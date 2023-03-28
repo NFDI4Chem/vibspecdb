@@ -108,7 +108,7 @@ const onSelect = project => {
 
 .projects-index {
   width: 100%;
-  height: calc(100vh - 125px);
+  height: calc(100vh - 141px);
 }
 
 .projects-expanded {

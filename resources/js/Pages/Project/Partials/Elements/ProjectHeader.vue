@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col gap-3 projects-index text-sm">
+  <div class="w-full flex flex-col gap-3 text-sm">
     <div class="flex flex-row justify-between w-full">
       <w-breadcrumbs
         icon="mdi mdi-arrow-right"
