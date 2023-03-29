@@ -22,16 +22,18 @@
               icon="mdi mdi-file-tree"
               absolute
               bg-color="blue-grey"
-              class="top-0 right-0 text-gray-100"
+              class="top-0 right-2 text-gray-100"
               @click="openTree"
             />
             <slot name="header"></slot>
           </template>
           <splitpanes style="height: 100%" @resize="treeWidth = $event[0].size">
             <pane :size="treeWidth" class="bg-slate-50" min-size="25">
-              <ProjectsTree :items="projects" class="p-2" />
+              <projects-tree :items="projects" class="p-2" />
             </pane>
-            <pane :size="100 - treeWidth"><slot></slot></pane>
+            <pane :size="100 - treeWidth">
+              <slot></slot>
+            </pane>
           </splitpanes>
         </HeaderMenu>
       </div>

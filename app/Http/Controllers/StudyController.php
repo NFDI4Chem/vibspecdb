@@ -205,21 +205,20 @@ class StudyController extends Controller
 
     public function destroy(Request $request, StatefulGuard $guard, Study $study)
     {
-        $confirmed = app(ConfirmPassword::class)(
-            $guard,
-            $request->user(),
-            $request->password
-        );
-
-        if (! $confirmed) {
-            throw ValidationException::withMessages([
-                'password' => __('The password is incorrect.'),
+        try {
+            if ( $study->owner_id !== auth()->user()->id) {
+                throw ValidationException::withMessages([
+                    'password' => __('You are not the study owner.'),
+                ]);
+            }
+    
+            $study->delete();
+            return redirect()->route('dashboard');
+        } catch(Throwable $e) {
+            return redirect()->back()->withErrors([
+                'destroy' => 'Failed to delete the study'
             ]);
         }
-
-        $study->delete();
-
-        return redirect()->route('dashboard');
     }
 
     public function activity(Request $request, Study $study)

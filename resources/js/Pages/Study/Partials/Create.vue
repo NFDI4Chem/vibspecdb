@@ -111,8 +111,8 @@ const createStudyForm = useForm({
   name: '',
   description: '',
   error_message: null,
-  team_id: usePage().props.value.user.current_team.id,
-  owner_id: usePage().props.value.user.id, // TODO !! bug, fix it later, owner id should not be var
+  team_id: usePage().props.value.user?.current_team?.id, // TODO !! bug, fix
+  owner_id: usePage().props.value.user?.id, // TODO !! bug, fix it later, owner id should not be var
   project_id: props?.project?.id,
   color: null,
   starred: null,

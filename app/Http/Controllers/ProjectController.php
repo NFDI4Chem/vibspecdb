@@ -70,7 +70,7 @@ class ProjectController extends Controller
             return redirect()->route('dashboard');
         } catch(Throwable $e) {
             return redirect()->back()->withErrors([
-                'create' => 'Failed to delete the project'
+                'destroy' => 'Failed to delete the project'
             ]);
         }
     }

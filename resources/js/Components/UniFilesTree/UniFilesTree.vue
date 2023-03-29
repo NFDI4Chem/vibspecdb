@@ -70,7 +70,7 @@
           <w-icon
             v-if="
               !node.edit &&
-              ['directory', 'project', 'study'].includes(node.type) &&
+              ['directory' /*, 'project', 'study'*/].includes(node.type) &&
               options.createable
             "
             class="text-gray-500 w-5 cursor-pointer"
@@ -185,6 +185,13 @@ export default {
         }
       },
     },
+    ondragend: {
+      type: Function,
+      required: false,
+      default: () => {
+        return false
+      },
+    },
   },
   components: {
     Tree: Tree.mixPlugins([Fold, Draggable, Check]),
@@ -200,7 +207,7 @@ export default {
   methods: {
     moveCursor(node) {
       return (
-        ['directory', 'project', 'study'].includes(node.type) &&
+        ['directory', /*'project',*/ 'study'].includes(node.type) &&
         this.options.draggable
       )
     },
@@ -216,24 +223,26 @@ export default {
     toggleFold(tree, node, path) {
       tree.toggleFold(node, path)
     },
-    ondrop(tree) {
-      console.log('ondrop', tree)
+    ondrop(store) {
+      const parent_node = this.$refs.tree.getNodeParentByPath(store?.targetPath)
+      const parent_node_old = this.$refs.tree.getNodeParentByPath(
+        store?.startPath,
+      )
+      const item = store?.dragNode
+      this.$emit('onDrop', item, parent_node, parent_node_old)
     },
     onBeforeDrop(tree) {
       console.log('onBeforeDrop', tree)
     },
     ondragend(tree, store) {
-      const targetNode = tree.getNodeParentByPath(store.targetPath)
-      const same_type = store?.dragNode?.type === targetNode?.type
-      return !same_type
+      return this.ondragend(tree, store)
     },
     renameItem(node) {
-      // console.log(node);
-      this.$emit('change', node)
+      this.$emit('onRename', node)
     },
     renameItemKeyBoard(event, node) {
       if (event.code === 'Enter') {
-        this.$emit('change', node)
+        this.$emit('onRename', node)
       }
     },
     removeItem(tree, node, path) {

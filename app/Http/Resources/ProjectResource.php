@@ -62,9 +62,14 @@ class ProjectResource extends JsonResource
                 'created_at' => $this->created_at,
                 'updated_at' => $this->updated_at,
 
-                'children' => ($this->studies) ? collect($this->studies)->map(function ($study) {
-                    return (new StudyResource($study))->tree();
-                }) : [],
+                'children' => ($this->studies) ? 
+                    collect($this->studies)
+                        ->sortBy('updated_at')
+                        ->reverse()
+                        ->map(function ($study) {
+                            return (new StudyResource($study))->tree();
+                        })->toArray()
+                    : [],
                         
             ];
         }
