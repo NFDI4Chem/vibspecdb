@@ -9,7 +9,7 @@
       <TreeInfoPopper :options="treeOptions" />
     </div>
     <UniFilesTree
-      @itemClick="TreeItemClick"
+      @itemClick="onItemClick"
       :tree="items"
       :options="treeOptions"
       :onRemoveItem="onRemoveItem"
@@ -27,6 +27,7 @@ import { ref, computed } from 'vue'
 
 import { useForm } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
+import { router } from '@inertiajs/vue3'
 
 import TreeInfoPopper from '@/Components/Popper/TreeInfoPopper.vue'
 import UniFilesTree from '@/Components/UniFilesTree/UniFilesTree.vue'
@@ -49,10 +50,23 @@ const treeOptions = {
   title: 'Projects Tree',
 }
 
-const activeItem = ref({})
+const activeItem = computed(() => {
+  const params = route().params
+  const { project, study } = params
+  if (project)
+    return {
+      id: Number(project),
+      type: 'project',
+    }
+  if (study)
+    return {
+      id: Number(study),
+      type: 'study',
+    }
+})
 
-const TreeItemClick = (file, parent) => {
-  console.log(file, parent)
+const onItemClick = (node, parent) => {
+  router.visit(route(node?.type, node?.id))
 }
 
 const onRemoveItem = (tree, node, path) => {
@@ -80,7 +94,6 @@ const onDragend = (tree, store) => {
 }
 
 const onRename = node => {
-  console.log('onRename', node)
   console.log('onRename', node)
   onChange(node, { name: node?.name })
 }

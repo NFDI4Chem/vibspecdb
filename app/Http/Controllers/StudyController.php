@@ -7,6 +7,7 @@ use App\Actions\Study\UpdateStudy;
 use App\Models\FileSystemObject;
 use App\Models\ArgoJob;
 use App\Models\Study;
+use App\Models\Project;
 use Spatie\Tags\Tag;
 
 use Illuminate\Contracts\Auth\StatefulGuard;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 use App\Http\Resources\StudyResource;
+use App\Http\Resources\ProjectResource;
 
 use Inertia\Inertia;
 use Laravel\Fortify\Actions\ConfirmPassword;
@@ -59,9 +61,16 @@ class StudyController extends Controller
         $tab = $request->has('tab') ? $request->query('tab') : 1;
         $tree = $this->getStudyFiles($study);
 
+        $user = $request->user();
+        $projects = Project::where('owner_id', $user->id)->get();
+        $projects = collect($projects)->map(function ($project) {
+            return (new ProjectResource($project))->tree();
+        });
+
         return Inertia::render('Study/Index', [
             'study' => (new StudyResource($study))->lite(false, ['tags', 'metadata']),
             'project' => $study->project,
+            'projects' => $projects,
             'files' => $tree,
             'tab' => $tab,
         ]);

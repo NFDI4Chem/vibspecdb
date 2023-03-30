@@ -1,6 +1,6 @@
 <template>
   <div>
-    <study-layout :project="project" :study="study">
+    <study-layout :project="project" :study="study" :projects="projects">
       <template #scontent>
         <div class="bg-white shadow-md flex flex-col flex-1 mb-0">
           <div class="px4 py-4 project-tabs w-full">
@@ -36,7 +36,7 @@ import Info from '@/Pages/Study/Partials/Tabs/Info.vue'
 import Metadata from '@/Pages/Study/Partials/Tabs/Metadata.vue'
 import UploadFiles from '@/Pages/Study/Partials/Tabs/UploadFiles.vue'
 
-const props = defineProps(['study', 'project', 'files', 'tab'])
+const props = defineProps(['study', 'project', 'files', 'tab', 'projects'])
 
 const tab = computed(() => {
   let t = props?.tab

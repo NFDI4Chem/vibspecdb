@@ -25,10 +25,11 @@
               class="top-0 right-2 text-gray-100"
               @click="openTree"
             />
+
             <slot name="header"></slot>
           </template>
           <splitpanes style="height: 100%" @resize="treeWidth = $event[0].size">
-            <pane :size="treeWidth" class="bg-slate-50" min-size="25">
+            <pane :size="treeWidth" class="bg-slate-50" min-size="20">
               <projects-tree :items="projects" class="p-2" />
             </pane>
             <pane :size="100 - treeWidth">
@@ -42,7 +43,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
+import { Inertia } from '@inertiajs/inertia'
+import { usePage } from '@inertiajs/inertia-vue3'
+
 import ProjectsTree from '@/Pages/Dashboard/Tree/ProjectsTree.vue'
 
 import MobileMenu from '@/Layouts/Elements/MobileMenu.vue'
@@ -53,9 +58,6 @@ import JetBanner from '@/Jetstream/Banner.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 
 import { sidebarOpen } from '@/VueComposable/store'
-import { Inertia } from '@inertiajs/inertia'
-import { useStore } from 'vuex'
-import { computed } from 'vue'
 
 const store = useStore()
 
@@ -93,11 +95,11 @@ const clearJobAlerts = async () => {
   })
 }
 
-const openDrawer = ref(false)
-const treeWidth = ref(0)
+const openDrawer = ref(true)
+const treeWidth = ref(25)
 const openTree = () => {
   openDrawer.value = !openDrawer.value
-  treeWidth.value = openDrawer.value ? 30 : 0
+  treeWidth.value = openDrawer.value ? 25 : 0
 }
 </script>
 

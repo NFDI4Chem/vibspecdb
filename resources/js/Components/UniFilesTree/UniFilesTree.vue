@@ -15,15 +15,15 @@
   >
     <div
       class="relative z-0"
-      :class="{ ['active-node']: node.id === activeItem.id }"
+      :class="{
+        ['active-node']:
+          node.id === activeItem.id && node.type === activeItem.type,
+      }"
     >
       <div
         class="group flex justify-between gap-2 items-center whitespace-nowrap"
       >
-        <div
-          @click="onItemClick(node, path, tree)"
-          class="flex flex-row gap-2 items-center w-full"
-        >
+        <div class="flex flex-row gap-2 items-center w-full">
           <div class="flex items-center" v-if="options.checkable">
             <input
               type="checkbox"
@@ -64,6 +64,7 @@
             :class="{ ['text-teal-500']: node.edit }"
             :readonly="node.edit ? false : 'readonly'"
             v-on:keydown="renameItemKeyBoard($event, node)"
+            @click="onItemClick(node, path, tree)"
           />
         </div>
         <div class="hidden flex-row align-middle group-hover:flex">
@@ -213,7 +214,9 @@ export default {
     },
     onItemClick(node, path, tree) {
       const parent = this.$refs.tree.getNodeParentByPath(path)
-      this.$emit('itemClick', node, parent)
+      if (!node.edit) {
+        this.$emit('itemClick', node, parent)
+      }
     },
     handleCheck(node, path, tree) {
       tree.toggleCheck(node, path)
