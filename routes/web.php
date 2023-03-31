@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ConsoleController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\FileSystemController;
 use App\Http\Controllers\ImageUploadController;
@@ -96,6 +97,8 @@ Route::group(['middleware' => ['auth']], function () {
     ->name('users.alerts');
     Route::get('user/clear_alerts', [UserController::class, 'clear_alerts'])
     ->name('users.clear_alerts');
+    Route::put('users/settings', [SettingsController::class, 'update'])
+    ->name('users.settings');
 
     Route::put('/image/store', [ImageUploadController::class, 'store'])
         ->name('image.store');

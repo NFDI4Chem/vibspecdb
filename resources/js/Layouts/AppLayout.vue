@@ -23,7 +23,7 @@
               absolute
               bg-color="blue-grey"
               class="top-0 right-2 text-gray-100"
-              @click="openTree"
+              @click="updateSettings"
             />
 
             <slot name="header"></slot>
@@ -95,12 +95,26 @@ const clearJobAlerts = async () => {
   })
 }
 
-const openDrawer = ref(true)
-const treeWidth = ref(25)
-const openTree = () => {
-  openDrawer.value = !openDrawer.value
-  treeWidth.value = openDrawer.value ? 25 : 0
+const show_project_tree = computed(() => {
+  return usePage().props.value?.user?.settings?.find(
+    x => (x.key = 'show_project_tree'),
+  )?.value
+})
+
+const updateSettings = () => {
+  const data = { show_project_tree: !show_project_tree.value }
+  Inertia.put(route('users.settings'), data, {
+    errorBag: 'userSettingsUpdate',
+    preserveScroll: true,
+    onError: err => {
+      setup_error_notify(`<div>An error occurred.<br>${message}</div>`)
+    },
+  })
 }
+
+const treeWidth = computed(() => {
+  return show_project_tree.value ? 25 : 0
+})
 </script>
 
 <style lang="scss">

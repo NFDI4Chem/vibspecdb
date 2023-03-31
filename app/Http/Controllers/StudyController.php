@@ -71,7 +71,7 @@ class StudyController extends Controller
             'study' => (new StudyResource($study))->lite(false, ['tags', 'metadata']),
             'project' => $study->project,
             'projects' => $projects,
-            'files' => $tree,
+            'files' => fn () => $tree,
             'tab' => $tab,
         ]);
 
