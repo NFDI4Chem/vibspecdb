@@ -24,6 +24,7 @@
               bg-color="blue-grey"
               class="top-0 right-2 text-gray-100"
               @click="updateSettings"
+              :loading="treeLoading"
             />
 
             <slot name="header"></slot>
@@ -101,13 +102,18 @@ const show_project_tree = computed(() => {
   )?.value
 })
 
+const treeLoading = ref(false)
 const updateSettings = () => {
+  treeLoading.value = true
   const data = { show_project_tree: !show_project_tree.value }
   Inertia.put(route('users.settings'), data, {
     errorBag: 'userSettingsUpdate',
     preserveScroll: true,
     onError: err => {
       setup_error_notify(`<div>An error occurred.<br>${message}</div>`)
+    },
+    onFinish: () => {
+      treeLoading.value = false
     },
   })
 }

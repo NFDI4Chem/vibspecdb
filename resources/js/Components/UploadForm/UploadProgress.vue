@@ -1,0 +1,53 @@
+<template>
+  <div>
+    <div
+      class="flex flex-row flex-wrap justify-center gap-10 items-center py-10 px-6"
+    >
+      <div>
+        <w-progress class="ma1" circle v-model="progress" size="8em">
+          <strong>{{ progress }}%</strong>
+        </w-progress>
+      </div>
+      <div class="uploading-description flex flex-col items-center gap-5">
+        <div class="font-bold text-4xl text-gray-700 text-center">
+          {{ progress < 100 ? 'Uploading files...' : 'Files Uploaded' }}
+        </div>
+        <div class="text-center text-lg p-5 bg-gray-200">
+          {{ progress < 100 ? uploadingText : uploadedText }}
+        </div>
+
+        <div class="w-full flex justify-between">
+          <w-button
+            v-if="progress < 100"
+            @click="cancelUploading"
+            bg-color="secondary"
+          >
+            Cancel upload
+          </w-button>
+          <w-button v-else @click="showModal" bg-color="secondary">
+            Upload More
+          </w-button>
+
+          <w-button @click="showModal" bg-color="primary">
+            Show Modal <w-icon class="ml2" sm>mdi mdi-open-in-new</w-icon>
+          </w-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import RadialProgressBar from 'vue3-radial-progress'
+
+const props = defineProps(['progress', 'uploadingText', 'uploadedText'])
+const emit = defineEmits(['showModal', 'cancelUploading'])
+
+const showModal = () => {
+  emit('showModal')
+}
+
+const cancelUploading = () => {
+  emit('cancelUploading')
+}
+</script>
