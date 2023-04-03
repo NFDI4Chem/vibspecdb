@@ -32,7 +32,7 @@
             <pane :size="treeWidth" class="bg-slate-50" min-size="20">
               <projects-tree :items="projects" class="p-2" />
             </pane>
-            <pane :size="100 - treeWidth">
+            <pane :size="100 - treeWidth" class="main-content">
               <slot></slot>
             </pane>
           </splitpanes>
@@ -118,6 +118,11 @@ const treeWidth = computed(() => {
 </script>
 
 <style lang="scss">
+.main-content {
+  height: calc(100vh - 142px);
+  overflow-y: auto;
+}
+
 .splitpanes__pane {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.1) inset;
   .splitpanes__pane {

@@ -323,8 +323,7 @@ const inputData = ref({
 
 <style lang="scss">
 .files-uploader-area {
-  height: calc(100vh - 210px);
-  // height: 100vh;
+  height: calc(100vh - 238px);
 
   .tree-plane {
     height: 100%;
