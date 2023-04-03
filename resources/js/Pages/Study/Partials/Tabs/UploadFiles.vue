@@ -1,12 +1,12 @@
 <template>
-  <div class="py-3 files-uploader-area flex">
+  <div class="pb3 files-uploader-area flex">
     <splitpanes class="bg-gray-50" @resized="e => onPaneResize(e)">
+      <!-- :min-size="treeFilled && files?.length ? 30 : 0" -->
       <pane
-        :min-size="treeFilled && files?.length ? 30 : 0"
         :size="treeFilled && files?.length ? 45 : 0"
-        class="flex flex-col items-start justify-start px-5 py-3 tree-plane"
+        class="flex flex-col items-start justify-start py-3 tree-plane"
       >
-        <div class="w-full">
+        <div class="w-full px-5">
           <div class="" v-if="treeFilled">
             <div class="relative flex flex-col w-full">
               <div class="min-w-fit">
@@ -323,7 +323,8 @@ const inputData = ref({
 
 <style lang="scss">
 .files-uploader-area {
-  height: calc(100vh - 295px);
+  height: calc(100vh - 210px);
+  // height: 100vh;
 
   .tree-plane {
     height: 100%;

@@ -90,6 +90,6 @@ const tag = ref(1)
 <style lang="scss">
 .studies-index {
   width: 100%;
-  height: calc(100vh - 161px);
+  height: calc(100vh - 142px);
 }
 </style>

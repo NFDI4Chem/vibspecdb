@@ -66,6 +66,7 @@ class FileSystemObject extends Model
         return $this->hasMany(FileSystemObject::class, 'parent_id');
     }
 
+    /*
     public function getPathAttribute()
     {
         $path = [];
@@ -77,6 +78,7 @@ class FileSystemObject extends Model
         $path[] = $this->name;
         return $path;
     }
+    */
 
     public function jobs()
     {

@@ -203,6 +203,7 @@ const MakeReload = () => {
 }
 
 const onAddFile = async file => {
+  console.log('start upload', Date.now())
   await delay(500)
 
   const { name, type: ftype, size, id: uppyid } = file
@@ -219,16 +220,18 @@ const onAddFile = async file => {
     level: parseInt(level) + 1,
     parent_id: parseInt(base_id),
   })
+  console.log('file saved', Date.now())
   await extractzip(saved)
-  MakeReload()
+  console.log('file extracted', Date.now())
+  // MakeReload()
 }
 
 const delay = time => {
   return new Promise(resolve => setTimeout(resolve, time))
 }
 
-const onUploaded = (file, data) => {
-  onAddFile(file)
+const onUploaded = async (file, data) => {
+  await onAddFile(file)
   uploaded.value = true
 }
 

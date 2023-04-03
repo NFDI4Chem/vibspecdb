@@ -12,7 +12,7 @@
         :project="project"
       />
     </template>
-    <div class="px-0 sm:px-0 flex flex-1 flex-col">
+    <div class="px-0 sm:px-0 flex flex-1 flex-col h-full">
       <slot name="scontent"></slot>
     </div>
   </app-layout>
