@@ -4,6 +4,7 @@
       <template #scontent>
         <div class="bg-white shadow-md flex flex-col flex-1 mb-0">
           <div class="px4 py-4 project-tabs w-full">
+            <SplitterToggler v-model:slit_views="slit_views" />
             <w-tabs
               :items="tabs"
               class="w-full rounded-none border-0"
@@ -17,6 +18,7 @@
                   :study="study"
                   :project="project"
                   :files="files"
+                  v-model:slit_views="slit_views"
                 />
               </template>
             </w-tabs>
@@ -33,6 +35,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 
 import StudyLayout from '@/Pages/Study/Layout.vue'
 import Info from '@/Pages/Study/Partials/Tabs/Info.vue'
+import SplitterToggler from '@/Pages/Study/Partials/Elements/SplitterToggler.vue'
 import Metadata from '@/Pages/Study/Partials/Tabs/Metadata.vue'
 import UploadFiles from '@/Pages/Study/Partials/Tabs/UploadFiles.vue'
 
@@ -50,6 +53,12 @@ const tabs = [
   { title: 'Upload', content: 'Files Tree and uploader.' },
   { title: 'Files', content: 'Files Tree and preview.' },
 ]
+
+const slit_views = ref({
+  top_visible: false,
+  left_visible: true,
+  right_visible: true,
+})
 </script>
 
 <style lang="scss">

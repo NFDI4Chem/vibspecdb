@@ -1,82 +1,79 @@
 <template>
   <div class="pb3 files-uploader-area">
-    <splitpanes horizontal class="bg-gray-50">
-      <pane min-size="0" :size="!spectraData ? 0 : 50">
-        <div
-          v-if="showOverlay || !spectraData"
-          class="overlay-progress flex p-5 h-full justify-center align-middle"
-        >
-          <w-progress class="ma1" circle color="light-blue-dark3"></w-progress>
-        </div>
-        <SpectralPlotter
+    <div class="h-[400px]" v-if="top_size">
+      <div
+        v-if="showOverlay || !spectraData"
+        class="overlay-progress flex p-5 h-full justify-center align-middle"
+      >
+        <w-progress class="ma1" circle color="light-blue-dark3"></w-progress>
+      </div>
+      <PlotlyPlotter v-else :input="spectraData" />
+      <!-- <SpectralPlotter
           v-else
           :key="plotKey"
           :data="spectraData"
           ref="spectral_plot"
-        />
-      </pane>
-      <pane min-size="0">
-        <splitpanes @resized="e => onPaneResize(e)">
-          <pane
-            :size="treeFilled && files?.length ? 45 : 0"
-            class="flex flex-col items-start justify-start py-3 tree-plane"
-          >
-            <div class="w-full px-5">
-              <div class="" v-if="treeFilled">
-                <div class="relative flex flex-col w-full">
-                  <div class="min-w-fit">
-                    <div
-                      class="flex flex-row justify-between items-center pb7 gap-2"
-                    >
-                      <div class="font-bold text-md">
-                        <div v-if="treeOptions.showTitle">
-                          {{ treeOptions.title }}
-                        </div>
-                      </div>
-                      <TreeInfoPopper :options="treeOptions" />
-                    </div>
-                    <UniFilesTree
-                      @itemClick="TreeItemClick"
-                      :tree="files"
-                      :options="treeOptions"
-                      :onRemoveItem="onRemoveItem"
-                      :onAddChildren="onAddChildren"
-                      :activeItem="activeItem"
-                      @change="onTreeChange"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </pane>
-          <pane min-size="0">
-            <div class="flex flex-col gap-2 h-full items-left p-4 py4">
-              <div class="text-lg flex flex-col gap-1">
+        /> -->
+    </div>
+
+    <splitpanes
+      @resized="e => onPaneResize(e)"
+      :class="{ 'top-visible': top_size }"
+    >
+      <pane
+        :size="left_size"
+        class="flex flex-col items-start justify-start py-3 tree-plane"
+      >
+        <div class="w-full px-5">
+          <div class="" v-if="treeFilled">
+            <div class="relative flex flex-col w-full">
+              <div class="min-w-fit">
                 <div
-                  class="flex flex-row flex-wrap gap-1 justify-between items-center"
+                  class="flex flex-row justify-between items-center pb7 gap-2"
                 >
-                  <div class="text-bold text-md">
-                    Uploading files to the folder:
+                  <div class="font-bold text-md">
+                    <div v-if="treeOptions.showTitle">
+                      {{ treeOptions.title }}
+                    </div>
                   </div>
-                  <UploaderInfoPopper :selectTreeFolder="selectTreeFolder" />
+                  <TreeInfoPopper :options="treeOptions" />
                 </div>
-                <div class="flex flex-row gap-2 items-center align-middle">
-                  <CircleStackIcon class="h-4 w-4 text-gray-500" />
-                  <strong
-                    class="flex items-center text-sm text-gray-600 force-wrap"
-                  >
-                    {{ selectTreeFolder }}
-                  </strong>
-                </div>
+                <UniFilesTree
+                  @itemClick="TreeItemClick"
+                  :tree="files"
+                  :options="treeOptions"
+                  :onRemoveItem="onRemoveItem"
+                  :onAddChildren="onAddChildren"
+                  :activeItem="activeItem"
+                  @change="onTreeChange"
+                />
               </div>
-              <Uploader
-                :width="sectionWidth"
-                :baseFolder="activeItem"
-                @uploaded="onUploaded"
-              />
             </div>
-          </pane>
-        </splitpanes>
+          </div>
+        </div>
+      </pane>
+      <pane :size="right_size">
+        <div class="flex flex-col gap-2 h-full items-left p-4 py4">
+          <div class="text-lg flex flex-col gap-1">
+            <div
+              class="flex flex-row flex-wrap gap-1 justify-between items-center"
+            >
+              <div class="text-bold text-md">
+                Uploading files to the folder:
+              </div>
+              <UploaderInfoPopper :selectTreeFolder="selectTreeFolder" />
+            </div>
+            <div class="flex flex-row gap-2 items-center align-middle">
+              <CircleStackIcon class="h-4 w-4 text-gray-500" />
+              <strong
+                class="flex items-center text-sm text-gray-600 force-wrap"
+              >
+                {{ selectTreeFolder }}
+              </strong>
+            </div>
+          </div>
+          <Uploader :baseFolder="activeItem" @uploaded="onUploaded" />
+        </div>
       </pane>
     </splitpanes>
   </div>
@@ -99,13 +96,15 @@ import TreeInfoPopper from '@/Components/Popper/TreeInfoPopper.vue'
 import { useForm, usePage } from '@inertiajs/inertia-vue3'
 
 import SpectralPlotter from '@/Components/uPlot/SpectralPlotter.vue'
+import PlotlyPlotter from '@/Components/plotly/PlotlyPlotter.vue'
 
 import { useFiles } from '@/VueComposable/useFiles'
 
-import { ref, computed, onMounted, reactive, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useStore } from 'vuex'
 
-const props = defineProps(['study', 'project', 'files'])
+const emit = defineEmits(['update:slit_views'])
+const props = defineProps(['study', 'project', 'files', 'slit_views'])
 const { showChildsAPI, extractzip, getSpectraData } = useFiles()
 
 const selectTreeItem = ref()
@@ -113,8 +112,6 @@ const selectTreeFolder = ref('/')
 const store = useStore()
 
 const { getFilesListAPI, getPresignedURL, parseFile } = useFiles()
-
-const job_files = ref({})
 
 const treeFilled = computed(() => {
   return props?.files?.length > 0 && props?.files[0].children?.length > 0
@@ -130,9 +127,6 @@ const treeOptions = {
   showTitle: true,
   title: 'Files Tree',
 }
-
-const sectionRef = ref()
-const sectionWidth = ref()
 
 const activeItem = computed({
   get() {
@@ -173,10 +167,6 @@ const MakeReload = () => {
     onSuccess: () => form.reset(),
   })
 }
-
-onMounted(() => {
-  // sectionWidth.value = sectionRef.value.clientWidth;
-})
 
 const onRemoveItem = (tree, node, path) => {
   node.loading = true
@@ -261,6 +251,11 @@ const TreeItemClick = async (file, parent) => {
       }
     })
     showOverlay.value = false
+
+    emit('update:slit_views', {
+      ...props?.slit_views,
+      top_visible: true,
+    })
   }
 }
 
@@ -325,9 +320,35 @@ const inputData = ref({
   rootpath: 'data1/data2/zips/ascitic-fluid_bacteria_minimal.zip',
   local: false,
 })
+
+const top_size = computed(() => {
+  return props?.slit_views?.top_visible
+})
+
+const left_size = computed(() => {
+  if (!props?.slit_views?.right_visible) {
+    return 100
+  }
+  return treeFilled.value &&
+    props?.files?.length &&
+    props?.slit_views?.left_visible
+    ? 45
+    : 0
+})
+
+const right_size = computed(() => {
+  if (!props?.slit_views?.left_visible) {
+    return 100
+  }
+  return props?.slit_views?.right_visible ? 55 : 0
+})
 </script>
 
 <style lang="scss">
+.top-visible {
+  height: calc(100% - 400px);
+}
+
 .overlay-progress {
   background-color: rgba(35, 71, 129, 0.1);
 }
