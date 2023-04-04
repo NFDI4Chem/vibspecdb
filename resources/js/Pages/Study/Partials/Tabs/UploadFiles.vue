@@ -1,42 +1,55 @@
 <template>
-  <div class="pb3 files-uploader-area flex">
-    <splitpanes class="bg-gray-50" @resized="e => onPaneResize(e)">
-      <!-- :min-size="treeFilled && files?.length ? 30 : 0" -->
-      <pane
-        :size="treeFilled && files?.length ? 45 : 0"
-        class="flex flex-col items-start justify-start py-3 tree-plane"
-      >
-        <div class="w-full px-5">
-          <div class="" v-if="treeFilled">
-            <div class="relative flex flex-col w-full">
-              <div class="min-w-fit">
-                <div
-                  class="flex flex-row justify-between items-center pb7 gap-2"
-                >
-                  <div class="font-bold text-md">
-                    <div v-if="treeOptions.showTitle">
-                      {{ treeOptions.title }}
+  <div class="pb3 files-uploader-area">
+    <splitpanes horizontal class="bg-gray-50">
+      <pane min-size="0" :size="!spectraData ? 0 : 50">
+        <div
+          v-if="showOverlay || !spectraData"
+          class="overlay-progress flex p-5 h-full justify-center align-middle"
+        >
+          <w-progress class="ma1" circle color="light-blue-dark3"></w-progress>
+        </div>
+        <SpectralPlotter
+          v-else
+          :key="plotKey"
+          :data="spectraData"
+          ref="spectral_plot"
+        />
+      </pane>
+      <pane min-size="0">
+        <splitpanes @resized="e => onPaneResize(e)">
+          <pane
+            :size="treeFilled && files?.length ? 45 : 0"
+            class="flex flex-col items-start justify-start py-3 tree-plane"
+          >
+            <div class="w-full px-5">
+              <div class="" v-if="treeFilled">
+                <div class="relative flex flex-col w-full">
+                  <div class="min-w-fit">
+                    <div
+                      class="flex flex-row justify-between items-center pb7 gap-2"
+                    >
+                      <div class="font-bold text-md">
+                        <div v-if="treeOptions.showTitle">
+                          {{ treeOptions.title }}
+                        </div>
+                      </div>
+                      <TreeInfoPopper :options="treeOptions" />
                     </div>
+                    <UniFilesTree
+                      @itemClick="TreeItemClick"
+                      :tree="files"
+                      :options="treeOptions"
+                      :onRemoveItem="onRemoveItem"
+                      :onAddChildren="onAddChildren"
+                      :activeItem="activeItem"
+                      @change="onTreeChange"
+                    />
                   </div>
-                  <TreeInfoPopper :options="treeOptions" />
                 </div>
-                <UniFilesTree
-                  @itemClick="TreeItemClick"
-                  :tree="files"
-                  :options="treeOptions"
-                  :onRemoveItem="onRemoveItem"
-                  :onAddChildren="onAddChildren"
-                  :activeItem="activeItem"
-                  @change="onTreeChange"
-                />
               </div>
             </div>
-          </div>
-        </div>
-      </pane>
-      <pane min-size="25">
-        <splitpanes horizontal>
-          <pane min-size="0" size="40">
+          </pane>
+          <pane min-size="0">
             <div class="flex flex-col gap-2 h-full items-left p-4 py4">
               <div class="text-lg flex flex-col gap-1">
                 <div
@@ -60,16 +73,6 @@
                 :width="sectionWidth"
                 :baseFolder="activeItem"
                 @uploaded="onUploaded"
-              />
-            </div>
-          </pane>
-          <pane min-size="0">
-            <div class="p-5">
-              <SpectralPlotter
-                :key="plotKey"
-                v-if="spectraData"
-                :data="spectraData"
-                ref="spectral_plot"
               />
             </div>
           </pane>
@@ -231,6 +234,7 @@ const onAddChildren = node => {
 }
 
 const spectraData = ref()
+const showOverlay = ref(false)
 
 const TreeItemClick = async (file, parent) => {
   const itemData = file.type === 'directory' ? file : parent
@@ -238,6 +242,7 @@ const TreeItemClick = async (file, parent) => {
   storeSelected(itemData)
 
   if (file.type !== 'directory') {
+    showOverlay.value = true
     const input = {
       files: [
         {
@@ -255,6 +260,7 @@ const TreeItemClick = async (file, parent) => {
         sd: [],
       }
     })
+    showOverlay.value = false
   }
 }
 
@@ -322,6 +328,10 @@ const inputData = ref({
 </script>
 
 <style lang="scss">
+.overlay-progress {
+  background-color: rgba(35, 71, 129, 0.1);
+}
+
 .files-uploader-area {
   height: calc(100vh - 238px);
 
