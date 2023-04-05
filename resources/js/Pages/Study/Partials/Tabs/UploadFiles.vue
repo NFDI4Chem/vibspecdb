@@ -19,6 +19,7 @@
     <splitpanes
       @resized="e => onPaneResize(e)"
       :class="{ 'top-visible': top_size }"
+      class="bg-slate-50"
     >
       <pane
         :size="left_size"
@@ -31,12 +32,19 @@
                 <div
                   class="flex flex-row justify-between items-center pb7 gap-2"
                 >
-                  <div class="font-bold text-md">
-                    <div v-if="treeOptions.showTitle">
-                      {{ treeOptions.title }}
+                  <div class="flex flex-row justify-start">
+                    <TreeOptionSettings v-model:options="treeOptions" />
+
+                    <div class="font-bold text-md">
+                      <div v-if="treeOptions.showTitle">
+                        {{ treeOptions.title }}
+                      </div>
                     </div>
                   </div>
-                  <TreeInfoPopper :options="treeOptions" />
+                  <TreeInfoPopper
+                    :options="treeOptions"
+                    v-if="treeOptions.showInfo"
+                  />
                 </div>
                 <UniFilesTree
                   @itemClick="TreeItemClick"
@@ -98,6 +106,7 @@ import { useForm, usePage } from '@inertiajs/inertia-vue3'
 
 import SpectralPlotter from '@/Components/uPlot/SpectralPlotter.vue'
 import PlotlyPlotter from '@/Components/plotly/PlotlyPlotter.vue'
+import TreeOptionSettings from '@/Pages/Study/Partials/Elements/TreeOptionSettings.vue'
 
 import { useFiles } from '@/VueComposable/useFiles'
 
@@ -118,7 +127,7 @@ const treeFilled = computed(() => {
   return props?.files?.length > 0 && props?.files[0].children?.length > 0
 })
 
-const treeOptions = {
+const treeOptions = ref({
   checkable: true,
   deleteable: true,
   editable: true,
@@ -127,7 +136,7 @@ const treeOptions = {
   showInfo: true,
   showTitle: true,
   title: 'Files Tree',
-}
+})
 
 const activeItem = computed({
   get() {
@@ -181,8 +190,6 @@ const onRemoveItem = (tree, node, path) => {
 }
 
 const onTreeCheck = async checked => {
-  console.log('checked', checked)
-
   const files = checked.filter(f => f.type === 'file')
 
   if (files?.length === 0) {

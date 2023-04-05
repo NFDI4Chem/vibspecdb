@@ -25,10 +25,11 @@
       >
         <div class="flex flex-row gap-2 items-center w-full">
           <div class="flex items-center" v-if="options.checkable">
-            <input
-              type="checkbox"
-              :checked="node.$checked"
-              @change="handleCheck(node, path, tree)"
+            <w-checkbox
+              :model-value="node.$checked"
+              round
+              color="cyan-dark3"
+              @input="handleCheck(node, path, tree)"
             />
           </div>
 
