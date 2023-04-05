@@ -12,9 +12,8 @@ import { ref, onMounted, computed } from 'vue'
 import Plotly from 'plotly.js-dist-min'
 
 const plot = ref()
-const errorBars = ref(false)
 
-const props = defineProps(['input'])
+const props = defineProps(['input', 'showSqrtSd'])
 
 const dinp = computed(() => {
   const result = []
@@ -28,7 +27,7 @@ const dinp = computed(() => {
       type: 'scatter',
     })
 
-    if (errorBars.value) {
+    if (props?.showSqrtSd) {
       result.push({
         x: line.x,
         y: line.y.map(y => {
@@ -85,7 +84,7 @@ var layout = {
   },
   margin: {
     l: 80,
-    r: 15,
+    r: 20,
     b: 80,
     t: 10,
   },
@@ -125,5 +124,8 @@ onMounted(() => {
       width: 100% !important;
     }
   }
+}
+.modebar-container {
+  right: -7px !important;
 }
 </style>

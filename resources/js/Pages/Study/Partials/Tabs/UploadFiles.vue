@@ -7,7 +7,7 @@
       >
         <w-progress class="ma1" circle color="light-blue-dark3"></w-progress>
       </div>
-      <PlotlyPlotter v-else :input="spectraData" />
+      <PlotlyPlotter v-else :input="spectraData" :showSqrtSd="false" />
       <!-- <SpectralPlotter
           v-else
           :key="plotKey"
@@ -46,6 +46,7 @@
                   :onAddChildren="onAddChildren"
                   :activeItem="activeItem"
                   @change="onTreeChange"
+                  @onCheck="onTreeCheck"
                 />
               </div>
             </div>
@@ -118,7 +119,7 @@ const treeFilled = computed(() => {
 })
 
 const treeOptions = {
-  checkable: false,
+  checkable: true,
   deleteable: true,
   editable: true,
   createable: true,
@@ -179,15 +180,38 @@ const onRemoveItem = (tree, node, path) => {
   })
 }
 
-const onTreeChange = node => {
-  node.loading = true
-  const form = useForm(node)
-  form.put(route('files.update', node.id), {
-    preserveScroll: true,
-    onSuccess: () => {},
-    onError: () => {},
-    onFinish: () => {},
+const onTreeCheck = async checked => {
+  console.log('checked', checked)
+
+  const files = checked.filter(f => f.type === 'file')
+
+  if (files?.length === 0) {
+    return
+  }
+
+  showOverlay.value = true
+  emit('update:slit_views', {
+    ...props?.slit_views,
+    top_visible: true,
   })
+
+  const input = {
+    files: files.map(f => ({
+      src: f?.path,
+      path: f?.relative_url,
+    })),
+  }
+
+  const parsed = await getSpectraData(input)
+  spectraData.value = parsed?.x?.map((plotX, idx) => {
+    return {
+      name: parsed?.filenames[idx],
+      x: plotX,
+      y: parsed?.y[idx],
+      sd: [],
+    }
+  })
+  showOverlay.value = false
 }
 
 const onAddChildren = node => {
@@ -233,6 +257,11 @@ const TreeItemClick = async (file, parent) => {
 
   if (file.type !== 'directory') {
     showOverlay.value = true
+    emit('update:slit_views', {
+      ...props?.slit_views,
+      top_visible: true,
+    })
+
     const input = {
       files: [
         {
@@ -251,12 +280,18 @@ const TreeItemClick = async (file, parent) => {
       }
     })
     showOverlay.value = false
-
-    emit('update:slit_views', {
-      ...props?.slit_views,
-      top_visible: true,
-    })
   }
+}
+
+const onTreeChange = node => {
+  node.loading = true
+  const form = useForm(node)
+  form.put(route('files.update', node.id), {
+    preserveScroll: true,
+    onSuccess: () => {},
+    onError: () => {},
+    onFinish: () => {},
+  })
 }
 
 const storeSelected = file => {
@@ -269,7 +304,6 @@ const onUploaded = (file, data) => {
 
 const displaySelected = file => {
   selectTreeItem.value = file
-  // console.log('file', file)
 
   let sFolder = '/'
   if (selectTreeItem.value.name == '/') {
@@ -321,6 +355,10 @@ const inputData = ref({
   local: false,
 })
 
+const treeNotEmpty = computed(() => {
+  return treeFilled.value && props?.files?.length
+})
+
 const top_size = computed(() => {
   return props?.slit_views?.top_visible
 })
@@ -329,15 +367,15 @@ const left_size = computed(() => {
   if (!props?.slit_views?.right_visible) {
     return 100
   }
-  return treeFilled.value &&
-    props?.files?.length &&
-    props?.slit_views?.left_visible
-    ? 45
-    : 0
+  if (treeNotEmpty.value && props?.slit_views?.left_visible) {
+    return 45
+  } else {
+    return 0
+  }
 })
 
 const right_size = computed(() => {
-  if (!props?.slit_views?.left_visible) {
+  if (!props?.slit_views?.left_visible || !treeNotEmpty.value) {
     return 100
   }
   return props?.slit_views?.right_visible ? 55 : 0
