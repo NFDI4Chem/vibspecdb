@@ -1,5 +1,5 @@
 <template>
-  <w-app>
+  <w-app @contextmenu.prevent="() => {}">
     <Head :title="title" />
     <jet-banner />
     <div>

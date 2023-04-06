@@ -47,15 +47,18 @@
                   />
                 </div>
                 <UniFilesTree
-                  @itemClick="TreeItemClick"
                   :tree="files"
                   :options="treeOptions"
                   :onRemoveItem="onRemoveItem"
                   :onAddChildren="onAddChildren"
                   :activeItem="activeItem"
-                  @change="onTreeChange"
+                  :ondragend="onDragend"
+                  @itemClick="TreeItemClick"
+                  @onRename="onTreeChange"
                   @onCheck="onTreeCheck"
+                  @onDrop="onDrop"
                 />
+                <!-- @change="onTreeChange" -->
               </div>
             </div>
           </div>
@@ -73,7 +76,7 @@
               <UploaderInfoPopper :selectTreeFolder="selectTreeFolder" />
             </div>
             <div class="flex flex-row gap-2 items-center align-middle">
-              <CircleStackIcon class="h-4 w-4 text-gray-500" />
+              <w-icon class="h-3 w-3 text-gray-500">mdi mdi-database</w-icon>
               <strong
                 class="flex items-center text-sm text-gray-600 force-wrap"
               >
@@ -90,14 +93,10 @@
 
 <script setup>
 import {
-  ChevronRightIcon,
-  HomeIcon,
-  InformationCircleIcon,
-  CircleStackIcon,
-} from '@heroicons/vue/24/solid'
+  setup_info_notify,
+  setup_error_notify,
+} from '@/VueComposable/mixins/useWave'
 
-import JetButton from '@/Jetstream/Button.vue'
-// import StudyIndex from '@/Pages/Study/Index.vue'
 import UniFilesTree from '@/Components/UniFilesTree/UniFilesTree.vue'
 import Uploader from '@/Components/UploadForm/Uploader.vue'
 import UploaderInfoPopper from '@/Components/Popper/UploaderInfoPopper.vue'
@@ -132,7 +131,7 @@ const treeOptions = ref({
   deleteable: true,
   editable: true,
   createable: true,
-  draggable: false,
+  draggable: true,
   showInfo: true,
   showTitle: true,
   title: 'Files Tree',
@@ -277,7 +276,7 @@ const TreeItemClick = async (file, parent) => {
         },
       ],
     }
-    const parsed = await getSpectraData(/*inputData.value*/ input)
+    const parsed = await getSpectraData(input)
     spectraData.value = parsed?.x?.map((plotX, idx) => {
       return {
         name: file.name,
@@ -291,14 +290,39 @@ const TreeItemClick = async (file, parent) => {
 }
 
 const onTreeChange = node => {
+  console.log('onTreeChange', node)
   node.loading = true
   const form = useForm(node)
   form.put(route('files.update', node.id), {
     preserveScroll: true,
-    onSuccess: () => {},
-    onError: () => {},
-    onFinish: () => {},
+    onSuccess: () => {
+      setup_info_notify('The item has been updated')
+    },
+    onError: () => {
+      const message = Object.values(err).join('<br>')
+      setup_error_notify(`<div>An error occurred.<br>${message}</div>`)
+    },
+    onFinish: () => {
+      node.loading = false
+    },
   })
+}
+
+const onDrop = (node, pnode, pnode_old) => {
+  console.log('onDrop', node, pnode)
+  // onChange(node, { project_id: pnode?.id })
+}
+
+const onDragend = (tree, store) => {
+  const targetNode = tree.getNodeParentByPath(store.targetPath)
+  const same_type = store?.dragNode?.type === targetNode?.type
+  const allowed = ['directory', 'dataset'].includes(targetNode?.type)
+  if (same_type && !allowed) {
+    setup_error_notify(
+      `Not possible to use this item as parent item for drag-and-drop action.`,
+    )
+  }
+  return !same_type || allowed
 }
 
 const storeSelected = file => {
@@ -337,30 +361,6 @@ const onExtractZip = () => {
   }
   extractzip(file)
 }
-
-const plotKey = ref(0)
-const onPaneResize = e => {
-  plotKey.value++
-}
-
-const inputData = ref({
-  files: [
-    {
-      src: 'data1/data2/zips/130208_093455_E. coli DSM 10806 Ascites I_sort/SpRaw_130208_093808.txt',
-      path: '/130208_093455_E. coli DSM 10806 Ascites I_sort/SpRaw_130208_093808.txt',
-    },
-    {
-      src: 'data1/data2/zips/paracetamol/SpRaw_130208_093143.txt',
-      path: '/paracetamol/SpRaw_130208_093143.txt',
-    },
-    {
-      src: 'data1/data2/zips/metadata.xlsx',
-      path: '/metadata.xlsx',
-    },
-  ],
-  rootpath: 'data1/data2/zips/ascitic-fluid_bacteria_minimal.zip',
-  local: false,
-})
 
 const treeNotEmpty = computed(() => {
   return treeFilled.value && props?.files?.length

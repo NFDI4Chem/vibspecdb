@@ -19,6 +19,7 @@
         ['active-node']:
           node.id === activeItem.id && node.type === activeItem.type,
       }"
+      @contextmenu.prevent="() => {}"
     >
       <div
         class="group flex justify-between gap-2 items-center whitespace-nowrap"
@@ -42,7 +43,11 @@
               @click="toggleFold(tree, node, path)"
               >mdi mdi-chevron-down</w-icon
             >
-            <TButton :type="node?.type" :open="true" />
+            <TButton
+              :type="node?.type"
+              :open="true"
+              :class="{ 'cursor-move': moveCursor(node) }"
+            />
           </div>
           <div v-else class="flex flex-row align-middle">
             <w-icon
@@ -72,7 +77,9 @@
           <w-icon
             v-if="
               !node.edit &&
-              ['directory' /*, 'project', 'study'*/].includes(node.type) &&
+              ['directory', 'dataset' /*, 'project', 'study'*/].includes(
+                node.type,
+              ) &&
               options.createable
             "
             class="text-gray-500 w-5 cursor-pointer"
@@ -89,7 +96,6 @@
             v-if="node.edit"
             @click="
               () => {
-                node.edit = false
                 renameItem(node)
               }
             "
@@ -209,8 +215,9 @@ export default {
   methods: {
     moveCursor(node) {
       return (
-        ['directory', /*'project',*/ 'study'].includes(node.type) &&
-        this.options.draggable
+        ['directory', /*'project',*/ 'study', 'file', 'dataset'].includes(
+          node.type,
+        ) && this.options.draggable
       )
     },
     onItemClick(node, path, tree) {
@@ -242,10 +249,12 @@ export default {
       return this.ondragend(tree, store)
     },
     renameItem(node) {
+      node.edit = false
       this.$emit('onRename', node)
     },
     renameItemKeyBoard(event, node) {
       if (event.code === 'Enter') {
+        node.edit = false
         this.$emit('onRename', node)
       }
     },
