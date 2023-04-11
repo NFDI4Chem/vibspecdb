@@ -18,10 +18,12 @@ use Illuminate\Validation\ValidationException;
 
 use App\Http\Resources\StudyResource;
 use App\Http\Resources\ProjectResource;
+use App\Http\Resources\FileSystemObjectResource;
 
 use Inertia\Inertia;
 use Laravel\Fortify\Actions\ConfirmPassword;
 use Auth;
+
 
 class StudyController extends Controller
 {
@@ -59,7 +61,19 @@ class StudyController extends Controller
         ])->validate();
 
         $tab = $request->has('tab') ? $request->query('tab') : 1;
-        $tree = $this->getStudyFiles($study);
+
+        // Old way to get a tree:
+        // $tree = $this->getStudyFiles($study);
+
+        
+        // Models way to get tree:
+        $study_root = FileSystemObject::where('study_id', $study->id)
+                        ->where('is_root', true)->first();
+        $tree = !empty($study_root) ?
+            (new FileSystemObjectResource($study_root))->lite(false, ['children']) :
+            [];
+
+        // return $tree;
 
         $user = $request->user();
         $projects = Project::where('owner_id', $user->id)->get();
@@ -71,7 +85,7 @@ class StudyController extends Controller
             'study' => (new StudyResource($study))->lite(false, ['tags', 'metadata']),
             'project' => $study->project,
             'projects' => $projects,
-            'files' => fn () => $tree,
+            'files' => fn () => [$tree],
             'tab' => $tab,
         ]);
 

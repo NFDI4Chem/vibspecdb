@@ -19,7 +19,6 @@
         ['active-node']:
           node.id === activeItem.id && node.type === activeItem.type,
       }"
-      @contextmenu.prevent="() => {}"
     >
       <div
         class="group flex justify-between gap-2 items-center whitespace-nowrap"

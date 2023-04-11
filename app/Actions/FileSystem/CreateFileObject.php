@@ -52,6 +52,30 @@ class CreateFileObject
 
             return DB::transaction(function () use ($input, $type) {
 
+                // create root files folder:
+                $root_folder = [
+                    'name' => '/',
+                    'slug' => 'root_study' . $input["study_id"],
+                    'key' => 'root_study' . $input["study_id"],
+                    'relative_url' => '/',
+                    'type' => 'directory',
+                    'project_id' => $input["project_id"],
+                    'study_id' => $input["study_id"],
+                    'parent_id' => 0,
+                    'level' => 0,
+                    'is_root' => true,
+                    "has_children" => true,
+                ];
+        
+                $root_item = FileSystemObject::where('study_id', $input["study_id"])
+                    ->where('is_root', true)->first();
+
+                if (empty($root_item)) {
+                    $root_item = FileSystemObject::create($root_folder);
+                }
+                // end create 
+
+
                 // extract name;
                 $name = $input["type"] == 'directory' ? ($input["name"] ?? "NewFolder") : $input["name"];
 
@@ -96,9 +120,16 @@ class CreateFileObject
                     "uppyid" => $input["uppyid"] ?? '',
                     "path" => $type === 'zip' ? $path_zip : $path_regular,
                     "relative_url" => $input["relative_url"] ?? '',
-                ]), function (FileSystemObject $file) {
+                    "is_root" => array_key_exists('is_root', $input) ? $input['is_root'] : false,
+                ]), function (FileSystemObject $file)  {
                     FileSystemObject::where('id', $file->parent_id ?? 0)
                         ->update(['has_children' => TRUE]);
+
+                    $root_item = FileSystemObject::where('study_id', $file->study_id)
+                        ->where('is_root', true)->first();
+                    if (!empty($root_item) && !$file->parent_id) {
+                        $file->update(['parent_id' => $root_item['id']]);
+                    }
                 });
             });
 

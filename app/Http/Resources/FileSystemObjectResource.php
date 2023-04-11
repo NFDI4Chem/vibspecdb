@@ -46,6 +46,8 @@ class FileSystemObjectResource extends JsonResource
             'parent_id' => $this->parent_id,
             'project_id' => $this->project_id,
             'study_id' => $this->study_id,
+            '$droppable' => ($this->type == 'directory' ? true : false),
+            // '$draggable' => true,
             $this->mergeWhen(! $this->lite, function () {
                 return [
                     $this->mergeWhen(
@@ -58,6 +60,7 @@ class FileSystemObjectResource extends JsonResource
                                     ->orderBy('type')
                                     ->get(),
                                 */
+                                'level' => $this->level ? $this->level + 1 : 1,
                                 'count' => sizeof($this->children),
                                 'children' => ($this->children) ? collect($this->children)->map(function ($child) {
                                     return (new FileSystemObjectResource($child))->lite(false, ['children']);
