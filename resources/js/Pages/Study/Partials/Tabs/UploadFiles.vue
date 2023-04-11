@@ -1,6 +1,6 @@
 <template>
   <div class="pb3 files-uploader-area">
-    <div class="h-[400px]" v-if="top_size">
+    <div class="h-[400px]" v-if="layout_switcher.top_size()">
       <div
         v-if="showOverlay || !spectraData"
         class="overlay-progress flex p-5 h-full justify-center align-middle"
@@ -18,11 +18,11 @@
 
     <splitpanes
       @resized="e => onPaneResize(e)"
-      :class="{ 'top-visible': top_size }"
+      :class="{ 'top-visible': layout_switcher.top_size() }"
       class="bg-slate-50"
     >
       <pane
-        :size="left_size"
+        :size="layout_switcher.left_size()"
         class="flex flex-col items-start justify-start py-3 tree-plane"
       >
         <div class="w-full px-5">
@@ -64,7 +64,7 @@
           </div>
         </div>
       </pane>
-      <pane :size="right_size">
+      <pane :size="layout_switcher.right_size()">
         <div class="flex flex-col gap-2 h-full items-left p-4 py4">
           <div class="text-lg flex flex-col gap-1">
             <div
@@ -355,37 +355,29 @@ const displaySelected = file => {
   }
 }
 
-const onExtractZip = () => {
-  const file = {
-    id: 15,
+const layout_switcher = computed(() => {
+  const treeNotEmpty = treeFilled.value && props?.files?.length
+  return {
+    top_size: () => {
+      return props?.slit_views?.top_visible
+    },
+    left_size: () => {
+      if (!props?.slit_views?.right_visible) {
+        return 100
+      }
+      if (treeNotEmpty && props?.slit_views?.left_visible) {
+        return 45
+      } else {
+        return 0
+      }
+    },
+    right_size: () => {
+      if (!props?.slit_views?.left_visible || !treeNotEmpty) {
+        return 100
+      }
+      return props?.slit_views?.right_visible ? 55 : 0
+    },
   }
-  extractzip(file)
-}
-
-const treeNotEmpty = computed(() => {
-  return treeFilled.value && props?.files?.length
-})
-
-const top_size = computed(() => {
-  return props?.slit_views?.top_visible
-})
-
-const left_size = computed(() => {
-  if (!props?.slit_views?.right_visible) {
-    return 100
-  }
-  if (treeNotEmpty.value && props?.slit_views?.left_visible) {
-    return 45
-  } else {
-    return 0
-  }
-})
-
-const right_size = computed(() => {
-  if (!props?.slit_views?.left_visible || !treeNotEmpty.value) {
-    return 100
-  }
-  return props?.slit_views?.right_visible ? 55 : 0
 })
 </script>
 

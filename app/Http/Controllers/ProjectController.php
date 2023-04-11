@@ -67,7 +67,10 @@ class ProjectController extends Controller
             }
     
             $project->delete();
-            return redirect()->route('dashboard');
+            // return redirect()->route('dashboard');
+            return redirect()->back()->with([
+                'destroy' => 'Success. Project has been deleted.'
+            ]);
         } catch(Throwable $e) {
             return redirect()->back()->withErrors([
                 'destroy' => 'Failed to delete the project'

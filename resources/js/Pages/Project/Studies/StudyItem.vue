@@ -10,17 +10,6 @@
       </div>
     </div>
 
-    <delete-btn
-      :pid="item.id"
-      class="z-10 cursor-pointer absolute -right-8 top-5 rotate-45"
-      v-if="false"
-    >
-      <div class="inline-flex items-center pr-1 text-gray-500 gap-1">
-        <w-icon class="mx-auto" md>mdi mdi-close</w-icon>
-        <div class="">Delete</div>
-      </div>
-    </delete-btn>
-
     <div class="absolute right-0 h-[340px] top-[170px] z-10">
       <w-menu right align-bottom arrow class="project-card">
         <template #activator="{ on }">
@@ -35,7 +24,7 @@
           item-class="pa0"
         >
           <template #item.1>
-            <delete-btn :pid="item.id" class="cursor-pointer">
+            <delete-btn :sid="item.id" class="cursor-pointer">
               <div class="inline-flex items-center pr-1 text-gray-500 gap-1">
                 <w-icon class="mx-auto" md>mdi mdi-close</w-icon>
                 <div class="">Delete</div>
