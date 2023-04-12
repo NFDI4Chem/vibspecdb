@@ -22,6 +22,7 @@ class UpdateFileObject
             $file->forceFill([
                 'type'  => $input["type"] ?? $file['type'],
                 'name'  => $input["name"] ?? $file['name'],
+                'parent_id'  => $input["parent_id"] ?? $file['parent_id'],
             ])->save();
         });
     }

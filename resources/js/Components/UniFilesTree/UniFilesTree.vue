@@ -212,6 +212,12 @@ export default {
   },
 
   methods: {
+    unfoldAll() {
+      this.$refs.tree.unfoldAll()
+    },
+    foldAll() {
+      this.$refs.tree.foldAll()
+    },
     moveCursor(node) {
       return (
         ['directory', /*'project',*/ 'study', 'file', 'dataset'].includes(
@@ -264,9 +270,9 @@ export default {
       this.onAddChildren(node)
     },
     handleTreeChange() {
-      const store = this.$refs.tree.treesStore.store
-      const { dragNode } = store
-      const targetNode = this.$refs.tree.getNodeParentByPath(store.targetPath)
+      // const store = this.$refs.tree.treesStore.store
+      // const { dragNode } = store
+      // const targetNode = this.$refs.tree.getNodeParentByPath(store.targetPath)
       // get the parent of dragNode
       // this.$refs.tree.getNodeParentByPath(store.startPath)
       // console.log('drag', dragNode)

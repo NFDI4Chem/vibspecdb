@@ -9,7 +9,7 @@ export const useFiles = () => {
     axios
       .get('/api/v1/files/children/' + study.value.id + '/' + file.id)
       .then(response => {
-        file.children = response.data.files[0].children
+        file.children = response.data?.files[0]?.children
         file.loading = false
       })
   }

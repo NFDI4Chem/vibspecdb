@@ -48,12 +48,13 @@ class FileSystemObjectResource extends JsonResource
             'study_id' => $this->study_id,
             '$droppable' => ($this->type == 'directory' ? true : false),
             // '$draggable' => true,
+            'has_children' => sizeof($this->children) > 0,
             $this->mergeWhen(! $this->lite, function () {
                 return [
                     $this->mergeWhen(
                         in_array('children', $this->properties),
                         function () {
-                            return [
+                            $data = [
                                 /*
                                 'children' => FileSystemObject::with('children')
                                     ->where([['parent_id', $this->id]])
@@ -67,6 +68,7 @@ class FileSystemObjectResource extends JsonResource
                                 }) : [],
                                 'parent' => (new FileSystemObjectResource($this->parent)),
                             ];
+                            return $data;
                         }
                     ),
                 ];

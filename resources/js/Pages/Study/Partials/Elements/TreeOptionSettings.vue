@@ -3,7 +3,7 @@
     <template #activator="{ on }">
       <w-button
         v-on="on"
-        class="mr2 border-0 cursor-context-menu"
+        class="border-0 cursor-context-menu"
         bg-color="transparent"
         icon="mdi mdi-dots-vertical"
       ></w-button>

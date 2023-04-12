@@ -42,8 +42,16 @@ class FileSystemController extends Controller
 
     public function destroy(Request $request, FileSystemObject $file)
     {
+        $this->cascadeDelete($file->children);
         $file->delete();
         return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'file-system-object-deleted');
+    }
+
+    private function cascadeDelete($files) {
+        foreach ($files as $child) {
+            $this->cascadeDelete($child->children);
+            $child->delete();
+        }
     }
 
     public function update(Request $request, UpdateFileObject $updater, FileSystemObject $file)

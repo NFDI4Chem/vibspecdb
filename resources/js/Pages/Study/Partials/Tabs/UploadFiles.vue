@@ -32,14 +32,27 @@
                 <div
                   class="flex flex-row justify-between items-center pb7 gap-2"
                 >
-                  <div class="flex flex-row justify-start">
-                    <TreeOptionSettings v-model:options="treeOptions" />
-
-                    <div class="font-bold text-md">
+                  <div class="flex flex-row justify-start align-middle w-full">
+                    <div class="font-bold text-md mr-auto">
                       <div v-if="treeOptions.showTitle">
                         {{ treeOptions.title }}
                       </div>
                     </div>
+
+                    <w-button
+                      class="border-0 cursor-context-menu"
+                      bg-color="transparent"
+                      icon="mdi mdi-unfold-more-horizontal"
+                      @click="unfoldAll"
+                    ></w-button>
+                    <w-button
+                      class="border-0 cursor-context-menu"
+                      bg-color="transparent"
+                      icon="mdi mdi-unfold-less-horizontal"
+                      @click="foldAll"
+                    ></w-button>
+
+                    <TreeOptionSettings v-model:options="treeOptions" />
                   </div>
                   <TreeInfoPopper
                     :options="treeOptions"
@@ -47,6 +60,7 @@
                   />
                 </div>
                 <UniFilesTree
+                  ref="uniFilesTree"
                   :tree="files"
                   :options="treeOptions"
                   :onRemoveItem="onRemoveItem"
@@ -159,17 +173,18 @@ const study = computed(() => usePage().props.value.study)
 
 watch(FilesUploaded, (newValue, oldValue) => {
   if (newValue) {
-    if (activeItem.value.id === 0) {
-      MakeReload()
-    } else {
-      showChildsAPI(activeItem.value)
-    }
+    MakeReload()
+    // if (activeItem.value.id === 0) {
+    //   MakeReload()
+    // } else {
+    //   showChildsAPI(activeItem.value)
+    // }
   }
 })
 
 const MakeReload = () => {
   const form = useForm({
-    email: null,
+    files: null,
   })
   form.post(route('study.file-upload.update', study.value.id), {
     preserveScroll: true,
@@ -289,18 +304,22 @@ const TreeItemClick = async (file, parent) => {
   }
 }
 
-const onTreeChange = node => {
+const onTreeChange = (node, report = true) => {
   console.log('onTreeChange', node)
   node.loading = true
   const form = useForm(node)
   form.put(route('files.update', node.id), {
     preserveScroll: true,
     onSuccess: () => {
-      setup_info_notify('The item has been updated')
+      if (report) {
+        setup_info_notify('The item has been updated')
+      }
     },
     onError: () => {
       const message = Object.values(err).join('<br>')
-      setup_error_notify(`<div>An error occurred.<br>${message}</div>`)
+      if (report) {
+        setup_error_notify(`<div>An error occurred.<br>${message}</div>`)
+      }
     },
     onFinish: () => {
       node.loading = false
@@ -309,8 +328,13 @@ const onTreeChange = node => {
 }
 
 const onDrop = (node, pnode, pnode_old) => {
-  console.log('onDrop', node, pnode)
-  // onChange(node, { project_id: pnode?.id })
+  onTreeChange(
+    {
+      ...node,
+      parent_id: pnode?.id,
+    },
+    false,
+  )
 }
 
 const onDragend = (tree, store) => {
@@ -379,6 +403,14 @@ const layout_switcher = computed(() => {
     },
   }
 })
+
+const uniFilesTree = ref()
+const foldAll = () => {
+  uniFilesTree.value.foldAll()
+}
+const unfoldAll = () => {
+  uniFilesTree.value.unfoldAll()
+}
 </script>
 
 <style lang="scss">
