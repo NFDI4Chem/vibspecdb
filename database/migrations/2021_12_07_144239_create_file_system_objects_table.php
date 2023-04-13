@@ -20,7 +20,7 @@ class CreateFileSystemObjectsTable extends Migration
             $table->longText('description')->nullable();
             $table->string('relative_url', 2048)->nullable();
             $table->string('path', 2048)->nullable();
-            $table->enum('type', ['directory', 'file'])->default('file');
+            $table->enum('type', ['directory', 'file', 'dataset'])->default('file');
             $table->string('key');
             $table->string('compressionInfo')->nullable();
             $table->string('kernelSessionInfo')->nullable();

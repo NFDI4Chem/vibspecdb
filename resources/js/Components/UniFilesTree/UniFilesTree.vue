@@ -23,6 +23,10 @@
       <div
         class="group flex justify-between gap-2 items-center whitespace-nowrap"
       >
+        <div
+          v-if="node.type === 'dataset'"
+          class="absolute w-1.5 h-1.5 top-[-3px] left-[-6px] bg-teal-500 rounded-full"
+        />
         <div class="flex flex-row gap-2 items-center w-full">
           <div class="flex items-center" v-if="options.checkable">
             <w-checkbox
@@ -73,7 +77,8 @@
           />
         </div>
         <div class="hidden flex-row align-middle group-hover:flex">
-          <w-icon
+          <div
+            class="flex flex-row gap-1"
             v-if="
               !node.edit &&
               ['directory', 'dataset' /*, 'project', 'study'*/].includes(
@@ -81,26 +86,39 @@
               ) &&
               options.createable
             "
-            class="text-gray-500 w-5 cursor-pointer"
-            @click="addChildren(node)"
-            >mdi mdi-folder-plus</w-icon
           >
-          <w-icon
+            <w-button
+              v-if="node.is_root"
+              class="text-gray-500 w-5 cursor-pointer border-0"
+              bg-color="transparent"
+              icon="mdi mdi-database-plus"
+              @click="addChildrenDataset(node)"
+            ></w-button>
+            <w-button
+              class="text-gray-500 w-5 cursor-pointer border-0"
+              bg-color="transparent"
+              icon="mdi mdi-folder-plus"
+              @click="addChildren(node)"
+            ></w-button>
+          </div>
+          <w-button
             v-if="!node.edit && node.name !== '/' && options.editable"
-            class="text-gray-500 w-5 cursor-pointer"
+            class="text-gray-500 w-5 cursor-pointer border-0"
+            bg-color="transparent"
+            icon="mdi mdi-rename"
             @click="node.edit = true"
-            >mdi mdi-rename</w-icon
-          >
-          <w-icon
+          ></w-button>
+          <w-button
             v-if="node.edit"
             @click="
               () => {
                 renameItem(node)
               }
             "
-            class="text-gray-500 w-5 font-bold cursor-pointer"
-            >mdi mdi-check</w-icon
-          >
+            class="text-gray-500 w-5 font-bold cursor-pointer border-0"
+            bg-color="transparent"
+            icon="mdi mdi-check"
+          ></w-button>
 
           <w-tooltip
             bottom
@@ -109,14 +127,14 @@
             tooltip-class="t-class"
           >
             <template #activator="{ on }">
-              <w-icon
+              <w-button
                 v-on="on"
-                class="text-red-400 w-5 ml1 cursor-pointer"
+                class="text-red-400 w-5 ml1 cursor-pointer border-0"
                 @click="removeItem(tree, node, path)"
                 md
-              >
-                mdi mdi-delete
-              </w-icon>
+                bg-color="transparent"
+                icon="mdi mdi-delete"
+              ></w-button>
             </template>
             <div class="inline-flex">
               <w-button
@@ -130,13 +148,18 @@
               </div>
             </div>
           </w-tooltip>
+          <ItemSettings
+            v-if="options.menuitem"
+            @onSelect="key => onChangeNodeType(node, key)"
+            :type="node?.type"
+          />
         </div>
       </div>
       <div
         v-if="node.loading"
         class="absolute backdrop-blur top-0 left-0 flex justify-center items-center z-10 w-full h-full"
       >
-        <w-progress class="w-6" color="blue-grey" circle></w-progress>
+        <w-progress class="w-4" color="blue-grey" circle></w-progress>
         <!-- <w-spinner xs class="h-3" color="blue-grey" /> -->
       </div>
     </div>
@@ -146,6 +169,7 @@
 <script>
 import { Tree, Fold, Draggable, Check } from 'he-tree-vue'
 import TButton from '@/Components/UniFilesTree/TButton.vue'
+import ItemSettings from '@/Components/UniFilesTree/ItemSettings.vue'
 
 export default {
   props: {
@@ -164,6 +188,7 @@ export default {
           createable: true,
           draggable: true,
           showInfo: true,
+          menuitem: false,
           title: 'Files Tree',
         }
       },
@@ -174,6 +199,11 @@ export default {
       default: () => {},
     },
     onAddChildren: {
+      type: Function,
+      required: false,
+      default: () => {},
+    },
+    onChangeNodeType: {
       type: Function,
       required: false,
       default: () => {},
@@ -203,6 +233,7 @@ export default {
   components: {
     Tree: Tree.mixPlugins([Fold, Draggable, Check]),
     TButton,
+    ItemSettings,
   },
   data() {
     return {}
@@ -267,7 +298,10 @@ export default {
       this.onRemoveItem(tree, node, path)
     },
     addChildren(node) {
-      this.onAddChildren(node)
+      this.onAddChildren(node, 'directory')
+    },
+    addChildrenDataset(node) {
+      this.onAddChildren(node, 'dataset')
     },
     handleTreeChange() {
       // const store = this.$refs.tree.treesStore.store

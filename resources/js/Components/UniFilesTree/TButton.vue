@@ -34,6 +34,9 @@ const switchIcon = computed(() => {
     case 'study':
       icon = 'mdi-bookshelf'
       break
+    case 'dataset':
+      icon = props?.open ? 'mdi-database-outline' : 'mdi-database'
+      break
     default:
       break
   }

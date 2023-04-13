@@ -1,5 +1,5 @@
 <template>
-  <w-menu right align-top>
+  <w-menu left align-top class="tree-setting-dots">
     <template #activator="{ on }">
       <w-button
         v-on="on"
@@ -11,11 +11,12 @@
     <w-list
       v-model="selection"
       :items="items"
-      color="primary"
+      color="blue-grey"
       checklist
       item-value-key="key"
       class="text-md"
       @input="onInput"
+      item-class="px3 py0.5 cursor-pointer"
     >
     </w-list>
   </w-menu>
@@ -51,7 +52,7 @@ const items = computed(() => {
   return items_all.filter(item => check_options.value.includes(item.key))
 })
 
-const selection = ref(check_options_active)
+const selection = ref(check_options_active.value)
 
 const onInput = active => {
   let opts = {}
@@ -66,4 +67,10 @@ const onInput = active => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.tree-setting-dots {
+  .w-card__content {
+    padding: 0;
+  }
+}
+</style>

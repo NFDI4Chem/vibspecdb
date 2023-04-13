@@ -65,6 +65,7 @@
                   :options="treeOptions"
                   :onRemoveItem="onRemoveItem"
                   :onAddChildren="onAddChildren"
+                  :onChangeNodeType="onChangeNodeType"
                   :activeItem="activeItem"
                   :ondragend="onDragend"
                   @itemClick="TreeItemClick"
@@ -148,6 +149,7 @@ const treeOptions = ref({
   draggable: true,
   showInfo: true,
   showTitle: true,
+  menuitem: true,
   title: 'Files Tree',
 })
 
@@ -235,15 +237,18 @@ const onTreeCheck = async checked => {
   showOverlay.value = false
 }
 
-const onAddChildren = node => {
+const onChangeNodeType = (node, type) => {
+  onTreeChange({ ...node, type }, false)
+}
+
+const onAddChildren = (node, type) => {
   node.loading = true
   const form = useForm(node)
   form
     .transform(data => {
-      const name = 'NewFolder'
+      const name = type === 'directory' ? 'Folder' : 'Dataset'
       const parent_id = data?.id ?? 0
-      const type = 'directory'
-      const [ftype, size, uppyid] = ['folder', 0, '']
+      const [ftype, size, uppyid] = ['directory', 0, '']
       const { project_id, study_id, level } = data
       return {
         name,
@@ -328,13 +333,7 @@ const onTreeChange = (node, report = true) => {
 }
 
 const onDrop = (node, pnode, pnode_old) => {
-  onTreeChange(
-    {
-      ...node,
-      parent_id: pnode?.id,
-    },
-    false,
-  )
+  onTreeChange({ ...node, parent_id: pnode?.id }, false)
 }
 
 const onDragend = (tree, store) => {
