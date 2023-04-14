@@ -94,14 +94,21 @@
               class="flex flex-row flex-wrap gap-1 justify-between items-center"
             >
               <div class="text-bold text-md">
-                Uploading files to the folder:
+                Uploading files to the {{ activeItem.type }}:
               </div>
               <UploaderInfoPopper :selectTreeFolder="selectTreeFolder" />
             </div>
             <div class="flex flex-row gap-2 items-center align-middle">
-              <w-icon class="h-3 w-3 text-gray-500">mdi mdi-database</w-icon>
+              <w-icon class="h-3 w-3 text-gray-500" sm
+                >mdi
+                {{
+                  activeItem?.type === 'directory'
+                    ? 'mdi-folder'
+                    : 'mdi-database'
+                }}</w-icon
+              >
               <strong
-                class="flex items-center text-sm text-gray-600 force-wrap"
+                class="flex items-center text-sm text-gray-600 force-wrap pt-0.5"
               >
                 {{ selectTreeFolder }}
               </strong>
@@ -111,6 +118,7 @@
         </div>
       </pane>
     </splitpanes>
+    {{ activeItem }}
   </div>
 </template>
 
@@ -285,12 +293,16 @@ const onAddChildren = (node, type) => {
 const spectraData = ref()
 const showOverlay = ref(false)
 
+const matchSelectableType = type => {
+  return ['directory', 'dataset'].includes(type)
+}
+
 const TreeItemClick = async (file, parent) => {
-  const itemData = file.type === 'directory' ? file : parent
+  const itemData = matchSelectableType(file.type) ? file : parent
   displaySelected(itemData)
   storeSelected(itemData)
 
-  if (file.type !== 'directory') {
+  if (!matchSelectableType(file.type)) {
     showOverlay.value = true
     emit('update:slit_views', {
       ...props?.slit_views,
