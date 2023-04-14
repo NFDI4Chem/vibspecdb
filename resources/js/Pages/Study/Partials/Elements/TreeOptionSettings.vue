@@ -1,12 +1,17 @@
 <template>
   <w-menu left align-top class="tree-setting-dots">
     <template #activator="{ on }">
-      <w-button
-        v-on="on"
-        class="border-0 cursor-context-menu"
-        bg-color="transparent"
-        icon="mdi mdi-dots-vertical"
-      ></w-button>
+      <div class="flex align-middle" v-on="on">
+        <ToolTipWrapper text="Tree Settings">
+          <template #btn>
+            <w-button
+              class="border-0 cursor-context-menu"
+              bg-color="transparent"
+              icon="mdi mdi-dots-vertical"
+            ></w-button>
+          </template>
+        </ToolTipWrapper>
+      </div>
     </template>
     <w-list
       v-model="selection"
@@ -24,6 +29,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+
+import ToolTipWrapper from '@/Components/UniFilesTree/ToolTipWrapper.vue'
 
 const props = defineProps(['options'])
 const emit = defineEmits(['update:options'])

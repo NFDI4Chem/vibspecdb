@@ -39,18 +39,26 @@
                       </div>
                     </div>
 
-                    <w-button
-                      class="border-0 cursor-context-menu"
-                      bg-color="transparent"
-                      icon="mdi mdi-unfold-more-horizontal"
-                      @click="unfoldAll"
-                    ></w-button>
-                    <w-button
-                      class="border-0 cursor-context-menu"
-                      bg-color="transparent"
-                      icon="mdi mdi-unfold-less-horizontal"
-                      @click="foldAll"
-                    ></w-button>
+                    <ToolTipWrapper text="Unfold All">
+                      <template #btn>
+                        <w-button
+                          class="border-0 cursor-context-menu"
+                          bg-color="transparent"
+                          icon="mdi mdi-unfold-more-horizontal"
+                          @click="unfoldAll"
+                        ></w-button>
+                      </template>
+                    </ToolTipWrapper>
+                    <ToolTipWrapper text="Fold All">
+                      <template #btn>
+                        <w-button
+                          class="border-0 cursor-context-menu"
+                          bg-color="transparent"
+                          icon="mdi mdi-unfold-less-horizontal"
+                          @click="foldAll"
+                        ></w-button>
+                      </template>
+                    </ToolTipWrapper>
 
                     <TreeOptionSettings v-model:options="treeOptions" />
                   </div>
@@ -112,6 +120,7 @@ import {
   setup_error_notify,
 } from '@/VueComposable/mixins/useWave'
 
+import ToolTipWrapper from '@/Components/UniFilesTree/ToolTipWrapper.vue'
 import UniFilesTree from '@/Components/UniFilesTree/UniFilesTree.vue'
 import Uploader from '@/Components/UploadForm/Uploader.vue'
 import UploaderInfoPopper from '@/Components/Popper/UploaderInfoPopper.vue'
@@ -373,9 +382,12 @@ const displaySelected = file => {
 
   selectTreeFolder.value = sFolder
 
+  // disable it now:
+  /*
   if (file.has_children && file.level > 0 && !file.children) {
     showChildsAPI(file)
   }
+  */
 }
 
 const layout_switcher = computed(() => {
@@ -410,6 +422,8 @@ const foldAll = () => {
 const unfoldAll = () => {
   uniFilesTree.value.unfoldAll()
 }
+
+const onPaneResize = () => {}
 </script>
 
 <style lang="scss">

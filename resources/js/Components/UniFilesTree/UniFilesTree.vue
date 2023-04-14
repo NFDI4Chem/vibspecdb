@@ -20,13 +20,16 @@
           node.id === activeItem.id && node.type === activeItem.type,
       }"
     >
+      <ToolTipWrapper v-if="node.type === 'dataset'" text="The item is dataset">
+        <template #btn>
+          <div
+            class="absolute top-[-3px] left-[-7px] w-2 h-2 bg-teal-500 rounded-full"
+          />
+        </template>
+      </ToolTipWrapper>
       <div
         class="group flex justify-between gap-2 items-center whitespace-nowrap"
       >
-        <div
-          v-if="node.type === 'dataset'"
-          class="absolute w-1.5 h-1.5 top-[-3px] left-[-6px] bg-teal-500 rounded-full"
-        />
         <div class="flex flex-row gap-2 items-center w-full">
           <div class="flex items-center" v-if="options.checkable">
             <w-checkbox
@@ -46,11 +49,16 @@
               @click="toggleFold(tree, node, path)"
               >mdi mdi-chevron-down</w-icon
             >
-            <TButton
-              :type="node?.type"
-              :open="true"
-              :class="{ 'cursor-move': moveCursor(node) }"
-            />
+
+            <ToolTipWrapper text="Click & Hold here to drag item">
+              <template #btn>
+                <TButton
+                  :type="node?.type"
+                  :open="true"
+                  :class="{ 'cursor-move': moveCursor(node) }"
+                />
+              </template>
+            </ToolTipWrapper>
           </div>
           <div v-else class="flex flex-row align-middle">
             <w-icon
@@ -59,11 +67,16 @@
               @click="toggleFold(tree, node, path)"
               >mdi mdi-chevron-right</w-icon
             >
-            <TButton
-              :type="node?.type"
-              :open="false"
-              :class="{ 'cursor-move': moveCursor(node) }"
-            />
+
+            <ToolTipWrapper text="Click & Hold here to drag item">
+              <template #btn>
+                <TButton
+                  :type="node?.type"
+                  :open="false"
+                  :class="{ 'cursor-move': moveCursor(node) }"
+                />
+              </template>
+            </ToolTipWrapper>
           </div>
 
           <input
@@ -87,46 +100,62 @@
               options.createable
             "
           >
-            <w-button
-              v-if="node.is_root"
-              class="text-gray-500 w-5 cursor-pointer border-0"
-              bg-color="transparent"
-              icon="mdi mdi-database-plus"
-              @click="addChildrenDataset(node)"
-            ></w-button>
-            <w-button
-              class="text-gray-500 w-5 cursor-pointer border-0"
-              bg-color="transparent"
-              icon="mdi mdi-folder-plus"
-              @click="addChildren(node)"
-            ></w-button>
-          </div>
-          <w-button
-            v-if="!node.edit && node.name !== '/' && options.editable"
-            class="text-gray-500 w-5 cursor-pointer border-0"
-            bg-color="transparent"
-            icon="mdi mdi-rename"
-            @click="node.edit = true"
-          ></w-button>
-          <w-button
-            v-if="node.edit"
-            @click="
-              () => {
-                renameItem(node)
-              }
-            "
-            class="text-gray-500 w-5 font-bold cursor-pointer border-0"
-            bg-color="transparent"
-            icon="mdi mdi-check"
-          ></w-button>
+            <ToolTipWrapper v-if="node.is_root" text="Add Dataset">
+              <template #btn>
+                <w-button
+                  class="text-gray-500 w-5 cursor-pointer border-0"
+                  bg-color="transparent"
+                  icon="mdi mdi-database-plus"
+                  @click="addChildrenDataset(node)"
+                ></w-button>
+              </template>
+            </ToolTipWrapper>
 
-          <w-tooltip
-            bottom
-            align-left
-            v-if="!node.edit && node.name !== '/' && options.deleteable"
-            tooltip-class="t-class"
+            <ToolTipWrapper text="Add Folder">
+              <template #btn>
+                <w-button
+                  class="text-gray-500 w-5 cursor-pointer border-0"
+                  bg-color="transparent"
+                  icon="mdi mdi-folder-plus"
+                  @click="addChildren(node)"
+                ></w-button>
+              </template>
+            </ToolTipWrapper>
+          </div>
+
+          <ToolTipWrapper
+            v-if="!node.edit && node.name !== '/' && options.editable"
+            text="Rename"
           >
-            <template #activator="{ on }">
+            <template #btn>
+              <w-button
+                class="text-gray-500 w-5 cursor-pointer border-0"
+                bg-color="transparent"
+                icon="mdi mdi-rename"
+                @click="node.edit = true"
+              ></w-button>
+            </template>
+          </ToolTipWrapper>
+
+          <ToolTipWrapper v-if="node.edit" text="Save changes">
+            <template #btn>
+              <w-button
+                @click="
+                  () => {
+                    renameItem(node)
+                  }
+                "
+                class="text-gray-500 w-5 font-bold cursor-pointer border-0"
+                bg-color="transparent"
+                icon="mdi mdi-check"
+              ></w-button>
+            </template>
+          </ToolTipWrapper>
+          <ToolTipWrapper
+            v-if="!node.edit && node.name !== '/' && options.deleteable"
+            text="This item and its childs will be deleted permanently."
+          >
+            <template #btn>
               <w-button
                 v-on="on"
                 class="text-red-400 w-5 ml1 cursor-pointer border-0"
@@ -136,23 +165,24 @@
                 icon="mdi mdi-delete"
               ></w-button>
             </template>
-            <div class="inline-flex">
+            <template #icon>
               <w-button
                 class="mx1"
                 bg-color="error"
                 xs
                 icon="mdi mdi-exclamation"
               ></w-button>
-              <div class="whitespace-nowrap">
-                This item and its childs will be deleted permanently.
-              </div>
-            </div>
-          </w-tooltip>
-          <ItemSettings
-            v-if="options.menuitem"
-            @onSelect="key => onChangeNodeType(node, key)"
-            :type="node?.type"
-          />
+            </template>
+          </ToolTipWrapper>
+
+          <ToolTipWrapper v-if="options.menuitem" text="Tree Item Options">
+            <template #btn>
+              <ItemSettings
+                @onSelect="key => onChangeNodeType(node, key)"
+                :type="node?.type"
+              />
+            </template>
+          </ToolTipWrapper>
         </div>
       </div>
       <div
@@ -170,6 +200,7 @@
 import { Tree, Fold, Draggable, Check } from 'he-tree-vue'
 import TButton from '@/Components/UniFilesTree/TButton.vue'
 import ItemSettings from '@/Components/UniFilesTree/ItemSettings.vue'
+import ToolTipWrapper from '@/Components/UniFilesTree/ToolTipWrapper.vue'
 
 export default {
   props: {
@@ -234,6 +265,7 @@ export default {
     Tree: Tree.mixPlugins([Fold, Draggable, Check]),
     TButton,
     ItemSettings,
+    ToolTipWrapper,
   },
   data() {
     return {}
@@ -340,15 +372,11 @@ export default {
 <style lang="scss">
 .files-tree .tree-node {
   // min-width: 300px;
-  padding: 0 2px;
+  padding: 0 0 0 2px;
 }
 
 .active-node .active-field {
   color: rgb(13, 138, 172);
   font-weight: bold;
-}
-
-.t-class {
-  max-width: none;
 }
 </style>
