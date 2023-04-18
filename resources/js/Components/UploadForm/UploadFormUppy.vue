@@ -170,6 +170,8 @@ export default {
       this.uppy.on('dashboard:file-edit-complete', this.handleFileEditComplete)
       this.uppy.on('complete', this.handleComplete)
       this.uppy.on('upload-progress', this.handleUpladProgress)
+      this.uppy.on('error', this.handleError)
+      this.uppy.on('upload-error', this.handleUploadError)
       // window.addEventListener("resize", this.onWindowResize);
     },
     unSetupEvents() {
@@ -180,16 +182,24 @@ export default {
       this.uppy.off('dashboard:file-edit-complete', this.handleFileEditComplete)
       this.uppy.off('complete', this.handleComplete)
       this.uppy.off('upload-progress', this.handleUpladProgress)
+      this.uppy.off('error', this.handleError)
+      this.uppy.off('upload-error', this.handleUploadError)
       // window.removeEventListener("resize", this.onWindowResize);
+    },
+    handleError(err) {
+      this.$emit('error', err?.stack)
+    },
+    handleUploadError(file, error, response) {
+      this.$emit('upload-error', file, error, response)
     },
     handleUploadSuccess(file, data) {
       this.$emit('uploaded', file, data)
     },
     handleFileAdded(file) {
-      const { id, name, level } = this.baseFolder
+      const { id, level } = this.baseFolder
       this.uppy.setFileMeta(file.id, {
         uppyid: file.id,
-        base_id: id,
+        parent_id: id,
         level: level ? level : 1,
         project_id: this.$page.props.project.id,
         study_id: this.$page.props.study.id,

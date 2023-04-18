@@ -98,6 +98,7 @@ class ZipPreprocessing
                         'relative_url' => $relative_url,
                         'path' => $basepath . ltrim($relative_url, "/"),
                         'parent_id' => $parent['id'] ?? $zipfileId,
+                        'zip_pid' => $zipfileId ?? -1,
                         'type' => $folder ? 'directory' : 'file',
                         'has_children' => $folder,
                         'level' => $level,

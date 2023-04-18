@@ -23,6 +23,7 @@
       :uploadingText="uploadingText"
       :uploadedText="uploadedText"
       :progress="progress"
+      :loading="loading"
       @showModal="showModal"
       @cancelUploading="cancelUploading"
     />
@@ -41,6 +42,7 @@ import {
 } from '@heroicons/vue/24/outline'
 
 import { useStore } from 'vuex'
+import { loading } from '@/VueComposable/useFiles'
 
 const uploadingText =
   "We're uploading your files to the main server. Feel free to work on your tasks in the meantime."

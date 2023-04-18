@@ -42,6 +42,7 @@ class FileSystemObject extends Model
         'uppyid',
         'size',
         'ftype',
+        'zip_pid'
     ];
 
     // Recursive children

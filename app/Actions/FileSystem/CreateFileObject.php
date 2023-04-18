@@ -97,12 +97,12 @@ class CreateFileObject
                 }
 
                 return tap(FileSystemObject::create([
-                    "has_children" => FALSE,
+                    "has_children" => false,
                     "color" => "#fff",
-                    "\$droppable" => TRUE,
-                    "\$draggable" => TRUE,
-                    'is_processed' => TRUE,
-                    'is_archived' => $input["is_archived"] ?? FALSE,
+                    "\$droppable" => $input["type"] != 'file' ? true : false,
+                    "\$draggable" => true,
+                    'is_processed' => true,
+                    'is_archived' => $input["is_archived"] ?? false,
                     "compressionInfo" => NULL,
                     "owner_id" => auth()->user()->id ?? 0,
                     "children" => [],
@@ -112,9 +112,10 @@ class CreateFileObject
                     "parent_id" => $input["parent_id"] ?? 0,
                     "name" => $name,
                     "project_id" => $input["project_id"] ?? -1,
+                    "zip_pid" => $input["zip_pid"] ?? NULL,
                     "study_id" => $input["study_id"] ?? -1,
                     "type" => $input["type"] ?? 'directory',
-                    "level" => (int)$input["level"],
+                    "level" => (int)$input["level"] ?? 0,
                     "ftype" => $input["ftype"] ?? '',
                     "size" => (int)($input["size"] ?? 0),
                     "uppyid" => $input["uppyid"] ?? '',
@@ -123,7 +124,7 @@ class CreateFileObject
                     "is_root" => array_key_exists('is_root', $input) ? $input['is_root'] : false,
                 ]), function (FileSystemObject $file)  {
                     FileSystemObject::where('id', $file->parent_id ?? 0)
-                        ->update(['has_children' => TRUE]);
+                        ->update(['has_children' => true]);
 
                     $root_item = FileSystemObject::where('study_id', $file->study_id)
                         ->where('is_root', true)->first();

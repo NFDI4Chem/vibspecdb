@@ -50,7 +50,7 @@
               >mdi mdi-chevron-down</w-icon
             >
 
-            <ToolTipWrapper text="Click & Hold here to drag item">
+            <ToolTipWrapper text="Click & Hold here to drag the item">
               <template #btn>
                 <TButton
                   :type="node?.type"
@@ -68,7 +68,7 @@
               >mdi mdi-chevron-right</w-icon
             >
 
-            <ToolTipWrapper text="Click & Hold here to drag item">
+            <ToolTipWrapper text="Click & Hold here to drag the item">
               <template #btn>
                 <TButton
                   :type="node?.type"

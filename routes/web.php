@@ -91,6 +91,9 @@ Route::group(['middleware' => ['auth']], function () {
 /// project and study, assay routes ///
 
 Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('/testrun', [FileSystemController::class, 'testrun']);
+
     Route::post('/storage/signed-storage-url', [FileSystemController::class, 'signedStorageURL']);
 
     Route::get('user/alerts', [UserController::class, 'alerts'])

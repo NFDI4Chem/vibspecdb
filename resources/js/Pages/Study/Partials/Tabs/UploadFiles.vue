@@ -118,7 +118,6 @@
         </div>
       </pane>
     </splitpanes>
-    {{ activeItem }}
   </div>
 </template>
 
@@ -331,7 +330,7 @@ const TreeItemClick = async (file, parent) => {
 }
 
 const onTreeChange = (node, report = true) => {
-  console.log('onTreeChange', node)
+  // console.log('onTreeChange', node)
   node.loading = true
   const form = useForm(node)
   form.put(route('files.update', node.id), {

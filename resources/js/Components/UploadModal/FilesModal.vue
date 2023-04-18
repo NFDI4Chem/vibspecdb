@@ -11,6 +11,7 @@
       ['max-preview']: view === 'max',
     }"
   >
+    <!-- {{ activeItem }} -->
     <ModalHeader
       :show="true"
       :progress="progress"
@@ -40,6 +41,9 @@
             <UploadFormUppy
               pid="3"
               @uploaded="onUploaded"
+              @completed="onCompleted"
+              @error="onError"
+              @upload-error="onUploadError"
               :maxFileSize="maxFileSize"
               @handleProgress="onHandleProgress"
               @uploadProgress="onUploadProgress"
@@ -71,9 +75,13 @@ import { Inertia } from '@inertiajs/inertia'
 import UploadFormUppy from '@/Components/UploadForm/UploadFormUppy.vue'
 import ModalHeader from './ModalHeader.vue'
 
-import { useFiles } from '@/VueComposable/useFiles'
+import { useFiles, loading } from '@/VueComposable/useFiles'
 
 import { useStore } from 'vuex'
+import {
+  setup_info_notify,
+  setup_error_notify,
+} from '@/VueComposable/mixins/useWave'
 
 const { extractzip, saveFile } = useFiles()
 const store = useStore()
@@ -202,37 +210,171 @@ const MakeReload = () => {
   Inertia.reload({ only: ['files'] })
 }
 
-const onAddFile = async file => {
-  console.log('start upload', Date.now())
-  await delay(500)
-
-  const { name, type: ftype, size, id: uppyid } = file
-  const type = 'file'
-  const { project_id, study_id, level, base_id } = file?.meta || {}
-  const saved = await saveFile({
-    name,
-    type,
-    ftype,
-    size,
-    uppyid,
-    project_id: parseInt(project_id),
-    study_id: parseInt(study_id),
-    level: parseInt(level) + 1,
-    parent_id: parseInt(base_id),
-  })
-  console.log('file saved', Date.now())
-  await extractzip(saved)
-  console.log('file extracted', Date.now())
-  // MakeReload()
-}
-
-const delay = time => {
-  return new Promise(resolve => setTimeout(resolve, time))
+const loadingStatus = step => {
+  let load = { ...loading.value }
+  switch (step) {
+    case 'minio_upload_loading':
+      return {
+        ...load,
+        minio_upload: {
+          loading: true,
+          done: false,
+          error: false,
+        },
+      }
+      break
+    case 'minio_upload_done':
+      return {
+        ...load,
+        minio_upload: {
+          loading: false,
+          done: true,
+          error: false,
+        },
+      }
+      break
+    case 'minio_upload_error':
+      return {
+        ...load,
+        minio_upload: {
+          loading: false,
+          done: false,
+          error: true,
+        },
+      }
+      break
+    case 'saving_to_database_loading':
+      return {
+        ...load,
+        saving_to_database: {
+          loading: true,
+          done: false,
+          error: false,
+        },
+      }
+      break
+    case 'saving_to_database_done':
+      return {
+        ...load,
+        saving_to_database: {
+          loading: false,
+          done: true,
+          error: false,
+        },
+      }
+      break
+    case 'saving_to_database_error':
+      return {
+        ...load,
+        saving_to_database: {
+          loading: false,
+          done: false,
+          error: true,
+        },
+      }
+      break
+    case 'zip_extracting_loading':
+      return {
+        ...load,
+        zip_extracting: {
+          loading: true,
+          done: false,
+          error: false,
+        },
+      }
+      break
+    case 'zip_extracting_done':
+      return {
+        ...load,
+        zip_extracting: {
+          loading: false,
+          done: true,
+          error: false,
+        },
+      }
+      break
+    case 'zip_extracting_error':
+      return {
+        ...load,
+        zip_extracting: {
+          loading: false,
+          done: false,
+          error: true,
+        },
+      }
+      break
+    case 'clear_all':
+      return {
+        minio_upload: {
+          loading: false,
+          done: false,
+          error: false,
+        },
+        zip_extracting: {
+          loading: false,
+          done: false,
+          error: false,
+        },
+        saving_to_database: {
+          loading: false,
+          done: false,
+          error: false,
+        },
+      }
+  }
 }
 
 const onUploaded = async (file, data) => {
-  await onAddFile(file)
+  // loading.value = loadingStatus('minio_upload_done')
   uploaded.value = true
+}
+
+const onCompleted = ({ failed, successful }) => {
+  if (failed?.length > 0) {
+    setup_error_notify(
+      'Not all files where uploaded. Please check upload status info.',
+    )
+  } else if (successful?.length > 0) {
+    saveDBfiles(successful)
+  }
+}
+
+const saveDBfiles = files => {
+  loading.value = loadingStatus('saving_to_database_loading')
+  const files2save = files.map(file => {
+    const { name, type: ftype, size, id: uppyid } = file
+    const type = 'file'
+    const { project_id, study_id, level, parent_id } = file?.meta || {}
+    return {
+      name,
+      type,
+      ftype,
+      size,
+      uppyid,
+      project_id: parseInt(project_id),
+      study_id: parseInt(study_id),
+      level: parseInt(level) + 1,
+      parent_id: parseInt(parent_id),
+    }
+  })
+  saveFile(files2save)
+    .then(res => {
+      setup_info_notify('All files has been successfully uploaded')
+      loading.value = loadingStatus('saving_to_database_done')
+    })
+    .catch(err => {
+      setup_error_notify('Failed to store files. ' + err?.message)
+      loading.value = loadingStatus('saving_to_database_done')
+    })
+}
+
+const onError = err => {
+  // console.log('onError', err)
+  // setup_error_notify('Upload failed: ' + err)
+}
+const onUploadError = (file, error, response) => {
+  // console.log('onUploadError', file, error, response)
+  // setup_error_notify('Upload failed: ' + err)
 }
 
 const onBeforeRetry = () => {
@@ -242,12 +384,21 @@ const onBeforeRetry = () => {
 
 const onBeforeUpload = () => {
   // store.dispatch("updateFilesData", { uploaded: false });
+
   uploaded.value = false
 }
 
 const onHandleProgress = prog => {
+  if (prog === 0) {
+    loading.value = loadingStatus('clear_all')
+    loading.value = loadingStatus('minio_upload_loading')
+  }
+
   progress.value = prog
   store.dispatch('updateFilesData', { progress: prog })
+  if (prog === 100) {
+    loading.value = loadingStatus('minio_upload_done')
+  }
 }
 
 const onUploadProgress = (file, { uploader, bytesUploaded, bytesTotal }) => {

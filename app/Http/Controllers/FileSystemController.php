@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FileSystemObject;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\JsonResponse;
@@ -11,17 +11,79 @@ use App\Actions\FileSystem\CreateFileObject;
 use App\Actions\FileSystem\UpdateFileObject;
 use App\Actions\FileSystem\ZipPreprocessing;
 
+use App\Models\FileSystemObject;
+use App\Models\Project;
+use App\Models\Study;
+use App\Http\Resources\FileSystemObjectResource;
+
 class FileSystemController extends Controller
 {
-    public function create(Request $request, CreateFileObject $creator) {
-        $fileObject = $creator->create($request->all());
-        return $request->wantsJson() ? new JsonResponse($fileObject, 200) : back()->with('status', 'object-created');
+
+    // 2462, 2360
+    public function testrun(Request $request) {
+
+        // $tree = FileSystemObject::findOrFail(2360)->children()->get([
+        //     'id', 'name','children.id', 'children.name']);
+        // return $tree;
+        
+        $file = FileSystemObject::findOrFail(3668); //->with('child')->get();
+        // return $file;
+        return (new FileSystemObjectResource($file))->lite(false, ['children']);
+
+        /*
+        $zipextractor = new ZipPreprocessing();
+        return $zipextractor->extractzip(2884);
+        */
+
+        /*
+        $root_folder = [
+            'name' => '/',
+            'type' => 'directory',
+            'project_id' => 7,
+            'study_id' => 10,
+            'parent_id' => 0,
+            'level' => 0,
+            'is_root' => true,
+        ];
+
+        $project = [];
+        $study = [];
+
+        // $project = Project::findOrFail(7);
+        // $study = Study::findOrFail(10);
+
+        // return [
+        //     'p' => $project,
+        //     's' => $study,
+        // ];
+
+        $root_item = FileSystemObject::where('study_id', 10)->where('is_root', true)->get();
+        $root_creator = new CreateFileObject();
+        $rd = $root_creator->create($root_folder, "directory");
+        return $root_item;
+        */
     }
 
-    public function extractzip(Request $request, FileSystemObject $file) {
 
-        $zipextractor = new ZipPreprocessing();
-        $updater = new UpdateFileObject();
+
+    public function create(Request $request, CreateFileObject $creator) {
+        try {
+            $input = $request->all();
+            $files  = isset($input['name']) ? [$input] : $input;
+  
+            foreach ($files as $file) {
+                $fileObject = $creator->create($file);
+                $this->extractzip($fileObject);
+            }
+        } catch (Throwable $exception) {
+            return redirect()->back()->withErrors([
+                'create' => 'Failed to store data'
+            ]);
+        }
+        return back()->withSuccess('objects-created');
+    }
+
+    public function extractzip(FileSystemObject $file) {
 
         if ($file->ftype !== 'application/zip') {
             return [
@@ -29,8 +91,16 @@ class FileSystemController extends Controller
                 'error' => 'extract error, file is not application/zip type.'
             ];
         }
+
+        $zipextractor = new ZipPreprocessing();
+        $updater = new UpdateFileObject();
         
-        $updater->update($file, ['type' => 'directory']);
+        $fileName = pathinfo($file->name)['filename'] . ' (from archive)';
+        $updater->update($file, [
+            'type' => 'dataset',
+            'name' => $fileName,
+            'is_archived' => true,
+        ]);
         $zipextractor->extractzip($file->id);
 
         return [

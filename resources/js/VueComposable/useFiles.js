@@ -1,6 +1,24 @@
 import { usePage } from '@inertiajs/inertia-vue3'
 import { computed, ref } from 'vue'
 
+export const loading = ref({
+  minio_upload: {
+    loading: false,
+    done: false,
+    error: false,
+  },
+  zip_extracting: {
+    loading: false,
+    done: false,
+    error: false,
+  },
+  saving_to_database: {
+    loading: false,
+    done: false,
+    error: false,
+  },
+})
+
 export const useFiles = () => {
   const study = computed(() => usePage().props.value.study)
 
@@ -66,5 +84,6 @@ export const useFiles = () => {
     extractzip,
     saveFile,
     getSpectraData,
+    loading,
   }
 }
