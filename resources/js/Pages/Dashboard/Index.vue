@@ -4,7 +4,7 @@
       <div class="min-h-[54px]">
         <div>
           <div
-            class="flex items-center text-sm text-gray-700 tracking-widest primary"
+            class="flex items-center text-md text-gray-700 tracking-widest primary"
           >
             <div v-if="team?.personal_team">Your</div>
             <div v-else>
@@ -36,7 +36,7 @@
       </div>
     </template>
     <div>
-      <team-projects :projects="projects" @showTree="onShowTree" />
+      <team-projects :projects="projects" />
     </div>
   </app-layout>
 </template>
@@ -45,7 +45,7 @@
 import { ref } from 'vue'
 import AppLayout from '@/Layouts/AppLayout.vue'
 
-import TeamProjects from '@/Pages/Dashboard/Projects/Index.vue'
+import TeamProjects from '@/Pages/Projects/Index.vue'
 
 import { sidebarOpen, updateLeftMenu } from '@/VueComposable/store'
 

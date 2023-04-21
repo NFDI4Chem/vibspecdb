@@ -63,13 +63,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-Route::middleware(['auth:sanctum'])->get('/explorer', function (Request $request) {
-    $team = $request->user()->currentTeam;
-    $team->users = $team->allUsers();
-    return Inertia::render('Explorer', [
-        'team' => $team
-    ]);
-})->name('explorer');
 
 // // AWS S3 Multipart Upload Route
 
@@ -94,7 +87,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/testrun', [FileSystemController::class, 'testrun']);
 
-    Route::post('/storage/signed-storage-url', [FileSystemController::class, 'signedStorageURL']);
+    // Route::post('/storage/signed-storage-url', [FileSystemController::class, 'signedStorageURL']);
 
     Route::get('user/alerts', [UserController::class, 'alerts'])
     ->name('users.alerts');
@@ -134,6 +127,7 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('job_model.settings');
     Route::get('job_models/{job_model}/activity', [JobModelsController::class, 'activity'])
         ->name('job_model.activity');            
+
 
     Route::get('projects/{project}', [ProjectController::class, 'index'])
         ->name('project');
@@ -186,6 +180,8 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('assays.update');
     Route::get('assays/{assay}/activity', [AssayController::class, 'activity'])
         ->name('assays.activity');
+
+    // Route::get('teams', [TeamsController::class, 'index'])->name('teams');
 });
 
 

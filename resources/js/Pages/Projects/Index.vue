@@ -80,7 +80,7 @@ import { ref } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 
 import ProjectCreate from '@/Pages/Project/Partials/Create.vue'
-import ProjectItems from '@/Pages/Dashboard/Projects/ProjectItems.vue'
+import ProjectItems from '@/Pages/Projects/ProjectItems.vue'
 
 const props = defineProps(['projects'])
 const projectCreateElement = ref()

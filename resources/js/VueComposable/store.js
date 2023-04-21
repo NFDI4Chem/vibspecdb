@@ -16,24 +16,31 @@ export const leftMenu = ref([
   {
     name: 'Dashboard',
     shortname: 'Board',
-    icon: HomeIcon,
+    icon: 'mdi mdi-home',
     href: route('dashboard'),
-    active: false,
+    active: true,
   },
   {
-    name: 'Jobs',
-    shortname: 'Jobs',
-    icon: BriefcaseIcon,
-    href: route('jobs'),
-    active: false,
+    name: 'Teams',
+    shortname: 'Teams',
+    icon: 'mdi mdi-account-group',
+    href: route('dashboard'),
+    active: true,
   },
   {
-    name: 'Models',
-    shortname: 'Models',
-    icon: RectangleGroupIcon,
-    href: route('job_models'),
-    active: false,
+    name: 'Settings',
+    shortname: 'Settings',
+    icon: 'mdi mdi-cog',
+    href: route('dashboard'),
+    active: true,
   },
+  // {
+  //   name: 'Models',
+  //   shortname: 'Models',
+  //   icon: RectangleGroupIcon,
+  //   href: route('job_models'),
+  //   active: false,
+  // },
 ])
 
 export const updateLeftMenu = page => {

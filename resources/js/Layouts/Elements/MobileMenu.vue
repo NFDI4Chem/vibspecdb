@@ -149,12 +149,8 @@
                   :href="item.href"
                   class="text-gray-700 group flex items-center px-2 py-3 text-sm font-medium rounded-md hover:text-teal-800"
                 >
-                  <component
-                    :is="item.icon"
-                    class="mr-2 h-6 w-6"
-                    aria-hidden="true"
-                  />
-                  <div class="text-lg mt-1">{{ item.name }}</div>
+                  <w-icon class="" lg>{{ item.icon }}</w-icon>
+                  <div class="text-lg my0.5 mx-3">{{ item.name }}</div>
                 </Link>
               </div>
             </nav>

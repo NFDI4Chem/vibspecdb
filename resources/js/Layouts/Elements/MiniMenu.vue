@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col min-h-screen w-18 hidden sm:flex">
+  <div class="flex-col min-h-screen w-16 hidden sm:flex">
     <div
       class="flex flex-col flex-grow border-r border-gray-200 bg-white overflow-y-auto text-gray-500"
     >
@@ -20,20 +20,16 @@
       </div>
 
       <div class="mt-0 flex-grow flex flex-col">
-        <nav class="flex-1 pr-2 pl-1 bg-white space-y-3 py-3">
+        <nav class="flex-1 px-1 bg-white space-y-3 py-3">
           <Link
             v-for="item in leftMenu"
             :key="item.name"
             :href="item.href"
-            class="group flex items-center px-2 pt-1 text-sm font-medium rounded-none flex-col rounded-r-md"
+            class="group flex items-center px-2 pt-1 text-sm font-medium flex-col rounded-none"
             :class="{ ' border-sky-700 border-l-2 bg-gray-100': item.active }"
           >
-            <component
-              :is="item.icon"
-              class="h-6 w-6 mr-1"
-              aria-hidden="true"
-            />
-            <div class="mt-1 extra-small">{{ item.shortname }}</div>
+            <w-icon class="mr-1" xl>{{ item.icon }}</w-icon>
+            <div class="my0.5 extra-small">{{ item.shortname }}</div>
           </Link>
         </nav>
       </div>
