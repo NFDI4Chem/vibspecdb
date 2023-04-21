@@ -19,7 +19,7 @@ class UpdateStudy
     {
         Validator::make($input, [
             'name' => ['string', 'max:255'],
-            'description' => ['string'],
+            // 'description' => ['string'],
         ])->validate();
 
         return DB::transaction(function () use ($input, $study) {

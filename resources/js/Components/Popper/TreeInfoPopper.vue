@@ -17,7 +17,7 @@
           <w-icon class="text-gray-500 w-4 h-4">mdi mdi-rename</w-icon>
         </div>
         <div class="flex flex-row items-center justify-left gap-0">
-          <div class="mr2"><strong>Рold and move</strong>with icons:</div>
+          <div class="mr2"><strong>Hold and move</strong> with icons:</div>
 
           <w-icon class="text-gray-500 w-4 h-4 mx1">mdi mdi-folder</w-icon> |
           <w-icon class="text-gray-500 w-4 h-4 mx1"

@@ -336,11 +336,11 @@ const onCompleted = ({ failed, successful }) => {
     )
   } else if (successful?.length > 0) {
     saveDBfiles(successful)
+    loading.value = loadingStatus('saving_to_database_loading')
   }
 }
 
 const saveDBfiles = files => {
-  loading.value = loadingStatus('saving_to_database_loading')
   const files2save = files.map(file => {
     const { name, type: ftype, size, id: uppyid } = file
     const type = 'file'
@@ -361,6 +361,7 @@ const saveDBfiles = files => {
     .then(res => {
       setup_info_notify('All files has been successfully uploaded')
       loading.value = loadingStatus('saving_to_database_done')
+      MakeReload()
     })
     .catch(err => {
       setup_error_notify('Failed to store files. ' + err?.message)

@@ -65,7 +65,8 @@ const slit_views = ref({
 .project-tabs {
   .w-tabs__bar-item {
     margin-right: 10px;
-    width: 80px;
+    width: 90px;
+    height: 30px;
   }
   .w-tabs__content {
     padding-left: 0;
