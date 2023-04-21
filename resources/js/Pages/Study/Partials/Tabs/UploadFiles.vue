@@ -30,7 +30,7 @@
             <div class="relative flex flex-col w-full">
               <div class="min-w-fit">
                 <div
-                  class="flex flex-row justify-between items-center pb7 gap-2"
+                  class="flex flex-row justify-between items-center pb3 gap-2"
                 >
                   <div class="flex flex-row justify-start align-middle w-full">
                     <div class="font-bold text-md mr-auto">
@@ -89,10 +89,15 @@
       </pane>
       <pane :size="layout_switcher(files).right_size()">
         <div
-          class="w-full h-[400px] p-4"
+          class="w-full h-[500px] p-4"
           v-if="layout_switcher(files).metainfo_visible()"
         >
-          <div class="bg-gray-100 w-full h-full"></div>
+          <div class="w-full h-full flex flex-col">
+            <div class="text-md font-bold pb-2 h-8">Dataset Options:</div>
+            <div class="bg-gray-100 overflow-auto grow">
+              <DatasetOptions />
+            </div>
+          </div>
         </div>
 
         <div
@@ -146,6 +151,7 @@ import { useForm, usePage } from '@inertiajs/inertia-vue3'
 // import SpectralPlotter from '@/Components/uPlot/SpectralPlotter.vue'
 import PlotlyPlotter from '@/Components/plotly/PlotlyPlotter.vue'
 import TreeOptionSettings from '@/Pages/Study/Partials/Elements/TreeOptionSettings.vue'
+import DatasetOptions from '@/Pages/Study/Partials/Dataset/DatasetOptions.vue'
 
 import {
   onRemoveItem,

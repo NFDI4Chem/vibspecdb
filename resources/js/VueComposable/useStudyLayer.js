@@ -4,7 +4,7 @@ export const split_views = ref({
   top_visible: false,
   left_visible: true,
   right_visible: true,
-  metainfo_visible: false,
+  metainfo_visible: true,
 })
 
 export const layout_switcher = (files = []) => {

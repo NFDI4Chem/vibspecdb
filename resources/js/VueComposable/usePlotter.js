@@ -4,18 +4,18 @@ import { split_views } from '@/VueComposable/useStudyLayer'
 export const spectraData = ref()
 export const showOverlay = ref(false)
 
+export const activeDataset = ref()
+export const dataset_data = ref()
+
 export const selectTreeFolder = ref('/')
 export const activeItem = ref({
   id: 0,
   path: '/',
 })
 
-export const activeDataset = ref()
-
 export const displaySelected = file => {
   let sFolder = '/'
-  switch (file?.name) {
-  }
+
   if (file?.name == '/') {
     sFolder = '/'
   } else {
