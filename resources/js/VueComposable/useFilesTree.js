@@ -14,7 +14,7 @@ import {
   storeSelected,
 } from '@/VueComposable/usePlotter'
 
-import { slit_views } from '@/VueComposable/useStudyLayer'
+import { split_views } from '@/VueComposable/useStudyLayer'
 
 const { getSpectraData } = useFiles()
 
@@ -41,7 +41,7 @@ export const TreeItemClick = async (file, parent) => {
 
   if (!matchSelectableType(file.type)) {
     showOverlay.value = true
-    slit_views.value.top_visible = true
+    split_views.value.top_visible = true
 
     const input = {
       files: [
@@ -72,7 +72,7 @@ export const onTreeCheck = async checked => {
   }
 
   showOverlay.value = true
-  slit_views.value.top_visible = true
+  split_views.value.top_visible = true
 
   const input = {
     files: files.map(f => ({

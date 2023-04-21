@@ -4,7 +4,7 @@
       <template #scontent>
         <div class="bg-white shadow-md flex flex-col flex-1 mb-0">
           <div class="px4 py-4 project-tabs w-full">
-            <SplitterToggler v-model:slit_views="slit_views" />
+            <SplitterToggler v-model:split_views="split_views" />
             <w-tabs
               :items="tabs"
               class="w-full rounded-none border-0"
@@ -38,7 +38,7 @@ import SplitterToggler from '@/Pages/Study/Partials/Elements/SplitterToggler.vue
 import Metadata from '@/Pages/Study/Partials/Tabs/Metadata.vue'
 import UploadFiles from '@/Pages/Study/Partials/Tabs/UploadFiles.vue'
 
-import { slit_views } from '@/VueComposable/useStudyLayer'
+import { split_views } from '@/VueComposable/useStudyLayer'
 
 const props = defineProps(['study', 'project', 'files', 'tab', 'projects'])
 

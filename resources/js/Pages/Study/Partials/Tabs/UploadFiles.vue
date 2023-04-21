@@ -25,7 +25,7 @@
         :size="layout_switcher(files).left_size()"
         class="flex flex-col items-start justify-start py-3 tree-plane"
       >
-        <div class="w-full px-5">
+        <div class="w-full px-4">
           <div class="" v-if="treeFilled">
             <div class="relative flex flex-col w-full">
               <div class="min-w-fit">
@@ -88,7 +88,19 @@
         </div>
       </pane>
       <pane :size="layout_switcher(files).right_size()">
-        <div class="flex flex-col gap-2 h-full items-left p-4 py4">
+        <div
+          class="w-full h-[400px] p-4"
+          v-if="layout_switcher(files).metainfo_visible()"
+        >
+          <div class="bg-gray-100 w-full h-full"></div>
+        </div>
+
+        <div
+          class="flex flex-col gap-2 h-full items-left p-4 py4"
+          :class="{
+            'metainfo-visible': layout_switcher(files).metainfo_visible(),
+          }"
+        >
           <div class="text-lg flex flex-col gap-1">
             <div
               class="flex flex-row flex-wrap gap-1 justify-between items-center"
