@@ -1,5 +1,11 @@
 <template>
-  <w-menu bottom align-right hide-on-menu-click class="tree-item-setting-dots">
+  <w-menu
+    v-if="items"
+    bottom
+    align-right
+    hide-on-menu-click
+    class="tree-item-setting-dots"
+  >
     <template #activator="{ on }">
       <w-button
         v-on="on"
@@ -14,7 +20,7 @@
         :items="items"
         color="primary"
         item-value-key="key"
-        item-class="px3 py0.5 cursor-pointer"
+        item-class="px3 py0 cursor-pointer"
       >
         <template #item="{ item }">
           <w-flex
@@ -26,6 +32,7 @@
             <w-icon md>{{ item?.icon }}</w-icon>
             <div class="pt1">{{ item?.label }}</div>
           </w-flex>
+          <!-- {{ props.type }} -->
         </template>
       </w-list>
     </w-flex>
@@ -39,19 +46,44 @@ const emit = defineEmits(['onSelect'])
 const props = defineProps(['type'])
 
 const _items = [
-  { label: 'Convert to Folder', key: 'directory', icon: 'mdi mdi-folder-plus' },
+  {
+    label: 'Convert to Folder',
+    key: 'directory',
+    icon: 'mdi mdi-folder-plus',
+  },
   {
     label: 'Convert to Dataset',
     key: 'dataset',
     icon: 'mdi mdi-database-plus',
   },
+  {
+    label: 'Convert to Metafile',
+    key: 'metafile',
+    icon: 'mdi mdi-table',
+  },
+  {
+    label: 'Convert to File',
+    key: 'file',
+    icon: 'mdi mdi-file-document',
+  },
 ]
 
-const items = computed(() => {
-  return _items.filter(i => i.key !== props.type)
-})
+const firstSet = ['file', 'metafile']
+const secondSet = ['dataset', 'directory']
 
-const selection = ref()
+const items = computed(() => {
+  if (firstSet.includes(props.type)) {
+    return _items
+      .filter(f => firstSet.includes(f.key))
+      .filter(i => i.key !== props.type)
+  }
+  if (secondSet.includes(props.type)) {
+    return _items
+      .filter(f => secondSet.includes(f.key))
+      .filter(i => i.key !== props.type)
+  }
+  return []
+})
 
 const onSelect = key => {
   emit('onSelect', key)

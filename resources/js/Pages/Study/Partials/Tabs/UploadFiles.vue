@@ -15,7 +15,7 @@
           ref="spectral_plot"
         /> -->
     </div>
-
+    <!-- {{ activeItem }} -->
     <splitpanes
       @resized="e => onPaneResize(e)"
       :class="{ 'top-visible': layout_switcher(files).top_size() }"
@@ -88,14 +88,11 @@
         </div>
       </pane>
       <pane :size="layout_switcher(files).right_size()">
-        <div
-          class="w-full h-[500px] p-4"
-          v-if="layout_switcher(files).metainfo_visible()"
-        >
+        <div class="w-full h-[500px] p-4" v-if="show_dataset_options">
           <div class="w-full h-full flex flex-col">
             <div class="text-md font-bold pb-2 h-8">Dataset Options:</div>
             <div class="bg-gray-100 overflow-auto grow">
-              <DatasetOptions />
+              <DatasetOptions :data="dataset_data" />
             </div>
           </div>
         </div>
@@ -103,7 +100,7 @@
         <div
           class="flex flex-col gap-2 h-full items-left p-4 py4"
           :class="{
-            'metainfo-visible': layout_switcher(files).metainfo_visible(),
+            'metainfo-visible': show_dataset_options,
           }"
         >
           <div class="text-lg flex flex-col gap-1">
@@ -169,15 +166,40 @@ import {
   showOverlay,
   selectTreeFolder,
   activeItem,
+  // dataset_data,
 } from '@/VueComposable/usePlotter'
 
 import { layout_switcher } from '@/VueComposable/useStudyLayer'
 
-const props = defineProps(['study', 'project', 'files'])
+const props = defineProps([/*'study', 'project',*/ 'files'])
 
 const onUploaded = (file, data) => {
   console.log('files uploaded (UploadFiles.vue)', file, data)
 }
+
+const dataset_data = computed(() => {
+  const is_dataset = activeItem.value?.type === 'dataset'
+  if (is_dataset) {
+    return {
+      dataset: { ...activeItem.value, children: [] },
+      metafiles: activeItem.value.children?.filter(f => {
+        return f.type === 'metafile'
+      }),
+    }
+  } else {
+    return {
+      metafiles: [],
+      dataset: {},
+    }
+  }
+})
+
+const show_dataset_options = computed(() => {
+  return (
+    layout_switcher(props?.files).metainfo_visible() &&
+    dataset_data.value?.dataset?.id
+  )
+})
 
 const treeFilled = computed(() => {
   return props?.files?.length > 0 && props?.files[0].children?.length > 0

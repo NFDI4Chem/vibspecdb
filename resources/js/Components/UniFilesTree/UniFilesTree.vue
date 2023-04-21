@@ -23,7 +23,18 @@
       <ToolTipWrapper v-if="node.type === 'dataset'" text="The item is dataset">
         <template #btn>
           <div
-            class="absolute top-[-3px] left-[-7px] w-2 h-2 bg-teal-500 rounded-full"
+            class="absolute top-[-1px] left-[-8px] w-1.5 h-1.5 bg-teal-500"
+          />
+        </template>
+      </ToolTipWrapper>
+
+      <ToolTipWrapper
+        v-if="node.type === 'dataset' && checkMetaFiles(node)"
+        text="The item has meta-files"
+      >
+        <template #btn>
+          <div
+            class="absolute top-[6px] left-[-8px] w-1.5 h-1.5 bg-green-600"
           />
         </template>
       </ToolTipWrapper>
@@ -82,8 +93,11 @@
           <input
             role="button"
             v-model="node.name"
-            class="focus-visible:outline-none active-field w-full px-1"
-            :class="{ ['text-teal-500']: node.edit }"
+            class="focus-visible:outline-none active-field w-full px-1 text-sm py-0.5"
+            :class="{
+              ['text-teal-500']: node.edit,
+              'teal-dark1 text-bold': node.type === 'metafile',
+            }"
             :readonly="node.edit ? false : 'readonly'"
             v-on:keydown="renameItemKeyBoard($event, node)"
             @click="onItemClick(node, path, tree)"
@@ -275,6 +289,11 @@ export default {
   },
 
   methods: {
+    checkMetaFiles(node) {
+      return node?.children?.filter(f => {
+        return f.type === 'metafile'
+      })?.length
+    },
     unfoldAll() {
       this.$refs.tree.unfoldAll()
     },
