@@ -29,7 +29,7 @@
             :class="{ ' border-sky-700 border-l-2 bg-gray-100': item.active }"
           >
             <w-icon class="mr-1" xl>{{ item.icon }}</w-icon>
-            <div class="my0.5 extra-small">{{ item.shortname }}</div>
+            <div class="my0.5 text-xs">{{ item.shortname }}</div>
           </Link>
         </nav>
       </div>

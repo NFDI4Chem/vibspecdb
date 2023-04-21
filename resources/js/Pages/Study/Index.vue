@@ -11,15 +11,14 @@
               v-model="tab"
             >
               <template #item-content="{ index }">
-                <Info v-if="index === 1" :item="study" type="study" />
-                <Metadata v-if="index === 2" :item="study" type="study" />
                 <UploadFiles
-                  v-if="index === 3"
+                  v-if="index === 1"
                   :study="study"
                   :project="project"
                   :files="files"
-                  v-model:slit_views="slit_views"
                 />
+                <Info v-if="index === 2" :item="study" type="study" />
+                <Metadata v-if="index === 3" :item="study" type="study" />
               </template>
             </w-tabs>
           </div>
@@ -39,6 +38,8 @@ import SplitterToggler from '@/Pages/Study/Partials/Elements/SplitterToggler.vue
 import Metadata from '@/Pages/Study/Partials/Tabs/Metadata.vue'
 import UploadFiles from '@/Pages/Study/Partials/Tabs/UploadFiles.vue'
 
+import { slit_views } from '@/VueComposable/useStudyLayer'
+
 const props = defineProps(['study', 'project', 'files', 'tab', 'projects'])
 
 const tab = computed(() => {
@@ -48,25 +49,19 @@ const tab = computed(() => {
 })
 
 const tabs = [
+  { title: 'Upload', content: 'Files Tree and uploader.' },
   { title: 'Info', content: 'Study Common Info.' },
   { title: 'Metadata', content: 'Custom Metadata.' },
-  { title: 'Upload', content: 'Files Tree and uploader.' },
-  { title: 'Files', content: 'Files Tree and preview.' },
+  // { title: 'Files', content: 'Files Tree and preview.' },
 ]
-
-const slit_views = ref({
-  top_visible: false,
-  left_visible: true,
-  right_visible: true,
-})
 </script>
 
 <style lang="scss">
 .project-tabs {
   .w-tabs__bar-item {
     margin-right: 10px;
-    width: 90px;
-    height: 30px;
+    width: 80px;
+    height: 35px;
   }
   .w-tabs__content {
     padding-left: 0;

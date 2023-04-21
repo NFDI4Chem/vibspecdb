@@ -1,5 +1,6 @@
 import './bootstrap'
 import '../css/app.css'
+import '../css/custom/styles.scss'
 
 // import uPlot from 'uplot';
 import UplotVue from 'uplot-vue'
