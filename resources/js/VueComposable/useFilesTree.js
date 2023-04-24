@@ -15,6 +15,7 @@ import {
 } from '@/VueComposable/usePlotter'
 
 import { split_views } from '@/VueComposable/useStudyLayer'
+import { activeItem } from '@/VueComposable/usePlotter'
 
 const { getSpectraData } = useFiles()
 
@@ -111,6 +112,15 @@ export const onDrop = (node, pnode, pnode_old) => {
   onTreeChange({ ...node, parent_id: pnode?.id }, false)
 }
 
+const updateActiveItemChilds = file => {
+  activeItem.value = {
+    ...activeItem.value,
+    children: activeItem.value?.children?.map(item => {
+      return item.id === file.id ? { ...item, type: file.type } : item
+    }),
+  }
+}
+
 export const onTreeChange = (node, report = true) => {
   node.loading = true
   const form = useForm(node)
@@ -120,6 +130,7 @@ export const onTreeChange = (node, report = true) => {
       if (report) {
         setup_info_notify('The item has been updated')
       }
+      updateActiveItemChilds(node)
     },
     onError: () => {
       const message = Object.values(err).join('<br>')

@@ -92,7 +92,10 @@
           <div class="w-full h-full flex flex-col">
             <div class="text-md font-bold pb-2 h-8">Dataset Options:</div>
             <div class="bg-gray-100 overflow-auto grow">
-              <DatasetOptions :data="dataset_data" />
+              <DatasetOptions
+                :data="dataset_data"
+                @deleteMetafile="onChangeNodeType"
+              />
             </div>
           </div>
         </div>

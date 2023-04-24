@@ -22,7 +22,7 @@
               <w-button
                 v-on="on"
                 class="text-red-400 w-5 ml1 cursor-pointer border-0"
-                @click="() => {}"
+                @click="deleteMetafile(mf)"
                 md
                 bg-color="transparent"
                 icon="mdi mdi-delete"
@@ -47,8 +47,8 @@
     </div>
     <div class="flex flex-row justify-end pt-2">
       <w-button class="ma1" :loading="false" @click="() => {}">
-        <w-icon class="mr1">wi-check</w-icon>
-        Update metadata
+        <w-icon class="mr1">mdi mdi-tools</w-icon>
+        Parse metadata
       </w-button>
     </div>
   </div>
@@ -57,11 +57,17 @@
 <script setup>
 import { computed } from 'vue'
 import ToolTipWrapper from '@/Components/UniFilesTree/ToolTipWrapper.vue'
+
+const emit = defineEmits(['deleteMetafile'])
 const props = defineProps(['data'])
 
 const show = computed(() => {
   return props?.data?.dataset?.id
 })
+
+const deleteMetafile = file => {
+  emit('deleteMetafile', file, file?.type === 'file' ? 'metafile' : 'file')
+}
 </script>
 
 <style lang="scss" scoped></style>
