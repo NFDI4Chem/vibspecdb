@@ -76,6 +76,7 @@ import UploadFormUppy from '@/Components/UploadForm/UploadFormUppy.vue'
 import ModalHeader from './ModalHeader.vue'
 
 import { useFiles, loading } from '@/VueComposable/useFiles'
+import { saveDBfiles, loadingStatus } from '@/VueComposable/useFilesTree'
 
 import { useStore } from 'vuex'
 import {
@@ -210,120 +211,6 @@ const MakeReload = () => {
   Inertia.reload({ only: ['files'] })
 }
 
-const loadingStatus = step => {
-  let load = { ...loading.value }
-  switch (step) {
-    case 'minio_upload_loading':
-      return {
-        ...load,
-        minio_upload: {
-          loading: true,
-          done: false,
-          error: false,
-        },
-      }
-      break
-    case 'minio_upload_done':
-      return {
-        ...load,
-        minio_upload: {
-          loading: false,
-          done: true,
-          error: false,
-        },
-      }
-      break
-    case 'minio_upload_error':
-      return {
-        ...load,
-        minio_upload: {
-          loading: false,
-          done: false,
-          error: true,
-        },
-      }
-      break
-    case 'saving_to_database_loading':
-      return {
-        ...load,
-        saving_to_database: {
-          loading: true,
-          done: false,
-          error: false,
-        },
-      }
-      break
-    case 'saving_to_database_done':
-      return {
-        ...load,
-        saving_to_database: {
-          loading: false,
-          done: true,
-          error: false,
-        },
-      }
-      break
-    case 'saving_to_database_error':
-      return {
-        ...load,
-        saving_to_database: {
-          loading: false,
-          done: false,
-          error: true,
-        },
-      }
-      break
-    case 'zip_extracting_loading':
-      return {
-        ...load,
-        zip_extracting: {
-          loading: true,
-          done: false,
-          error: false,
-        },
-      }
-      break
-    case 'zip_extracting_done':
-      return {
-        ...load,
-        zip_extracting: {
-          loading: false,
-          done: true,
-          error: false,
-        },
-      }
-      break
-    case 'zip_extracting_error':
-      return {
-        ...load,
-        zip_extracting: {
-          loading: false,
-          done: false,
-          error: true,
-        },
-      }
-      break
-    case 'clear_all':
-      return {
-        minio_upload: {
-          loading: false,
-          done: false,
-          error: false,
-        },
-        zip_extracting: {
-          loading: false,
-          done: false,
-          error: false,
-        },
-        saving_to_database: {
-          loading: false,
-          done: false,
-          error: false,
-        },
-      }
-  }
-}
-
 const onUploaded = async (file, data) => {
   // loading.value = loadingStatus('minio_upload_done')
   uploaded.value = true
@@ -336,37 +223,7 @@ const onCompleted = ({ failed, successful }) => {
     )
   } else if (successful?.length > 0) {
     saveDBfiles(successful)
-    loading.value = loadingStatus('saving_to_database_loading')
   }
-}
-
-const saveDBfiles = files => {
-  const files2save = files.map(file => {
-    const { name, type: ftype, size, id: uppyid } = file
-    const type = 'file'
-    const { project_id, study_id, level, parent_id } = file?.meta || {}
-    return {
-      name,
-      type,
-      ftype,
-      size,
-      uppyid,
-      project_id: parseInt(project_id),
-      study_id: parseInt(study_id),
-      level: parseInt(level) + 1,
-      parent_id: parseInt(parent_id),
-    }
-  })
-  saveFile(files2save)
-    .then(res => {
-      setup_info_notify('All files has been successfully uploaded')
-      loading.value = loadingStatus('saving_to_database_done')
-      MakeReload()
-    })
-    .catch(err => {
-      setup_error_notify('Failed to store files. ' + err?.message)
-      loading.value = loadingStatus('saving_to_database_done')
-    })
 }
 
 const onError = err => {

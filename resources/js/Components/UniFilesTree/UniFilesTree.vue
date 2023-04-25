@@ -34,7 +34,7 @@
       >
         <template #btn>
           <div
-            class="absolute top-[6px] left-[-8px] w-1.5 h-1.5 bg-green-600"
+            class="absolute top-[6px] left-[-8px] w-1.5 h-1.5 bg-green-500"
           />
         </template>
       </ToolTipWrapper>
@@ -302,9 +302,13 @@ export default {
     },
     moveCursor(node) {
       return (
-        ['directory', /*'project',*/ 'study', 'file', 'dataset'].includes(
-          node.type,
-        ) && this.options.draggable
+        [
+          'directory',
+          /*'project',*/ 'study',
+          'file',
+          'dataset',
+          'metafile',
+        ].includes(node.type) && this.options.draggable
       )
     },
     onItemClick(node, path, tree) {
@@ -312,6 +316,9 @@ export default {
       if (!node.edit) {
         this.$emit('itemClick', node, parent)
       }
+    },
+    getTree() {
+      return this.$refs.tree
     },
     handleCheck(node, path, tree) {
       tree.toggleCheck(node, path)

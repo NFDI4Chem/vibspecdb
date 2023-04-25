@@ -166,6 +166,7 @@ import {
   onChangeNodeType,
   onTreeCheck,
   TreeItemClick,
+  uniFilesTree,
 } from '@/VueComposable/useFilesTree'
 import {
   spectraData,
@@ -211,7 +212,6 @@ const treeFilled = computed(() => {
   return props?.files?.length > 0 && props?.files[0].children?.length > 0
 })
 
-const uniFilesTree = ref()
 const foldAll = () => {
   uniFilesTree.value.foldAll()
 }

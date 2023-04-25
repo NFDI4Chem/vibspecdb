@@ -5,7 +5,7 @@ import {
   setup_error_notify,
 } from '@/VueComposable/mixins/useWave'
 
-import { useFiles } from '@/VueComposable/useFiles'
+import { loading, useFiles } from '@/VueComposable/useFiles'
 
 import {
   spectraData,
@@ -18,6 +18,8 @@ import { split_views } from '@/VueComposable/useStudyLayer'
 import { activeItem } from '@/VueComposable/usePlotter'
 
 const { getSpectraData } = useFiles()
+
+export const uniFilesTree = ref()
 
 export const treeOptions = ref({
   checkable: true,
@@ -98,15 +100,19 @@ export const onTreeCheck = async checked => {
   showOverlay.value = false
 }
 
-export const MakeReload = study => {
-  const form = useForm({
-    files: null,
-  })
-  form.post(route('study.file-upload.update', study.value.id), {
-    preserveScroll: true,
-    onSuccess: () => form.reset(),
-  })
+export const MakeReload = () => {
+  Inertia.reload({ only: ['files'] })
 }
+
+// export const MakeReload = study => {
+//   const form = useForm({
+//     files: null,
+//   })
+//   form.post(route('study.file-upload.update', study.value.id), {
+//     preserveScroll: true,
+//     onSuccess: () => form.reset(),
+//   })
+// }
 
 export const onChangeNodeType = (node, type) => {
   onTreeChange({ ...node, type }, false)
@@ -116,13 +122,11 @@ export const onDrop = (node, pnode, pnode_old) => {
   onTreeChange({ ...node, parent_id: pnode?.id }, false)
 }
 
-const updateActiveItemChilds = file => {
-  activeItem.value = {
-    ...activeItem.value,
-    children: activeItem.value?.children?.map(item => {
-      return item.id === file.id ? { ...item, type: file.type } : item
-    }),
-  }
+const updateActiveItemChildsMeta = () => {
+  const node = getNodeInfoByID(activeItem.value.id)
+  // TreeItemClick(node, node?.parent)
+  storeSelected(node)
+  displaySelected(node)
 }
 
 export const onTreeChange = (node, report = true) => {
@@ -134,7 +138,7 @@ export const onTreeChange = (node, report = true) => {
       if (report) {
         setup_info_notify('The item has been updated')
       }
-      updateActiveItemChilds(node)
+      updateActiveItemChildsMeta()
     },
     onError: () => {
       const message = Object.values(err).join('<br>')
@@ -165,7 +169,9 @@ export const onRemoveItem = (tree, node, path) => {
   const form = useForm(node)
   form.delete(route('files.destroy', node.id), {
     preserveScroll: true,
-    onSuccess: () => {},
+    onSuccess: () => {
+      updateActiveItemChildsMeta()
+    },
     onError: () => {},
     onFinish: () => {},
   })
@@ -197,8 +203,171 @@ export const onAddChildren = (node, type) => {
       onSuccess: file => {
         node.loading = false
       },
-      onError: p => {
-        console.log('onAddChildren', p)
+      onError: e => {
+        console.log('Error onAddChildren', e)
       },
+      onFinish: () => {},
     })
+}
+
+export const saveDBfiles = files => {
+  loading.value = loadingStatus('saving_to_database_loading')
+
+  const files2save = files.map(file => {
+    const { name, type: ftype, size, id: uppyid } = file
+    const type = 'file'
+    const { project_id, study_id, level, parent_id } = file?.meta || {}
+    return {
+      name,
+      type,
+      ftype,
+      size,
+      uppyid,
+      project_id: parseInt(project_id),
+      study_id: parseInt(study_id),
+      level: parseInt(level) + 1,
+      parent_id: parseInt(parent_id),
+    }
+  })
+  const form = useForm(files2save)
+  form.post(route('files.create'), {
+    preserveScroll: true,
+    onSuccess: file => {
+      setup_info_notify('All files has been successfully uploaded')
+      updateActiveItemChildsMeta()
+      loading.value = loadingStatus('saving_to_database_done')
+    },
+    onError: e => {
+      console.log('Error onAddChildren', e)
+      setup_error_notify('Failed to store files. ' + e?.message)
+      loading.value = loadingStatus('saving_to_database_done')
+    },
+    onFinish: () => {},
+  })
+}
+
+const getNodeInfoByID = id => {
+  let found
+  const tree = uniFilesTree.value?.getTree()
+  tree?.walkTreeData((node, index, parent, path) => {
+    if (node.id === id) {
+      found = { node, index, parent, path }
+      return node
+    }
+  })
+  return found?.node
+}
+
+export const loadingStatus = step => {
+  let load = { ...loading.value }
+  switch (step) {
+    case 'minio_upload_loading':
+      return {
+        ...load,
+        minio_upload: {
+          loading: true,
+          done: false,
+          error: false,
+        },
+      }
+      break
+    case 'minio_upload_done':
+      return {
+        ...load,
+        minio_upload: {
+          loading: false,
+          done: true,
+          error: false,
+        },
+      }
+      break
+    case 'minio_upload_error':
+      return {
+        ...load,
+        minio_upload: {
+          loading: false,
+          done: false,
+          error: true,
+        },
+      }
+      break
+    case 'saving_to_database_loading':
+      return {
+        ...load,
+        saving_to_database: {
+          loading: true,
+          done: false,
+          error: false,
+        },
+      }
+      break
+    case 'saving_to_database_done':
+      return {
+        ...load,
+        saving_to_database: {
+          loading: false,
+          done: true,
+          error: false,
+        },
+      }
+      break
+    case 'saving_to_database_error':
+      return {
+        ...load,
+        saving_to_database: {
+          loading: false,
+          done: false,
+          error: true,
+        },
+      }
+      break
+    case 'zip_extracting_loading':
+      return {
+        ...load,
+        zip_extracting: {
+          loading: true,
+          done: false,
+          error: false,
+        },
+      }
+      break
+    case 'zip_extracting_done':
+      return {
+        ...load,
+        zip_extracting: {
+          loading: false,
+          done: true,
+          error: false,
+        },
+      }
+      break
+    case 'zip_extracting_error':
+      return {
+        ...load,
+        zip_extracting: {
+          loading: false,
+          done: false,
+          error: true,
+        },
+      }
+      break
+    case 'clear_all':
+      return {
+        minio_upload: {
+          loading: false,
+          done: false,
+          error: false,
+        },
+        zip_extracting: {
+          loading: false,
+          done: false,
+          error: false,
+        },
+        saving_to_database: {
+          loading: false,
+          done: false,
+          error: false,
+        },
+      }
+  }
 }
