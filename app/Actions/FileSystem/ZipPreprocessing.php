@@ -2,7 +2,7 @@
 
 namespace App\Actions\FileSystem;
 
-use App\Models\FileSystemObject;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -12,6 +12,7 @@ use Aws\Middleware;
 use Psr\Http\Message\RequestInterface;
 
 use App\Models\Study;
+use App\Models\FileSystemObject;
 
 use App\Actions\FileSystem\CreateFileObject;
 use App\Actions\FileSystem\UpdateFileObject;
@@ -109,6 +110,11 @@ class ZipPreprocessing
                     ];
                     $fileObject = $creator->create($filedata, 'zip');
                     $filedata['id'] = $fileObject->id;
+
+                    $fileObject = FileSystemObject::checkMetafile($fileObject);
+                    $filedata['type'] = $fileObject->type ?? $filedata['type'];
+
+                    
                     $tree[] = $filedata;
                 }
 

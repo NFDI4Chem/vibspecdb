@@ -5,7 +5,7 @@
   >
     <div>
       <div class="flex flex-row justify-between">
-        <div class="text-bold text-sm pb-2">Metafiles:</div>
+        <div class="text-bold text-sm pb-2">Meta-files:</div>
       </div>
       <div v-if="data?.metafiles?.length">
         <div

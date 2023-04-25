@@ -19,12 +19,7 @@ use App\Http\Resources\FileSystemObjectResource;
 class FileSystemController extends Controller
 {
 
-    // TODO check by content type but not extension
-    public $metatypes_ext = [
-        'xlsx', 
-        'xls',
-        'csv'
-    ];
+
 
     // 2462, 2360
     public function testrun(Request $request) {
@@ -90,7 +85,7 @@ class FileSystemController extends Controller
             foreach ($files as $file) {
                 $fileObject = $creator->create($file);
                 $this->extractzip($fileObject);
-                $this->checkMetafile($fileObject);
+                FileSystemObject::checkMetafile($fileObject);
             }
         } catch (Throwable $exception) {
             return redirect()->back()->withErrors([
@@ -100,26 +95,7 @@ class FileSystemController extends Controller
         return back()->withSuccess('objects-created');
     }
 
-    public function checkMetafile(FileSystemObject $file) {
 
-        $ext = pathinfo($file->name, PATHINFO_EXTENSION);
-        // $basename = basename($file->name);
-
-        if (!in_array($ext, $this->metatypes_ext)) {
-            return [
-                'status' => false,
-                'error' => 'extract error, file is not metadata type.'
-            ];
-        }
-        $updater = new UpdateFileObject();
-        $updater->update($file, [
-            'type' => 'metafile',
-        ]);
-        return [
-            'status' => true,
-            'error' => ''
-        ];
-    }
 
     public function extractzip(FileSystemObject $file) {
 

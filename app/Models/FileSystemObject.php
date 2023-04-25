@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Actions\FileSystem\UpdateFileObject;
+
 class FileSystemObject extends Model
 {
     use HasFactory;
+    
 
     protected $fillable = [
         'name',
@@ -96,4 +99,27 @@ class FileSystemObject extends Model
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
+
+
+
+
+    static function checkMetafile($file) {
+        // TODO check by content type but not extension
+        $metatypes_ext = [
+            'xlsx', 
+            'xls',
+            'csv'
+        ];
+        $ext = pathinfo($file->name, PATHINFO_EXTENSION);
+        // $basename = basename($file->name);
+
+        if (!in_array($ext, $metatypes_ext)) {
+            return false;
+        }
+        $updater = new UpdateFileObject();
+        return $updater->update($file, [
+            'type' => 'metafile',
+        ]);
+    }
+
 }
