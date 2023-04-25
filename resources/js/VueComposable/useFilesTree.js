@@ -35,12 +35,16 @@ const matchSelectableType = type => {
   return ['directory', 'dataset'].includes(type)
 }
 
+const matchSelectableExtension = filename => {
+  return ['txt'].includes(filename.split('.').pop())
+}
+
 export const TreeItemClick = async (file, parent) => {
   const itemData = matchSelectableType(file.type) ? file : parent
   displaySelected(itemData)
   storeSelected(itemData)
 
-  if (!matchSelectableType(file.type)) {
+  if (!matchSelectableType(file.type) && matchSelectableExtension(file.name)) {
     showOverlay.value = true
     split_views.value.top_visible = true
 

@@ -120,7 +120,7 @@ class CreateFileObject
                     "size" => (int)($input["size"] ?? 0),
                     "uppyid" => $input["uppyid"] ?? '',
                     "path" => $type === 'zip' ? $path_zip : $path_regular,
-                    "relative_url" => $input["relative_url"] ?? '',
+                    "relative_url" => $input["relative_url"] ?? '/' . $name,
                     "is_root" => array_key_exists('is_root', $input) ? $input['is_root'] : false,
                 ]), function (FileSystemObject $file)  {
                     FileSystemObject::where('id', $file->parent_id ?? 0)

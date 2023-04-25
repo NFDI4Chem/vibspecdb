@@ -3,19 +3,22 @@
     <div class="h-[400px]" v-if="layout_switcher(files).top_size()">
       <div
         v-if="showOverlay || !spectraData"
-        class="overlay-progress flex p-5 h-full justify-center align-middle"
+        class="overlay-progress flex flex-col p-5 h-full justify-center align-middle gap-4"
       >
-        <w-progress class="ma1" circle color="light-blue-dark3"></w-progress>
+        <div class="flex justify-center">No data at the moment</div>
+        <div class="flex justify-center">
+          <w-progress class="ma1" circle color="light-blue-dark3" />
+        </div>
       </div>
       <PlotlyPlotter v-else :input="spectraData" :showSqrtSd="false" />
       <!-- <SpectralPlotter
-          v-else
+          v-if="false"
           :key="plotKey"
           :data="spectraData"
           ref="spectral_plot"
         /> -->
     </div>
-    <!-- {{ activeItem }} -->
+
     <splitpanes
       @resized="e => onPaneResize(e)"
       :class="{ 'top-visible': layout_switcher(files).top_size() }"
