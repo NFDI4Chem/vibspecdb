@@ -46,7 +46,7 @@
       </div>
     </div>
     <div class="flex flex-row justify-end pt-2">
-      <w-button class="ma1" :loading="false" @click="() => {}">
+      <w-button class="ma1" :loading="false" @click="parseMeta">
         <w-icon class="mr1">mdi mdi-tools</w-icon>
         Parse metadata
       </w-button>
@@ -58,7 +58,7 @@
 import { computed } from 'vue'
 import ToolTipWrapper from '@/Components/UniFilesTree/ToolTipWrapper.vue'
 
-const emit = defineEmits(['deleteMetafile'])
+const emit = defineEmits(['deleteMetafile', 'onParseMetadata'])
 const props = defineProps(['data'])
 
 const show = computed(() => {
@@ -67,6 +67,10 @@ const show = computed(() => {
 
 const deleteMetafile = file => {
   emit('deleteMetafile', file, file?.type === 'file' ? 'metafile' : 'file')
+}
+
+const parseMeta = () => {
+  emit('onParseMetadata')
 }
 </script>
 

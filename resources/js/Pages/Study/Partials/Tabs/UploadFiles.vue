@@ -98,6 +98,7 @@
               <DatasetOptions
                 :data="dataset_data"
                 @deleteMetafile="onChangeNodeType"
+                @onParseMetadata="datasetSubmit"
               />
             </div>
           </div>
@@ -167,6 +168,7 @@ import {
   onTreeCheck,
   TreeItemClick,
   uniFilesTree,
+  datasetSubmit,
 } from '@/VueComposable/useFilesTree'
 import {
   spectraData,

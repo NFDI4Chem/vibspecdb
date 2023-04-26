@@ -123,7 +123,10 @@ export const onDrop = (node, pnode, pnode_old) => {
 }
 
 const updateActiveItemChildsMeta = () => {
-  const node = getNodeInfoByID(activeItem.value.id)
+  if (!activeItem.value?.id) {
+    return
+  }
+  const node = getNodeInfoByID(activeItem.value?.id)
   // TreeItemClick(node, node?.parent)
   storeSelected(node)
   displaySelected(node)
@@ -147,6 +150,29 @@ export const onTreeChange = (node, report = true) => {
       }
     },
     onFinish: () => {
+      node.loading = false
+    },
+  })
+}
+
+export const datasetSubmit = () => {
+  const { id } = activeItem.value
+  parseMetadata({ id })
+}
+
+const parseMetadata = node => {
+  node.loading = true
+  const form = useForm(node)
+  form.put(route('files.update.meta', node.id), {
+    preserveScroll: true,
+    onSuccess: () => {
+      console.log('onSuccess')
+    },
+    onError: () => {
+      console.log('onError')
+    },
+    onFinish: () => {
+      console.log('onFinish')
       node.loading = false
     },
   })

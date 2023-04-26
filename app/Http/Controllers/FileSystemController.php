@@ -16,10 +16,12 @@ use App\Models\Project;
 use App\Models\Study;
 use App\Http\Resources\FileSystemObjectResource;
 
+use App\Services\RamanService;
+
 class FileSystemController extends Controller
 {
 
-
+    private RamanService $ramanService;
 
     // 2462, 2360
     public function testrun(Request $request) {
@@ -73,6 +75,70 @@ class FileSystemController extends Controller
         $rd = $root_creator->create($root_folder, "directory");
         return $root_item;
         */
+    }
+
+    public function updateFilesMeta(Request $request, RamanService $ramanService, FileSystemObject $file) {
+        try {
+            // $input = $request->all();
+            // return $file->children;
+            $list = [];
+            $this->cascadeExtract($file->children, $list);
+
+            $data = $ramanService->getSpectra(['files' => $list]);
+            $meta = $data['meta'] ?? [];
+            $info = $data['info'] ?? [];
+
+            $updated_meta = $this->extractMetadata($meta);
+            $this->extractFilesId($list, $updated_meta);
+
+            return $updated_meta;
+            
+
+        } catch (Throwable $exception) {
+            return redirect()->back()->withErrors([
+                'create' => 'Failed to update meta data'
+            ]);
+        }
+    }
+
+    private function getFileId($list, $path) {
+        foreach ($list as $list_item) {
+            if ($list_item['path'] == implode('/', ['',$path])) {
+                return $list_item['id'];
+            }
+        }
+        return -1;
+    }
+
+    private function extractFilesId($files, &$list) {
+        foreach ($list as $key=>$list_item) {
+            $list[$key]['id'] =  $this->getFileId($files, $list_item['filename']);
+        }
+    }
+
+    private function extractMetadata($meta) {
+        $updated_meta = [];
+        foreach (array_keys($meta) as $meta_key=>$meta_item) {
+            
+            foreach ($meta[$meta_item] as $file_id=>$item) {
+                $updated_meta[$file_id][$meta_item] = $item;
+            }
+        }
+        return $updated_meta;
+    }
+
+    private function cascadeExtract($childrens, &$fileList) {
+        foreach ($childrens as $child) {
+            if (!in_array($child->type, ['directory', 'dataset'])) {
+                $fileList[] = [
+                    'id' => $child->id,
+                    'name' => $child->name,
+                    'path' => $child->relative_url,
+                    'src' => $child->path,
+                ];
+            }
+            $this->cascadeExtract($child->children, $fileList);
+        }
     }
 
 

@@ -110,6 +110,8 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('files.downloadbypath');
     Route::put('files/{file}/update', [FileSystemController::class, 'update'])
         ->name('files.update');
+    Route::get('files/{file}/update_meta', [FileSystemController::class, 'updateFilesMeta'])
+        ->name('files.update.meta');
     Route::get('/extractzip/{file}', [FileSystemController::class, 'extractzip'])
         ->name('files.extractzip');
 
