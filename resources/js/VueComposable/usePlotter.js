@@ -15,6 +15,7 @@ export const activeItem = ref({
   id: 0,
   path: '/',
 })
+export const clickedItem = ref()
 
 export const displaySelected = file => {
   const is_dataset = file?.type === 'dataset'
@@ -37,6 +38,9 @@ export const getDatasetOptions = file => {
 
 export const storeSelected = file => {
   activeItem.value = file
+}
+export const storeClicked = file => {
+  clickedItem.value = file
 }
 
 const getSFolder = file => {

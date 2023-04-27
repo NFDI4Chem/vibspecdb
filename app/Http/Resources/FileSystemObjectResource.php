@@ -52,6 +52,7 @@ class FileSystemObjectResource extends JsonResource
             'has_children' => sizeof($this->children) > 0,
             'path' => $this->path,
             'relative_url' => $this->relative_url,
+            'metadata' => $this->getMetadata(),
             $this->mergeWhen(! $this->lite, function () {
                 return [
                     $this->mergeWhen(
@@ -72,6 +73,14 @@ class FileSystemObjectResource extends JsonResource
                                 'parent' => (new FileSystemObjectResource($this->parent)),
                             ];
                             return $data;
+                        }
+                    ),
+                    $this->mergeWhen(
+                        in_array('metadata', $this->properties),
+                        function () {
+                            return [
+                                'metadata' => $this->getMetadata()
+                            ];
                         }
                     ),
                 ];

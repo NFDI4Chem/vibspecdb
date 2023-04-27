@@ -16,8 +16,9 @@
     <div
       class="relative z-0"
       :class="{
-        ['active-node']:
+        'active-node':
           node.id === activeItem.id && node.type === activeItem.type,
+        'text-sky-800 text-bold': node.id === clickedItem?.id,
       }"
     >
       <ToolTipWrapper v-if="node.type === 'dataset'" text="The item is dataset">
@@ -259,6 +260,15 @@ export default {
       default: () => [],
     },
     activeItem: {
+      type: Object,
+      required: false,
+      default: () => {
+        return {
+          id: -1,
+        }
+      },
+    },
+    clickedItem: {
       type: Object,
       required: false,
       default: () => {

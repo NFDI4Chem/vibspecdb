@@ -15,7 +15,7 @@ import {
 } from '@/VueComposable/usePlotter'
 
 import { split_views } from '@/VueComposable/useStudyLayer'
-import { activeItem } from '@/VueComposable/usePlotter'
+import { activeItem, storeClicked } from '@/VueComposable/usePlotter'
 
 const { getSpectraData } = useFiles()
 
@@ -42,6 +42,7 @@ const matchSelectableExtension = filename => {
 }
 
 export const TreeItemClick = async (file, parent) => {
+  storeClicked(file)
   const itemData = matchSelectableType(file.type) ? file : parent
   displaySelected(itemData)
   storeSelected(itemData)

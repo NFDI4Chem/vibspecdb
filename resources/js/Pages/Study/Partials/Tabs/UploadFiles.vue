@@ -18,7 +18,7 @@
           ref="spectral_plot"
         /> -->
     </div>
-
+    <!-- {{ activeItem }} -->
     <splitpanes
       @resized="e => onPaneResize(e)"
       :class="{ 'top-visible': layout_switcher(files).top_size() }"
@@ -70,6 +70,7 @@
                     v-if="treeOptions?.showInfo"
                   />
                 </div>
+                <!-- {{ clickedItem }} -->
                 <UniFilesTree
                   ref="uniFilesTree"
                   :tree="files"
@@ -78,6 +79,7 @@
                   :onAddChildren="onAddChildren"
                   :onChangeNodeType="onChangeNodeType"
                   :activeItem="activeItem"
+                  :clickedItem="clickedItem"
                   :ondragend="onDragend"
                   @itemClick="TreeItemClick"
                   @onRename="onTreeChange"
@@ -104,10 +106,23 @@
           </div>
         </div>
 
+        <div class="w-full h-[500px] p-4" v-if="show_selected_file">
+          <div class="w-full h-full flex flex-col">
+            <div class="text-md font-bold pb-2 h-8">
+              File
+              <span class="text-blue-900">"{{ clickedItem?.name }}"</span>
+              metadata:
+            </div>
+            <div class="bg-gray-100 overflow-auto grow">
+              <FilesMeta :data="clickedItem" />
+            </div>
+          </div>
+        </div>
+
         <div
           class="flex flex-col gap-2 h-full items-left p-4 py4"
           :class="{
-            'metainfo-visible': show_dataset_options,
+            'metainfo-visible': show_dataset_options || show_selected_file,
           }"
         >
           <div class="text-lg flex flex-col gap-1">
@@ -156,6 +171,7 @@ import { useForm, usePage } from '@inertiajs/inertia-vue3'
 import PlotlyPlotter from '@/Components/plotly/PlotlyPlotter.vue'
 import TreeOptionSettings from '@/Pages/Study/Partials/Elements/TreeOptionSettings.vue'
 import DatasetOptions from '@/Pages/Study/Partials/Dataset/DatasetOptions.vue'
+import FilesMeta from '@/Pages/Study/Partials/Metadata/FilesMeta.vue'
 
 import {
   onRemoveItem,
@@ -175,7 +191,7 @@ import {
   showOverlay,
   selectTreeFolder,
   activeItem,
-  // dataset_data,
+  clickedItem,
 } from '@/VueComposable/usePlotter'
 
 import { layout_switcher } from '@/VueComposable/useStudyLayer'
@@ -203,10 +219,14 @@ const dataset_data = computed(() => {
   }
 })
 
+const show_selected_file = computed(() => {
+  return clickedItem.value?.type === 'file' && clickedItem.value?.metadata
+})
+
 const show_dataset_options = computed(() => {
   return (
     layout_switcher(props?.files).metainfo_visible() &&
-    dataset_data.value?.dataset?.id
+    activeItem.value?.type === 'dataset'
   )
 })
 

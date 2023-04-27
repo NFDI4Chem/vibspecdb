@@ -91,8 +91,18 @@ class FileSystemController extends Controller
             $updated_meta = $this->extractMetadata($meta);
             $this->extractFilesId($list, $updated_meta);
 
-            return $updated_meta;
-            
+            collect($updated_meta)->map(function ($item) {
+                if ($file = FileSystemObject::find($item['id'])) {
+                    unset($item['id']);
+                    if (!$file->syncMeta($item)) {
+                        return back()->withErrors(
+                            ["metadata" => "Can not update metadata for the file."]
+                        );
+                    }
+                }
+            });
+
+            return back()->withSuccess('files meta updated');
 
         } catch (Throwable $exception) {
             return redirect()->back()->withErrors([
@@ -119,7 +129,6 @@ class FileSystemController extends Controller
     private function extractMetadata($meta) {
         $updated_meta = [];
         foreach (array_keys($meta) as $meta_key=>$meta_item) {
-            
             foreach ($meta[$meta_item] as $file_id=>$item) {
                 $updated_meta[$file_id][$meta_item] = $item;
             }

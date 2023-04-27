@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Actions\FileSystem\UpdateFileObject;
 
+use Zoha\Metable;
+
 class FileSystemObject extends Model
 {
     use HasFactory;
+    use Metable;
     
 
     protected $fillable = [
@@ -101,7 +104,18 @@ class FileSystemObject extends Model
     }
 
 
+    public function syncMeta($metas) {
+        foreach ($this->getMetas() as $keydb => $valdb) {
+            if (!isset($metas[$keydb])) {
+                $this->deleteMeta($keydb);
+            }
+        }
+        return $this->setMeta($metas);
+    }
 
+    public function getMetadata() {
+        return $this->getMetas();
+    }
 
     static function checkMetafile($file) {
         // TODO check by content type but not extension
