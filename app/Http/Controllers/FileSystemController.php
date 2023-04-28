@@ -88,12 +88,16 @@ class FileSystemController extends Controller
             $meta = $data['meta'] ?? [];
             $info = $data['info'] ?? [];
 
+            $missing_metadata = $data['warnings']['metadata_missing'] ?? false;
+
             $updated_meta = $this->extractMetadata($meta);
             $this->extractFilesId($list, $updated_meta);
 
-            collect($updated_meta)->map(function ($item) {
+
+            collect($updated_meta)->map(function ($item) use ($missing_metadata) {
                 if ($file = FileSystemObject::find($item['id'])) {
                     unset($item['id']);
+                    if ($missing_metadata) { $item = []; }
                     if (!$file->syncMeta($item)) {
                         return back()->withErrors(
                             ["metadata" => "Can not update metadata for the file."]
@@ -139,12 +143,17 @@ class FileSystemController extends Controller
     private function cascadeExtract($childrens, &$fileList) {
         foreach ($childrens as $child) {
             if (!in_array($child->type, ['directory', 'dataset'])) {
-                $fileList[] = [
-                    'id' => $child->id,
-                    'name' => $child->name,
-                    'path' => $child->relative_url,
-                    'src' => $child->path,
-                ];
+                if (
+                    ($child->type == 'metafile' && FileSystemObject::isMetadataFile($child)) || 
+                    !FileSystemObject::isMetadataFile($child)
+                ) {
+                    $fileList[] = [
+                        'id' => $child->id,
+                        'name' => $child->name,
+                        'path' => $child->relative_url,
+                        'src' => $child->path,
+                    ];
+                }
             }
             $this->cascadeExtract($child->children, $fileList);
         }
@@ -160,7 +169,7 @@ class FileSystemController extends Controller
             foreach ($files as $file) {
                 $fileObject = $creator->create($file);
                 $this->extractzip($fileObject);
-                FileSystemObject::checkMetafile($fileObject);
+                FileSystemObject::addMetafile($fileObject);
             }
         } catch (Throwable $exception) {
             return redirect()->back()->withErrors([

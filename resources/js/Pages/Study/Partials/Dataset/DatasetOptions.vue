@@ -69,8 +69,14 @@ const deleteMetafile = file => {
   emit('deleteMetafile', file, file?.type === 'file' ? 'metafile' : 'file')
 }
 
+const metafile = computed(() => {
+  return props?.data?.metafiles[0]?.parent
+    ? props?.data?.metafiles[0]?.parent
+    : null
+})
+
 const parseMeta = () => {
-  emit('onParseMetadata')
+  emit('onParseMetadata', metafile.value)
 }
 </script>
 

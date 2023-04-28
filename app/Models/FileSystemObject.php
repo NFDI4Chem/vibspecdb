@@ -117,7 +117,17 @@ class FileSystemObject extends Model
         return $this->getMetas();
     }
 
-    static function checkMetafile($file) {
+    static function addMetafile($file) {
+        if (!self::isMetadataFile($file)) {
+            return false;
+        }
+        $updater = new UpdateFileObject();
+        return $updater->update($file, [
+            'type' => 'metafile',
+        ]);
+    }
+
+    static function isMetadataFile($file) {
         // TODO check by content type but not extension
         $metatypes_ext = [
             'xlsx', 
@@ -130,10 +140,7 @@ class FileSystemObject extends Model
         if (!in_array($ext, $metatypes_ext)) {
             return false;
         }
-        $updater = new UpdateFileObject();
-        return $updater->update($file, [
-            'type' => 'metafile',
-        ]);
+        return true;
     }
 
 }

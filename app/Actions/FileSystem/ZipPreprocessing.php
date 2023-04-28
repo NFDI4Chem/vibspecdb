@@ -111,7 +111,7 @@ class ZipPreprocessing
                     $fileObject = $creator->create($filedata, 'zip');
                     $filedata['id'] = $fileObject->id;
 
-                    $fileObject = FileSystemObject::checkMetafile($fileObject);
+                    $fileObject = FileSystemObject::addMetafile($fileObject);
                     $filedata['type'] = $fileObject->type ?? $filedata['type'];
 
                     

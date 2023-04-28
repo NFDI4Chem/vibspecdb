@@ -123,14 +123,16 @@ export const onDrop = (node, pnode, pnode_old) => {
   onTreeChange({ ...node, parent_id: pnode?.id }, false)
 }
 
-const updateActiveItemChildsMeta = () => {
-  if (!activeItem.value?.id) {
+const updateActiveItemChildsMeta = (node = null) => {
+  if (!node?.id || node?.type !== 'dataset') {
     return
   }
-  const node = getNodeInfoByID(activeItem.value?.id)
-  // TreeItemClick(node, node?.parent)
-  storeSelected(node)
-  displaySelected(node)
+  parseMetadata(node)
+  // datasetSubmit(node)
+  // const node = getNodeInfoByID(activeItem.value?.id)
+  // storeSelected(node)
+  // displaySelected(node)
+  // console.log('updated', node)
 }
 
 export const onTreeChange = (node, report = true) => {
@@ -142,7 +144,7 @@ export const onTreeChange = (node, report = true) => {
       if (report) {
         setup_info_notify('The item has been updated')
       }
-      updateActiveItemChildsMeta()
+      updateActiveItemChildsMeta(node.parent)
     },
     onError: () => {
       const message = Object.values(err).join('<br>')
@@ -156,25 +158,33 @@ export const onTreeChange = (node, report = true) => {
   })
 }
 
-export const datasetSubmit = () => {
-  const { id } = activeItem.value
-  parseMetadata({ id })
+export const datasetSubmit = node => {
+  // const { id } = activeItem.value
+  // console.log('id', id)
+  // parseMetadata({ id })
+  parseMetadata(node)
 }
 
+export const loading_parseMetadata = ref(false)
 const parseMetadata = node => {
-  node.loading = true
+  if (!node?.id) {
+    return
+  }
+  loading_parseMetadata.value = true
   const form = useForm(node)
   form.put(route('files.update.meta', node.id), {
     preserveScroll: true,
     onSuccess: () => {
       console.log('onSuccess')
+      storeSelected(node)
+      displaySelected(node)
     },
     onError: () => {
       console.log('onError')
     },
     onFinish: () => {
       console.log('onFinish')
-      node.loading = false
+      loading_parseMetadata.value = false
     },
   })
 }
@@ -197,7 +207,7 @@ export const onRemoveItem = (tree, node, path) => {
   form.delete(route('files.destroy', node.id), {
     preserveScroll: true,
     onSuccess: () => {
-      updateActiveItemChildsMeta()
+      updateActiveItemChildsMeta(node)
     },
     onError: () => {},
     onFinish: () => {},

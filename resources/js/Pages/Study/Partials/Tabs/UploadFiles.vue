@@ -42,6 +42,8 @@
                       </div>
                     </div>
 
+                    <!-- loading_parseMetadata -->
+
                     <ToolTipWrapper text="Unfold All">
                       <template #btn>
                         <w-button
@@ -106,7 +108,7 @@
           </div>
         </div>
 
-        <div class="w-full h-[500px] p-4" v-if="show_selected_file">
+        <div class="w-full h-[500px] p-4" v-if="show_selected_file_meta">
           <div class="w-full h-full flex flex-col">
             <div class="text-md font-bold pb-2 h-8">
               File
@@ -122,7 +124,7 @@
         <div
           class="flex flex-col gap-2 h-full items-left p-4 py4"
           :class="{
-            'metainfo-visible': show_dataset_options || show_selected_file,
+            'metainfo-visible': show_dataset_options || show_selected_file_meta,
           }"
         >
           <div class="text-lg flex flex-col gap-1">
@@ -185,6 +187,7 @@ import {
   TreeItemClick,
   uniFilesTree,
   datasetSubmit,
+  loading_parseMetadata,
 } from '@/VueComposable/useFilesTree'
 import {
   spectraData,
@@ -219,7 +222,7 @@ const dataset_data = computed(() => {
   }
 })
 
-const show_selected_file = computed(() => {
+const show_selected_file_meta = computed(() => {
   return clickedItem.value?.type === 'file' && clickedItem.value?.metadata
 })
 
