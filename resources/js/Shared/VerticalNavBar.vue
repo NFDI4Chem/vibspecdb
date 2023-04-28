@@ -10,7 +10,7 @@
                 : 'cursor-pointer bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
               'cursor-pointer group w-full flex items-center pl-3 pr-2 py-2 text-sm font-medium rounded-md',
             ]"
-            @click="displaySelected(file)"
+            @click="setUploadFolder(file)"
           >
             <span v-if="file.type == 'directory'">
               <FolderIcon
@@ -36,7 +36,7 @@
                 : 'cursor-pointer bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
               'group w-full flex items-center pr-2 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500',
             ]"
-            @click="displaySelected(file)"
+            @click="setUploadFolder(file)"
           >
             <DisclosureButton>
               <svg
@@ -69,7 +69,7 @@
           <DisclosurePanel class="space-y-1">
             <vertical-nav-bar :files="file.children"></vertical-nav-bar>
             <!-- <div
-              @click="displaySelected(subItem)"
+              @click="setUploadFolder(subItem)"
               v-for="subItem in file.children"
               :key="subItem.name"
               as="div"

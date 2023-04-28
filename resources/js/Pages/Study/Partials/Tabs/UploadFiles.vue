@@ -32,6 +32,12 @@
           <div class="" v-if="treeFilled">
             <div class="relative flex flex-col w-full">
               <div class="min-w-fit">
+                <w-progress
+                  v-if="loading_parseMetadata"
+                  class="rounded-none text-xs w-full my1"
+                  size="2px"
+                  color="light-blue-dark3"
+                />
                 <div
                   class="flex flex-row justify-between items-center pb3 gap-2"
                 >
@@ -41,8 +47,6 @@
                         {{ treeOptions?.title }}
                       </div>
                     </div>
-
-                    <!-- loading_parseMetadata -->
 
                     <ToolTipWrapper text="Unfold All">
                       <template #btn>
@@ -74,6 +78,9 @@
                 </div>
                 <!-- {{ clickedItem }} -->
                 <UniFilesTree
+                  :class="{
+                    'pointer-events-none select-none ': loading_parseMetadata,
+                  }"
                   ref="uniFilesTree"
                   :tree="files"
                   :options="treeOptions"

@@ -17,11 +17,11 @@ export const activeItem = ref({
 })
 export const clickedItem = ref()
 
-export const displaySelected = file => {
+export const setUploadFolder = file => {
   const is_dataset = file?.type === 'dataset'
   getDatasetOptions(file)
   selectTreeFolder.value = getSFolder(file)
-  split_views.value.metainfo_visible = is_dataset
+  split_views.value.metainfo_visible = file?.type !== 'directory'
 }
 
 export const getDatasetOptions = file => {
@@ -36,10 +36,10 @@ export const getDatasetOptions = file => {
   }
 }
 
-export const storeSelected = file => {
+export const setActive = file => {
   activeItem.value = file
 }
-export const storeClicked = file => {
+export const setClicked = file => {
   clickedItem.value = file
 }
 

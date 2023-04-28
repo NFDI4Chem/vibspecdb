@@ -10,16 +10,17 @@ import { loading, useFiles } from '@/VueComposable/useFiles'
 import {
   spectraData,
   showOverlay,
-  displaySelected,
-  storeSelected,
+  setUploadFolder,
+  setActive,
 } from '@/VueComposable/usePlotter'
 
 import { split_views } from '@/VueComposable/useStudyLayer'
-import { activeItem, storeClicked } from '@/VueComposable/usePlotter'
+import { activeItem, setClicked } from '@/VueComposable/usePlotter'
 
 const { getSpectraData } = useFiles()
 
 export const uniFilesTree = ref()
+export const loading_parseMetadata = ref(false)
 
 export const treeOptions = ref({
   checkable: true,
@@ -42,10 +43,10 @@ const matchSelectableExtension = filename => {
 }
 
 export const TreeItemClick = async (file, parent) => {
-  storeClicked(file)
+  setClicked(file)
   const itemData = matchSelectableType(file.type) ? file : parent
-  displaySelected(itemData)
-  storeSelected(itemData)
+  setUploadFolder(itemData)
+  setActive(itemData)
 
   if (!matchSelectableType(file.type) && matchSelectableExtension(file.name)) {
     showOverlay.value = true
@@ -127,16 +128,18 @@ const updateActiveItemChildsMeta = (node = null) => {
   if (!node?.id || node?.type !== 'dataset') {
     return
   }
-  parseMetadata(node)
+  // console.log('updateActiveItemChildsMeta start', node?.id)
+  // parseMetadata(node)
   // datasetSubmit(node)
   // const node = getNodeInfoByID(activeItem.value?.id)
-  // storeSelected(node)
-  // displaySelected(node)
+  // console.log('node type', node?.type)
+  // setActive(node)
+  // setUploadFolder(node)
   // console.log('updated', node)
 }
 
 export const onTreeChange = (node, report = true) => {
-  node.loading = true
+  loading_parseMetadata.value = true
   const form = useForm(node)
   form.put(route('files.update', node.id), {
     preserveScroll: true,
@@ -144,7 +147,7 @@ export const onTreeChange = (node, report = true) => {
       if (report) {
         setup_info_notify('The item has been updated')
       }
-      updateActiveItemChildsMeta(node.parent)
+      // updateActiveItemChildsMeta(node.parent)
     },
     onError: () => {
       const message = Object.values(err).join('<br>')
@@ -153,7 +156,7 @@ export const onTreeChange = (node, report = true) => {
       }
     },
     onFinish: () => {
-      node.loading = false
+      loading_parseMetadata.value = false
     },
   })
 }
@@ -165,7 +168,6 @@ export const datasetSubmit = node => {
   parseMetadata(node)
 }
 
-export const loading_parseMetadata = ref(false)
 const parseMetadata = node => {
   if (!node?.id) {
     return
@@ -175,15 +177,15 @@ const parseMetadata = node => {
   form.put(route('files.update.meta', node.id), {
     preserveScroll: true,
     onSuccess: () => {
-      console.log('onSuccess')
-      storeSelected(node)
-      displaySelected(node)
+      console.log('onSuccess parseMetadata')
+      setActive(node)
+      setUploadFolder(node)
     },
     onError: () => {
-      console.log('onError')
+      console.log('onError parseMetadata')
     },
     onFinish: () => {
-      console.log('onFinish')
+      console.log('onFinish parseMetadata')
       loading_parseMetadata.value = false
     },
   })
@@ -202,12 +204,13 @@ export const onDragend = (tree, store) => {
 }
 
 export const onRemoveItem = (tree, node, path) => {
+  console.log('onRemoveItem start')
   node.loading = true
   const form = useForm(node)
   form.delete(route('files.destroy', node.id), {
     preserveScroll: true,
     onSuccess: () => {
-      updateActiveItemChildsMeta(node)
+      // updateActiveItemChildsMeta(node)
     },
     onError: () => {},
     onFinish: () => {},
@@ -248,6 +251,7 @@ export const onAddChildren = (node, type) => {
 }
 
 export const saveDBfiles = files => {
+  console.log('saveDBfiles start')
   loading.value = loadingStatus('saving_to_database_loading')
 
   const files2save = files.map(file => {
@@ -271,7 +275,7 @@ export const saveDBfiles = files => {
     preserveScroll: true,
     onSuccess: file => {
       setup_info_notify('All files has been successfully uploaded')
-      updateActiveItemChildsMeta()
+      // updateActiveItemChildsMeta()
       loading.value = loadingStatus('saving_to_database_done')
     },
     onError: e => {

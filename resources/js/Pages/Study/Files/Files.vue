@@ -97,7 +97,7 @@ const onFilesTreeCheck = checked => {
 const TreeItemClick = (file, parent) => {
   // console.log("Files: file, parent");
   const itemData = file.type === 'directory' ? file : parent
-  displaySelected(itemData)
+  setUploadFolder(itemData)
 }
 
 const treeFilled = computed(() => {
@@ -121,7 +121,7 @@ const treeOptions = {
   title: 'Files Tree:',
 }
 
-const displaySelected = file => {
+const setUploadFolder = file => {
   if (file.has_children && file.level > 0 && !file.children) {
     showChildsAPI(file)
   }
