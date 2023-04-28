@@ -25,6 +25,18 @@ import { store } from './store'
 const appName =
   window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
 
+// for version wave v3
+/*
+  .use(WaveUI, {
+    notificationManager: {
+      align: 'left', // Or 'right'.
+      bottom: true,
+      absolute: true,
+      transition: 'default', // Sliding from the side by default.
+    },
+  })
+  */
+
 createInertiaApp({
   title: title => `${title} - ${appName}`,
   resolve: name => {
@@ -58,6 +70,7 @@ createInertiaApp({
       return null
     }
 
+    // commend this for wave v3.
     new WaveUI(application, {
       notificationManager: {
         align: 'left', // Or 'left'.
@@ -67,6 +80,8 @@ createInertiaApp({
       },
     })
     application.provide('WaveUI', WaveUI)
+    //
+
     application.mount(el)
     return application
   },
