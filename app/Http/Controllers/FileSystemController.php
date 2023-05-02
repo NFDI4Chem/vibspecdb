@@ -82,7 +82,7 @@ class FileSystemController extends Controller
         try {
             
             $metadataParser = new ParseMetadata();
-            $metadataParser->updateParseParent($file);
+            $metadataParser->updateFilesMeta($file);
 
         } catch (Throwable $exception) {
             return redirect()->back()->withErrors([

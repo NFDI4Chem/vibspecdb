@@ -16,6 +16,8 @@ class Project extends Model implements Auditable
     use HasTags;
     use Metable;
 
+    protected $metaTable = 'projects_meta';
+
     protected $fillable = [
         'name',
         'slug',

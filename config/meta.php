@@ -20,16 +20,11 @@ return [
     'tables' => [
 
         // default table for all models
-
         'default' => 'meta',
 
         // custom tables list
-
         'custom'  => [
-
-            // example : 'posts_meta' , 'users_meta'
             'studies_meta' , 'projects_meta', 'datasets_meta', 'files_meta'
-
         ],
     ],
 

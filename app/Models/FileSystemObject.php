@@ -13,6 +13,8 @@ class FileSystemObject extends Model
 {
     use HasFactory;
     use Metable;
+
+    protected $metaTable = 'files_meta';
     
 
     protected $fillable = [

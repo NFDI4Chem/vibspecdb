@@ -25,7 +25,7 @@
                 @click="deleteMetafile(mf)"
                 md
                 bg-color="transparent"
-                icon="mdi mdi-delete"
+                icon="mdi mdi-close"
               ></w-button>
             </template>
             <template #icon>

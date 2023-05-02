@@ -125,7 +125,7 @@ export const onDrop = (node, pnode, pnode_old) => {
 }
 
 const clickMetafileParent = (node = null) => {
-  console.log('node', node)
+  // console.log('node', node)
   if (node?.parent?.type !== 'dataset') {
     return
   }
