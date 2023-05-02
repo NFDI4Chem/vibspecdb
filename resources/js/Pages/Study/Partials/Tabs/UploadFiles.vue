@@ -76,7 +76,7 @@
                     v-if="treeOptions?.showInfo"
                   />
                 </div>
-                <!-- {{ clickedItem }} -->
+                <!-- blur-sm -->
                 <UniFilesTree
                   :class="{
                     'pointer-events-none select-none ': loading_parseMetadata,

@@ -48,7 +48,7 @@
     <div class="flex flex-row justify-end pt-2">
       <w-button class="ma1" :loading="false" @click="parseMeta">
         <w-icon class="mr1">mdi mdi-tools</w-icon>
-        Parse metadata
+        Update metadata
       </w-button>
     </div>
   </div>

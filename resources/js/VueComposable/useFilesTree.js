@@ -124,18 +124,28 @@ export const onDrop = (node, pnode, pnode_old) => {
   onTreeChange({ ...node, parent_id: pnode?.id }, false)
 }
 
-const updateActiveItemChildsMeta = (node = null) => {
-  if (!node?.id || node?.type !== 'dataset') {
+const clickMetafileParent = (node = null) => {
+  console.log('node', node)
+  if (node?.parent?.type !== 'dataset') {
     return
   }
-  // console.log('updateActiveItemChildsMeta start', node?.id)
-  // parseMetadata(node)
-  // datasetSubmit(node)
-  // const node = getNodeInfoByID(activeItem.value?.id)
-  // console.log('node type', node?.type)
-  // setActive(node)
-  // setUploadFolder(node)
-  // console.log('updated', node)
+
+  setClicked(node)
+  const itemData = matchSelectableType(node.type) ? node : node?.parent
+  setUploadFolder(itemData)
+  setActive(itemData)
+
+  /*
+  setActive(node)
+  console.log('updateActiveItemChildsMeta start', node?.id)
+  parseMetadata(node)
+  datasetSubmit(node)
+  const node = getNodeInfoByID(activeItem.value?.id)
+  console.log('node type', node?.type)
+  setActive(node)
+  setUploadFolder(node)
+  console.log('updated', node)
+  */
 }
 
 export const onTreeChange = (node, report = true) => {
@@ -147,7 +157,7 @@ export const onTreeChange = (node, report = true) => {
       if (report) {
         setup_info_notify('The item has been updated')
       }
-      // updateActiveItemChildsMeta(node.parent)
+      clickMetafileParent(node)
     },
     onError: () => {
       const message = Object.values(err).join('<br>')
@@ -162,9 +172,6 @@ export const onTreeChange = (node, report = true) => {
 }
 
 export const datasetSubmit = node => {
-  // const { id } = activeItem.value
-  // console.log('id', id)
-  // parseMetadata({ id })
   parseMetadata(node)
 }
 
