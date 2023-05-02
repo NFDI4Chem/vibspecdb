@@ -159,7 +159,7 @@ export const onTreeChange = (node, report = true) => {
       }
       clickMetafileParent(node)
     },
-    onError: () => {
+    onError: err => {
       const message = Object.values(err).join('<br>')
       if (report) {
         setup_error_notify(`<div>An error occurred.<br>${message}</div>`)
