@@ -108,6 +108,16 @@ class FileSystemObject extends Model
         }   
     }
 
+    public function updateChildRelPath($file) {
+        if (!$file->children) { return; }
+        collect($file->children)->map(function ($child) {
+            FileSystemObject::find($child->id)->update([
+                'relative_url' => $child->getRelPath($child)
+            ]);
+            $this->updateChildRelPath($child);
+        });
+    }
+
     public function syncMeta($metas) {
         foreach ($this->getMetas() as $keydb => $valdb) {
             if (!isset($metas[$keydb])) {

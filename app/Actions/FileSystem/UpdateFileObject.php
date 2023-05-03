@@ -25,6 +25,7 @@ class UpdateFileObject
                 'parent_id'  => $input["parent_id"] ?? $file['parent_id'],
                 
             ])->save();
+            $file->updateChildRelPath($file);
             $file = FileSystemObject::find($file->id)->update([
                 'relative_url' => $file->getRelPath($file)
             ]);

@@ -137,6 +137,7 @@ class CreateFileObject
 
                     // fix relative url path:                 
                     $file->update(['relative_url' => $file->getRelPath($file)]);
+                    $file->updateChildRelPath($file);
                 });
             });
 
