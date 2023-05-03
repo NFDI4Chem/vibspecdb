@@ -115,6 +115,20 @@
               options.createable
             "
           >
+            <w-button
+              class="border-0 cursor-context-menu"
+              bg-color="transparent"
+              icon="mdi mdi-unfold-more-horizontal"
+              @click="unfoldALevel(node)"
+            ></w-button>
+
+            <w-button
+              class="border-0 cursor-context-menu"
+              bg-color="transparent"
+              icon="mdi mdi-unfold-less-horizontal"
+              @click="foldALevel(node)"
+            ></w-button>
+
             <ToolTipWrapper v-if="node.is_root" text="Add Dataset">
               <template #btn>
                 <w-button
@@ -309,6 +323,28 @@ export default {
     },
     foldAll() {
       this.$refs.tree.foldAll()
+    },
+    unfoldALevel(node) {
+      const tree = this.$refs.tree
+      tree?.walkTreeData(_node => {
+        if (
+          _node?.parent?.id === node?.id &&
+          ['dataset', 'directory'].includes(_node?.type)
+        ) {
+          tree.unfold(_node)
+        }
+      })
+    },
+    foldALevel(node) {
+      const tree = this.$refs.tree
+      tree?.walkTreeData(_node => {
+        if (
+          _node?.parent?.id === node?.id &&
+          ['dataset', 'directory'].includes(_node?.type)
+        ) {
+          tree.fold(_node)
+        }
+      })
     },
     moveCursor(node) {
       return (
