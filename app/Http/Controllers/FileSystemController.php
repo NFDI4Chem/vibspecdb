@@ -79,10 +79,11 @@ class FileSystemController extends Controller
     }
 
     public function updateFilesMeta(FileSystemObject $file) {
+
         try {
             
-            $metadataParser = new ParseMetadata();
-            $metadataParser->updateFilesMeta($file);
+            $metadataParser = new ParseMetadata($file);
+            $metadataParser->updateFilesMeta();
 
         } catch (Throwable $exception) {
             return redirect()->back()->withErrors([

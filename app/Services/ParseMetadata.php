@@ -8,21 +8,22 @@ use App\Models\FileSystemObject;
 
 class ParseMetadata
 {
+    protected $file;
 
-    public function __construct()
-    {
+    public function __construct(FileSystemObject $file) {
+        $this->file = $file;
     }
 
-    public function updateParseParent(FileSystemObject $file) {
+    public function updateParseParent() {
       try {
-        if ($fileParent = FileSystemObject::find($file['parent_id'])) {
-          if ($fileParent->type != 'dataset') { 
+        if ($this->file->parent) {
+          if ($this->file->parent->type != 'dataset') { 
             return redirect()->back()->withErrors([
                 'update' => 'Parent is not dataset type'
             ]);
            }
 
-           $this->updateFilesMeta($fileParent);
+           $this->updateFilesMeta($this->file->parent);
         }
 
         } catch (Throwable $exception) {
@@ -32,12 +33,12 @@ class ParseMetadata
       }
     }
 
-    public function updateFilesMeta(FileSystemObject $file) {
+    public function updateFilesMeta() {
 
       try {
           $ramanService = new RamanService();
           $list = [];
-          $this->cascadeExtract($file->children, $list);
+          $this->cascadeExtract($this->file->children, $list);
 
           $data = $ramanService->getSpectra(['files' => $list]);
           $meta = $data['meta'] ?? [];
@@ -102,10 +103,19 @@ class ParseMetadata
                   ($child->type == 'metafile' && FileSystemObject::isMetadataFile($child)) || 
                   !FileSystemObject::isMetadataFile($child)
               ) {
+
+                  // start rel url of all childs from base dataset or directory;
+                  $base_url = $this->file->parent->relative_url;
+                  $child_url = $child->relative_url;
+                  $relative_url = str_starts_with($child_url, $base_url) 
+                    ? substr($child_url, strlen($base_url)) 
+                    :  $child_url;
+
+                  // creates files list;
                   $fileList[] = [
                       'id' => $child->id,
                       'name' => $child->name,
-                      'path' => $child->relative_url,
+                      'path' => $relative_url,
                       'src' => $child->path,
                   ];
               }
