@@ -23,7 +23,11 @@ class UpdateFileObject
                 'type'  => $input["type"] ?? $file['type'],
                 'name'  => $input["name"] ?? $file['name'],
                 'parent_id'  => $input["parent_id"] ?? $file['parent_id'],
+                
             ])->save();
+            $file = FileSystemObject::find($file->id)->update([
+                'relative_url' => $file->getRelPath($file)
+            ]);
         });
     }
 }

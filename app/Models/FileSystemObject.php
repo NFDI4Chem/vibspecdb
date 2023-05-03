@@ -89,22 +89,24 @@ class FileSystemObject extends Model
     }
     */
 
-    public function jobs()
-    {
+    public function jobs() {
         return $this->belongsToMany(ArgoJob::class, 'argo_jobs_files', 'file_id', 'job_id')
             ->as('jobs');
     }
 
-    public function study()
-    {
+    public function study() {
         return $this->belongsTo(Study::class, 'study_id');
     }
 
-    public function project()
-    {
+    public function project() {
         return $this->belongsTo(Project::class, 'project_id');
     }
 
+    public function getRelPath($file) {
+        if ($file->parent) {
+            return implode('/', [$this->getRelPath($file->parent),$file->name]);
+        }   
+    }
 
     public function syncMeta($metas) {
         foreach ($this->getMetas() as $keydb => $valdb) {

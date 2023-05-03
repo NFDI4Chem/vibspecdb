@@ -123,14 +123,20 @@ class CreateFileObject
                     "relative_url" => $input["relative_url"] ?? '/' . $name,
                     "is_root" => array_key_exists('is_root', $input) ? $input['is_root'] : false,
                 ]), function (FileSystemObject $file)  {
+
+                    // update parent has_children to true
                     FileSystemObject::where('id', $file->parent_id ?? 0)
                         ->update(['has_children' => true]);
 
+                    // update parent_id with default study root item
                     $root_item = FileSystemObject::where('study_id', $file->study_id)
                         ->where('is_root', true)->first();
                     if (!empty($root_item) && !$file->parent_id) {
                         $file->update(['parent_id' => $root_item['id']]);
                     }
+
+                    // fix relative url path:                 
+                    $file->update(['relative_url' => $file->getRelPath($file)]);
                 });
             });
 
