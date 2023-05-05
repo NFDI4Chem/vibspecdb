@@ -8,7 +8,10 @@ use App\Models\Team;
 use App\Models\User;
 use Auth;
 use Illuminate\Auth\Events\Registered;
+
+use Laravel\Socialite\Two\InvalidStateException;
 use Laravel\Socialite\Facades\Socialite;
+
 
 class SocialController extends Controller
 {
@@ -44,7 +47,11 @@ class SocialController extends Controller
                 ->stateless()
                 ->user();
         } else {
-            $providerUser = Socialite::driver($service)->user();
+            try {
+                $providerUser = Socialite::driver($service)->user();
+            } catch (InvalidStateException $e) {
+                $providerUser = Socialite::driver($service)->stateless()->user();
+            }
         }
 
         $providerUserID = $providerUser->getId() ?
