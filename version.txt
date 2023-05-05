@@ -1,7 +1,7 @@
 # Laravel docker image version/tag
-v1.0.36
+v1.0.35
 # Nginx docker image version/tag
-v1.0.36
+v1.0.35
 
 #1.0.36: wss port changed to 80 : 80 port with full URL:80 is not accessible
 #1.0.37: changes in laravel-echo bootstrap.js, removed port : Started to connect to Pusher website
