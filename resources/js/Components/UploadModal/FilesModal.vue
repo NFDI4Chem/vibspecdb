@@ -211,11 +211,6 @@ const MakeReload = () => {
   Inertia.reload({ only: ['files'] })
 }
 
-const onUploaded = async (file, data) => {
-  // loading.value = loadingStatus('minio_upload_done')
-  uploaded.value = true
-}
-
 const onCompleted = ({ failed, successful }) => {
   if (failed?.length > 0) {
     setup_error_notify(
