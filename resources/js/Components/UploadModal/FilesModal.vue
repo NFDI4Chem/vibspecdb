@@ -230,6 +230,11 @@ const onUploadError = (file, error, response) => {
   // setup_error_notify('Upload failed: ' + err)
 }
 
+const onUploaded = async (file, data) => {
+  // await onAddFile(file)
+  uploaded.value = true
+}
+
 const onBeforeRetry = () => {
   // store.dispatch("updateFilesData", { uploaded: false });
   uploaded.value = false

@@ -74,32 +74,40 @@ export const TreeItemClick = async (file, parent) => {
 }
 
 export const onTreeCheck = async checked => {
-  const files = checked.filter(f => f.type === 'file')
+  try {
+    const files = checked.filter(f => f.type === 'file')
 
-  if (files?.length === 0) {
-    return
-  }
-
-  showOverlay.value = true
-  split_views.value.top_visible = true
-
-  const input = {
-    files: files.map(f => ({
-      src: f?.path,
-      path: f?.relative_url,
-    })),
-  }
-
-  const parsed = await getSpectraData(input)
-  spectraData.value = parsed?.x?.map((plotX, idx) => {
-    return {
-      name: parsed?.filenames[idx],
-      x: plotX,
-      y: parsed?.y[idx],
-      sd: [],
+    if (files?.length === 0) {
+      return
     }
-  })
-  showOverlay.value = false
+
+    showOverlay.value = true
+    split_views.value.top_visible = true
+
+    const input = {
+      files: files.map(f => ({
+        src: f?.path,
+        path: f?.relative_url,
+      })),
+    }
+
+    const parsed = await getSpectraData(input)
+    spectraData.value = parsed?.x?.map((plotX, idx) => {
+      return {
+        name: Object.keys(parsed?.filenames).includes(idx.toString())
+          ? parsed?.filenames[idx]
+          : null,
+        x: plotX,
+        y: Object.keys(parsed?.y).includes(idx.toString())
+          ? parsed?.y[idx]
+          : [],
+        sd: [],
+      }
+    })
+    showOverlay.value = false
+  } catch (error) {
+    console.error('onTreeCheck, useFilesTree.js', error)
+  }
 }
 
 export const MakeReload = () => {
