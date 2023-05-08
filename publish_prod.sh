@@ -8,6 +8,8 @@ FPM_TAG=latest # $(sed -n 2p version.txt)
 NGINX_NAME=vibspecdb_nginx
 NGINX_TAG=latest # $(sed -n 4p version.txt)
 
+npm run build
+
 docker build . -f ./resources/ops/app/Dockerfile --tag ${DOCKER_USERNAME}/${FPM_NAME}:${FPM_TAG} 
 docker build . -f ./resources/ops/nginx/Dockerfile --tag ${DOCKER_USERNAME}/${NGINX_NAME}:${NGINX_TAG} 
 

@@ -92,18 +92,20 @@ export const onTreeCheck = async checked => {
     }
 
     const parsed = await getSpectraData(input)
+    // console.log('parsed', parsed)
     spectraData.value = parsed?.x?.map((plotX, idx) => {
+      const filenames = parsed?.filenames ? parsed?.filenames : {}
+      const y_cors = parsed?.y ? parsed?.y : {}
       return {
-        name: Object.keys(parsed?.filenames).includes(idx.toString())
-          ? parsed?.filenames[idx]
+        name: Object.keys(filenames).includes(idx.toString())
+          ? filenames[idx]
           : null,
         x: plotX,
-        y: Object.keys(parsed?.y).includes(idx.toString())
-          ? parsed?.y[idx]
-          : [],
+        y: Object.keys(y_cors).includes(idx.toString()) ? y_cors[idx] : [],
         sd: [],
       }
     })
+    // console.log('spectraData.value', spectraData.value)
     showOverlay.value = false
   } catch (error) {
     console.error('onTreeCheck, useFilesTree.js', error)
