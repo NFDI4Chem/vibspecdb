@@ -173,8 +173,10 @@ class Project extends Model implements Auditable
     }
 
     public function getPhotoUrl() {
-        return ($this->image && $this->image->path) ?
-        Storage::disk(env('FILESYSTEM_DRIVER_PUBLIC'))->url($this->image->path) : null;
+        return ($this->image && $this->image->path) 
+            ? Storage::disk(env('FILESYSTEM_DRIVER_PUBLIC', 'public'))
+                ->temporaryUrl($this->image->path, now()->addMinutes(5)) 
+            : null;
     }
 
     public function getTagsTranslated() {

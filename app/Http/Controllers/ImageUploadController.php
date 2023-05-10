@@ -43,13 +43,15 @@ class ImageUploadController extends Controller
 
         // define general params
         $params = $request->all();
+
         $image = $request->image['file'];
 
         // define input file props
         $type = $image->extension();
         $size = $image->getSize();
+        $storage_path = implode('/', ['CoverImages', $params['type'], $params['itemId'] ]);
         $name = implode('.', [$params['type'], $params['itemId'], 'head', 'photo', $type]);
-        $path = Storage::disk('public')->putFileAs('upload-images', $image, $name);
+        $path = Storage::disk(env('FILESYSTEM_DRIVER', 'minio'))->putFileAs($storage_path, $image, $name);
 
 
         // define to which object file belongs to

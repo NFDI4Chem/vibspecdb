@@ -77,8 +77,10 @@ class Study extends Model implements Auditable
     }
 
     public function getPhotoUrl() {
-        return ($this->image && $this->image->path) ?
-        Storage::disk(env('FILESYSTEM_DRIVER_PUBLIC'))->url($this->image->path) : null;
+        return ($this->image && $this->image->path) 
+            ? Storage::disk(env('FILESYSTEM_DRIVER_PUBLIC', 'public'))
+                ->temporaryUrl($this->image->path, now()->addMinutes(5)) 
+            : null;
     }
 
     public function getTagsTranslated() {
@@ -104,12 +106,14 @@ class Study extends Model implements Auditable
         return $rmeta;
     }
 
+    /*
     public function with_photo() {
         if ($this->image && $this->image->path) {
             $this->study_photo_path = Storage::disk('public')->url($this->image->path);
         }        
         return $this;
     }
+    */
 
     public function with_tags_translated() {
         $this->tags_translated = $this->tags->map(function ($tag) {
@@ -212,7 +216,8 @@ class Study extends Model implements Auditable
     public function getStudyPhotoUrlAttribute()
     {
         return $this->study_photo_path
-                    ? Storage::disk(env('FILESYSTEM_DRIVER_PUBLIC'))->url($this->study_photo_path)
-                    : '';
+            ? Storage::disk(env('FILESYSTEM_DRIVER_PUBLIC', 'public'))
+                ->temporaryUrl($this->image->path, now()->addMinutes(5)) 
+            : null;
     }
 }

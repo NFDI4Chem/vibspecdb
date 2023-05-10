@@ -1,4 +1,12 @@
 <template>
+  <UploadImage
+    class="w-full mb5"
+    :item="user"
+    type="user"
+    :defaultImg="user.profile_photo_url"
+    v-if="false"
+  />
+
   <jet-form-section @submitted="updateProfileInformation">
     <template #title> Profile Information </template>
 
@@ -127,6 +135,8 @@ import JetLabel from '@/Jetstream/Label.vue'
 import JetActionMessage from '@/Jetstream/ActionMessage.vue'
 import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
 
+// import UploadImage from '@/Pages/Study/Partials/Elements/UploadImage.vue'
+
 export default {
   components: {
     JetActionMessage,
@@ -136,6 +146,7 @@ export default {
     JetInputError,
     JetLabel,
     JetSecondaryButton,
+    // UploadImage,
   },
 
   props: ['user'],
