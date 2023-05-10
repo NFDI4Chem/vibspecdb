@@ -50,8 +50,12 @@
             </div>
           </TransitionChild>
           <div class="flex items-center flex-shrink-0 px-4 justify-start">
-            <Link :href="route('dashboard')">
-              <jet-application-logo class="block h-10 w-auto" />
+            <Link :href="route('welcome')">
+              <div class="flex flex-row gap-3">
+                <img class="h-7 w-auto" src="/imgs/logo_vibspecdb.png" alt="" />
+                <div class="text-lg font-bold">VibSpecDB</div>
+              </div>
+              <!-- <jet-application-logo class="block h-10 w-auto" /> -->
             </Link>
           </div>
           <div class="mt-5 flex-1 h-0 overflow-y-auto">
