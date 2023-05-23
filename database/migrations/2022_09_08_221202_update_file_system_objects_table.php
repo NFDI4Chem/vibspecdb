@@ -17,6 +17,7 @@ class UpdateFileSystemObjectsTable extends Migration
             $table->integer('size')->nullable();
             $table->string('ftype')->nullable();
             $table->string('uppyid')->nullable();
+            $table->integer('zip_pid')->nullable();
         });
     }
 
