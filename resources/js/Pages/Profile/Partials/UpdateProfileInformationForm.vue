@@ -1,11 +1,14 @@
 <template>
-  <UploadImage
-    class="w-full mb5"
-    :item="user"
-    type="user"
-    :defaultImg="user.profile_photo_url"
-    v-if="false"
-  />
+  <div class="flex flex-row justify-between w-full mb10">
+    <div class="sm:w-full md:w-1/4">Photo</div>
+    <UploadImage
+      class="sm:w-full md:w-1/2"
+      :item="user"
+      type="user"
+      :defaultImg="user.profile_photo_url"
+      v-if="true"
+    />
+  </div>
 
   <jet-form-section @submitted="updateProfileInformation">
     <template #title> Profile Information </template>
@@ -17,7 +20,7 @@
     <template #form>
       <!-- Profile Photo -->
       <div
-        v-if="$page.props.jetstream.managesProfilePhotos"
+        v-if="$page.props.jetstream.managesProfilePhotos && false"
         class="col-span-6 sm:col-span-4"
       >
         <!-- Profile Photo File Input -->
@@ -74,7 +77,7 @@
 
       <!-- First Name -->
       <div class="col-span-6 sm:col-span-4">
-        <jet-label for="first_name" value="First Name" />
+        <jet-label for="first_name" value="First Name" class="mb2" />
         <jet-input
           id="first_name"
           v-model="form.first_name"
@@ -87,7 +90,7 @@
 
       <!-- Last Name -->
       <div class="col-span-6 sm:col-span-4">
-        <jet-label for="last_name" value="Last Name" />
+        <jet-label for="last_name" value="Last Name" class="mb2" />
         <jet-input
           id="last_name"
           v-model="form.last_name"
@@ -100,7 +103,7 @@
 
       <!-- Email -->
       <div class="col-span-6 sm:col-span-4">
-        <jet-label for="email" value="Email" />
+        <jet-label for="email" value="Email" class="mb2" />
         <jet-input
           id="email"
           v-model="form.email"
@@ -135,7 +138,7 @@ import JetLabel from '@/Jetstream/Label.vue'
 import JetActionMessage from '@/Jetstream/ActionMessage.vue'
 import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
 
-// import UploadImage from '@/Pages/Study/Partials/Elements/UploadImage.vue'
+import UploadImage from '@/Pages/Study/Partials/Elements/UploadImage.vue'
 
 export default {
   components: {
@@ -146,7 +149,7 @@ export default {
     JetInputError,
     JetLabel,
     JetSecondaryButton,
-    // UploadImage,
+    UploadImage,
   },
 
   props: ['user'],

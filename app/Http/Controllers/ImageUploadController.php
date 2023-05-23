@@ -99,4 +99,46 @@ class ImageUploadController extends Controller
         ]);
       }
     }
+
+    public function destroy(Request $request)
+    {
+
+      $params = $request->all();
+
+        try {
+
+            $item_key = '';
+            switch ($params['type']) {
+              case 'study':
+                $item_key = 'study_id';
+                  break;
+              case 'project':
+                $item_key = 'project_id';
+                  break;
+              case 'user':
+                $item_key = 'user_id';
+                  break;
+              default:
+                return back()
+                ->with('error','Can not destroy the image');
+            }
+
+            $imageDB = Image::where($item_key, $params['itemId'])->get()->first();
+
+            if ( $imageDB->owner_id !== auth()->user()->id) {
+                throw ValidationException::withMessages([
+                    'password' => __('You are not the project owner.'),
+                ]);
+            }
+    
+            $imageDB->delete();
+            return redirect()->back()->with([
+                'destroy' => 'Success. Image has been deleted.'
+            ]);
+        } catch(Throwable $e) {
+            return redirect()->back()->withErrors([
+                'destroy' => 'Failed to delete the image'
+            ]);
+        }
+    }
 }

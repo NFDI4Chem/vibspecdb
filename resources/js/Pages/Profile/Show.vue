@@ -9,11 +9,11 @@
         <div v-if="$page.props.jetstream.canUpdateProfileInformation">
           <update-profile-information-form :user="$page.props.user" />
 
-          <jet-section-border />
+          <!-- <jet-section-border /> -->
         </div>
 
         <div v-if="$page.props.jetstream.canUpdatePassword">
-          <update-password-form class="mt-10 sm:mt-0" />
+          <update-password-form class="mt10 sm:mt-0" />
           <jet-section-border />
         </div>
 
@@ -30,7 +30,7 @@
 
         <template v-if="$page.props.jetstream.hasAccountDeletionFeatures">
           <!-- <jet-section-border /> -->
-          <delete-user-form class="mt-10 sm:mt-0" />
+          <delete-user-form class="mt10 sm:mt-0" />
         </template>
       </div>
     </div>

@@ -12,6 +12,8 @@ use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+use Illuminate\Support\Facades\Storage;
+
 class User extends Authenticatable # implements MustVerifyEmail
 {
     use HasApiTokens;
@@ -61,6 +63,7 @@ class User extends Authenticatable # implements MustVerifyEmail
      */
     protected $appends = [
         'profile_photo_url',
+        'photo_url',
     ];
 
     /**
@@ -71,6 +74,11 @@ class User extends Authenticatable # implements MustVerifyEmail
     public function linkedSocialAccounts()
     {
         return $this->hasMany(LinkedSocialAccount::class);
+    }
+
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'user_id');
     }
 
     /**
@@ -122,5 +130,18 @@ class User extends Authenticatable # implements MustVerifyEmail
     protected function defaultProfilePhotoUrl()
     {
         return 'https://ui-avatars.com/api/?name='.urlencode($this->first_name.'+'.$this->last_name).'&color=7F9CF5&background=EBF4FF';
+    }
+
+    /**
+     * Get the URL to the  profile photo.
+     *
+     * @return string
+     */
+    public function getPhotoUrlAttribute()
+    {
+        return ($this->image && $this->image->path) 
+            ? Storage::disk(env('FILESYSTEM_DRIVER_PUBLIC', 'public'))
+                ->temporaryUrl($this->image->path, now()->addMinutes(600)) 
+            : null;
     }
 }

@@ -26,4 +26,9 @@ class Image extends Model
     {
         return $this->belongsTo(Study::class, 'study_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(Study::class, 'user_id');
+    }
 }

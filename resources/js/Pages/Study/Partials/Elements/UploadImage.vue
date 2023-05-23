@@ -21,9 +21,27 @@
         File
       </w-input>
 
-      <w-button type="submit" md :loading="loading" class="d-flex mla mt2">
-        Upload
-      </w-button>
+      <div class="flex-col items-center align-middle justify-between">
+        <w-button
+          type="submit"
+          md
+          :loading="loading"
+          class="d-flex mla mt2"
+          :width="100"
+        >
+          Upload
+        </w-button>
+        <w-button
+          bg-color="error"
+          md
+          :width="100"
+          :loading="loading_destroy"
+          class="d-flex mla mt2"
+          @click="deleteImage"
+        >
+          Delete
+        </w-button>
+      </div>
     </w-form>
   </div>
 </template>
@@ -42,10 +60,32 @@ const props = defineProps(['item', 'type', 'defaultImg'])
 const imgKey = ref(0)
 const files = ref([])
 const loading = ref(false)
+const loading_destroy = ref(false)
 const errors = ref({ image: '' })
 const imgSrc = computed(() => {
   return props?.item?.photo_url
 })
+
+const deleteImage = () => {
+  loading_destroy.value = true
+  const form = useForm({
+    type: props?.type,
+    itemId: props?.item?.id,
+  })
+  form.post(route('image.destroy'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      form.reset()
+      setup_info_notify('The Image deleted successfully')
+      loading_destroy.value = false
+    },
+    onError: () => {
+      setup_error_notify('Failed to Delete the Image')
+      loading_destroy.value = false
+    },
+    onFinish: () => form.reset(),
+  })
+}
 
 const onFormSuccess = async () => {
   console.log('try submit')

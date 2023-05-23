@@ -20,7 +20,7 @@
               v-for="user in team?.users"
               :key="user?.id"
               class="w-8 h-8 -mr-3 rounded-full border-3 border-dark"
-              :src="user?.profile_photo_url"
+              :src="user?.photo_url ? user?.photo_url : user?.profile_photo_url"
               :alt="user?.name"
             />
           </div>

@@ -130,7 +130,7 @@
               >
                 <img
                   class="h-8 w-8 rounded-full object-cover"
-                  :src="$page.props.user.profile_photo_url"
+                  :src="profile_photo"
                   :alt="$page.props.user.first_name"
                 />
               </MenuButton>
@@ -141,7 +141,7 @@
                 >
                   <img
                     class="h-8 w-8 rounded-full object-cover mr3"
-                    :src="$page.props.user.profile_photo_url"
+                    :src="profile_photo"
                     :alt="$page.props.user.first_name"
                   />
                   <span class="md:block hidden">{{
@@ -214,7 +214,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Link } from '@inertiajs/inertia-vue3'
+import { Link, usePage } from '@inertiajs/inertia-vue3'
 import JetDropdownLink from '@/Jetstream/DropdownLink.vue'
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
@@ -236,6 +236,12 @@ const emit = defineEmits(['sidebarOpenChange', 'logout', 'clearJobAlerts'])
 const sidebarOpenChange = state => {
   emit('sidebarOpenChange', state)
 }
+
+const profile_photo = computed(() => {
+  return usePage().props.value?.user?.photo_url
+    ? usePage().props.value?.user?.photo_url
+    : usePage().props.value?.user?.profile_photo_url
+})
 
 const nalerts = computed(() => {
   return props.alertItems.length

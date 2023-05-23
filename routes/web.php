@@ -98,6 +98,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::put('/image/store', [ImageUploadController::class, 'store'])
         ->name('image.store');
+    Route::post('/image/destroy', [ImageUploadController::class, 'destroy'])
+        ->name('image.destroy');
 
 
     Route::post('/files/create', [FileSystemController::class, 'create'])

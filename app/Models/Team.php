@@ -33,6 +33,7 @@ class Team extends JetstreamTeam
 
     protected $appends = [
         'profile_photo_url',
+        'photo_url',
     ];
 
     /**
@@ -53,5 +54,18 @@ class Team extends JetstreamTeam
     protected function getProfilePhotoUrlAttribute()
     {
         return 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&color=7F9CF5&background=EBF4FF';
+    }
+
+    /**
+     * Get the URL to the  profile photo.
+     *
+     * @return string
+     */
+    public function getPhotoUrlAttribute()
+    {
+        return $this->profile_photo_path
+            ? Storage::disk(env('FILESYSTEM_DRIVER_PUBLIC', 'public'))
+                ->temporaryUrl($this->image->path, now()->addMinutes(36000)) 
+            : null;
     }
 }
