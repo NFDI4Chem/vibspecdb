@@ -3,7 +3,7 @@
     <!-- Header -->
     <header class="absolute inset-x-0 top-0 z-50">
       <nav
-        class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        class="mx-auto flex max-w-7xl items-center justify-between p-6 pt-8 lg:px-8"
         aria-label="Global"
       >
         <div class="flex lg:flex-1">
@@ -85,8 +85,18 @@
       </Dialog>
     </header>
 
+    <w-alert
+      v-if="release_status == 'true'"
+      icon=""
+      no-border
+      xs
+      dismiss
+      class="w-full h-[30px] bg-emerald-500 z-50 my-0 text-center rounded-none"
+      >{{ release_text }}
+    </w-alert>
+
     <main class="relative isolate">
-      <HeaderSection />
+      <HeaderSection class="mt12" />
 
       <TextSection />
 
@@ -106,7 +116,7 @@
 </template>
 
 <script setup>
-import { defineComponent, h, ref } from 'vue'
+import { defineComponent, h, ref, computed } from 'vue'
 import { Dialog, DialogPanel } from '@headlessui/vue'
 
 import SpectralViewerSection from '@/Pages/Welcome/SpectralViewerSection.vue'
@@ -119,6 +129,15 @@ import RamanCompatible from '@/Pages/Welcome/RamanCompatible.vue'
 import Footer from '@/Pages/Welcome/Footer.vue'
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
+
+const show_warn = ref(true)
+
+const release_text = computed(() => {
+  return import.meta.env.VITE_RELEASE_TEXT
+})
+const release_status = computed(() => {
+  return import.meta.env.VITE_RELEASE_STATUS
+})
 
 const base_docs_page =
   'https://nfdi4chem.pages.photonicdata.science/vibspecdb-docs'
