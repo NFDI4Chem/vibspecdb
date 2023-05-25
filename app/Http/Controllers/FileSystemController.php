@@ -19,6 +19,8 @@ use App\Http\Resources\FileSystemObjectResource;
 use App\Services\RamanService;
 use App\Services\ParseMetadata;
 
+use App\Jobs\JobUnzipUpload;
+
 class FileSystemController extends Controller
 {
 
@@ -93,7 +95,6 @@ class FileSystemController extends Controller
     }
 
 
-
     public function create(Request $request, CreateFileObject $creator) {
         try {
             $input = $request->all();
@@ -101,7 +102,13 @@ class FileSystemController extends Controller
   
             foreach ($files as $file) {
                 $fileObject = $creator->create($file);
-                $this->extractzip($fileObject);
+
+                
+                JobUnzipUpload::dispatch(auth()->user(), $fileObject)
+                    ->onQueue('unzip')
+                    ->delay(now()->addSeconds(0));
+
+                // $this->extractzip($fileObject);
                 FileSystemObject::addMetafile($fileObject);
             }
         } catch (Throwable $exception) {
@@ -138,7 +145,6 @@ class FileSystemController extends Controller
             'status' => true,
             'error' => ''
         ];
-
     }
 
     public function destroy(Request $request, FileSystemObject $file)

@@ -9,9 +9,11 @@ use Inertia\Inertia;
 use Illuminate\Support\Str;
 
 use App\Jobs\JobSubmitArgo;
+use App\Jobs\JobUnzipUpload;
 use App\Events\SendUserMessage;
 
 use App\Actions\Webhook\WebhookAuth;
+use App\Actions\FileSystem\ExtractZip;
 
 use App\Models\ArgoJob;
 use App\Models\FileSystemObject;
@@ -92,4 +94,42 @@ class JobsController extends Controller
 
         return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'event-submitted');
     }
+
+
+
+    public function ziprunner(Request $request) {
+
+        // $zip_extractor = new ExtractZip();
+        // $file = FileSystemObject::where('id', 723)->get()->first();
+        // $files = FileSystemObject::where('id', 723)->get();
+        // $zip_extractor->extract($file);
+
+        // return $files;
+
+        try {
+            $input = $request->all();
+            $files  = isset($input['name']) ? [$input] : $input;
+  
+            foreach ($files as $file) {
+                $fileObject = $creator->create($file);
+                // $this->extractzip($fileObject);
+
+                JobUnzipUpload::dispatch(auth()->user(), $file)
+                    ->onQueue('unzip')
+                    ->delay(now()->addSeconds(0));
+
+                FileSystemObject::addMetafile($fileObject);
+            }
+        } catch (Throwable $exception) {
+            return redirect()->back()->withErrors([
+                'create' => 'Failed to store data'
+            ]);
+        }
+        return back()->withSuccess('objects-created');
+
+        // return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'event-submitted');
+
+
+    }
+
 }

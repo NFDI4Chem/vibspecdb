@@ -5,6 +5,11 @@ namespace App\Providers;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
+ 
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Queue\Events\JobProcessed;
+use Illuminate\Queue\Events\JobProcessing;
+
 use Inertia\Inertia;
 
 class AppServiceProvider extends ServiceProvider
@@ -45,6 +50,22 @@ class AppServiceProvider extends ServiceProvider
             'urlFull' => url()->full(),
             'urlCurrent' => url()->current(),
          ]);
+
+        /*
+        Queue::before(function (JobProcessing $event) {
+            // $event->connectionName
+            // $event->job
+            // $event->job->payload()
+        });
+ 
+        Queue::after(function (JobProcessed $event) {
+            // $event->connectionName
+            // $event->job
+            // $event->job->payload()
+           
+            \Log::error('Something is really going wrong.', $event->job->payload());
+        });
+        */
         
     }
 }

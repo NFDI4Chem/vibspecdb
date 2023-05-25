@@ -17,6 +17,7 @@ class CreateUserJobAlertsTable extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('status');
+            $table->string('text', 2048)->nullable();
             $table->boolean('shown')->default(0);
             $table->foreignId('user_id')->nullable();
             $table->foreignId('study_id')->nullable();

@@ -102,6 +102,8 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('image.destroy');
 
 
+    Route::get('/files/ziprunner', [JobsController::class, 'ziprunner'])
+        ->name('files.ziprunner');
     Route::post('/files/create', [FileSystemController::class, 'create'])
         ->name('files.create');
     Route::delete('/files/{file}', [FileSystemController::class, 'destroy'])

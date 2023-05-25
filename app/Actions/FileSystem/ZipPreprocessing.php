@@ -42,12 +42,14 @@ class ZipPreprocessing
             throw ValidationException::withMessages([
                 'not_exists' => $e->getMessage(),
             ]);
+            return [];
         } 
         catch(Throwable $e)
         {
             throw ValidationException::withMessages([
                 'exception' => $e->getMessage(),
             ]); 
+            return [];
         }
 
     }

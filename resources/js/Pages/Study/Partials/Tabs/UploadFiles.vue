@@ -76,6 +76,14 @@
                     v-if="treeOptions?.showInfo"
                   />
                 </div>
+
+                <w-button
+                  class="border-0 cursor-context-menu my2"
+                  bg-color="blue"
+                  @click="unzip_test"
+                  >Unzip</w-button
+                >
+
                 <!-- blur-sm -->
                 <UniFilesTree
                   :class="{
@@ -243,6 +251,23 @@ const show_dataset_options = computed(() => {
 const treeFilled = computed(() => {
   return props?.files?.length > 0 && props?.files[0].children?.length > 0
 })
+
+// // // // // // // //
+
+const unzip_test = () => {
+  console.log('test here')
+  const form = useForm({})
+  form.get(route('files.ziprunner'), {
+    preserveScroll: true,
+    onSuccess: file => {},
+    onError: e => {
+      console.log('Error onAddChildren', e)
+    },
+    onFinish: () => {},
+  })
+}
+
+// // // // // // // //
 
 const foldAll = () => {
   uniFilesTree.value.foldAll()
