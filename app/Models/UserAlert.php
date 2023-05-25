@@ -16,6 +16,7 @@ class UserAlert extends Model
         'user_id',
         'study_id',
         'argo_job_id',
+        'text',
     ];
     
     public function user()

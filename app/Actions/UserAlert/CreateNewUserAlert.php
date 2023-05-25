@@ -31,9 +31,10 @@ class CreateNewUserAlert
                 'uuid'  => Str::uuid(),
                 'status' => array_key_exists('status', $input) ? $input['status'] : 'undefined',
                 'shown' => false,
-                'user_id' => $input['user_id'],
-                'study_id' => $input['study_id'],
-                'argo_job_id' => $input['argo_job_id'],
+                'user_id' => $input['user_id'] ?? null,
+                'text' => $input['text'] ?? '',
+                'study_id' => $input['study_id'] ?? null,
+                'argo_job_id' => $input['argo_job_id'] ?? 0,
             ]), function (UserAlert $study) {
             });
         });

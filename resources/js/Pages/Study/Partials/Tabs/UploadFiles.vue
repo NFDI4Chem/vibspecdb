@@ -252,23 +252,6 @@ const treeFilled = computed(() => {
   return props?.files?.length > 0 && props?.files[0].children?.length > 0
 })
 
-// // // // // // // //
-
-const unzip_test = () => {
-  console.log('test here')
-  const form = useForm({})
-  form.get(route('files.ziprunner'), {
-    preserveScroll: true,
-    onSuccess: file => {},
-    onError: e => {
-      console.log('Error onAddChildren', e)
-    },
-    onFinish: () => {},
-  })
-}
-
-// // // // // // // //
-
 const foldAll = () => {
   uniFilesTree.value.foldAll()
 }

@@ -46,14 +46,15 @@ class FileSystemObjectResource extends JsonResource
             'parent_id' => $this->parent_id,
             'project_id' => $this->project_id,
             'study_id' => $this->study_id,
-            'is_root' => $this->is_root,
+            // 'is_root' => $this->is_root,
             '$droppable' => in_array($this->type, ['directory', 'dataset']) ? true : false,
             '$draggable' => !$this->is_root,
             'has_children' => sizeof($this->children) > 0,
             'path' => $this->path,
             'relative_url' => $this->relative_url,
-            'metadata' => $this->getMetadata(),
+            // 'metadata' => $this->getMetadata(),
             $this->mergeWhen(! $this->lite, function () {
+                // $this->limit = $this->limit + count($this->children);
                 return [
                     $this->mergeWhen(
                         in_array('children', $this->properties),
@@ -65,12 +66,13 @@ class FileSystemObjectResource extends JsonResource
                                     ->orderBy('type')
                                     ->get(),
                                 */
-                                'level' => $this->level ? $this->level + 1 : 1,
-                                'count' => sizeof($this->children),
+                                // 'limit' => $this->limit + count($this->children),
+                                // 'level' => $this->level ? $this->level + 1 : 1,
+                                // 'count' => sizeof($this->children),
                                 'children' => ($this->children) ? collect($this->children)->map(function ($child) {
                                     return (new FileSystemObjectResource($child))->lite(false, ['children']);
                                 }) : [],
-                                'parent' => (new FileSystemObjectResource($this->parent)),
+                                // 'parent' => (new FileSystemObjectResource($this->parent)),
                             ];
                             return $data;
                         }

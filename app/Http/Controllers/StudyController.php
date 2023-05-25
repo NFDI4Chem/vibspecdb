@@ -67,13 +67,21 @@ class StudyController extends Controller
 
         
         // Models way to get tree:
-        $study_root = FileSystemObject::where('study_id', $study->id)
-                        ->where('is_root', true)->first();
-        $tree = !empty($study_root) ?
-            (new FileSystemObjectResource($study_root))->lite(false, ['children']) :
-            [];
+        $study_root = FileSystemObject::where('study_id', $study->id)->where('is_root', true)->first();
+        // $nfiles = FileSystemObject::where('study_id', $study->id)->count();
 
-        // return $tree;
+
+
+        $tree = [];
+
+        $tree = !empty($study_root) ?
+            (new FileSystemObjectResource($study_root))->lite(false, ['children']) : [];
+
+        // return [
+        //     'study_root' => $study_root,
+        //     'count' => $nfiles,
+        //     'tree' => $tree
+        // ];
 
         $user = $request->user();
         $projects = Project::where('owner_id', $user->id)->get();
@@ -85,6 +93,7 @@ class StudyController extends Controller
             'study' => (new StudyResource($study))->lite(false, ['tags', 'metadata']),
             'project' => $study->project,
             'projects' => $projects,
+            // 'files' => Inertia::lazy(fn () => [$tree]),
             'files' => fn () => [$tree],
             'tab' => $tab,
         ]);
