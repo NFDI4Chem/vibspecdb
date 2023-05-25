@@ -99,12 +99,26 @@ class JobsController extends Controller
 
     public function ziprunner(Request $request) {
 
-        // $zip_extractor = new ExtractZip();
-        // $file = FileSystemObject::where('id', 723)->get()->first();
-        // $files = FileSystemObject::where('id', 723)->get();
-        // $zip_extractor->extract($file);
 
-        // return $files;
+        $type = 'success';
+
+        event(new SendUserMessage(auth()->user(), [
+            'type' => 'Success',
+            'title' => 'Success',
+            "id" => (string) Str::uuid(),
+            "message" => "Event broadcasting tested. It works. Type: {$type}",
+            "errors" =>  "",
+        ]));
+
+        return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'event-submitted');
+        
+        /*
+        $zip_extractor = new ExtractZip();
+        $file = FileSystemObject::where('id', 723)->get()->first();
+        $files = FileSystemObject::where('id', 723)->get();
+        $zip_extractor->extract($file);
+
+        return $files;
 
         try {
             $input = $request->all();
@@ -127,8 +141,8 @@ class JobsController extends Controller
         }
         return back()->withSuccess('objects-created');
 
-        // return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'event-submitted');
-
+        return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'event-submitted');
+        */
 
     }
 

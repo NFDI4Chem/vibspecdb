@@ -25,14 +25,8 @@
           </w-icon>
         </div>
 
-        <div
-          v-if="
-            loading?.saving_to_database?.loading ||
-            loading?.saving_to_database?.done
-          "
-          class="flex flex-row align-middle justify-between"
-        >
-          <div>Saving to database:</div>
+        <div class="flex flex-row align-middle justify-between">
+          <div>Saving to database / Zip extraction:</div>
           <w-progress
             v-if="!loading?.saving_to_database?.done"
             class="rounded-none text-xs w-1/2 mt-[8px]"

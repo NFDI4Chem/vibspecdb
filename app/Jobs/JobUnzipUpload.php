@@ -18,6 +18,7 @@ use App\Actions\ArgoJob\CreateNewArgoJob;
 use App\Actions\UserAlert\CreateNewUserAlert;
 
 use App\Actions\FileSystem\ExtractZip;
+use App\Actions\UserReport\UserReport;
 
 
 class JobUnzipUpload implements ShouldQueue
@@ -76,22 +77,20 @@ class JobUnzipUpload implements ShouldQueue
       ]);
       */
 
-      $alertCreater->create([
-        'status' => $JOB_STATUS ? 'succeeded' : 'failed',
-        'user_id' => $this->user->id,
-        'study_id' => $this->data['study_id'] ?? null,
-        'argo_job_id' => null,
-        'text' => ($JOB_STATUS ? "Uploaded ZIP-archive has been extracted." : "Can not extract ZIP-archive."),
-      ]);
-
-      event(new SendUserMessage($this->user, [
+      $report = new UserReport();
+      $messages = [
+        'alert_message' => $JOB_STATUS ? "ZIP: Uploaded ZIP-archive has been extracted." : "ZIP: Can not extract ZIP-archive.",
+        'event_message' => $JOB_STATUS ? "ZIP: Uploaded ZIP-archive has been extracted." : "ZIP: Can not extract ZIP-archive."
+      ];
+      $data = [
         'action' => 'update_alerts',
-        'type' => $JOB_STATUS ? 'Success' : 'Error',
-        'title' => $JOB_STATUS ? 'Success' : 'Error',
-        "id" => (string) Str::uuid(),
-        "message" => ($JOB_STATUS ? "Job to extract ZIP-archive has been submitted to a queue." : "Can not submit."),
-        "errors" =>  (string) $JOB_ERRORS,
-      ]));
+        'status' => $JOB_STATUS,
+        'errors' => $JOB_ERRORS,
+        'messages' => $messages,
+        'user' => $this->user,
+        'file' => $this->data,
+      ];
+      $report->send($data);
         
     }
 
@@ -109,23 +108,20 @@ class JobUnzipUpload implements ShouldQueue
 
       \Log::error('Failed JOB:', ['error' => $e->getMessage()]);
 
-      event(new SendUserMessage($this->user, [
+      $report = new UserReport();
+      $messages = [
+        'alert_message' => $JOB_STATUS ? "ZIP: Uploaded ZIP-archive has been extracted." : "ZIP: Can not extract ZIP-archive.",
+        'event_message' => $JOB_STATUS ? "ZIP: Uploaded ZIP-archive has been extracted." : "ZIP: Can not extract ZIP-archive."
+      ];
+      $data = [
         'action' => 'update_alerts',
-        'type' =>'Error',
-        'title' => 'Error',
-        "id" => (string) Str::uuid(),
-        "message" => "Can not extract ZIP-archive.",
-        "errors" =>  (string) $JOB_ERRORS,
-      ]));
-
-      $alertCreater = new CreateNewUserAlert();
-      $alertCreater->create([
-        'status' => 'failed',
-        'user_id' => $this->user->id,
-        'study_id' => $this->data['study_id'] ?? null,
-        'argo_job_id' => null,
-        'text' => "Can not extract ZIP-archive.",
-      ]);
+        'status' => $JOB_STATUS,
+        'errors' => $JOB_ERRORS,
+        'messages' => $messages,
+        'user' => $this->user,
+        'file' => $this->data,
+      ];
+      $report->send($data);
 
       /*
       $jobCreater = new CreateNewArgoJob();

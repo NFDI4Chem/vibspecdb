@@ -125,6 +125,12 @@ class ImageUploadController extends Controller
 
             $imageDB = Image::where($item_key, $params['itemId'])->get()->first();
 
+            if (!$imageDB) {
+              return redirect()->back()->withErrors([
+                'destroy' => 'Failed to delete the image'
+              ]);
+            }
+
             if ( $imageDB->owner_id !== auth()->user()->id) {
                 throw ValidationException::withMessages([
                     'password' => __('You are not the project owner.'),

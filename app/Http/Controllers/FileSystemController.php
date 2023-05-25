@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use App\Actions\FileSystem\CreateFileObject;
 use App\Actions\FileSystem\UpdateFileObject;
 use App\Actions\FileSystem\ZipPreprocessing;
+use App\Actions\UserReport\UserReport;
 
 use App\Models\FileSystemObject;
 use App\Models\Project;
@@ -99,15 +100,37 @@ class FileSystemController extends Controller
         try {
             $input = $request->all();
             $files  = isset($input['name']) ? [$input] : $input;
+            $user = auth()->user() ?? null;
   
             foreach ($files as $file) {
                 $fileObject = $creator->create($file);
 
-                
-                JobUnzipUpload::dispatch(auth()->user(), $fileObject)
-                    ->onQueue('unzip')
-                    ->delay(now()->addSeconds(0));
+                if ($fileObject->ftype == 'application/zip') {
 
+                    JobUnzipUpload::dispatch($user, $fileObject)
+                        ->onQueue('unzip')
+                        ->delay(now()->addSeconds(0));
+
+
+                    $JOB_STATUS = true;
+                    $JOB_ERRORS = '';
+                    $report = new UserReport();
+                    $messages = [
+                      'alert_message' => $JOB_STATUS ? "ZIP: Job to extract ZIP-archive has been submitted to a queue." : "ZIP: Can not submit a job (Zip extraction).",
+                      'event_message' => $JOB_STATUS ? "ZIP: Job to extract ZIP-archive has been submitted to a queue." : "ZIP: Can not submit a job (Zip extraction)."
+                    ];
+                    $data = [
+                      'action' => 'update_alerts',
+                      'status' => $JOB_STATUS,
+                      'errors' => $JOB_ERRORS,
+                      'messages' => $messages,
+                      'user' => $user,
+                      'file' => $fileObject,
+                    ];
+                    $report->send($data);
+
+                }
+                
                 // $this->extractzip($fileObject);
                 FileSystemObject::addMetafile($fileObject);
             }

@@ -77,13 +77,6 @@
                   />
                 </div>
 
-                <w-button
-                  class="border-0 cursor-context-menu my2"
-                  bg-color="blue"
-                  @click="unzip_test"
-                  >Unzip</w-button
-                >
-
                 <!-- blur-sm -->
                 <UniFilesTree
                   :class="{
@@ -143,6 +136,13 @@
           }"
         >
           <div class="text-lg flex flex-col gap-1">
+            <w-button
+              v-if="false"
+              class="border-0 cursor-context-menu my2"
+              bg-color="blue"
+              @click="alert_test"
+              >Alert</w-button
+            >
             <div
               class="flex flex-row flex-wrap gap-1 justify-between items-center"
             >
@@ -260,6 +260,23 @@ const unfoldAll = () => {
 }
 
 const onPaneResize = () => {}
+
+// // // // // // // //
+
+const alert_test = () => {
+  console.log('test alert here')
+  const form = useForm({})
+  form.get(route('files.ziprunner'), {
+    preserveScroll: true,
+    onSuccess: file => {},
+    onError: e => {
+      console.log('Error onAddChildren', e)
+    },
+    onFinish: () => {},
+  })
+}
+
+// // // // // // // //
 </script>
 
 <style lang="scss" scoped>
