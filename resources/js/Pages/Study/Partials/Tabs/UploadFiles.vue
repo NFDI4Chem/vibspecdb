@@ -48,6 +48,16 @@
                       </div>
                     </div>
 
+                    <ToolTipWrapper text="Refresh Tree">
+                      <template #btn>
+                        <w-button
+                          class="border-0 cursor-context-menu mr2"
+                          bg-color="transparent"
+                          icon="mdi mdi-refresh"
+                          @click="refreshTree"
+                        ></w-button>
+                      </template>
+                    </ToolTipWrapper>
                     <ToolTipWrapper text="Unfold All">
                       <template #btn>
                         <w-button
@@ -203,6 +213,7 @@ import {
   uniFilesTree,
   datasetSubmit,
   loading_parseMetadata,
+  MakeReload,
 } from '@/VueComposable/useFilesTree'
 import {
   spectraData,
@@ -257,6 +268,11 @@ const foldAll = () => {
 }
 const unfoldAll = () => {
   uniFilesTree.value.unfoldAll()
+}
+
+const refreshTree = () => {
+  // uniFilesTree.value.unfoldAll()
+  MakeReload()
 }
 
 const onPaneResize = () => {}

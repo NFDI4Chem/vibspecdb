@@ -10,32 +10,32 @@
       </div>
       <div class="w-full">
         <div
-          v-if="loading?.minio_upload?.loading || loading?.minio_upload?.done"
+          v-if="
+            loading?.minio_upload?.loading ||
+            loading?.minio_upload?.done ||
+            true
+          "
           class="flex flex-row align-middle justify-between"
         >
           <div>Files uploading:</div>
           <w-progress
             v-if="!loading?.minio_upload?.done"
-            class="rounded-none text-xs w-1/2 mt-[8px]"
-            size="0.6rem"
+            class="rounded-none text-xs w-1/2 mt-[10px]"
+            size="0.3rem"
             color="light-blue-dark3"
           />
-          <w-icon v-else md color="cyan-dark2">
-            mdi mdi-check-circle-outline
-          </w-icon>
+          <w-icon v-else md color="cyan-dark2"> mdi mdi-check-circle </w-icon>
         </div>
 
         <div class="flex flex-row align-middle justify-between">
           <div>Saving to database / Zip extraction:</div>
           <w-progress
             v-if="!loading?.saving_to_database?.done"
-            class="rounded-none text-xs w-1/2 mt-[8px]"
-            size="0.6rem"
+            class="rounded-none text-xs w-1/2 mt-[10px]"
+            size="0.3rem"
             color="light-blue-dark3"
           />
-          <w-icon v-else md color="cyan-dark2">
-            mdi mdi-check-circle-outline
-          </w-icon>
+          <w-icon v-else md color="cyan-dark2"> mdi mdi-check-circle </w-icon>
         </div>
 
         <div

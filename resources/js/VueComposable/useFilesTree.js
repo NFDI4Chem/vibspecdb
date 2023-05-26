@@ -1,5 +1,8 @@
 import { useForm } from '@inertiajs/inertia-vue3'
 import { ref } from 'vue'
+
+import { Inertia } from '@inertiajs/inertia'
+
 import {
   setup_info_notify,
   setup_error_notify,

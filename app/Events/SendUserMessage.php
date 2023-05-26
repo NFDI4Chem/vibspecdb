@@ -22,7 +22,7 @@ class SendUserMessage implements ShouldBroadcast
     private $message;
     private $user;
     // public $connection = 'redis';
-    public $queue = 'jobs';
+    public $queue = 'notification';
  
     /**
      * Create a new event instance.
