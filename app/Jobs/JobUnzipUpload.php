@@ -60,6 +60,7 @@ class JobUnzipUpload implements ShouldQueue
       $result = $zip_extractor->extract($this->data);
       $JOB_STATUS = $result['status'] ?? false;
       $JOB_ERRORS = $result['error'] ?? '';
+      $STATUS_ACTION = 'succeeded';
 
       /*
       $job = $creater->create([
@@ -84,7 +85,7 @@ class JobUnzipUpload implements ShouldQueue
       ];
       $data = [
         'action' => 'update_alerts',
-        'status' => $JOB_STATUS,
+        'status' => $STATUS_ACTION,
         'errors' => $JOB_ERRORS,
         'messages' => $messages,
         'user' => $this->user,
@@ -105,6 +106,7 @@ class JobUnzipUpload implements ShouldQueue
 
       $JOB_STATUS = false;
       $JOB_ERRORS = 'Job Error. Can not extract ZIP-archive.' . $e->getMessage();
+      $STATUS_ACTION = 'failed';
 
       \Log::error('Failed JOB:', ['error' => $e->getMessage()]);
 
@@ -115,7 +117,7 @@ class JobUnzipUpload implements ShouldQueue
       ];
       $data = [
         'action' => 'update_alerts',
-        'status' => $JOB_STATUS,
+        'status' => $STATUS_ACTION,
         'errors' => $JOB_ERRORS,
         'messages' => $messages,
         'user' => $this->user,

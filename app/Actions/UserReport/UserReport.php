@@ -32,7 +32,7 @@ class UserReport
 
         $alertCreater = new CreateNewUserAlert();
         $alertCreater->create([
-            'status' => $data['status'] ? 'succeeded' : 'failed',
+            'status' => $data['status'] ?? 'info',
             'user_id' => $data['user']['id'] ?? null,
             'study_id' => $data['file']['study_id'] ?? null,
             'argo_job_id' => 0,
@@ -41,8 +41,8 @@ class UserReport
     
           event(new SendUserMessage($data['user'], [
             'action' => $data['action'] ?? 'update_alerts',
-            'type' => $data['status'] ? 'Success' : 'Error',
-            'title' => $data['status'] ? 'Success' : 'Error',
+            'type' => $data['status'] ?? 'info', # $data['status'] ? 'Success' : 'Error',
+            'title' => ucfirst($data['status'] ?? 'Info'),
             "id" => (string) Str::uuid(),
             "message" => $data['messages']['event_message'] ?? 'no_key_issue',
             "errors" =>  (string) $data['errors'],

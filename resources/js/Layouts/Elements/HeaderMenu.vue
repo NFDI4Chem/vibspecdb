@@ -35,85 +35,94 @@
         </div>
 
         <div class="ml4 flex items-center">
-          <div class="ml-4 flex items-center md:ml-6">
-            <BellIcon
-              v-if="nalerts === 0"
-              class="h-6 w-6 hover:cursor-pointer text-gray-500"
-              aria-hidden="true"
-            />
-            <BellAlertIcon
-              v-else
-              class="h-6 w-6 hover:cursor-pointer text-sky-700"
-              aria-hidden="true"
-              @click="show_alerts = !show_alerts"
-            />
-            <div v-if="nalerts > 0" class="notification_number text-red-700">
-              {{ nalerts }}
+          <div>
+            <div
+              class="hover:cursor-pointer"
+              @click="openNotificationDrawer = true"
+            >
+              <w-icon color="light-blue-dark2" lg v-if="nalerts === 0"
+                >mdi mdi-bell-outline</w-icon
+              >
+              <w-badge v-else bg-color="error" class="mr5 mt1">
+                <template #badge>{{ nalerts }}</template>
+                <w-icon color="light-blue-dark2" lg
+                  >mdi mdi-bell-ring-outline</w-icon
+                >
+              </w-badge>
             </div>
-
-            <div class="notifications-list" v-if="show_alerts">
-              <div class="flow-root mx2">
-                <ul role="list" class="my5 divide-y divide-gray-200">
-                  <li v-for="alert in alerts" :key="alert" class="py2">
-                    <div class="flex items-center space-x-4">
-                      <div class="flex-shrink-0">
-                        <CheckCircleIcon
-                          v-if="['done', 'succeeded'].includes(alert.status)"
-                          class="h-6 w-6 text-green-700"
-                          aria-hidden="true"
-                        />
-                        <ExclamationCircleIcon
-                          v-if="['failed', 'error'].includes(alert.status)"
-                          class="h-6 w-6 text-red-600"
-                          aria-hidden="true"
-                        />
-                        <BriefcaseIcon
-                          v-if="alert.status === 'running'"
-                          class="h-6 w-6 text-sky-700"
-                          aria-hidden="true"
-                        />
-                        <BriefcaseIcon
-                          v-if="!alert.status === 'undefined'"
-                          class="h-6 w-6 text-sky-700"
-                          aria-hidden="true"
-                        />
-                      </div>
-                      <div class="min-w-0 flex-1">
-                        <p class="truncate text-sm font-medium text-gray-900">
-                          {{
-                            `${alert?.study?.name}: Job ID ${alert.argo_job_id}`
-                          }}
-                        </p>
-                        <small
-                          ><time>
-                            {{ formatDateTimeShort(alert.created_at) }}
-                          </time></small
-                        >
+            <w-drawer
+              v-model="openNotificationDrawer"
+              right="true"
+              class="z-10"
+              drawer-class="overflow-y-auto overflow-x-hidden py12"
+              bg-color="blue-grey-light6"
+            >
+              <div class="absolute top-1 left-2 title2">Notifications:</div>
+              <w-button
+                @click="openNotificationDrawer = false"
+                sm
+                outline
+                round
+                absolute
+                icon="wi-cross"
+              >
+              </w-button>
+              <div v-if="notificationItems?.length > 0" class="w-full">
+                <w-timeline
+                  class="w-full px5"
+                  :items="notificationItems"
+                  color="transparent"
+                >
+                  <template #item="{ item }">
+                    <div
+                      class="flex flex-row justify-between items-center border-t"
+                    >
+                      <div class="w-timeline-item__title" :class="item.color">
+                        {{ item.title }}
                       </div>
                       <div>
-                        <inertia-link
-                          class="hover:cursor-pointer inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50"
-                          :href="route('study.jobs', alert?.study?.id)"
-                        >
-                          <ArrowRightIcon
-                            class="ml2 h-3 w-3 text-gray-500"
-                            aria-hidden="true"
-                          />
-                        </inertia-link>
+                        <div class="text-xs">
+                          <time>{{
+                            formatDateTimeShort(item.created_at)
+                          }}</time>
+                        </div>
                       </div>
                     </div>
-                  </li>
-                </ul>
+                    <div class="w-timeline-item__content">
+                      {{ item.content }}
+                    </div>
+                    <div class="mt1 flex items-center justify-between">
+                      <div
+                        class="text-gray-400 text-xs max-w-[200px] text-ellipsis overflow-x-hidden whitespace-nowrap"
+                      >
+                        {{ `Study: ${item?.study?.name}` }}
+                      </div>
+                      <w-button
+                        class="flex items-center text-gray-50"
+                        bg-color="blue-grey"
+                        @click=""
+                        xs
+                        :route="
+                          route('study', { study: item?.study?.id, tab: 1 })
+                        "
+                        :disabled="!item?.study?.id"
+                      >
+                        Visit
+                        <w-icon class="ml2">mdi mdi-arrow-right</w-icon>
+                      </w-button>
+                    </div>
+                  </template>
+                </w-timeline>
+                <w-button class="w-full my4" @click="clear_notifications" xl>
+                  Clear All
+                </w-button>
               </div>
-              <div class="mt-6">
-                <div
-                  @click="clear_notifications"
-                  class="flex w-full items-center justify-center border-l-0 border-r-0 border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 hover:cursor-pointer"
+              <div v-else class="w-full">
+                <w-alert info lg class="rounded-none" border-top
+                  >Notification list is empty.</w-alert
                 >
-                  Clear all
-                </div>
               </div>
-            </div>
+            </w-drawer>
           </div>
 
           <a :href="docs_page" target="_blank">
@@ -232,6 +241,66 @@ import { MagnifyingGlassIcon, ChevronDownIcon } from '@heroicons/vue/24/solid'
 
 const props = defineProps(['sidebarOpen', 'alertItems'])
 const emit = defineEmits(['sidebarOpenChange', 'logout', 'clearJobAlerts'])
+
+const openNotificationDrawer = ref(false)
+
+const getStatusAttributes = alert => {
+  let title = 'Undefined'
+  let icon = 'wi-warning-circle'
+  let color = 'amber'
+
+  switch (alert?.status) {
+    case 'done':
+      title = 'Success'
+      icon = 'wi-check-circle'
+      color = 'success'
+      break
+    case 'succeeded':
+      title = 'Success'
+      icon = 'wi-check-circle'
+      color = 'success'
+      break
+    case 'failed':
+      title = 'Failed'
+      icon = 'wi-cross-circle'
+      color = 'error'
+      break
+    case 'error':
+      title = 'Error'
+      icon = 'wi-cross-circle'
+      color = 'error'
+      break
+    case 'running':
+      title = 'Running'
+      icon = 'wi-info-circle'
+      color = 'info'
+      break
+    case 'info':
+      title = 'Info'
+      icon = 'wi-info-circle'
+      color = 'info'
+      break
+    default:
+      break
+  }
+  return { title, icon, color }
+}
+
+const notificationItems = computed(() => {
+  return (
+    props?.alertItems
+      // ?.slice(0, 0)
+      ?.map(alert => {
+        const alert_status = getStatusAttributes(alert)
+        return {
+          study: alert?.study,
+          content: alert?.text,
+          created_at: alert?.created_at,
+          ...alert_status,
+        }
+      })
+  )
+})
 
 const sidebarOpenChange = state => {
   emit('sidebarOpenChange', state)

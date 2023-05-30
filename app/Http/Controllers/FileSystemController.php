@@ -114,6 +114,8 @@ class FileSystemController extends Controller
 
                     $JOB_STATUS = true;
                     $JOB_ERRORS = '';
+                    $STATUS_ACTION =  'running';
+
                     $report = new UserReport();
                     $messages = [
                       'alert_message' => $JOB_STATUS ? "ZIP: Job to extract ZIP-archive has been submitted to a queue." : "ZIP: Can not submit a job (Zip extraction).",
@@ -121,7 +123,7 @@ class FileSystemController extends Controller
                     ];
                     $data = [
                       'action' => 'update_alerts',
-                      'status' => $JOB_STATUS,
+                      'status' => $STATUS_ACTION,
                       'errors' => $JOB_ERRORS,
                       'messages' => $messages,
                       'user' => $user,

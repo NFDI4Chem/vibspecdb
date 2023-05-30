@@ -25,12 +25,16 @@
             <div class="flex items-start">
               <div class="flex-shrink-0">
                 <CheckCircleIcon
-                  v-if="notification?.type === 'Success'"
+                  v-if="['done', 'succeeded'].includes(notification?.type)"
                   class="text-green-500 h-7 w-7"
                 />
                 <ExclamationCircleIcon
-                  v-if="notification?.type === 'Error'"
+                  v-if="['failed', 'error'].includes(notification?.type)"
                   class="text-red-500 h-7 w-7"
+                />
+                <InformationCircleIcon
+                  v-if="['running', 'info'].includes(notification?.type)"
+                  class="text-blue-500 h-7 w-7"
                 />
               </div>
               <div class="ml-3 w-0 flex-1 pt-0.5">
@@ -73,6 +77,7 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   ExclamationCircleIcon,
   CheckCircleIcon,
+  InformationCircleIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/solid'
 

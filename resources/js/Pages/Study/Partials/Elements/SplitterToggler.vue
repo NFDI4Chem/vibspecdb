@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-7 h-6 flex flex-col gap-1 absolute right-2 top-24 cursor-pointer z-10"
+    class="w-7 h-6 flex flex-col gap-1 absolute right-2 top-24 cursor-pointer z-1"
   >
     <div
       class="w-7 h-3"
