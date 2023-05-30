@@ -1,13 +1,7 @@
 <template>
   <!-- bounce -->
-  <w-tooltip
-    :bottom="bottom && !(top || left || right)"
-    :top="top && !(bottom || left || right)"
-    :left="left && !(top || bottom || right)"
-    :right="right && !(top || left || bottom)"
-    :align-right="true"
-    transition="twist"
-  >
+
+  <w-tooltip :[position]="true" :align-right="true" transition="twist">
     <template #activator="{ on }">
       <div class="info-tooltip">
         <w-button
@@ -25,7 +19,7 @@
 </template>
 
 <script setup>
-const props = defineProps(['bottom', 'top', 'right', 'left'])
+const props = defineProps(['position'])
 </script>
 
 <style lang="scss">

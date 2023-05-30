@@ -3,7 +3,7 @@
     <div class="flex flex-row justify-between pb2 pr6">
       <div class="border-b-2 flex flex-row flex-start gap-2">
         <div class="mb-auto">
-          <StudyInfoHelper :right="true" :text="helperText" />
+          <StudyInfoHelper position="right" :text="helperText" />
         </div>
         <div class="title2 primary">{{ title }}</div>
       </div>

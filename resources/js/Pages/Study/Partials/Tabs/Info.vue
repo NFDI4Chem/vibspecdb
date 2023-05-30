@@ -3,7 +3,7 @@
     <div class="flex flex-row flex-start gap-2">
       <div class="mb-auto">
         <StudyInfoHelper
-          :right="true"
+          position="right"
           text="Section to update Study cover image."
         />
       </div>
@@ -23,7 +23,7 @@
     <div class="flex flex-row flex-start gap-2">
       <div class="mb-auto">
         <StudyInfoHelper
-          :right="true"
+          position="right"
           text="Section to update the Study Name, Description and Tags."
         />
       </div>
