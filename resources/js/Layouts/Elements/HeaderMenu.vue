@@ -113,7 +113,11 @@
                     </div>
                   </template>
                 </w-timeline>
-                <w-button class="w-full my4" @click="clear_notifications" xl>
+                <w-button
+                  class="w-full my4 mt6"
+                  @click="clear_notifications"
+                  xl
+                >
                   Clear All
                 </w-button>
               </div>

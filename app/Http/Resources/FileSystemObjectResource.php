@@ -47,6 +47,7 @@ class FileSystemObjectResource extends JsonResource
             'project_id' => $this->project_id,
             'study_id' => $this->study_id,
             // 'is_root' => $this->is_root,
+            // '$folded' => true,
             '$droppable' => in_array($this->type, ['directory', 'dataset']) ? true : false,
             '$draggable' => !$this->is_root,
             'has_children' => sizeof($this->children) > 0,
