@@ -55,7 +55,7 @@
               right="true"
               class="z-10"
               drawer-class="overflow-y-auto overflow-x-hidden py12"
-              bg-color="blue-grey-light6"
+              bg-color="blue-grey-light7"
             >
               <div class="absolute top-1 left-2 title2">Notifications:</div>
               <w-button
