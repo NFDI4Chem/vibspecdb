@@ -68,7 +68,7 @@ class FileSystemObjectResource extends JsonResource
                                     ->get(),
                                 */
                                 // 'limit' => $this->limit + count($this->children),
-                                // 'level' => $this->level ? $this->level + 1 : 1,
+                                'level' => $this->level ? $this->level + 1 : 1,
                                 // 'count' => sizeof($this->children),
                                 'children' => ($this->children) ? collect($this->children)->map(function ($child) {
                                     return (new FileSystemObjectResource($child))->lite(false, ['children']);
