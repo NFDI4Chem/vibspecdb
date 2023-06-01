@@ -16,6 +16,7 @@ const actions = {
 
 const state = {
   alerts: [
+    /*
     {
       status: 'done',
       argo_job_id: 1,
@@ -52,6 +53,7 @@ const state = {
         name: 'New Study 4',
       },
     },
+    */
   ],
 }
 
