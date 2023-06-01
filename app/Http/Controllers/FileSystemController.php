@@ -21,6 +21,7 @@ use App\Services\RamanService;
 use App\Services\ParseMetadata;
 
 use App\Jobs\JobUnzipUpload;
+use App\Jobs\JobDeleteFolderStructure;
 
 class FileSystemController extends Controller
 {
@@ -172,18 +173,49 @@ class FileSystemController extends Controller
         ];
     }
 
-    public function destroy(Request $request, FileSystemObject $file)
+    public function destroy(Request $request, $file)
     {
-        $this->cascadeDelete($file->children);
-        $file->delete();
-        return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'file-system-object-deleted');
-    }
-
-    private function cascadeDelete($files) {
-        foreach ($files as $child) {
-            $this->cascadeDelete($child->children);
-            $child->delete();
+        if ($file != null) {
+            $file = FileSystemObject::find($file);
         }
+
+        if (empty($file)) {
+            return redirect()->back()->withErrors([
+                'destroy' => 'No such file to delete'
+            ]);
+        }
+        
+        if (count($file->children) > 0) {
+
+            $user = auth()->user() ?? null;
+
+            JobDeleteFolderStructure::dispatch($user, $file)
+                ->onQueue('jobs')
+                ->delay(now()->addSeconds(0));
+
+
+            $JOB_STATUS = true;
+            $JOB_ERRORS = '';
+            $STATUS_ACTION =  'running';
+
+            $report = new UserReport();
+            $messages = [
+                'alert_message' => $JOB_STATUS ? "DELETE: Job to delete files and its children has been submitted to a queue." : "DELETE: Can not delete files structure.",
+                'event_message' => $JOB_STATUS ? "DELETE: Job to delete files and its children has been submitted to a queue." : "DELETE: Can not delete files structure."
+            ];
+            $data = [
+                'action' => 'update_alerts',
+                'status' => $STATUS_ACTION,
+                'errors' => $JOB_ERRORS,
+                'messages' => $messages,
+                'user' => $user,
+                'file' => $file,
+            ];
+            $report->send($data);
+        } else {
+            $file->delete();
+        }
+        return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'file-system-object-deleted');
     }
 
     public function update(Request $request, UpdateFileObject $updater, ParseMetadata $metadataParser, FileSystemObject $file)
