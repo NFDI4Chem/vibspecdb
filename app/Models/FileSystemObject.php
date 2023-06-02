@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Prunable ;
 
 use App\Actions\FileSystem\UpdateFileObject;
 
@@ -13,6 +15,8 @@ class FileSystemObject extends Model
 {
     use HasFactory;
     use Metable;
+    use SoftDeletes;
+    use Prunable;
 
     protected $metaTable = 'files_meta';
     
@@ -52,6 +56,12 @@ class FileSystemObject extends Model
         'ftype',
         'zip_pid'
     ];
+
+    // deletes completely deleted files
+    public function prunable()
+    {
+      return static::where('deleted_at', '<=', now()->subWeek());
+    }
 
     // Recursive children
     public function children()

@@ -95,11 +95,29 @@ class JobsController extends Controller
         return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'event-submitted');
     }
 
-
+    private function cascadeDelete($files = []) {
+        foreach ($files as $child) {
+            $this->cascadeDelete($child->children);
+            $child->forceDelete();
+            // TODO add remove from Minio
+        }
+      }
 
     public function ziprunner(Request $request) {
 
 
+        $files = FileSystemObject::onlyTrashed()
+            ->where('deleted_at', '<=', now()->subWeek())->get();   
+            
+        collect($files)->map(function ($file) {
+            $this->cascadeDelete($file->children);
+            $file->forceDelete();
+        });
+
+        return [
+            'data' => $files,
+        ];
+        
         $type = 'success';
 
         event(new SendUserMessage(auth()->user(), [
